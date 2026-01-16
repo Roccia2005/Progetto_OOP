@@ -44,4 +44,15 @@ public record ShotResult(HitType hitType, Position position, Optional<Ship> sunk
     public static ShotResult sunk(final Position position, final Ship ship) {
         return new ShotResult(HitType.SUNK, position, Optional.of(ship));
     }
+
+    /**
+     * Creates a result indicating a failed shot.
+     *
+     * @param position The target position.
+     * @param hitType The specific failure type (e.g., INVALID, ALREADY_HIT).
+     * @return A ShotResult with the specified failure type and position.
+     */
+    public static ShotResult failure(final Position position, final HitType hitType) {
+        return new ShotResult(hitType, position, Optional.empty());
+    }
 }
