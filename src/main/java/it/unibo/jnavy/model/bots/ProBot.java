@@ -1,5 +1,5 @@
 package it.unibo.jnavy.model.bots;
 
-public class ProBot {
+public class ProBot implements BotStrategy{
 
 }

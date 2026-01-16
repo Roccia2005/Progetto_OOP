@@ -1,5 +1,5 @@
 package it.unibo.jnavy.model.bots;
 
-public class SniperBot {
+public class SniperBot implements BotStrategy{
 
 }
