@@ -5,6 +5,9 @@ import java.util.List;
 
 import it.unibo.jnavy.model.ship.Ship;
 
+/**
+ * Concrete implementation of the Fleet interface.
+ */
 public class FleetImpl implements Fleet {
 
     private List<Ship> ships;

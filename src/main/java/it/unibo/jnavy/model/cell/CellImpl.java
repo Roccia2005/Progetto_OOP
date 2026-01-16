@@ -1,0 +1,59 @@
+package it.unibo.jnavy.model.cell;
+
+import it.unibo.jnavy.model.HitType;
+import it.unibo.jnavy.model.ship.Ship;
+import it.unibo.jnavy.model.utilities.Position;
+
+/**
+ * Concrete implementation of the Cell interface.
+ */
+public class CellImpl implements Cell{
+
+    private final Position position;
+    private Ship ship;
+    private HitType status;
+
+    public CellImpl(final Position p) {
+        this.position = p;
+        this.ship = null;
+        this.status = null;
+    }
+    
+    @Override
+    public HitType receiveShot() {
+        if (this.status != null) {
+            return HitType.ALREADY_HIT;
+        }
+
+        if (this.ship == null) {
+            this.status = HitType.MISS;
+            return HitType.MISS;
+        } else {
+            this.ship.hit();
+            this.status = HitType.HIT;
+
+            return this.ship.isSunk() ? HitType.SUNK : HitType.HIT;
+        }
+    }
+
+    @Override
+    public void setShip(Ship ship) {
+        this.ship = ship;
+    }
+
+    @Override
+    public Ship getShip() {
+        return this.ship;
+    }
+
+    @Override
+    public boolean isOccupied() {
+        return this.ship != null;
+    }
+
+    @Override
+    public Position getPosition() {
+        return position;
+    }
+    
+}
