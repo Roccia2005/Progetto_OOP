@@ -11,4 +11,17 @@ package it.unibo.jnavy.model;
  */
 public interface TurnObserver {
 
+    /**
+     * Called automatically by the Game Controller after each turn.
+     * (e.g., implementations should use this to decrease cooldown timers,
+     * decrease duration of weather conditions, update turn counters, ...)
+     */
+    void onTurnEnd();
+
+    /**
+     * Called automatically by the Game Controller before each turn.
+     *
+     * This is a {@code default} method, classes are not forced to implement it.
+     */
+    default void onTurnStart() {}
 }
