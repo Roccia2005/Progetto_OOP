@@ -38,7 +38,7 @@ public enum HitType {
      *
      * @param description A human-readable description of the shot result.
      */
-    HitType(String description) {
+    HitType(final String description) {
         this.description = description;
     }
 

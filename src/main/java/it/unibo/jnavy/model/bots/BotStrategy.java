@@ -1,4 +1,4 @@
-package it.unibo.jnavy.model.bot;
+package it.unibo.jnavy.model.bots;
 
 public interface BotStrategy {
 
