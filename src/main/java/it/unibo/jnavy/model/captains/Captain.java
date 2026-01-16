@@ -1,4 +1,4 @@
-package it.unibo.jnavy.model.captain;
+package it.unibo.jnavy.model.captains;
 
 /**
 *
