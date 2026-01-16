@@ -1,6 +1,7 @@
 package it.unibo.jnavy.model.grid;
 
 import it.unibo.jnavy.model.HitType;
+import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.Direction;
 import it.unibo.jnavy.model.utilities.Position;
@@ -35,7 +36,7 @@ public interface Grid {
      * @param p the target position.
      * @return the result of the shot (e.g., HIT, MISS, SUNK).
      */
-    HitType receiveShot(Position p);
+    ShotResult receiveShot(Position p);
 
     /**
      * Checks if the entire fleet on this grid has been defeated.

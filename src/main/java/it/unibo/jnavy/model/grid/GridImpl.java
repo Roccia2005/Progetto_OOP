@@ -1,6 +1,7 @@
 package it.unibo.jnavy.model.grid;
 
 import it.unibo.jnavy.model.HitType;
+import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.cell.CellImpl;
 import it.unibo.jnavy.model.fleet.Fleet;
@@ -8,6 +9,8 @@ import it.unibo.jnavy.model.fleet.FleetImpl;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.Direction;
 import it.unibo.jnavy.model.utilities.Position;
+
+import java.util.Optional;
 
 /**
  * Concrete implementation of the Grid interface.
@@ -66,11 +69,20 @@ public class GridImpl implements Grid{
     }
 
     @Override
-    public HitType receiveShot(Position p) {
+    public ShotResult receiveShot(Position p) {
         if (p.x() < 0 || p.x() >= SIZE || p.y() < 0 || p.y() >= SIZE) {
-            return HitType.INVALID;
+            return ShotResult.failure(p, HitType.INVALID);
         }
-        return cells[p.x()][p.y()].receiveShot();
+        var targetCell = cells[p.x()][p.y()];
+
+        HitType cellResult = targetCell.receiveShot();
+
+        if (cellResult == HitType.SUNK) {
+            Ship sunkShip = targetCell.getShip();
+            return ShotResult.sunk(p, sunkShip);
+        }
+
+        return new ShotResult(cellResult, p, Optional.empty());
     }
 
     @Override
