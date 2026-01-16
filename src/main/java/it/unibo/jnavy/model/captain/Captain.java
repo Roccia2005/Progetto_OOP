@@ -1,8 +1,8 @@
 package it.unibo.jnavy.model.captain;
 
 /**
-*
-*/
+ *
+ */
 public interface Captain {
 
     /**
@@ -11,8 +11,8 @@ public interface Captain {
      */
     boolean isAbilityRecharged();
 
-    /*
-    *
-    */
+    /**
+     *
+     */
     void applyAbility();
 }
