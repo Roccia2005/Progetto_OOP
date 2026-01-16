@@ -1,4 +1,4 @@
-package it.unibo.fleed;
+package it.unibo.jnavy.model.fleet;
 
 import java.util.List;
 
