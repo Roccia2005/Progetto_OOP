@@ -15,5 +15,6 @@ public class StandardShot implements HitStrategy {
     @Override
     public List<ShotResult> execute(final Position target, final Grid grid) {
         ShotResult result = grid.receiveShot(target);
+        return List.of(result);
     }
 }
