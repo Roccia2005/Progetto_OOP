@@ -33,4 +33,15 @@ public record ShotResult(HitType hitType, Position position, Optional<Ship> sunk
     public static ShotResult hit(final Position position) {
         return new ShotResult(HitType.HIT, position, Optional.empty());
     }
+
+    /**
+     * Creates a result indicating a ship has been sunk.
+     *
+     * @param position The position of the final hit.
+     * @param ship The ship instance that was sunk.
+     * @return A ShotResult with a SUNK hit type and the specific ship object.
+     */
+    public static ShotResult sunk(final Position position, final Ship ship) {
+        return new ShotResult(HitType.SUNK, position, Optional.of(ship));
+    }
 }
