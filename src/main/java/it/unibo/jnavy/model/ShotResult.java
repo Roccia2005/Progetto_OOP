@@ -23,4 +23,14 @@ public record ShotResult(HitType hitType, Position position, Optional<Ship> sunk
     public static ShotResult miss(final Position position) {
         return new ShotResult(HitType.MISS, position, Optional.empty());
     }
+
+    /**
+     * Creates a result indicating a successful hit on a ship, but not sunk yet.
+     *
+     * @param position The position of the hit.
+     * @return A ShotResult with only a HIT hit type.
+     */
+    public static ShotResult hit(final Position position) {
+        return new ShotResult(HitType.HIT, position, Optional.empty());
+    }
 }
