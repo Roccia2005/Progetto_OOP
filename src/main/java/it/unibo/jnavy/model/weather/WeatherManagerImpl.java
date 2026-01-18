@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.weather;
 
+import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 
 import java.util.Random;
@@ -32,7 +33,17 @@ public class WeatherManagerImpl implements WeatherManager {
 
     @Override
     public Position applyWeatherEffects(Position target) {
-        return null;
+        if (this.condition == WeatherCondition.SUNNY) {
+            return target;
+        }
+        Position nextPossiblePosition;
+        do {
+            int offsetX = this.random.nextInt(3) - 1;
+            int offsetY = this.random.nextInt(3) - 1;
+            nextPossiblePosition = new Position(target.x() + offsetX, target.y() + offsetY);
+        } while (nextPossiblePosition.x() < 0 || nextPossiblePosition.x() >= Grid.getSize() ||
+                nextPossiblePosition.y() < 0 || nextPossiblePosition.y() >= Grid.getSIze());
+        return nextPossiblePosition;
     }
 
     @Override
