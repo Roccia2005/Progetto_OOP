@@ -1,18 +1,41 @@
 package it.unibo.jnavy.model;
 
-import java.util.List;
-
+import it.unibo.jnavy.model.fleet.Fleet;
+import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.shots.HitStrategy;
 import it.unibo.jnavy.model.utilities.Position;
-import it.unibo.jnavy.model.ship.Ship;
 
+/**
+ * Defines the contract for a participant in the game.
+ * <p>
+ * This interface abstracts the common behaviors of both human players and computer-controlled
+ * opponents (Bots). It ensures that every player has a {@link Grid} containing their ships
+ * and provides a mechanism to generate offensive moves (shots).
+ */
 public interface Player {
+
     /**
-     * Returns the player's list of ships (fleet).
+     * Retrieves the game grid associated with this player.
+     * <p>
+     * The grid represents the player's board, containing their fleet and tracking
+     * the state of each cell (e.g., hit, miss, empty). This is essential for
+     * the game controller to apply shots and verify the state of the player's ships.
      *
-     * @return The list of {@link Ship} owned by the player.
+     * @return The {@link Grid} owned by this player.
      */
-    List<Ship> getShips();
+    Grid getGrid();
+
+    /**
+     * Retrieves the fleet associated with this player.
+     * <p>
+     * This is a default method that delegates the call to the player's Grid,
+     * avoiding code duplication in Bot and Human classes.
+     *
+     * @return The {@link Fleet} owned by this player.
+     */
+    default Fleet getFleet() {
+        return getGrid().getFleet();
+    }
 
     /**
      * Creates a shot directed at a specific target position.
