@@ -26,7 +26,7 @@ public class AreaShot implements HitStrategy {
         );
 
         for (final Position pos : targets) {
-            final ShotResult shotResult = grid.receiveShot(pos);
+            final ShotResult shotResult = grid.receiveShot(pos);//deve diventare weatherManager.receiveShot(target) e va usato grid.receiveShot(target) in weatherManager
 
             results.add(shotResult);
         }
