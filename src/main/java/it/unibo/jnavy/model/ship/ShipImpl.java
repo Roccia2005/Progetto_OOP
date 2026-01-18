@@ -41,4 +41,9 @@ public class ShipImpl implements Ship {
     public int getHealth() {
         return this.health;
     }
+
+    @Override
+    public void setHealth(int value) {
+        this.health = value;
+    }
 }

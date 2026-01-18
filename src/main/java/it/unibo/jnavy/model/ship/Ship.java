@@ -29,4 +29,10 @@ public interface Ship {
      * @return the remaining health points.
      */
     int getHealth();
+
+    /**
+     * set the current health of the ship.
+     * @param value the new health of the ship
+     */
+    void setHealth(int value);
 }

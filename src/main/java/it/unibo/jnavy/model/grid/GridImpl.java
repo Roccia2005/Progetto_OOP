@@ -88,5 +88,21 @@ public class GridImpl implements Grid{
     @Override
     public boolean isDefeated() {
         return this.fleet.isDefeated();
+    }
+
+    @Override
+    public boolean repair(Position p) {
+        Cell cellToRapair = getCell(p).get();
+        if(cellToRapair.isOccupied()) {
+            Ship s = cellToRapair.getShip();
+            s.setHealth(s.getHealth() + 1);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Optional<Cell> getCell(Position p) {
+        return Optional.of(cells[p.x()][p.y()]);
     }    
 } 
