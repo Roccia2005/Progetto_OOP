@@ -1,4 +1,4 @@
-package it.unibo.jnavy.model.captains;
+package it.unibo.jnavy.model.shots;
 
 import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.grid.Grid;
