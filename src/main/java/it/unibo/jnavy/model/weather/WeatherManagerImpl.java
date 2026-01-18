@@ -18,8 +18,12 @@ public class WeatherManagerImpl implements WeatherManager {
     private static final int WEATHER_DURATION = 5;
     private WeatherCondition condition;
     private int turnCounter;
-    private Random random;
+    private final Random random;
 
+    /**
+     * Initializes the weather manager.
+     * Starts with {@link WeatherCondition#SUNNY} and a turn counter of 0.
+     */
     public WeatherManagerImpl() {
         this.condition = WeatherCondition.SUNNY;
         this.turnCounter = 0;
@@ -32,7 +36,7 @@ public class WeatherManagerImpl implements WeatherManager {
     }
 
     @Override
-    public Position applyWeatherEffects(Position target, final Grid grid) {
+    public Position applyWeatherEffects(final Position target, final Grid grid) {
         if (this.condition == WeatherCondition.SUNNY) {
             return target;
         }
