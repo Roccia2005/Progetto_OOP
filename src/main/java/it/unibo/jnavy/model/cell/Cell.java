@@ -40,4 +40,9 @@ public interface Cell {
      * @return the position of the cell.
      */
     Position getPosition();
+
+    /**
+     * Set the content of the cell visible
+     */
+    void setVisible();
 }

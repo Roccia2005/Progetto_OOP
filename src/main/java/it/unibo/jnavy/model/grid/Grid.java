@@ -1,7 +1,10 @@
 package it.unibo.jnavy.model.grid;
 
+import java.util.Optional;
+
 import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.ShotResult;
+import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.Direction;
 import it.unibo.jnavy.model.utilities.Position;
@@ -43,4 +46,22 @@ public interface Grid {
      * @return true if all ships are sunk.
      */
     boolean isDefeated();
+
+    /**
+     * Attempts to repair a ship part at the specified position.
+     * Use this method to revert the status of a damaged cell.
+     *
+     * @param p the target position on the grid.
+     * @return true if a ship was successfully repaired at the given position,
+     * false otherwise.
+     */
+    boolean repair(Position p);
+
+    /**
+     * Retrieves the Cell object at the specified coordinates safely.
+     * @param p the coordinates of the cell to retrieve.
+     * @return an {@link Optional} containing the {@link Cell} if the position is within grid bounds,
+     * or {@link Optional#empty()} if the position is invalid.
+     */
+    Optional<Cell> getCell(Position p);
 } 
