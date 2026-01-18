@@ -8,19 +8,21 @@ import it.unibo.jnavy.model.ship.Ship;
 
 public interface Player {
     /**
-     * metodo per ottenere la lista di navi(FLOTTA);
+     * Returns the player's list of ships (fleet).
      *
-     * @return
+     * @return The list of {@link Ship} owned by the player.
      */
     List<Ship> getShips();
 
     /**
-     * metodo con cui il player crea uno sparo, Human (standard o area), Bot(standard)
+     * Creates a shot directed at a specific target position.
+     * <p>
+     * The shot type may vary depending on the player (e.g., standard or area for Human, standard for Bot).
+     * The returned object is intended to be processed by the weather system and potentially modified
+     * if an atmospheric event is active.
      *
-     * verrà inviato a weather per modificarlo nel caso ci sia un evento atmosferico in corso
-     *
-     * @param target
-     * @return
+     * @param target The target {@link Position}.
+     * @return The {@link HitStrategy} representing the generated shot.
      */
     HitStrategy createShot(Position target);
 }
