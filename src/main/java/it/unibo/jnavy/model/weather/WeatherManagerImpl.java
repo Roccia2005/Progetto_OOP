@@ -20,7 +20,7 @@ public class WeatherManagerImpl implements WeatherManager {
     private int turnCounter;
     private Random random;
 
-    WeatherManagerImpl() {
+    public WeatherManagerImpl() {
         this.condition = WeatherCondition.SUNNY;
         this.turnCounter = 0;
         this.random = new Random();
@@ -32,17 +32,18 @@ public class WeatherManagerImpl implements WeatherManager {
     }
 
     @Override
-    public Position applyWeatherEffects(Position target) {
+    public Position applyWeatherEffects(Position target, final Grid grid) {
         if (this.condition == WeatherCondition.SUNNY) {
             return target;
         }
         Position nextPossiblePosition;
+        int gridSize = grid.getSize();
         do {
             int offsetX = this.random.nextInt(3) - 1;
             int offsetY = this.random.nextInt(3) - 1;
             nextPossiblePosition = new Position(target.x() + offsetX, target.y() + offsetY);
-        } while (nextPossiblePosition.x() < 0 || nextPossiblePosition.x() >= Grid.getSize() ||
-                nextPossiblePosition.y() < 0 || nextPossiblePosition.y() >= Grid.getSIze());
+        } while (nextPossiblePosition.x() < 0 || nextPossiblePosition.x() >= gridSize ||
+                nextPossiblePosition.y() < 0 || nextPossiblePosition.y() >= gridSize);
         return nextPossiblePosition;
     }
 
