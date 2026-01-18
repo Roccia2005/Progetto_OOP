@@ -17,8 +17,9 @@ import it.unibo.jnavy.model.utilities.Position;
  * <p>
  * The Bot manages its own {@link Fleet} and utilizes a {@link BotStrategy}
  * to determine its moves and target selection logic during the match.
+ * It also listens to turn events to handle time-dependent logic.
  */
-public class Bot implements Player{
+public class Bot implements Player, TurnObserver{
 
     private Grid grid;
     private BotStrategy strategy;
@@ -44,6 +45,10 @@ public class Bot implements Player{
     @Override
     public HitStrategy createShot(final Position target) {
         return new StandardShot(target);
+    }
+
+    @Override
+    public void onTurnEnd() {
     }
 
     /**
