@@ -1,5 +1,8 @@
 package it.unibo.jnavy.model.weather;
 
+import it.unibo.jnavy.model.TurnObserver;
+import it.unibo.jnavy.model.utilities.Position;
+
 /**
  * The manager responsible for handling the dynamic weather system.
  * It extends {@link TurnObserver} to react to game turns automatically.
@@ -8,5 +11,21 @@ package it.unibo.jnavy.model.weather;
  *    - Providing the current weather state to the View and Game Logic.
  *    - Calculating if a shot fails due to weather effects (e.g., Fog).
  */
-public interface WeatherManager {
+public interface WeatherManager extends TurnObserver {
+
+    /**
+     * Retrieves the active weather condition.
+     * @return The current {@link WeatherCondition} affecting the battle.
+     */
+    WeatherCondition getCurrentWeather();
+
+    /**
+     * Calculates the actual target position based on weather interference.
+     * If the weather is clear (SUNNY), the target remains unchanged.
+     * If visibility is low (FOG), the target might shift to a random adjacent cell.
+     *
+     * @param target The original position aimed by the player.
+     * @return The actual position where the shot will land.
+     */
+    Position applyWeatherEffects(final Position target);
 }
