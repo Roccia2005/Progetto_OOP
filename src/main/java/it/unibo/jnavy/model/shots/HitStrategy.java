@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Defines the strategy for executing a shot on the game grid.
- * This interface applies the Strategy Pattern to decouple the "shooter" (Captain)
+ * This interface applies the Strategy Pattern to decouple the "shooter" (Captain or Bot)
  * from the "ballistics" (how the shot affects the grid).
  *
  * Different implementations can define unique firing patterns.
