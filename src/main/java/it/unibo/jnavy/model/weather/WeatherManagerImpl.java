@@ -37,6 +37,18 @@ public class WeatherManagerImpl implements WeatherManager {
 
     @Override
     public void onTurnEnd() {
-
+        this.turnCounter++;
+        if (this.turnCounter >= WEATHER_DURATION) {
+            if (this.condition == WeatherCondition.SUNNY) {
+                this.condition = WeatherCondition.FOG;
+                // for debugging
+                System.out.println("METEO CAMBIATO: " + this.condition);
+            } else {
+                this.condition = WeatherCondition.SUNNY;
+                // for debugging
+                System.out.println("METEO CAMBIATO: " + this.condition);
+            }
+            this.turnCounter = 0;
+        }
     }
 }
