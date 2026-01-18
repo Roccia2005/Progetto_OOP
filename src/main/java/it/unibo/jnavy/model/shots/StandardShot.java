@@ -12,6 +12,9 @@ import java.util.List;
  */
 public class StandardShot implements HitStrategy {
 
+    //aggiungere campo position dello shot
+    //aggiungere costruttore
+
     @Override
     public List<ShotResult> execute(final Position target, final Grid grid) {
         ShotResult result = grid.receiveShot(target); //deve diventare weatherManager.receiveShot(target) e va usato grid.receiveShot(target) in weatherManager
