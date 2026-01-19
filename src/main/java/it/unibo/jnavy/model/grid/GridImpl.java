@@ -110,4 +110,11 @@ public class GridImpl implements Grid{
     public int getSize() {
         return SIZE;
     }
+
+    @Override
+    public Fleet getFleet() {
+        return this.fleet;
+    }
+
+    
 } 

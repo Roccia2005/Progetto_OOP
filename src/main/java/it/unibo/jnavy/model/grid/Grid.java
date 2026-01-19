@@ -5,6 +5,7 @@ import java.util.Optional;
 import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.cell.Cell;
+import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.Direction;
 import it.unibo.jnavy.model.utilities.Position;
@@ -69,4 +70,9 @@ public interface Grid {
      * @return The size of the grid.
      */
     int getSize();
+
+    /**
+     * @return The fleet of the grid.
+     */
+    Fleet getFleet();
 } 
