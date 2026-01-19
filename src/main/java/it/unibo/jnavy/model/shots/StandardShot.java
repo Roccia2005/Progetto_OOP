@@ -13,6 +13,7 @@ import java.util.List;
 public class StandardShot implements HitStrategy {
 
     //aggiungere campo position dello shot
+    Position shotPosition;
     //aggiungere costruttore
 
     @Override

@@ -45,7 +45,8 @@ public interface Player {
      * if an atmospheric event is active.
      *
      * @param target The target {@link Position}.
+     * @param grid The grid {@link Grid}.
      * @return The {@link HitStrategy} representing the generated shot.
      */
-    HitStrategy createShot(Position target);
+    HitStrategy createShot(Position target, Grid grid);
 }
