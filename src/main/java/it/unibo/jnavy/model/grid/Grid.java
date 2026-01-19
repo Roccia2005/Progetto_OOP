@@ -64,4 +64,9 @@ public interface Grid {
      * or {@link Optional#empty()} if the position is invalid.
      */
     Optional<Cell> getCell(Position p);
+
+    /**
+     * @return The size of the grid.
+     */
+    int getSize();
 } 
