@@ -12,11 +12,13 @@ public class CellImpl implements Cell{
     private final Position position;
     private Ship ship;
     private HitType status;
+    private boolean isVisible;
 
     public CellImpl(final Position p) {
         this.position = p;
         this.ship = null;
         this.status = null;
+        this.isVisible = false;
     }
     
     @Override
@@ -55,5 +57,9 @@ public class CellImpl implements Cell{
     public Position getPosition() {
         return position;
     }
-    
+
+    @Override
+    public void setVisible() {
+        this.isVisible = true;
+    }
 }
