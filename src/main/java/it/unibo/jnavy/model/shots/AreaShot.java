@@ -16,18 +16,18 @@ public class AreaShot implements HitStrategy {
     @Override
     public List<ShotResult> execute(final Position target, final Grid grid) {
         final List<ShotResult> results = new ArrayList<>();
+        final int vetX = target.x() >= grid.getSize()/2 ? -1 : 1;
+        final int vetY = target.y() >= grid.getSize()/2 ? -1 : 1;
 
-        // Define the offsets for a 2x2 area
         final List<Position> targets = List.of(
                 target,
-                new Position(target.x() + 1, target.y()),       // Right
-                new Position(target.x(), target.y() + 1),       // Down
-                new Position(target.x() + 1, target.y() + 1) // Diagonal
+                new Position(target.x() + vetX, target.y()),
+                new Position(target.x(), target.y() + vetY),
+                new Position(target.x() + vetX, target.y() + vetY)
         );
 
         for (final Position pos : targets) {
-            final ShotResult shotResult = grid.receiveShot(pos);//deve diventare weatherManager.receiveShot(target) e va usato grid.receiveShot(target) in weatherManager
-
+            final ShotResult shotResult = grid.receiveShot(pos);
             results.add(shotResult);
         }
         return results;
