@@ -1,5 +1,7 @@
 package it.unibo.jnavy.model;
 
+import java.util.List;
+
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.shots.HitStrategy;
@@ -46,7 +48,7 @@ public interface Player {
      *
      * @param target The target {@link Position}.
      * @param grid The grid {@link Grid}.
-     * @return The {@link HitStrategy} representing the generated shot.
+     * @return The {@link ShotResult} representing the list of generated shot outcomes.
      */
-    HitStrategy createShot(Position target, Grid grid);
+    List<ShotResult> createShot(Position target, Grid grid);
 }

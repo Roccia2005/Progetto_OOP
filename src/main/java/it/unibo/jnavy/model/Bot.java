@@ -43,8 +43,10 @@ public class Bot implements Player, TurnObserver{
     }
 
     @Override
-    public HitStrategy createShot(final Position target) {
-        return new StandardShot(target);
+    public List<ShotResult> createShot(final Position target, final Grid grid) {
+        HitStrategy shot = new StandardShot();
+            //andrà sostituita la grid in WeatherGrid
+        return shot.execute(target, grid);
     }
 
     @Override
