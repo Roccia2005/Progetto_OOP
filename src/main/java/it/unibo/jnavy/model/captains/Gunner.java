@@ -1,6 +1,8 @@
 package it.unibo.jnavy.model.captains;
 
 import it.unibo.jnavy.model.grid.Grid;
+import it.unibo.jnavy.model.shots.AreaShot;
+import it.unibo.jnavy.model.shots.HitStrategy;
 import it.unibo.jnavy.model.utilities.Position;
 
 public class Gunner extends AbstractCaptain{
