@@ -18,12 +18,11 @@ public class Engineer extends AbstractCaptain{
     public boolean useAbility(Grid grid, Position p) {
         if (this.isAbilityRecharged()) {
             Optional<Cell> cell = grid.getCell(p);
-            if (cell.isPresent()) {
-                return grid.repair(p);
+            if (cell.isPresent() && grid.repair(p)) {
+                this.resetCooldown();
+                return true;
             }
-            this.resetCooldown();
         }
         return false;
     }
-    
 }
