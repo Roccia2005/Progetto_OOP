@@ -104,5 +104,10 @@ public class GridImpl implements Grid{
     @Override
     public Optional<Cell> getCell(Position p) {
         return Optional.of(cells[p.x()][p.y()]);
-    }    
+    }
+
+    @Override
+    public int getSize() {
+        return SIZE;
+    }
 } 
