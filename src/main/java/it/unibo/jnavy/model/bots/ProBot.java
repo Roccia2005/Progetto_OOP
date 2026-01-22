@@ -26,7 +26,26 @@ public class ProBot extends AbstractBotStrategy{
     @Override
     public Position selectTarget(Grid enemyGrid) {
 
-        return null;
+        Position nextTarget = null;
+
+        switch (currentState) {
+            case HUNTING:
+                nextTarget = super.getRandomValidPosition(enemyGrid);
+            break;
+
+            case SEEKING:
+                while(nextTarget == null){
+                    currentDirection = availableDirections.getFirst();
+                    temporaryTarget = firstHitPosition + currentDirection;
+                }
+            break;
+
+            case DESTROYING:
+
+            break;
+        }
+
+        return nextTarget;
     }
 
     @Override
