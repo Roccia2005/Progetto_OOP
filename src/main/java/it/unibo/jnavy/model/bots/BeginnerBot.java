@@ -21,8 +21,8 @@ public class BeginnerBot implements BotStrategy{
         if (cellsList.isEmpty()) {
             throw new IllegalStateException("The bot can't shoot, no valid cells in grid");
         }
-
         int randomIndex = getRandomIndex(cellsList);
+
         return cellsList.get(randomIndex);
     }
 
