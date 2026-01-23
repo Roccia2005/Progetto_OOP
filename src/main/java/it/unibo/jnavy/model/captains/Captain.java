@@ -25,7 +25,7 @@ public interface Captain {
      *
      * @param grid the game grid where the ability will be applied.
      * @param p the target position for the ability.
-     * @return true if the ability was successfully executed, false otherwise (e.g., on cooldown or invalid target).
+     * @return true if the ability was successfully executed, false otherwise.
      */
     boolean useAbility(Grid grid, Position p);
 }
