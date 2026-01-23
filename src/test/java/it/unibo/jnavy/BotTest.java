@@ -12,4 +12,19 @@ public class BotTest {
     void createBeginnerBot() {
 
     }
+
+    @Test
+    void createProBot() {
+
+    }
+
+    @Test
+    void createSniperBot() {
+
+    }
+
+    /*
+        test da aggiungere:
+            -
+    */
 }
