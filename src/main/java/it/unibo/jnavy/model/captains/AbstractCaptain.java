@@ -18,7 +18,7 @@ public abstract class AbstractCaptain implements Captain, TurnObserver{
     }
 
     @Override
-    public void onTurnEnd() {
+    public void processTurnEnd() {
         this.currentCooldown++;
     }
 

@@ -18,4 +18,19 @@ public class WeatherManagerTest {
     void setUp() {
         this.weatherManager = new WeatherManagerImpl();
     }
+
+    @Test
+    void testInitialCondition() {
+
+    }
+
+    @Test
+    void testWeatherChangeOnTurns() {
+
+    }
+
+    @Test
+    void testFogDeviation() {
+
+    }
 }

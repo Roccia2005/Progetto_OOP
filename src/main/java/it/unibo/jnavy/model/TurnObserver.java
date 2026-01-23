@@ -16,12 +16,12 @@ public interface TurnObserver {
      * (e.g., implementations should use this to decrease cooldown timers,
      * decrease duration of weather conditions, update turn counters, ...)
      */
-    void onTurnEnd();
+    void processTurnEnd();
 
     /**
      * Called automatically by the Game Controller before each turn.
      *
      * This is a {@code default} method, classes are not forced to implement it.
      */
-    default void onTurnStart() {}
+    default void prepareTurn() {}
 }
