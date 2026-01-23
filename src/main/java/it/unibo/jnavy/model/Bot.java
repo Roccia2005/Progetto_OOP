@@ -50,7 +50,7 @@ public class Bot implements Player, TurnObserver{
     }
 
     @Override
-    public void onTurnEnd() {
+    public void processTurnEnd() {
     }
 
     /**

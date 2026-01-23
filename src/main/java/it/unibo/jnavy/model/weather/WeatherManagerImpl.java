@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.weather;
 
+import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 
@@ -36,9 +37,9 @@ public class WeatherManagerImpl implements WeatherManager {
     }
 
     @Override
-    public Position applyWeatherEffects(final Position target, final Grid grid) {
+    public ShotResult applyWeatherEffects(final Position target, final Grid grid) {
         if (this.condition == WeatherCondition.SUNNY) {
-            return target;
+            return grid.receiveShot(target);
         }
         Position nextPossiblePosition;
         int gridSize = grid.getSize();
@@ -48,11 +49,11 @@ public class WeatherManagerImpl implements WeatherManager {
             nextPossiblePosition = new Position(target.x() + offsetX, target.y() + offsetY);
         } while (nextPossiblePosition.x() < 0 || nextPossiblePosition.x() >= gridSize ||
                 nextPossiblePosition.y() < 0 || nextPossiblePosition.y() >= gridSize);
-        return nextPossiblePosition;
+        return grid.receiveShot(nextPossiblePosition);
     }
 
     @Override
-    public void onTurnEnd() {
+    public void processTurnEnd() {
         this.turnCounter++;
         if (this.turnCounter >= WEATHER_DURATION) {
             if (this.condition == WeatherCondition.SUNNY) {
