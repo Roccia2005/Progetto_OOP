@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.weather;
 
+import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.TurnObserver;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
@@ -26,7 +27,8 @@ public interface WeatherManager extends TurnObserver {
      * If visibility is low (FOG), the target might shift to a random adjacent cell.
      *
      * @param target The original position aimed by the player.
-     * @return The actual position where the shot will land.
+     * @param grid The grid where the shot effects are applied.
+     * @return The result of the shot
      */
-    Position applyWeatherEffects(final Position target, final Grid grid);
+    ShotResult applyWeatherEffects(final Position target, final Grid grid);
 }
