@@ -7,7 +7,7 @@ import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.ship.Ship;
-import it.unibo.jnavy.model.utilities.Direction;
+import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
 /**
@@ -23,7 +23,7 @@ public interface Grid {
      * @param dir the orientation of the ship (HORIZONTAL or VERTICAL).
      * @throws IllegalArgumentException if the placement is invalid (out of bounds or collision).
      */
-    void placeShip(Ship ship, Position startPos, Direction dir);
+    void placeShip(Ship ship, Position startPos, CardinalDirection dir);
 
     /**
      * Validates if a ship can be placed at the given coordinates.
@@ -33,7 +33,7 @@ public interface Grid {
      * @param dir the orientation.
      * @return true if the placement is valid, false otherwise.
      */
-    boolean isPlacementValid(Ship ship, Position startPos, Direction dir);
+    boolean isPlacementValid(Ship ship, Position startPos, CardinalDirection dir);
 
     /**
      * Processes a shot fired at the given position.
@@ -75,4 +75,9 @@ public interface Grid {
      * @return The fleet of the grid.
      */
     Fleet getFleet();
+
+    /**
+     * @return the matrix of the grid.
+     */
+    Cell[][] getCellMatrix();
 } 

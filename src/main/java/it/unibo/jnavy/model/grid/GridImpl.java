@@ -7,7 +7,7 @@ import it.unibo.jnavy.model.cell.CellImpl;
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.fleet.FleetImpl;
 import it.unibo.jnavy.model.ship.Ship;
-import it.unibo.jnavy.model.utilities.Direction;
+import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
 import java.util.Optional;
@@ -116,5 +116,10 @@ public class GridImpl implements Grid{
         return this.fleet;
     }
 
-    
+    @Override
+    public Cell[][] getCellMatrix() {
+        if(this.cells == null) return null;
+        return this.cells;
+    }
+
 } 

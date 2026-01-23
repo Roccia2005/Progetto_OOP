@@ -45,4 +45,9 @@ public interface Cell {
      * Set the content of the cell visible
      */
     void setVisible();
+
+    /**
+     * @return if the cell has been hit or no.
+     */
+    boolean isHit();
 }
