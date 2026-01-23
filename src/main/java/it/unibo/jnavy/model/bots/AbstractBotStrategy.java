@@ -13,7 +13,7 @@ public abstract class AbstractBotStrategy implements BotStrategy{
     protected final Random random = new Random();
 
     protected Position getRandomValidPosition(Grid enemyGrid) {
-        List<Position> cellsList = getCellsList(enemyGrid);
+        List<Position> cellsList = getValidCellsList(enemyGrid);
 
         if (cellsList.isEmpty()) {
             throw new IllegalStateException("The bot can't shoot, no valid cells in grid");
@@ -24,7 +24,7 @@ public abstract class AbstractBotStrategy implements BotStrategy{
     }
 
     protected List<Position> getValidCellsList(Grid grid) {
-        List<Position> enemyGridToList = Arrays.stream(grid.getCellsMatrix())
+        List<Position> enemyGridToList = Arrays.stream(grid.getCellMatrix()) //manca controllo nel caso getCellMatrix restituisca null!
         .flatMap(Arrays::stream)
         .filter(c -> !c.isHit())
         .map(Cell::getPosition)

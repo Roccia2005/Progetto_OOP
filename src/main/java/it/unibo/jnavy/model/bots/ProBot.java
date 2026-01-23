@@ -17,7 +17,7 @@ public class ProBot extends AbstractBotStrategy{
         DESTROYING;
     }
 
-    private State currentState = HUNTING;
+    private State currentState = State.HUNTING;
     private Position firstHitPosition;
     private Position lastTargetPosition;
     private List<CardinalDirection> availableDirections = new ArrayList<>();
@@ -27,6 +27,7 @@ public class ProBot extends AbstractBotStrategy{
     public Position selectTarget(Grid enemyGrid) {
 
         Position nextTarget = null;
+        Position temporaryTarget = null;
 
         switch (currentState) {
             case HUNTING:
@@ -34,17 +35,33 @@ public class ProBot extends AbstractBotStrategy{
             break;
 
             case SEEKING:
-                while(nextTarget == null){
+                while(nextTarget == null || !availableDirections.isEmpty()){
                     currentDirection = availableDirections.getFirst();
-                    temporaryTarget = firstHitPosition + currentDirection;
+                    temporaryTarget = targetCalc(firstHitPosition);
+                    if (temporaryTarget  // se il temptarget è out of bound o colpita, hittype allora lancio exception )
+                    {
+                        availableDirections.removeFirst();
+                    } else {
+                        nextTarget = temporaryTarget;
+                    }
+
                 }
+
+                //se il case esce dal ciclo arriva qui allora availabledirections è vuota
+                if (availableDirections.isEmpty() || nextTarget == null) {
+                    currentState = State.HUNTING;
+                }
+
             break;
 
             case DESTROYING:
+                nextTarget = targetCalc(lastTargetPosition);
+                if ()
 
             break;
         }
 
+        this.lastTargetPosition = nextTarget;
         return nextTarget;
     }
 
@@ -66,7 +83,6 @@ public class ProBot extends AbstractBotStrategy{
                         resetAvailableDirections();
                     case SEEKING:
                         currentState = State.DESTROYING;
-                        currentDirection = //metodo per calcolare direction!!!
                     case DESTROYING:
                         lastTargetPosition = target;
                 }
@@ -79,9 +95,15 @@ public class ProBot extends AbstractBotStrategy{
 
     }
 
+    // funzione per resettare l'array delle direzioni possibili
     public void resetAvailableDirections() {
         this.availableDirections.clear();
         this.availableDirections.addAll(Arrays.asList(CardinalDirection.values()));
+    }
+
+    // posizione calcolata aggiungendo alla x e alla y gli offset della direzione corrispondente
+    public Position targetCalc(Position target) {
+        return new Position(target.x()+currentDirection.getRowOffset(), target.y()+currentDirection.getColOffset());
     }
 }
 
