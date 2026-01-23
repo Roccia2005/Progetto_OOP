@@ -6,6 +6,11 @@ import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 
+/**
+ * Represents the Engineer captain.
+ * 
+ * The Engineer's special ability allows the player to repair a damaged part of a ship.
+ */
 public class Engineer extends AbstractCaptain{
 
     private static final int COOLDOWN = 3;
