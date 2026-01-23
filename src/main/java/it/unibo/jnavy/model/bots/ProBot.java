@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import it.unibo.jnavy.model.HitType;
+import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
@@ -38,8 +39,7 @@ public class ProBot extends AbstractBotStrategy{
                 while(nextTarget == null || !availableDirections.isEmpty()){
                     currentDirection = availableDirections.getFirst();
                     temporaryTarget = targetCalc(firstHitPosition);
-                    if (temporaryTarget  // se il temptarget è out of bound o colpita, hittype allora lancio exception )
-                    {
+                    if (!isTargetValid(temporaryTarget, enemyGrid)) {
                         availableDirections.removeFirst();
                     } else {
                         nextTarget = temporaryTarget;
@@ -56,7 +56,7 @@ public class ProBot extends AbstractBotStrategy{
 
             case DESTROYING:
                 nextTarget = targetCalc(lastTargetPosition);
-                if ()
+                if (next)
 
             break;
         }
@@ -81,10 +81,13 @@ public class ProBot extends AbstractBotStrategy{
                         currentState = State.SEEKING;
                         firstHitPosition = target;
                         resetAvailableDirections();
+                        break;
                     case SEEKING:
                         currentState = State.DESTROYING;
+                        break;
                     case DESTROYING:
                         lastTargetPosition = target;
+                        break;
                 }
 
             case MISS:
@@ -102,18 +105,21 @@ public class ProBot extends AbstractBotStrategy{
     }
 
     // posizione calcolata aggiungendo alla x e alla y gli offset della direzione corrispondente
-    public Position targetCalc(Position target) {
+    public Position targetCalc(final Position target) {
         return new Position(target.x()+currentDirection.getRowOffset(), target.y()+currentDirection.getColOffset());
     }
-}
 
-    /*
-        flusso del probot:
-            - sparo random finchè non prendo una cella con nave sopra (salva posizione come FIRSTHITPOSITION)
-            - sparo alla adiacente up (se valida), miss1 = sparo alla adiacente destra (se valida), miss2 = sparo alla adiacente sotto (se valida), miss3 = sparo alla adiacente a sinistra (per forza sarà valida) ---> si avrà hit = (salva direction)
-            - sparo successivo nella cella adiacente in quella specifica DIRECTION
-            - hit = continuo a sparare alla adiacente in quella specifica DIRECTION | miss = DIRECTION = INVERTIDIRECTION
-            - sparo alla adiacente della FIRSTHITPOSITION in quella specifica nuova DIRECTION
-            - hit = continuo | miss = nave affondata
-            - ricomincia il flusso!
-    */
+    //estraggo lo status della cell dall'optional e verifico se è valido o meno + verifico se è in bounds
+    public boolean isTargetValid(final Position target, final Grid grid) {
+        Cell[][] matrix = grid.getCellMatrix();
+        int x = target.x();
+        int y = target.y();
+        return !grid.getCell(target)
+        .map(c -> !c.isHit())
+        .orElse(false)
+        && x >= 0
+        && x < matrix.length
+        && y >= 0
+        && y < matrix[0].length;
+    }
+}
