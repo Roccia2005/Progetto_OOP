@@ -4,10 +4,8 @@ import java.util.List;
 
 import it.unibo.jnavy.model.bots.BotStrategy;
 import it.unibo.jnavy.model.fleet.Fleet;
-import it.unibo.jnavy.model.fleet.FleetImpl;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.grid.GridImpl;
-import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.shots.HitStrategy;
 import it.unibo.jnavy.model.shots.StandardShot;
 import it.unibo.jnavy.model.utilities.Position;

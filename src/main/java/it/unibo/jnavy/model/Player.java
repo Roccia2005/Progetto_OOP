@@ -4,7 +4,6 @@ import java.util.List;
 
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.grid.Grid;
-import it.unibo.jnavy.model.shots.HitStrategy;
 import it.unibo.jnavy.model.utilities.Position;
 
 /**
