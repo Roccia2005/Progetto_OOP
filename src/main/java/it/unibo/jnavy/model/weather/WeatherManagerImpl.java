@@ -21,7 +21,7 @@ public class WeatherManagerImpl implements WeatherManager {
     private static final int WEATHER_DURATION = 5;
     private WeatherCondition condition;
     private int turnCounter;
-    private final Random random;
+    private Random random;
 
     /**
      * Initializes the weather manager.
@@ -42,6 +42,15 @@ public class WeatherManagerImpl implements WeatherManager {
             instance = new WeatherManagerImpl();
         }
         return instance;
+    }
+
+    /**
+     * Resets the weather manager to its initial state.
+     */
+    public void reset() {
+        this.condition = WeatherCondition.SUNNY;
+        this.turnCounter = 0;
+        this.random = new Random();
     }
 
     @Override
