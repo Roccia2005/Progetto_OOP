@@ -18,7 +18,9 @@ public class WeatherManagerTest {
 
     @BeforeEach
     void setUp() {
-        this.weatherManager = new WeatherManagerImpl();
+        this.weatherManager = WeatherManagerImpl.getInstance();
+
+        ((WeatherManagerImpl) this.weatherManager).reset();
     }
 
     @Test
