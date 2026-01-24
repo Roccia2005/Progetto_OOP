@@ -23,8 +23,8 @@ public class CellImpl implements Cell{
     
     @Override
     public HitType receiveShot() {
-        if (this.status != null) {
-            return HitType.ALREADY_HIT;
+        if (isHit()) {
+            throw new IllegalStateException("Cannot shoot the same cell twice!");
         }
 
         if (this.ship == null) {
@@ -65,6 +65,6 @@ public class CellImpl implements Cell{
 
     @Override
     public boolean isHit() {
-        return status == HitType.HIT ? true : false;
+        return this.status != null;
     }
 }

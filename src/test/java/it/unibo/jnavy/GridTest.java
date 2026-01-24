@@ -103,8 +103,9 @@ public class GridTest {
         assertEquals(HitType.HIT, resultHit.hitType());
         
         // 3. I hit the same spot (ALREADY_HIT)
-        ShotResult resultAlreadyHit = grid.receiveShot(new Position(5, 5));
-        assertEquals(HitType.ALREADY_HIT, resultAlreadyHit.hitType());
+        assertThrows(IllegalStateException.class, () -> {
+            grid.receiveShot(new Position(5, 5));
+        }, "It should throw an exception if I shoot a cell that has already been hit");
 
         // 4. I'm sinking the ship (SUNK)
         ShotResult resultSunk = grid.receiveShot(new Position(5, 6));
