@@ -16,7 +16,7 @@ import java.util.Optional;
 /**
  * Concrete implementation of the Grid interface.
  */
-public class GridImpl implements Grid{
+public class GridImpl implements Grid {
 
     private static final int SIZE = 10;
     private final Cell[][] cells;

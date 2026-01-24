@@ -11,6 +11,7 @@ import it.unibo.jnavy.model.ship.Ship;
 public class FleetImpl implements Fleet {
 
     private List<Ship> ships;
+    private static final int MAX_SHIPS = 5;
 
     public FleetImpl() {
         this.ships = new ArrayList<>();
@@ -18,6 +19,25 @@ public class FleetImpl implements Fleet {
 
     @Override
     public void addShip(Ship s) {
+        if (this.ships.size() >= MAX_SHIPS) {
+            throw new IllegalStateException("Fleet is full! Max " + MAX_SHIPS + " ships allowed.");
+        }
+        long currentCountOfThisSize = ships.stream()
+                                       .filter(ship -> ship.getSize() == s.getSize())
+                                       .count();
+        
+        int allowedMax = switch (s.getSize()) {
+        case 2 -> 1;
+        case 3 -> 2;
+        case 4 -> 1;
+        case 5 -> 1;
+        default -> 0;
+        };
+
+        if (currentCountOfThisSize >= allowedMax) {
+            throw new IllegalStateException("Cannot add more ships of size " + s.getSize());
+        }
+        
         this.ships.add(s);
     }
 
@@ -36,6 +56,16 @@ public class FleetImpl implements Fleet {
     @Override
     public List<Ship> getShips() {
         return new ArrayList<>(this.ships);
+    }
+
+    @Override
+    public boolean isTopologyValid() {
+        long size2 = ships.stream().filter(s -> s.getSize() == 2).count();
+        long size3 = ships.stream().filter(s -> s.getSize() == 3).count();
+        long size4 = ships.stream().filter(s -> s.getSize() == 4).count();
+        long size5 = ships.stream().filter(s -> s.getSize() == 5).count();
+
+        return size2 == 2 && size3 == 1 && size4 == 1 && size5 == 1;
     }
     
 }
