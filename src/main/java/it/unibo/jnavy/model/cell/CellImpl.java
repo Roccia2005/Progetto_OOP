@@ -67,4 +67,9 @@ public class CellImpl implements Cell{
     public boolean isHit() {
         return status == HitType.HIT ? true : false;
     }
+
+    @Override
+    public boolean isVisible() {
+        return this.isVisible;
+    }
 }
