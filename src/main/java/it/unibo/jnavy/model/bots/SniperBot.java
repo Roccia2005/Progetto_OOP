@@ -19,16 +19,19 @@ public class SniperBot implements BotStrategy{
 
     /**
      * Cosa viene fornito allo sniper bot:
-     * - halfGrid = metà sinistra della griglia avversaria
-     * Cosa fa lo sniper bot:
-     * - prima di tutto fonde la halfGrid nella enemyGrid = da adesso la enemyGrid sarà una fusione tra enemyGrid e halfGrid!
-     * - il primo sparo non lo fa a caso!
-     * - come prima cella da colpire sceglie la prima cella occupata che incontra nella enemyGrid
-     * - per le celle seguenti avrà due possibilità (come obiettivo deve avere quello di affondare):
-     *      1. se nella enemyGrid è presente anche la cella adiacente a quella appena colpita ---> sniper bot bara e la colpisce direttamente;
-     *      2. se nella enemyGrid non è presente la cella adiacente a quella appena colpita, si hanno due possibilità:
-     *          a. la cella è presente nella enemyGrid ma si trova dall'altro lato rispetto a quella appena colpita, ad es: O X X, dobbiamo distruggere O;
-     *          b. la cella non è presente nella enemyGrid quindi andrà cercata con il metodo dell'adiacenza usato nel ProBot ma in partenza andranno escluse le adiacenti vuote.
-     * - nei turni successivi dato che il bot avrà nella enemyGrid eventualmente anche celle che ha colpito e quindi rivelato che non erano nella halfGrid, potrà partire da quelle usando il solito metodo di adiacenza.
+     * - enemyGrid = griglia avversaria reale (il controller passa direttamente al costruttore dello sniper la human.getGrid() alla creazione di esso)
+     * - lo sniper si prende la metà sinistra e salva tutto in una lista knownTargets
+     *
+     * Cosa fa lo sniper bot finchè ci sono celle in knownTargets:
+     * - come prima cella da colpire sceglie la prima cella occupata che incontra nella lista knownTargets;
+     * - se colpisce una nave (HIT) ma non la affonda, controlla la knownTargets:
+     *      1. se il resto della nave è ancora nella lista (quindi nella metà sinistra): continua a sparare a quelle coordinate.
+     *      2. se il resto della nave NON è nella lista (quindi la nave attraversa il confine verso destra):
+     *              a. il Bot calcola la prossima cella adiacente verso DESTRA (nella zona buia) e spara li'.
+     *
+     * Cosa fa lo sniper bot quando knownTargets è vuota:
+     * - distrutte tutte le navi nella metà sinistra, sniperBot si comporta come proBot MA solo nella metà destra.
+     *
+     * Devo ricordarmi di estendere da ProBot direttamente così da avere il comportamento già pronto!!!
      */
 }
