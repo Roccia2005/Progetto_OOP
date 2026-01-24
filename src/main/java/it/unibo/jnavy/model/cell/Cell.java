@@ -50,4 +50,9 @@ public interface Cell {
      * @return if the cell has been hit or no.
      */
     boolean isHit();
+
+    /**
+     * @return if the cell is visible
+     */
+    boolean isVisible();
 }
