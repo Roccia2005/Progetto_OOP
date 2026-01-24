@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Concrete implementation of the Grid interface.
  */
-public class GridImpl implements Grid{
+public class GridImpl implements Grid {
 
     private static final int SIZE = 10;
     private final Cell[][] cells;
@@ -36,14 +36,14 @@ public class GridImpl implements Grid{
     }
 
     @Override
-    public void placeShip(Ship ship, Position startPos, Direction dir) {
+    public void placeShip(Ship ship, Position startPos, CardinalDirection dir) {
         if (!isPlacementValid(ship, startPos, dir)) {
             throw new IllegalArgumentException("Invalid ship placement!");
         }
 
         for (int i = 0; i < ship.getSize(); i++) {
-            int x = startPos.x() + (dir == Direction.VERTICAL ? i : 0);
-            int y = startPos.y() + (dir == Direction.HORIZONTAL ? i : 0);
+            int x = startPos.x() + (dir == CardinalDirection.UP ? i : 0);
+            int y = startPos.y() + (dir == CardinalDirection.RIGHT ? i : 0);
 
             cells[x][y].setShip(ship);
         }
@@ -52,10 +52,10 @@ public class GridImpl implements Grid{
     }
 
     @Override
-    public boolean isPlacementValid(Ship ship, Position startPos, Direction dir) {
+    public boolean isPlacementValid(Ship ship, Position startPos, CardinalDirection dir) {
         for (int i = 0; i < ship.getSize(); i++) {
-            int x = startPos.x() + (dir == Direction.VERTICAL ? i : 0);
-            int y = startPos.y() + (dir == Direction.HORIZONTAL ? i : 0);
+            int x = startPos.x() + (dir == CardinalDirection.UP ? i : 0);
+            int y = startPos.y() + (dir == CardinalDirection.RIGHT ? i : 0);
 
             if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) {
                 return false;
