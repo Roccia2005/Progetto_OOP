@@ -7,14 +7,16 @@ import it.unibo.jnavy.model.utilities.Position;
 import java.util.Random;
 
 /**
- * Concrete implementation of the {@link WeatherManager}.
+ * Concrete implementation of the {@link WeatherManager} using the Singleton Pattern.
  * This class handles the logic for random weather transitions based on turn counters.
- * It uses a pseudo-random number generator to determine:
- *    - When the weather changes.
- *    - Which new condition is selected.
- *    - Whether a shot misses due to bad weather conditions.
+ * It determines:
+ *    - When the weather changes (based on a fixed duration).
+ *    - The alternating cycle between {@link WeatherCondition#SUNNY} and {@link WeatherCondition#FOG}.
+ *    - The calculation of coordinate deviation when shooting in bad weather.
  */
 public class WeatherManagerImpl implements WeatherManager {
+
+    private static WeatherManagerImpl instance;
 
     private static final int WEATHER_DURATION = 5;
     private WeatherCondition condition;
@@ -25,10 +27,21 @@ public class WeatherManagerImpl implements WeatherManager {
      * Initializes the weather manager.
      * Starts with {@link WeatherCondition#SUNNY} and a turn counter of 0.
      */
-    public WeatherManagerImpl() {
-        this.condition = WeatherCondition.SUNNY;
-        this.turnCounter = 0;
-        this.random = new Random();
+    private WeatherManagerImpl() {
+        this.reset();
+    }
+
+    /**
+     * Returns the single instance of the WeatherManager.
+     * If it doesn't exist, it creates it.
+     *
+     * @return The singleton instance.
+     */
+    public static synchronized WeatherManagerImpl getInstance() {
+        if (instance == null) {
+            instance = new WeatherManagerImpl();
+        }
+        return instance;
     }
 
     @Override
