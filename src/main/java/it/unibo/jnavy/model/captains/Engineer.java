@@ -13,7 +13,7 @@ import it.unibo.jnavy.model.utilities.Position;
  */
 public class Engineer extends AbstractCaptain{
 
-    private static final int COOLDOWN = 3;
+    public static final int COOLDOWN = 3;
 
     public Engineer() {
         super(COOLDOWN);

@@ -14,7 +14,7 @@ import it.unibo.jnavy.model.utilities.Position;
  */
 public class SonarOfficer extends AbstractCaptain {
 
-    private static final int COOLDOWN = 3;
+    public static final int COOLDOWN = 3;
 
     public SonarOfficer() {
         super(COOLDOWN);
