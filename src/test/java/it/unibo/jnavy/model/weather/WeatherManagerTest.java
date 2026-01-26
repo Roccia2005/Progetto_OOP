@@ -16,31 +16,56 @@ public class WeatherManagerTest {
 
     private WeatherManager weatherManager;
 
+    /**
+     * Sets up the test environment before each test.
+     * Retrives the WeatherManager singleton instance and resets its internal state.
+     * This ensures that every test starts with a clean state
+     * (SUNNY weather, turn counter at 0).
+     */
     @BeforeEach
     void setUp() {
         this.weatherManager = WeatherManagerImpl.getInstance();
-
+        // Manual reset is necessary because the instance is static (Singleton)
         ((WeatherManagerImpl) this.weatherManager).reset();
     }
 
+    /**
+     * Verifies the initial state of the WeatherManager.
+     * The weather condition must always be {@link WeatherCondition#SUNNY}.
+     */
     @Test
     void testInitialCondition() {
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
     }
 
+    /**
+     * Verifies that the weather condition changes every 5 turns.
+     */
     @Test
     void testWeatherChangeOnTurns() {
+        // Verify initial state
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
+
+        // Advance 5 turns (Weather duration)
         for (int i = 0; i < 5; i++) {
             this.weatherManager.processTurnEnd();
         }
+        // Weather should be FOG
         assertEquals(WeatherCondition.FOG, this.weatherManager.getCurrentWeather());
+
+        //Advance another 5 turns
         for (int i = 0; i < 5; i++) {
             this.weatherManager.processTurnEnd();
         }
+        // Weather should return to SUNNY
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
     }
 
+    /**
+     * Verifies shot precision under SUNNY conditions.
+     * With these weather conditions, the hit position must
+     * match the targeted position exactly.
+     */
     @Test
     void testSunnyPrecision() {
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
@@ -53,6 +78,13 @@ public class WeatherManagerTest {
         assertEquals(target, shotResult.position());
     }
 
+    /**
+     * Verifies the deviation effect under FOG conditions.
+     * With these weather conditions, the shot may land in a random cell
+     * within a 3x3 area centered on the target.
+     * This test ensures that the final position is at most 1 cell away (horizontally or vertically)
+     * from the original target.
+     */
     @Test
     void testFogDeviation() {
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
@@ -65,8 +97,9 @@ public class WeatherManagerTest {
         Grid grid = new GridImpl();
         Position target = new Position(5, 5);
         ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
-        Position actualPos = shotResult.position();
 
+        // Calculate distance (Delta)
+        Position actualPos = shotResult.position();
         int diffX = Math.abs(target.x() - actualPos.x());
         int diffY = Math.abs(target.y() - actualPos.y());
 
@@ -74,6 +107,12 @@ public class WeatherManagerTest {
 
     }
 
+    /**
+     * Verifies behavior at grid boundaries (Edge Case) under FOG conditions.
+     * When shooting at the corner (0,0), the deviation logic must ensure that:
+     * 1. No negative coordinates are generated (out of bounds).
+     * 2. The shot remains within the valid neighborhood: (0,0), (0,1), (1,0), or (1,1).
+     */
     @Test
     void fogCornerCase() {
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
@@ -86,6 +125,8 @@ public class WeatherManagerTest {
         ShotResult shotResult = this.weatherManager.applyWeatherEffects(corner, grid);
         Position hitPosition = shotResult.position();
         assertNotNull(hitPosition);
+
+        // Check that the shot is within the valid neighborhood (0,0), (0,1), (1,0), or (1,1)
         assertTrue(hitPosition.x() >= 0 && hitPosition.x() <= 1);
         assertTrue(hitPosition.y() >= 0 && hitPosition.y() <= 1);
     }
