@@ -73,4 +73,20 @@ public class WeatherManagerTest {
         assertTrue(diffX <= 1 && diffY <= 1);
 
     }
+
+    @Test
+    void fogCornerCase() {
+        assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
+        for (int i = 0; i < 5; i++) {
+            this.weatherManager.processTurnEnd();
+        }
+        assertEquals(WeatherCondition.FOG, this.weatherManager.getCurrentWeather());
+        Grid grid = new GridImpl();
+        Position corner = new Position(0, 0);
+        ShotResult shotResult = this.weatherManager.applyWeatherEffects(corner, grid);
+        Position hitPosition = shotResult.position();
+        assertNotNull(hitPosition);
+        assertTrue(hitPosition.x() >= 0 && hitPosition.x() <= 1);
+        assertTrue(hitPosition.y() >= 0 && hitPosition.y() <= 1);
+    }
 }
