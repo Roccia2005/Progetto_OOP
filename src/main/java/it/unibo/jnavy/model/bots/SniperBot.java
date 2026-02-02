@@ -1,6 +1,7 @@
 package it.unibo.jnavy.model.bots;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,13 +38,50 @@ public class SniperBot extends ProBot{
 
     @Override
     public Position selectTarget(final Grid enemyGrid) {
+        //ogni volta che entro tolgo i vari cell che ho colpito
+        Iterator<Position> iterator = this.perfectTargets.iterator();
+        while (iterator.hasNext()) {
+            Position p = iterator.next();
+            Optional<Cell> cell = enemyGrid.getCell(p);
+            if (cell.isPresent() && cell.get().isHit()) {
+                iterator.remove();
+            }
+        }
 
-        return new Position();
+        //controllo confine della metà della griglia, da capire
+        /**
+         *
+         *
+         */
+
+        // do come posizione la prima delle conosciute
+        if (!this.perfectTargets.isEmpty()) {
+            return this.perfectTargets.getFirst();
+        }
+
+        return super.selectTarget(enemyGrid); // fase del funzionamento come probot nel caso non ci siano più celle conosciute asx
     }
 
     @Override
     public void lastShotFeedback(final Position target, final HitType result) {
+        //modifica allo switch per tenere stato sniper?
+    }
 
+    @Override
+    protected Position getRandomValidPosition(final Grid enemyGrid) { //deve tirare solo nella metà dx, non va bene il tiro casuale in tutta la griglia
+        List<Position> validCells = super.getValidCellsList(enemyGrid);
+        List<Position> halfValidCellsDx = new ArrayList<>();
+
+        for (Position p : validCells) {
+            if (p.y() >= (enemyGrid.getSize() / 2)) {
+                halfValidCellsDx.add(p);
+            }
+        }
+
+        if (halfValidCellsDx.isEmpty()) {
+            throw new IllegalStateException("the bot has no valid cells in the right halfgrid");
+        }
+        return halfValidCellsDx.get(super.getRandomIndex(halfValidCellsDx));
     }
 
     /**
