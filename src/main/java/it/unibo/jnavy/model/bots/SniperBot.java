@@ -1,10 +1,39 @@
 package it.unibo.jnavy.model.bots;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import it.unibo.jnavy.model.HitType;
+import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 
-public class SniperBot implements BotStrategy{
+public class SniperBot extends ProBot{
+
+    private final List<Position> perfectTargets;
+
+    public SniperBot(final Grid humanGrid) {
+        super();
+        this.perfectTargets = new ArrayList<>();
+        populatePerfectTargets(humanGrid);
+    }
+
+    private void populatePerfectTargets(final Grid grid) {
+        int rows = grid.getSize();
+        int halfColumns = grid.getSize() / 2; //campo? rivedere
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < halfColumns; j++) {
+                Position pos = new Position(i, j);
+                Optional<Cell> cell = grid.getCell(pos);
+
+                if (cell.isPresent() && cell.get().isOccupied()) {
+                    this.perfectTargets.add(pos);
+                }
+            }
+        }
+    }
 
     @Override
     public Position selectTarget(final Grid enemyGrid) {
