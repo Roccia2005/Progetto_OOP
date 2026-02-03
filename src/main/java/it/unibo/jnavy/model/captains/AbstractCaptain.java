@@ -9,7 +9,7 @@ import it.unibo.jnavy.model.TurnObserver;
  * cooldown management mechanism. It implements {@link TurnObserver} to
  * automatically increment the cooldown counter at the end of each turn.
  */
-public abstract class AbstractCaptain implements Captain, TurnObserver{
+public abstract class AbstractCaptain implements Captain {
 
     private final int cooldown;
     private int currentCooldown;

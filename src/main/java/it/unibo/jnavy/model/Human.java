@@ -2,7 +2,7 @@ package it.unibo.jnavy.model;
 
 import java.util.List;
 
-import it.unibo.jnavy.model.captains.AbstractCaptain;
+import it.unibo.jnavy.model.captains.Captain;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.grid.GridImpl;
 import it.unibo.jnavy.model.utilities.Position;
@@ -10,10 +10,10 @@ import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
 public class Human implements Player, TurnObserver {
 
-    private AbstractCaptain captain;
+    private Captain captain;
     private Grid grid;
 
-    public Human(final AbstractCaptain captain) {
+    public Human(final Captain captain) {
         this.grid = new GridImpl();
         this.captain = captain;
     }

@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.captains;
 
+import it.unibo.jnavy.model.TurnObserver;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 
@@ -8,7 +9,7 @@ import it.unibo.jnavy.model.utilities.Position;
  * Each captain possesses a unique special ability that can be used on the grid
  * after a certain cooldown period.
  */
-public interface Captain {
+public interface Captain extends TurnObserver{
 
     /**
      * Checks if the captain's special ability is ready to be used.
