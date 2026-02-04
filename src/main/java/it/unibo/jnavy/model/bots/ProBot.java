@@ -5,10 +5,20 @@ import java.util.Arrays;
 import java.util.List;
 
 import it.unibo.jnavy.model.HitType;
+import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 
+
+/**
+ * nel controller avverrà questo:
+ * - INIZIO TURNO BOT!
+ * - bot.decideTarget(enemyGrid) ---> viene generata uno "sparo" in una certa position in base a selectTarget(enemyGrid)
+ * - ShotResult risultato = humanGrid.receiveShot("sparo") ---> viene inserito l'esito dello shot sulla vera griglia nemica in risultato
+ * - bot.lastShotFeedback(risultato) ---> il bot impara da questo risultato cambiando le varie modalità in base ad esso
+ * - FINE TURNO BOT!
+ */
 public class ProBot extends AbstractBotStrategy{
 
     public enum State{
@@ -17,16 +27,18 @@ public class ProBot extends AbstractBotStrategy{
         DESTROYING;
     }
 
-    private State currentState = HUNTING;
+    private State currentState = State.HUNTING;
     private Position firstHitPosition;
     private Position lastTargetPosition;
     private List<CardinalDirection> availableDirections = new ArrayList<>();
     private CardinalDirection currentDirection = null;
 
+    // uso questo metodo per calcolare le effettive posizioni ovvero i target da restituire e a cui sparare
     @Override
-    public Position selectTarget(Grid enemyGrid) {
+    public Position selectTarget(final Grid enemyGrid) {
 
         Position nextTarget = null;
+        Position temporaryTarget = null;
 
         switch (currentState) {
             case HUNTING:
@@ -34,64 +46,108 @@ public class ProBot extends AbstractBotStrategy{
             break;
 
             case SEEKING:
-                while(nextTarget == null){
+                while(nextTarget == null && !availableDirections.isEmpty()){
                     currentDirection = availableDirections.getFirst();
-                    temporaryTarget = firstHitPosition + currentDirection;
+                    temporaryTarget = targetCalc(firstHitPosition);
+                    if (!isTargetValid(temporaryTarget, enemyGrid)) {
+                        // al momento mi trovo meglio usando una lista in cui rimuovo le direction non valide
+                        this.availableDirections.removeFirst();
+                    } else {
+                        nextTarget = temporaryTarget;
+                        break;
+                    }
+
                 }
+
+                if (availableDirections.isEmpty() || nextTarget == null) {
+                    currentState = State.HUNTING;
+                    nextTarget = super.getRandomValidPosition(enemyGrid);
+                }
+
             break;
 
             case DESTROYING:
+                temporaryTarget = targetCalc(lastTargetPosition);
+                if (!isTargetValid(temporaryTarget, enemyGrid)) {
+                    this.currentDirection = this.currentDirection.opposite();
+                    nextTarget = targetCalc(firstHitPosition);
+                    lastTargetPosition = firstHitPosition;
+                } else {
+                    nextTarget = temporaryTarget;
+                }
 
             break;
         }
 
+        this.lastTargetPosition = nextTarget;
         return nextTarget;
     }
 
+    //uso questo metodo per far imparare al bot, viene chiamato dopo che si conosce il risultato del colpo sulla grid dell'enemy
     @Override
-    public void lastShotFeedback(Position target, HitType result) {
+    public void lastShotFeedback(final Position target, final HitType result) {
 
         switch (result) {
             case SUNK:
-                currentState = State.HUNTING;
+                this.currentState = State.HUNTING;
                 resetAvailableDirections();
-                firstHitPosition = null;
+                this.firstHitPosition = null;
                 return;
 
             case HIT:
-                switch (currentState) {
+                switch (this.currentState) {
                     case HUNTING:
-                        currentState = State.SEEKING;
-                        firstHitPosition = target;
+                        this.currentState = State.SEEKING;
+                        this.firstHitPosition = target;
                         resetAvailableDirections();
+                        break;
                     case SEEKING:
-                        currentState = State.DESTROYING;
-                        currentDirection = //metodo per calcolare direction!!!
+                        this.currentState = State.DESTROYING;
+                        break;
                     case DESTROYING:
-                        lastTargetPosition = target;
+                        this.lastTargetPosition = target;
+                        break;
                 }
+                break;
 
             case MISS:
-                if (currentState == State.DESTROYING) {
-                    currentDirection = currentDirection.opposite();
+                if (this.currentState == State.DESTROYING) {
+                    this.currentDirection = this.currentDirection.opposite();
+                    this.lastTargetPosition = firstHitPosition;
                 }
+            break;
+
+            case ALREADY_HIT:
+            case INVALID:
+            default:
+                // uso default vuoto per non far imparare nulla al bot in questi casi che non mi servono a molto
+            break;
         }
 
     }
 
+    // funzione per resettare l'array delle direzioni possibili
     public void resetAvailableDirections() {
         this.availableDirections.clear();
         this.availableDirections.addAll(Arrays.asList(CardinalDirection.values()));
     }
-}
 
-    /*
-        flusso del probot:
-            - sparo random finchè non prendo una cella con nave sopra (salva posizione come FIRSTHITPOSITION)
-            - sparo alla adiacente up (se valida), miss1 = sparo alla adiacente destra (se valida), miss2 = sparo alla adiacente sotto (se valida), miss3 = sparo alla adiacente a sinistra (per forza sarà valida) ---> si avrà hit = (salva direction)
-            - sparo successivo nella cella adiacente in quella specifica DIRECTION
-            - hit = continuo a sparare alla adiacente in quella specifica DIRECTION | miss = DIRECTION = INVERTIDIRECTION
-            - sparo alla adiacente della FIRSTHITPOSITION in quella specifica nuova DIRECTION
-            - hit = continuo | miss = nave affondata
-            - ricomincia il flusso!
-    */
+    // posizione calcolata aggiungendo alla x e alla y gli offset della direzione corrispondente
+    public Position targetCalc(final Position target) {
+        return new Position(target.x()+currentDirection.getRowOffset(), target.y()+currentDirection.getColOffset());
+    }
+
+    //estraggo lo status della cell dall'optional e verifico se è valido o meno + verifico se è in bounds
+    public boolean isTargetValid(final Position target, final Grid grid) {
+        Cell[][] matrix = grid.getCellMatrix();
+        int x = target.x();
+        int y = target.y();
+        return x >= 0
+        && x < matrix.length
+        && y >= 0
+        && y < matrix[0].length
+        && grid.getCell(target)  //metto il controllo sulla cell in fondo così non rischio che venga controllato un index non valido sulla grid
+        .map(c -> !c.isHit())
+        .orElse(false);
+    }
+}

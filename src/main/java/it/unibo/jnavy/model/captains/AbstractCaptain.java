@@ -2,7 +2,14 @@ package it.unibo.jnavy.model.captains;
 
 import it.unibo.jnavy.model.TurnObserver;
 
-public abstract class AbstractCaptain implements Captain, TurnObserver{
+/**
+ * Abstract base implementation of the {@link Captain} interface.
+ * 
+ * This class handles the common logic for all captains, specifically the
+ * cooldown management mechanism. It implements {@link TurnObserver} to
+ * automatically increment the cooldown counter at the end of each turn.
+ */
+public abstract class AbstractCaptain implements Captain {
 
     private final int cooldown;
     private int currentCooldown;
@@ -18,10 +25,13 @@ public abstract class AbstractCaptain implements Captain, TurnObserver{
     }
 
     @Override
-    public void onTurnEnd() {
+    public void processTurnEnd() {
         this.currentCooldown++;
     }
 
+    /**
+     * Resets the cooldown counter to zero.
+     */
     protected void resetCooldown() {
         this.currentCooldown = 0;
     }
