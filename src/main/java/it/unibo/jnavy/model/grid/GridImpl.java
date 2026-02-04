@@ -43,13 +43,8 @@ public class GridImpl implements Grid {
         }
 
         for (int i = 0; i < ship.getSize(); i++) {
-<<<<<<< HEAD
             int x = startPos.x() + (i * dir.getRowOffset());
             int y = startPos.y() + (i * dir.getColOffset());
-=======
-            int x = startPos.x() + (dir == CardinalDirection.UP ? i : 0);
-            int y = startPos.y() + (dir == CardinalDirection.RIGHT ? i : 0);
->>>>>>> master
 
             cells[x][y].setShip(ship);
         }
@@ -60,13 +55,8 @@ public class GridImpl implements Grid {
     @Override
     public boolean isPlacementValid(Ship ship, Position startPos, CardinalDirection dir) {
         for (int i = 0; i < ship.getSize(); i++) {
-<<<<<<< HEAD
             int x = startPos.x() + (i * dir.getRowOffset());
             int y = startPos.y() + (i * dir.getColOffset());
-=======
-            int x = startPos.x() + (dir == CardinalDirection.UP ? i : 0);
-            int y = startPos.y() + (dir == CardinalDirection.RIGHT ? i : 0);
->>>>>>> master
 
             if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) {
                 return false;

@@ -2,7 +2,6 @@ package it.unibo.jnavy.model.grid;
 
 import java.util.Optional;
 
-import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.fleet.Fleet;
