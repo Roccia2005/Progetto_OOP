@@ -8,19 +8,20 @@ import java.util.Optional;
 import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
+import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.Position;
 
 public class SniperBot extends ProBot{
 
-    private final List<Position> perfectTargets;
+    private final List<Position> knownTargets;
 
     public SniperBot(final Grid humanGrid) {
         super();
-        this.perfectTargets = new ArrayList<>();
-        populatePerfectTargets(humanGrid);
+        this.knownTargets = new ArrayList<>();
+        populateKnownTargets(humanGrid);
     }
 
-    private void populatePerfectTargets(final Grid grid) {
+    private void populateKnownTargets(final Grid grid) {
         int rows = grid.getSize();
         int halfColumns = grid.getSize() / 2; //campo? rivedere
 
@@ -30,7 +31,7 @@ public class SniperBot extends ProBot{
                 Optional<Cell> cell = grid.getCell(pos);
 
                 if (cell.isPresent() && cell.get().isOccupied()) {
-                    this.perfectTargets.add(pos);
+                    this.knownTargets.add(pos);
                 }
             }
         }
@@ -39,7 +40,7 @@ public class SniperBot extends ProBot{
     @Override
     public Position selectTarget(final Grid enemyGrid) {
         //ogni volta che entro tolgo i vari cell che ho colpito
-        Iterator<Position> iterator = this.perfectTargets.iterator();
+        Iterator<Position> iterator = this.knownTargets.iterator();
         while (iterator.hasNext()) {
             Position p = iterator.next();
             Optional<Cell> cell = enemyGrid.getCell(p);
@@ -48,23 +49,55 @@ public class SniperBot extends ProBot{
             }
         }
 
-        //controllo confine della metà della griglia, da capire
-        /**
-         *
-         *
-         */
+        //controllo dell'attraversamento della metà della griglia
+        Position borderTarget = checkBorderCrossing(enemyGrid);
+        if (borderTarget != null) {
+            return borderTarget;
+        }
 
         // do come posizione la prima delle conosciute
-        if (!this.perfectTargets.isEmpty()) {
-            return this.perfectTargets.getFirst();
+        if (!this.knownTargets.isEmpty()) {
+            return this.knownTargets.getFirst();
         }
 
         return super.selectTarget(enemyGrid); // fase del funzionamento come probot nel caso non ci siano più celle conosciute asx
     }
 
-    @Override
-    public void lastShotFeedback(final Position target, final HitType result) {
-        //modifica allo switch per tenere stato sniper?
+    private Position checkBorderCrossing(final Grid grid) {
+        //devo capire se esiste una nave colpita nella metà sinistra e continua nella parte destra
+        //itero sulla parte sx
+        for (int i = 0; i < grid.getSize(); i++) {
+            for (int j = 0; j < grid.getSize() / 2; j++) {
+                Position p = new Position(i, j);
+                Optional<Cell> optCell = grid.getCell(p);
+
+                if (optCell.isPresent()) {
+                    Cell cell = optCell.get();
+                    if (cell.isHit() && cell.isOccupied()) {
+                        Ship ship = cell.getShip();
+
+                        //ora se la nave nella cella non è affondata
+                        if (!ship.isSunk()) {
+                            boolean shipHasPiecesRemaining = false;
+                            for (Position targetPos : this.knownTargets) {
+                                Optional<Cell> targetCell = grid.getCell(targetPos);
+                                //se il target fa parte della nava allora mi fermo
+                                if (targetCell.isPresent() && targetCell.get().getShip().equals(ship)) {
+                                    shipHasPiecesRemaining = true;
+                                    break;
+                                }
+
+                            }
+
+                            if (!shipHasPiecesRemaining) { //se non ci sono pezzi della nave a sinistra allora cerco a destra
+                                int nextY = grid.getSize() / 2;
+                                // ricerca a dx?
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
