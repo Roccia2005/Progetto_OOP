@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.ship.Ship;
@@ -14,19 +13,20 @@ import it.unibo.jnavy.model.utilities.Position;
 public class SniperBot extends ProBot{
 
     private final List<Position> knownTargets;
+    private final int halfColumns;
 
     public SniperBot(final Grid humanGrid) {
         super();
         this.knownTargets = new ArrayList<>();
+        this.halfColumns = humanGrid.getSize() / 2;
         populateKnownTargets(humanGrid);
     }
 
     private void populateKnownTargets(final Grid grid) {
         int rows = grid.getSize();
-        int halfColumns = grid.getSize() / 2; //campo? rivedere
 
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < halfColumns; j++) {
+            for (int j = 0; j < this.halfColumns; j++) {
                 Position pos = new Position(i, j);
                 Optional<Cell> cell = grid.getCell(pos);
 
@@ -67,7 +67,7 @@ public class SniperBot extends ProBot{
         //devo capire se esiste una nave colpita nella metà sinistra e continua nella parte destra
         //itero sulla parte sx
         for (int i = 0; i < grid.getSize(); i++) {
-            for (int j = 0; j < grid.getSize() / 2; j++) {
+            for (int j = 0; j < this.halfColumns; j++) {
                 Position p = new Position(i, j);
                 Optional<Cell> optCell = grid.getCell(p);
 
@@ -90,8 +90,16 @@ public class SniperBot extends ProBot{
                             }
 
                             if (!shipHasPiecesRemaining) { //se non ci sono pezzi della nave a sinistra allora cerco a destra
-                                int nextY = grid.getSize() / 2;
-                                // ricerca a dx?
+                                int nextY = this.halfColumns;
+
+                                while (nextY < grid.getSize()) {
+                                    Position pos = new Position(i, nextY);
+                                    Optional<Cell> c = grid.getCell(pos);
+                                    if (c.isPresent() && !c.get().isHit()) {
+                                        return pos;
+                                    }
+                                    nextY++;
+                                }
                             }
                         }
                     }
