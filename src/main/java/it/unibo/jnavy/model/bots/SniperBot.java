@@ -50,9 +50,9 @@ public class SniperBot extends ProBot{
         }
 
         //controllo dell'attraversamento della metà della griglia
-        Position borderTarget = checkBorderCrossing(enemyGrid);
-        if (borderTarget != null) {
-            return borderTarget;
+        Optional<Position> borderTarget = checkBorderCrossing(enemyGrid);
+        if (borderTarget.isPresent()) {
+            return borderTarget.get();
         }
 
         // do come posizione la prima delle conosciute
@@ -63,7 +63,7 @@ public class SniperBot extends ProBot{
         return super.selectTarget(enemyGrid); // fase del funzionamento come probot nel caso non ci siano più celle conosciute asx
     }
 
-    private Position checkBorderCrossing(final Grid grid) {
+    private Optional<Position> checkBorderCrossing(final Grid grid) {
         //devo capire se esiste una nave colpita nella metà sinistra e continua nella parte destra
         //itero sulla parte sx
         for (int i = 0; i < grid.getSize(); i++) {
@@ -96,7 +96,7 @@ public class SniperBot extends ProBot{
                                     Position pos = new Position(i, nextY);
                                     Optional<Cell> c = grid.getCell(pos);
                                     if (c.isPresent() && !c.get().isHit()) {
-                                        return pos;
+                                        return Optional.of(pos);
                                     }
                                     nextY++;
                                 }
@@ -106,6 +106,7 @@ public class SniperBot extends ProBot{
                 }
             }
         }
+        return Optional.empty();
     }
 
     @Override
@@ -114,7 +115,7 @@ public class SniperBot extends ProBot{
         List<Position> halfValidCellsDx = new ArrayList<>();
 
         for (Position p : validCells) {
-            if (p.y() >= (enemyGrid.getSize() / 2)) {
+            if (p.y() >= this.halfColumns) {
                 halfValidCellsDx.add(p);
             }
         }

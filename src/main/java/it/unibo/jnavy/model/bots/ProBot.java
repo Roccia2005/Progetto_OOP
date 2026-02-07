@@ -117,7 +117,6 @@ public class ProBot extends AbstractBotStrategy{
                 }
             break;
 
-            case ALREADY_HIT:
             case INVALID:
             default:
                 // uso default vuoto per non far imparare nulla al bot in questi casi che non mi servono a molto
