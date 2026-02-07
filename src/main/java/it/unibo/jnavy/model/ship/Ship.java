@@ -35,4 +35,5 @@ public interface Ship {
      * @param value the new health of the ship
      */
     void setHealth(int value);
+
 }

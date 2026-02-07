@@ -23,7 +23,7 @@ class CaptainTest {
     private static final int TEST_COOLDOWN = 2;
 
     private Grid grid;
-    private AbstractCaptain captain;
+    private Captain captain;
     private Position position = new Position(0, 0);
     private Position invalidPosition = new Position(-1, -1);
 

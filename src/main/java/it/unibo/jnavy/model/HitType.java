@@ -22,11 +22,6 @@ public enum HitType {
     SUNK("Ship sunk"),
 
     /**
-     * The player tried to shoot at a coordinate that was already hit in a previous turn.
-     */
-    ALREADY_HIT("You already fired here!"),
-
-    /**
      * The target coordinates are outside the grid boundaries or are invalid.
      */
     INVALID("Invalid coordinates");

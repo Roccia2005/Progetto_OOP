@@ -12,6 +12,7 @@ import it.unibo.jnavy.model.utilities.Position;
 
 import java.util.Optional;
 
+
 /**
  * Concrete implementation of the Grid interface.
  */
@@ -42,8 +43,8 @@ public class GridImpl implements Grid {
         }
 
         for (int i = 0; i < ship.getSize(); i++) {
-            int x = startPos.x() + (dir == CardinalDirection.UP ? i : 0);
-            int y = startPos.y() + (dir == CardinalDirection.RIGHT ? i : 0);
+            int x = startPos.x() + (i * dir.getRowOffset());
+            int y = startPos.y() + (i * dir.getColOffset());
 
             cells[x][y].setShip(ship);
         }
@@ -54,8 +55,8 @@ public class GridImpl implements Grid {
     @Override
     public boolean isPlacementValid(Ship ship, Position startPos, CardinalDirection dir) {
         for (int i = 0; i < ship.getSize(); i++) {
-            int x = startPos.x() + (dir == CardinalDirection.UP ? i : 0);
-            int y = startPos.y() + (dir == CardinalDirection.RIGHT ? i : 0);
+            int x = startPos.x() + (i * dir.getRowOffset());
+            int y = startPos.y() + (i * dir.getColOffset());
 
             if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) {
                 return false;
