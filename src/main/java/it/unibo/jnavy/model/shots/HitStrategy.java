@@ -20,7 +20,6 @@ public interface HitStrategy {
      * @param target The central coordinate aimed by the player.
      * @param grid The grid where the shot effects are applied.
      * @return A list of {@link ShotResult}, representing the outcome for each cell affected.
-     * (e.g., a standard shot returns a list of size 1, an area shot returns multiple results).
      */
     List<ShotResult> execute(Position target, Grid grid);
 }

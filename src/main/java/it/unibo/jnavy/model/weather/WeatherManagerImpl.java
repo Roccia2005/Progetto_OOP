@@ -14,7 +14,7 @@ import java.util.Random;
  *    - The alternating cycle between {@link WeatherCondition#SUNNY} and {@link WeatherCondition#FOG}.
  *    - The calculation of coordinate deviation when shooting in bad weather.
  */
-public class WeatherManagerImpl implements WeatherManager {
+public final class WeatherManagerImpl implements WeatherManager {
 
     private static WeatherManagerImpl instance;
 
@@ -64,13 +64,13 @@ public class WeatherManagerImpl implements WeatherManager {
             return grid.receiveShot(target);
         }
         Position nextPossiblePosition;
-        int gridSize = grid.getSize();
+        final int gridSize = grid.getSize();
         do {
-            int offsetX = this.random.nextInt(3) - 1;
-            int offsetY = this.random.nextInt(3) - 1;
+            final int offsetX = this.random.nextInt(3) - 1;
+            final int offsetY = this.random.nextInt(3) - 1;
             nextPossiblePosition = new Position(target.x() + offsetX, target.y() + offsetY);
-        } while (nextPossiblePosition.x() < 0 || nextPossiblePosition.x() >= gridSize ||
-                nextPossiblePosition.y() < 0 || nextPossiblePosition.y() >= gridSize);
+        } while (nextPossiblePosition.x() < 0 || nextPossiblePosition.x() >= gridSize
+                || nextPossiblePosition.y() < 0 || nextPossiblePosition.y() >= gridSize);
         return grid.receiveShot(nextPossiblePosition);
     }
 

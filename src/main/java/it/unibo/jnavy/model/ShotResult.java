@@ -11,6 +11,10 @@ import java.util.Optional;
  *   - The type of result (Hit, Miss, Sunk, etc.) via {@link HitType}
  *   - The exact position where the event occurred
  *   - The specific ship involved (if sunk)
+ *
+ * @param hitType The outcome of the shot.
+ * @param position The position where the shot was fired.
+ * @param sunkShip The ship that was sunk (if applicable).
  */
 public record ShotResult(HitType hitType, Position position, Optional<Ship> sunkShip) {
 

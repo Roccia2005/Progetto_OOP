@@ -31,5 +31,5 @@ public interface WeatherManager extends TurnObserver {
      * @param grid The grid where the shot effects are applied.
      * @return The result of the shot
      */
-    ShotResult applyWeatherEffects(final Position target, final Grid grid);
+    ShotResult applyWeatherEffects(Position target, Grid grid);
 }
