@@ -41,7 +41,7 @@ class BotTest {
         BotStrategy bot = new BeginnerBot();
 
         Position randomTarget = bot.selectTarget(this.grid);
-        assertTrue(validPosition(randomTarget));
+        assertTrue(this.grid.isPositionValid(randomTarget));
 
         Optional<Cell> cell = this.grid.getCell(randomTarget);
         assertTrue(cell.isPresent());
@@ -58,7 +58,7 @@ class BotTest {
         BotStrategy bot = new ProBot();
 
         Position randomTarget = bot.selectTarget(this.grid);
-        assertTrue(validPosition(randomTarget));
+        assertTrue(this.grid.isPositionValid(randomTarget));
     }
 
     /**
@@ -109,7 +109,7 @@ class BotTest {
         bot.lastShotFeedback(new Position(3, 4), HitType.SUNK);
 
         Position randomTarget = bot.selectTarget(this.grid);
-        assertTrue(validPosition(randomTarget)); // da capire come valutare lo sparo random
+        assertTrue(this.grid.isPositionValid(randomTarget)); // da capire come valutare lo sparo random
     }
 
     /**
@@ -188,18 +188,6 @@ class BotTest {
 
     /**
      * Helper method.
-     * @param p the position to check.
-     * @return true if p is a valid position on the grid, false otherwise.
-     */
-    private boolean validPosition(final Position p) {
-        return p.x() >= 0
-        && p.x() < G_SIZE
-        && p.y() >= 0
-        && p.y() < G_SIZE;
-    }
-
-    /**
-     * Helper method.
      * @param first position to use for distance calcs.
      * @param second position to use for distance calcs.
      * @return true if the two positions are adjacent.
@@ -207,6 +195,6 @@ class BotTest {
     private boolean isNear(final Position first, final Position second) {
         final int distanceX = Math.abs(first.x() - second.x());
         final int distanceY = Math.abs(first.y() - second.y());
-        return (distanceX == 1) && (distanceY == 1);
+        return (distanceX + distanceY) == 1;
     }
 }
