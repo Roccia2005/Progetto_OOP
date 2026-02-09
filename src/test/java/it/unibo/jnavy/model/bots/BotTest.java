@@ -1,24 +1,21 @@
-package it.unibo.jnavy;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+package it.unibo.jnavy.model.bots;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import it.unibo.jnavy.model.HitType;
-import it.unibo.jnavy.model.bots.BeginnerBot;
-import it.unibo.jnavy.model.bots.BotStrategy;
-import it.unibo.jnavy.model.bots.ProBot;
-import it.unibo.jnavy.model.bots.SniperBot;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
+import it.unibo.jnavy.model.grid.GridImpl;
+import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
-import model.*;
 
 /**
  * Test class for {@link BotStrategy}
@@ -44,7 +41,7 @@ class BotTest {
         BotStrategy bot = new BeginnerBot();
 
         Position randomTarget = bot.selectTarget(this.grid);
-        AssertTrue(validPosition(randomTarget));
+        assertTrue(validPosition(randomTarget));
 
         Optional<Cell> cell = this.grid.getCell(randomTarget);
         assertTrue(cell.isPresent());
