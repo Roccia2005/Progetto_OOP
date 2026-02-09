@@ -65,7 +65,7 @@ public class FleetImpl implements Fleet {
         long size4 = ships.stream().filter(s -> s.getSize() == 4).count();
         long size5 = ships.stream().filter(s -> s.getSize() == 5).count();
 
-        return size2 == 2 && size3 == 1 && size4 == 1 && size5 == 1;
+        return size2 == 1 && size3 == 2 && size4 == 1 && size5 == 1;
     }
     
 }
