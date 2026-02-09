@@ -22,11 +22,13 @@ public class SonarOfficer extends AbstractCaptain {
 
     @Override
     public boolean useAbility(Grid grid, Position p) {
-        Optional<Cell> cell = grid.getCell(p);
-        if (cell.isPresent()) {
-            cell.get().setVisible();
-            this.resetCooldown();
-            return true;
+        if (this.isAbilityRecharged()) {
+            Optional<Cell> cell = grid.getCell(p);
+            if (cell.isPresent()) {
+                cell.get().setVisible();
+                this.resetCooldown();
+                return true;
+            }
         }
         return false;
     }
