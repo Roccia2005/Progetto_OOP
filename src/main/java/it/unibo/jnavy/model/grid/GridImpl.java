@@ -126,8 +126,9 @@ public class GridImpl implements Grid {
         return this.cells;
     }
 
-    private boolean isPositionValid(Position p) {
+    @Override
+    public boolean isPositionValid(Position p) {
         return p.x() < 0 || p.x() >= SIZE || p.y() < 0 || p.y() >= SIZE;
     }
 
-} 
+}

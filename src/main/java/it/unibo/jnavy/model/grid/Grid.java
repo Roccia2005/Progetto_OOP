@@ -79,4 +79,10 @@ public interface Grid {
      * @return the matrix of the grid.
      */
     Cell[][] getCellMatrix();
-} 
+
+    /**
+     * @param p position to verify
+     * @return true if the position is within grid's bounds
+     */
+    boolean isPositionValid(Position p);
+}
