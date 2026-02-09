@@ -1,4 +1,4 @@
-package it.unibo.jnavy;
+package it.unibo.jnavy.model.board;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

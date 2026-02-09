@@ -1,4 +1,4 @@
-package it.unibo.jnavy;
+package it.unibo.jnavy.model.fleet;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,8 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.jnavy.model.fleet.Fleet;
-import it.unibo.jnavy.model.fleet.FleetImpl;
 import it.unibo.jnavy.model.ship.ShipImpl;
 
 /**
