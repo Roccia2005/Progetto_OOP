@@ -58,7 +58,7 @@ public class GridImpl implements Grid {
             int x = startPos.x() + (i * dir.getRowOffset());
             int y = startPos.y() + (i * dir.getColOffset());
 
-            if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) {
+            if (isPositionValid(new Position(x, y))) {
                 return false;
             }
 
@@ -71,7 +71,7 @@ public class GridImpl implements Grid {
 
     @Override
     public ShotResult receiveShot(Position p) {
-        if (p.x() < 0 || p.x() >= SIZE || p.y() < 0 || p.y() >= SIZE) {
+        if (isPositionValid(p)) {
             return ShotResult.failure(p, HitType.INVALID);
         }
         var targetCell = cells[p.x()][p.y()];
@@ -104,6 +104,9 @@ public class GridImpl implements Grid {
 
     @Override
     public Optional<Cell> getCell(Position p) {
+        if (isPositionValid(p)) {
+            return Optional.empty();
+        }
         return Optional.of(cells[p.x()][p.y()]);
     }
 
@@ -121,6 +124,10 @@ public class GridImpl implements Grid {
     public Cell[][] getCellMatrix() {
         if(this.cells == null) return null;
         return this.cells;
+    }
+
+    private boolean isPositionValid(Position p) {
+        return p.x() < 0 || p.x() >= SIZE || p.y() < 0 || p.y() >= SIZE;
     }
 
 } 
