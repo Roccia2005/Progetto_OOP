@@ -23,5 +23,5 @@ public interface TurnObserver {
      *
      * This is a {@code default} method, classes are not forced to implement it.
      */
-    default void prepareTurn() {}
+    default void prepareTurn() { }
 }

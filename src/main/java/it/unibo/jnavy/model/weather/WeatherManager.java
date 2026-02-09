@@ -17,6 +17,7 @@ public interface WeatherManager extends TurnObserver {
 
     /**
      * Retrieves the active weather condition.
+     *
      * @return The current {@link WeatherCondition} affecting the battle.
      */
     WeatherCondition getCurrentWeather();
