@@ -128,7 +128,7 @@ public class GridImpl implements Grid {
 
     @Override
     public boolean isPositionValid(Position p) {
-        return p.x() > 0 && p.x() <= SIZE && p.y() > 0 && p.y() <= SIZE;
+        return p.x() >= 0 && p.x() < SIZE && p.y() >= 0 && p.y() < SIZE;
     }
 
 }
