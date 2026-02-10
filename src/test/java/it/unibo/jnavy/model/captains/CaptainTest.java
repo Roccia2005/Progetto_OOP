@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.grid.GridImpl;
+import it.unibo.jnavy.model.ship.ShipImpl;
+import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
@@ -30,6 +32,7 @@ class CaptainTest {
     @BeforeEach
     void setUp() {
         this.grid = new GridImpl();
+        this.grid.placeShip(new ShipImpl(2), position, CardinalDirection.DOWN);
         WeatherManagerImpl.getInstance().reset();
     }
 
