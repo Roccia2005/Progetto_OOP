@@ -8,5 +8,5 @@ public interface GameController {
 
     void processShot(Position p);
 
-    void endTurn();
+    int endTurn();
 }
