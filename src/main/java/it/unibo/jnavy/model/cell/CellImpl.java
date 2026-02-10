@@ -72,4 +72,14 @@ public class CellImpl implements Cell{
     public boolean isVisible() {
         return this.isVisible;
     }
+
+    @Override
+    public boolean repair() {
+        if (this.ship != null && !this.ship.isSunk()) {
+            this.status = null;
+            return true;
+        }
+        return false;
+    }
+
 }
