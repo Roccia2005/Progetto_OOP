@@ -17,7 +17,7 @@ import it.unibo.jnavy.model.utilities.Position;
  * to determine its moves and target selection logic during the match.
  * It also listens to turn events to handle time-dependent logic.
  */
-public class Bot implements Player, TurnObserver{
+public class Bot implements Player {
 
     private Grid grid;
     private BotStrategy strategy;
@@ -45,10 +45,6 @@ public class Bot implements Player, TurnObserver{
         HitStrategy shot = new StandardShot();
             //andrà sostituita la grid in WeatherGrid
         return shot.execute(target, grid);
-    }
-
-    @Override
-    public void processTurnEnd() {
     }
 
     /**

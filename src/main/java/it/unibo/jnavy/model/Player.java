@@ -13,7 +13,7 @@ import it.unibo.jnavy.model.utilities.Position;
  * opponents (Bots). It ensures that every player has a {@link Grid} containing their ships
  * and provides a mechanism to generate offensive moves (shots).
  */
-public interface Player {
+public interface Player extends TurnObserver{
 
     /**
      * Retrieves the game grid associated with this player.
@@ -50,4 +50,8 @@ public interface Player {
      * @return The {@link ShotResult} representing the list of generated shot outcomes.
      */
     List<ShotResult> createShot(Position target, Grid grid);
+    
+    @Override
+    default void processTurnEnd() {
+    }
 }
