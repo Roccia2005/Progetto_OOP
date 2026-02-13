@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.smartcardio.Card;
+
 import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
@@ -42,7 +44,7 @@ public class ProBot extends AbstractBotStrategy{
 
         switch (currentState) {
             case HUNTING:
-                nextTarget = super.getRandomValidPosition(enemyGrid);
+                nextTarget = getRandomValidPosition(enemyGrid);
             break;
 
             case SEEKING:
@@ -61,7 +63,7 @@ public class ProBot extends AbstractBotStrategy{
 
                 if (availableDirections.isEmpty() || nextTarget == null) {
                     currentState = State.HUNTING;
-                    nextTarget = super.getRandomValidPosition(enemyGrid);
+                    nextTarget = getRandomValidPosition(enemyGrid);
                 }
 
             break;
@@ -92,6 +94,8 @@ public class ProBot extends AbstractBotStrategy{
                 this.currentState = State.HUNTING;
                 resetAvailableDirections();
                 this.firstHitPosition = null;
+                this.lastTargetPosition = null;
+                this.currentDirection = null;
                 return;
 
             case HIT:
@@ -103,16 +107,23 @@ public class ProBot extends AbstractBotStrategy{
                         break;
                     case SEEKING:
                         this.currentState = State.DESTROYING;
+                        this.lastTargetPosition = target;
+
+                        if (this.currentDirection == null && this.firstHitPosition != null) {
+                            this.currentDirection = findDirection(this.firstHitPosition, target);
+                        }
                         break;
                     case DESTROYING:
                         this.lastTargetPosition = target;
                         break;
                 }
-                break;
+            break;
 
             case MISS:
                 if (this.currentState == State.DESTROYING) {
-                    this.currentDirection = this.currentDirection.opposite();
+                    if (this.currentDirection != null) {
+                        this.currentDirection = this.currentDirection.opposite();
+                    }
                     this.lastTargetPosition = firstHitPosition;
                 }
             break;
@@ -125,13 +136,25 @@ public class ProBot extends AbstractBotStrategy{
 
     }
 
+    // metodo per capire la direzione tra due celle data la precedente(p1) e quella attuale(p2)uso per i test
+    private CardinalDirection findDirection(final Position p1, final Position p2) {
+        for (CardinalDirection dir : CardinalDirection.values()) {
+            if (p1.x() + dir.getRowOffset() == p2.x() &&
+            p1.y() + dir.getColOffset() == p2.y()) {
+                return dir;
+            }
+        }
+        return null;
+    }
+
     // funzione per resettare l'array delle direzioni possibili
-    public void resetAvailableDirections() {
+    private void resetAvailableDirections() {
         this.availableDirections.clear();
         this.availableDirections.addAll(Arrays.asList(CardinalDirection.values()));
     }
 
     // posizione calcolata aggiungendo alla x e alla y gli offset della direzione corrispondente
+    //non deve mai essere null!!!
     public Position targetCalc(final Position target) {
         return new Position(target.x()+currentDirection.getRowOffset(), target.y()+currentDirection.getColOffset());
     }
