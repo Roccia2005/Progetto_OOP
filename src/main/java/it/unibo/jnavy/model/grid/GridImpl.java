@@ -10,6 +10,7 @@ import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 
@@ -79,7 +80,7 @@ public class GridImpl implements Grid {
         HitType cellResult = targetCell.receiveShot();
 
         if (cellResult == HitType.SUNK) {
-            Ship sunkShip = targetCell.getShip();
+            Ship sunkShip = targetCell.getShip().get();
             return ShotResult.sunk(p, sunkShip);
         }
 
@@ -94,9 +95,9 @@ public class GridImpl implements Grid {
     @Override
     public boolean repair(Position p) {
         Cell cellToRapair = getCell(p).get();
-        if(cellToRapair.isOccupied() && cellToRapair.isHit() && !cellToRapair.getShip().isSunk()) {
+        if(cellToRapair.isOccupied() && cellToRapair.isHit() && !cellToRapair.getShip().get().isSunk()) {
             cellToRapair.repair();
-            Ship s = cellToRapair.getShip();
+            Ship s = cellToRapair.getShip().get();
             s.setHealth(s.getHealth() + 1);
             return true;
         }
@@ -130,6 +131,14 @@ public class GridImpl implements Grid {
     @Override
     public boolean isPositionValid(Position p) {
         return p.x() >= 0 && p.x() < SIZE && p.y() >= 0 && p.y() < SIZE;
+    }
+
+    @Override
+    public void removeShip(Ship ship) {
+        Arrays.stream(this.cells)              
+          .flatMap(Arrays::stream)         
+          .filter(cell -> cell.isOccupied() && cell.getShip().get().equals(ship))
+          .forEach(cell -> cell.setShip(null));
     }
 
 }
