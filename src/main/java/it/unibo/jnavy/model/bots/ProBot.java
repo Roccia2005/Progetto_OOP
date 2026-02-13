@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.smartcardio.Card;
-
 import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
