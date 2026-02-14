@@ -27,6 +27,7 @@ public class GameControllerImpl implements GameController{
 
     private final List<Integer> shipsToPlace = new ArrayList<>(Arrays.asList(5, 4, 3, 3, 2));
     private CardinalDirection currentOrientation = CardinalDirection.RIGHT;
+    private Ship currentTempShip = null;
     private final Random random = new Random();
 
     private int turnCounter = 0;
