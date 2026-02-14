@@ -3,6 +3,7 @@ package it.unibo.jnavy.controller;
 import it.unibo.jnavy.model.Bot;
 import it.unibo.jnavy.model.Human;
 import it.unibo.jnavy.model.Player;
+import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherManager;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
@@ -11,6 +12,7 @@ public class GameControllerImpl implements GameController{
 
     private Player human;
     private Player bot;
+    private Player currentPlayer;
     private WeatherManager weather;
 
     private int turnCounter = 0;
@@ -18,6 +20,7 @@ public class GameControllerImpl implements GameController{
     public GameControllerImpl() {
         this.human = new Human(null);
         this.bot = new Bot(null);
+        this.currentPlayer = this.human;
         this.weather = WeatherManagerImpl.getInstance();
     }
 
@@ -29,8 +32,7 @@ public class GameControllerImpl implements GameController{
 
     @Override
     public void processShot(Position p) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'processShot'");
+        ShotResult result = this.weather.applyWeatherEffects(p, this.bot.getGrid());
     }
 
     @Override
@@ -39,5 +41,9 @@ public class GameControllerImpl implements GameController{
         this.bot.processTurnEnd();
         this.weather.processTurnEnd();
         return ++this.turnCounter;
+    }
+
+    private boolean isHumanTurn() {
+        return this.currentPlayer == this.human;
     }
 }
