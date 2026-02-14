@@ -29,8 +29,6 @@ public class GameControllerImpl implements GameController{
     private Phase currentPhase;
 
     private final List<Integer> shipsToPlace = new ArrayList<>(Arrays.asList(5, 4, 3, 3, 2));
-    private CardinalDirection currentOrientation = CardinalDirection.RIGHT;
-    private Ship currentTempShip = null;
     private final Random random = new Random();
 
     private int turnCounter = 0;
@@ -46,10 +44,52 @@ public class GameControllerImpl implements GameController{
         placeFleetRandomly(this.bot);
     }
 
+    @Override
+    public boolean placeCurrentShip(Position pos, CardinalDirection dir) {
+        // Controllo consistenza fase
+        if (this.currentPhase != Phase.SETUP || shipsToPlace.isEmpty()) {
+            return false;
+        }
+
+        Ship ship = new ShipImpl(shipsToPlace.get(0));
+        Grid grid = human.getGrid();
+
+        // Verifica validità nel Model
+        if (grid.isPlacementValid(ship, pos, dir)) {
+            // Modifica stato Model
+            grid.placeShip(ship, pos, dir);
+            human.getFleet().addShip(ship);
+            
+            // Aggiorna stato Controller
+            shipsToPlace.remove(0);
+            
+            checkSetupPhaseEnd();
+            return true;
+        }
+        
+        return false;
+    }
+
+    @Override
+    public void randomizeHumanShips() {
+        if (this.currentPhase != Phase.SETUP) return;
+        
+        // Se l'utente aveva già piazzato parzialmente delle navi, potresti voler pulire la griglia qui.
+        // Per ora assumiamo che randomize si usi su griglia vuota o che aggiunga al resto.
+        
+        placeFleetRandomly(this.human);
+        shipsToPlace.clear(); // Lista svuotata, setup finito
+        checkSetupPhaseEnd();
+    }
+
+    @Override
+    public int getNextShipSize() {
+        return shipsToPlace.isEmpty() ? 0 : shipsToPlace.get(0);
+    }
+
     /**
-     * Algoritmo che riempie casualmente la griglia di un giocatore.
-     * Usato sia per il Bot (all'inizio) sia per l'Umano (se sceglie "Random").
-     */
+     * Automatic placement method.
+    */
     private void placeFleetRandomly (Player player) {
         Grid grid = player.getGrid();
         Fleet fleet = player.getFleet();
