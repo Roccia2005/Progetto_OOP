@@ -14,21 +14,6 @@ public enum CardinalDirection {
         this.colOffset = colOffset;
     }
 
-    public CardinalDirection nextClockwise() {
-        switch (this) {
-            case UP:
-                return RIGHT;
-            case RIGHT:
-                return DOWN;
-            case DOWN:
-                return LEFT;
-            case LEFT:
-                return UP;
-            default:
-                throw new IllegalStateException("Invalid corresponding enum(clockwise) value: "+ this);
-        }
-    }
-
     public CardinalDirection opposite() {
         switch (this) {
             case UP:

@@ -14,6 +14,8 @@ import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
+import it.unibo.jnavy.model.ShotResult;
+
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherManager;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
@@ -22,6 +24,7 @@ public class GameControllerImpl implements GameController{
 
     private Player human;
     private Player bot;
+    private Player currentPlayer;
     private WeatherManager weather;
     private Phase currentPhase;
 
@@ -35,6 +38,7 @@ public class GameControllerImpl implements GameController{
     public GameControllerImpl() {
         this.human = new Human(null);
         this.bot = new Bot(null);
+        this.currentPlayer = this.human;
         this.weather = WeatherManagerImpl.getInstance();
         
         this.currentPhase = Phase.SETUP;
@@ -93,8 +97,11 @@ public class GameControllerImpl implements GameController{
 
     @Override
     public void processShot(Position p) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'processShot'");
+        if (!isHumanTurn()) {
+            return;
+        }
+        ShotResult result = this.weather.applyWeatherEffects(p, this.bot.getGrid());
+        endTurn();
     }
 
     @Override
@@ -102,6 +109,19 @@ public class GameControllerImpl implements GameController{
         this.human.processTurnEnd();
         this.bot.processTurnEnd();
         this.weather.processTurnEnd();
-        return ++this.turnCounter;
+        this.turnCounter++;
+        this.currentPlayer = this.currentPlayer == this.human ? this.bot : this.human;
+        if (this.currentPlayer == this.bot) {
+            playBotTurn();
+        }
+        return this.turnCounter;
+    }
+
+    private boolean isHumanTurn() {
+        return this.currentPlayer == this.human;
+    }
+
+    private void playBotTurn() {
+        return;
     }
 }
