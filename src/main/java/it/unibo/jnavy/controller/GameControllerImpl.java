@@ -32,7 +32,11 @@ public class GameControllerImpl implements GameController{
 
     @Override
     public void processShot(Position p) {
+        if (!isHumanTurn()) {
+            return;
+        }
         ShotResult result = this.weather.applyWeatherEffects(p, this.bot.getGrid());
+        endTurn();
     }
 
     @Override
