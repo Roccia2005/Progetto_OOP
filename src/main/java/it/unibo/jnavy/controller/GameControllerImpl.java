@@ -44,7 +44,9 @@ public class GameControllerImpl implements GameController{
         this.human.processTurnEnd();
         this.bot.processTurnEnd();
         this.weather.processTurnEnd();
-        return ++this.turnCounter;
+        this.turnCounter++;
+        this.currentPlayer = this.currentPlayer == this.human ? this.bot : this.human;
+        return this.turnCounter;
     }
 
     private boolean isHumanTurn() {
