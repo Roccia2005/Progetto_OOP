@@ -59,6 +59,9 @@ public class Human implements Player {
         return this.captain.useAbility(grid, target);
     }
 
+    /**
+     * @return the captain of the human
+     */
     public Captain getCaptain() {
         return this.captain;
     }
