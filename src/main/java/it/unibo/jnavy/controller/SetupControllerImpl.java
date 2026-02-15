@@ -1,7 +1,6 @@
 package it.unibo.jnavy.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -13,57 +12,79 @@ import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
-import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
+/**
+ * Implementation of SetupController interface.
+ */
 public class SetupControllerImpl implements SetupController {
 
-    private final List<Integer> shipsToPlace = new ArrayList<>(Arrays.asList(5, 4, 3, 3, 2));
-    private final Random random = new Random();
-    private Player human;
-    private Player bot;
+    private static final List<Integer> FLEET_CONFIG = List.of(5, 4, 3, 3, 2);
+
+    private final List<Integer> shipsToPlace;
+    private final Random random;
+    private final Player human;
+    private final Player bot;
+
+    /**
+     * The ship object currently placed on the grid but NOT yet confirmed.
+     * Needed to remove it if the user moves it to another position.
+     */
+    private Ship currentShipObject;
 
     public SetupControllerImpl() {
+        this.shipsToPlace = new ArrayList<>(FLEET_CONFIG);
+        this.random = new Random();
+        
+        // TODO: The Captain and BotStrategy could be passed as arguments or set later.
         this.human = new Human(null);
-        this.bot = new Bot(null);
-        placeFleetRandomly(bot);
+        this.bot = new Bot(null); 
+
+        this.placeFleetRandomly(this.bot, new ArrayList<>(FLEET_CONFIG));
     }
 
-
     @Override
-    public boolean placeCurrentShip(Position pos, CardinalDirection dir) {
-        // Controllo consistenza fase
-        if (this.currentPhase != Phase.SETUP || shipsToPlace.isEmpty()) {
+    public boolean setShip(final Position pos, final CardinalDirection dir) {
+        if (shipsToPlace.isEmpty()) {
             return false;
         }
 
-        Ship ship = new ShipImpl(shipsToPlace.get(0));
-        Grid grid = human.getGrid();
-
-        // Verifica validità nel Model
-        if (grid.isPlacementValid(ship, pos, dir)) {
-            // Modifica stato Model
-            grid.placeShip(ship, pos, dir);
-            
-            // Aggiorna stato Controller
-            shipsToPlace.remove(0);
-            
-            checkSetupPhaseEnd();
-            return true;
-        }
+        final Grid grid = human.getGrid();
         
+        if (this.currentShipObject != null) {
+            grid.removeShip(this.currentShipObject);
+        }
+
+        final Ship newShip = new ShipImpl(shipsToPlace.get(0));
+
+        if (grid.isPlacementValid(newShip, pos, dir)) {
+            grid.placeShip(newShip, pos, dir);
+            this.currentShipObject = newShip;
+            return true;
+        } 
+        
+        this.currentShipObject = null;
         return false;
     }
 
     @Override
+    public void nextShip() {
+        if (this.currentShipObject == null) {
+            throw new IllegalStateException("Cannot confirm: no valid ship is currently placed.");
+        }
+        
+        shipsToPlace.remove(0);
+        this.currentShipObject = null;
+    }
+
+    @Override
     public void randomizeHumanShips() {
-        if (this.currentPhase != Phase.SETUP) return;
+    
+        this.unsetShip();
         
-        // Se l'utente aveva già piazzato parzialmente delle navi, potresti voler pulire la griglia qui.
-        // Per ora assumiamo che randomize si usi su griglia vuota o che aggiunga al resto.
-        
-        placeFleetRandomly(this.human);
-        shipsToPlace.clear(); // Lista svuotata, setup finito
-        checkSetupPhaseEnd();
+        if (!shipsToPlace.isEmpty()) {
+            placeFleetRandomly(this.human, this.shipsToPlace);
+            this.shipsToPlace.clear();
+        }
     }
 
     @Override
@@ -71,38 +92,45 @@ public class SetupControllerImpl implements SetupController {
         return shipsToPlace.isEmpty() ? 0 : shipsToPlace.get(0);
     }
 
+    @Override
+    public boolean isSetupFinished() {
+        return shipsToPlace.isEmpty() && currentShipObject == null;
+    }
 
-     private void checkSetupPhaseEnd() {
-        if (human.getFleet().isTopologyValid()) {
-            this.currentPhase = Phase.PLAY;
+    @Override
+    public Player getHumanPlayer() {
+        return this.human;
+    }
+
+    @Override
+    public Player getBotPlayer() {
+        return this.bot;
+    }
+
+    private void unsetShip() {
+        if (this.currentShipObject != null) {
+            human.getGrid().removeShip(this.currentShipObject);
+            this.currentShipObject = null;
         }
     }
 
-     /**
-     * Automatic placement method.
-    */
-    private void placeFleetRandomly (Player player) {
-        Grid grid = player.getGrid();
+    /**
+     * Internal helper to place a list of ships randomly on a player's grid.
+     * * @param player The player target.
+     * @param shipsToInsert The list of ship sizes to place.
+     */
+    private void placeFleetRandomly(final Player player, final List<Integer> shipsToInsert) {
+        final Grid grid = player.getGrid();
         
-        List<Integer> shipSizes = List.copyOf(shipsToPlace);
-
-        for (int size : shipSizes) {
+        for (final int size : shipsToInsert) {
             boolean placed = false;
-            
-            // Continua a provare finché non trova una posizione valida
             while (!placed) {
-                Ship ship = new ShipImpl(size);
-                
-                // Genera coordinate random (Griglia 10x10)
-                int row = random.nextInt(10);
-                int col = random.nextInt(10);
-                Position pos = new Position(row, col);
+                final Ship ship = new ShipImpl(size);
+                final Position pos = new Position(random.nextInt(grid.getSize()), random.nextInt(grid.getSize()));
 
-                // Genera direzione random
-                CardinalDirection[] directions = CardinalDirection.values();
-                CardinalDirection dir = directions[random.nextInt(directions.length)];
+                final CardinalDirection[] directions = CardinalDirection.values();
+                final CardinalDirection dir = directions[random.nextInt(directions.length)];
 
-                // Se la posizione è valida, piazza la nave
                 if (grid.isPlacementValid(ship, pos, dir)) {
                     grid.placeShip(ship, pos, dir);
                     placed = true;
@@ -110,6 +138,4 @@ public class SetupControllerImpl implements SetupController {
             }
         }
     }
-
 }
-
