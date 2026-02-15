@@ -133,8 +133,6 @@ public class GameControllerImpl implements GameController{
         this.currentPhase = Phase.SETUP;
     }
 
-    
-
     @Override
     public void processShot(Position p) {
         if (!isHumanTurn()) {
