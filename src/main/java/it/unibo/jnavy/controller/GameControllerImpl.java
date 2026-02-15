@@ -58,7 +58,6 @@ public class GameControllerImpl implements GameController{
         if (grid.isPlacementValid(ship, pos, dir)) {
             // Modifica stato Model
             grid.placeShip(ship, pos, dir);
-            human.getFleet().addShip(ship);
             
             // Aggiorna stato Controller
             shipsToPlace.remove(0);
@@ -92,9 +91,8 @@ public class GameControllerImpl implements GameController{
     */
     private void placeFleetRandomly (Player player) {
         Grid grid = player.getGrid();
-        Fleet fleet = player.getFleet();
         
-        int[] shipSizes = {5, 4, 3, 3, 2};
+        List<Integer> shipSizes = List.copyOf(shipsToPlace);
 
         for (int size : shipSizes) {
             boolean placed = false;
@@ -115,7 +113,6 @@ public class GameControllerImpl implements GameController{
                 // Se la posizione è valida, piazza la nave
                 if (grid.isPlacementValid(ship, pos, dir)) {
                     grid.placeShip(ship, pos, dir);
-                    fleet.addShip(ship);
                     placed = true;
                 }
             }
