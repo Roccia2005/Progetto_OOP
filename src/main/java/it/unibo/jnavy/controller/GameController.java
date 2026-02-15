@@ -6,5 +6,9 @@ public interface GameController {
 
     void processShot(Position p);
 
+    boolean processAbility(Position p);
+
     int endTurn();
+
+    boolean isGameOver();
 }
