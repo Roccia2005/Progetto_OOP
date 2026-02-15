@@ -29,5 +29,15 @@ public class Gunner extends AbstractCaptain{
         }
         return false;
     }
+
+    @Override
+    public boolean doesAbilityConsumeTurn() {
+        return true;
+    }
+
+    @Override
+    public boolean targetsEnemyGrid() {
+        return true;
+    }
     
 }

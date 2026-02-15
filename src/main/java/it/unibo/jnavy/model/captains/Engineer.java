@@ -30,4 +30,14 @@ public class Engineer extends AbstractCaptain{
         }
         return false;
     }
+
+    @Override
+    public boolean doesAbilityConsumeTurn() {
+        return false;
+    }
+
+    @Override
+    public boolean targetsEnemyGrid() {
+        return false;
+    }
 }
