@@ -2,8 +2,6 @@ package it.unibo.jnavy.view.components;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.font.TextLayout;
-import java.awt.geom.AffineTransform;
 
 public class NotificationOverlay extends JComponent {
 
@@ -11,10 +9,13 @@ public class NotificationOverlay extends JComponent {
     private String subtitle = "";
     private final Timer timer;
 
+    private static final int PADDING = 40;
+    private static final int CORNER_RADIUS = 30;
+
     public NotificationOverlay() {
         this.timer = new Timer(3000, e -> {
-            this.title = "";
-            this.subtitle = "";
+            title = "";
+            subtitle = "";
             repaint();
         });
         this.timer.setRepeats(false);
@@ -22,9 +23,8 @@ public class NotificationOverlay extends JComponent {
     }
 
     public void showWeatherAlert(String weatherName) {
-        this.title = "⚠️ ATTENTION! WEATHER CHANGED";
-        this.subtitle = "The weather is now " + weatherName + ".";
-        this.setForeground(new Color(255, 215, 0));
+        this.title = "Attention! Weather changed.";
+        this.subtitle = "Current weather: " + weatherName;
 
         this.timer.restart();
         this.setVisible(true);
@@ -33,40 +33,41 @@ public class NotificationOverlay extends JComponent {
 
     @Override
     protected void paintComponent(Graphics g) {
-        if (this.title.isEmpty()) return;
+        if (title.isEmpty()) return;
 
         Graphics2D g2 = (Graphics2D) g;
+
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        int centerX = getWidth() / 2;
-        int centerY = getHeight() / 2;
+        Font titleFont = new Font("SansSerif", Font.BOLD, 28);
+        Font subFont = new Font("SansSerif", Font.PLAIN, 22);
 
-        Font fontTitle = new Font("Segoe UI", Font.BOLD, 50);
-        drawOutlinedText(g2, title, fontTitle, centerX, centerY - 30);
+        FontMetrics fmTitle = g2.getFontMetrics(titleFont);
+        FontMetrics fmSub = g2.getFontMetrics(subFont);
 
-        Font fontSubtitle = new Font("Segoe UI", Font.BOLD, 40);
-        drawOutlinedText(g2, subtitle, fontSubtitle, centerX, centerY + 30);
+        int textWidth = Math.max(fmTitle.stringWidth(title), fmSub.stringWidth(subtitle));
+        int boxWidth = textWidth + (PADDING * 2);
+        int boxHeight = 120;
+
+        int boxX = (getWidth() - boxWidth) / 2;
+        int boxY = (getHeight() - boxHeight) / 2;
+
+        g2.setColor(new Color(20, 20, 30, 220));
+        g2.fillRoundRect(boxX, boxY, boxWidth, boxHeight, CORNER_RADIUS, CORNER_RADIUS);
+
+        g2.setColor(new Color(255, 200, 50));
+        g2.setStroke(new BasicStroke(3f));
+        g2.drawRoundRect(boxX, boxY, boxWidth, boxHeight, CORNER_RADIUS, CORNER_RADIUS);
+
+        g2.setFont(titleFont);
+        g2.setColor(new Color(255, 200, 50));
+        int titleX = boxX + (boxWidth - fmTitle.stringWidth(title)) / 2;
+        g2.drawString(title, titleX, boxY + 50);
+
+        g2.setFont(subFont);
+        g2.setColor(new Color(240, 240, 255));
+        int subX = boxX + (boxWidth - fmSub.stringWidth(subtitle)) / 2;
+        g2.drawString(subtitle, subX, boxY + 90);
     }
-
-    private void drawOutlinedText(Graphics2D g2, String text, Font font, int x, int y) {
-        FontMetrics fm = g2.getFontMetrics(font);
-        int textWidth = fm.stringWidth(text);
-
-        float drawX = x - (textWidth / 2f);
-        float drawY = y;
-
-        TextLayout textLayout = new TextLayout(text, font, g2.getFontRenderContext());
-
-        AffineTransform transform = AffineTransform.getTranslateInstance(drawX, drawY);
-        Shape textShape = textLayout.getOutline(transform);
-
-        g2.setColor(Color.BLACK);
-        g2.setStroke(new BasicStroke(4f)); // Spessore del bordo (4 pixel)
-        g2.draw(textShape);
-
-        g2.setColor(getForeground());
-        g2.fill(textShape);
-    }
-
 }
