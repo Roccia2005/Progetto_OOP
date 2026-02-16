@@ -46,4 +46,14 @@ public interface Captain extends TurnObserver{
      * false if it is applied to the player's own grid.
      */
     boolean targetsEnemyGrid();
+
+    /**
+     * @return the total cooldown duration required for the captain's special ability.
+     */
+    int getCooldown();
+
+    /**
+     * @return the current progress of the ability's cooldown.
+     */
+    int getCurrentCooldown();
 }
