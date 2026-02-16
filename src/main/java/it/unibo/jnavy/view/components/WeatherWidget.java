@@ -14,7 +14,8 @@ import java.awt.*;
 public class WeatherWidget extends JPanel {
 
     private final JLabel iconLabel;
-    private Color circleColor;
+    private Color borderColor;
+    private Color backgroundColor;
 
     /**
      * Constructs a new {@code WeatherWidget}.
@@ -24,10 +25,10 @@ public class WeatherWidget extends JPanel {
     public WeatherWidget() {
         this.setLayout(new GridBagLayout());
         this.setOpaque(false);
-        this.setPreferredSize(new Dimension(80, 80));
+        this.setPreferredSize(new Dimension(70, 70));
 
         this.iconLabel = new JLabel("☀\uFE0F", SwingConstants.CENTER);
-        this.iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 40));
+        this.iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 45));
 
         this.add(iconLabel);
 
@@ -39,15 +40,16 @@ public class WeatherWidget extends JPanel {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int diameter = Math.min(getWidth(), getHeight()) - 4;
+        int strokeWidth = 4;
+        int diameter = Math.min(getWidth(), getHeight()) - (strokeWidth * 2);
         int x = (getWidth() - diameter) / 2;
         int y = (getHeight() - diameter) / 2;
 
-        g2.setColor(getBackground());
+        g2.setColor(this.backgroundColor);
         g2.fillOval(x, y, diameter, diameter);
 
-        g2.setColor(Color.DARK_GRAY);
-        g2.setStroke(new BasicStroke(2));
+        g2.setColor(this.borderColor);
+        g2.setStroke(new BasicStroke(strokeWidth));
         g2.drawOval(x, y, diameter, diameter);
 
         g2.dispose();
@@ -64,10 +66,14 @@ public class WeatherWidget extends JPanel {
         switch (condition) {
             case SUNNY -> {
                 this.iconLabel.setText("☀\uFE0F");
+                this.borderColor = new Color(255, 200, 50);
+                this.backgroundColor = new Color(255, 250, 200, 150);
                 this.setToolTipText("Weather: sunny");
             }
             case FOG -> {
                 this.iconLabel.setText("🌫️");
+                this.borderColor = new Color(100, 120, 140);
+                this.backgroundColor = new Color(200, 210, 220, 150);
                 this.setToolTipText("Weather: fog");
             }
         }
