@@ -37,7 +37,7 @@ public class SetupControllerImpl implements SetupController {
         
         // TODO: The Captain and BotStrategy could be passed as arguments or set later.
         this.human = new Human(null);
-        this.bot = new Bot(null); 
+        this.bot = new Bot(null);
 
         this.placeFleetRandomly(this.bot, new ArrayList<>(FLEET_CONFIG));
     }
@@ -54,7 +54,7 @@ public class SetupControllerImpl implements SetupController {
             grid.removeShip(this.currentShipObject);
         }
 
-        final Ship newShip = new ShipImpl(shipsToPlace.get(0));
+        final Ship newShip = new ShipImpl(shipsToPlace.getFirst());
 
         if (grid.isPlacementValid(newShip, pos, dir)) {
             grid.placeShip(newShip, pos, dir);
@@ -72,7 +72,7 @@ public class SetupControllerImpl implements SetupController {
             throw new IllegalStateException("Cannot confirm: no valid ship is currently placed.");
         }
         
-        shipsToPlace.remove(0);
+        shipsToPlace.removeFirst();
         this.currentShipObject = null;
     }
 
@@ -89,7 +89,7 @@ public class SetupControllerImpl implements SetupController {
 
     @Override
     public int getNextShipSize() {
-        return shipsToPlace.isEmpty() ? 0 : shipsToPlace.get(0);
+        return shipsToPlace.isEmpty() ? 0 : shipsToPlace.getFirst();
     }
 
     @Override
