@@ -1,4 +1,4 @@
-package it.unibo.jnavy.view.components;
+package it.unibo.jnavy.view.components.weather;
 
 import javax.swing.*;
 import java.awt.*;

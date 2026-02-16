@@ -1,4 +1,4 @@
-package it.unibo.jnavy.view;
+package it.unibo.jnavy.view.components.captain;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
