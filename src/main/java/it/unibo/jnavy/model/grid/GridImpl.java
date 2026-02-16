@@ -139,6 +139,8 @@ public class GridImpl implements Grid {
           .flatMap(Arrays::stream)         
           .filter(cell -> cell.isOccupied() && cell.getShip().get().equals(ship))
           .forEach(cell -> cell.setShip(null));
+
+        this.fleet.removeShip(ship);
     }
 
 }

@@ -12,7 +12,7 @@ public interface Fleet {
     
     /**
      * Adds a ship to the fleet.
-     * @param ship the ship to add.
+     * @param s the ship to add.
      */
     void addShip(Ship s);
 
@@ -40,4 +40,10 @@ public interface Fleet {
      * @return true if the fleet is complete and valid.
      */
     boolean isTopologyValid();
+
+    /**
+     * remove the given ship.
+     * @param ship to remove.
+     */
+    void removeShip(Ship ship);
 } 

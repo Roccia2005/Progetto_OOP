@@ -7,6 +7,8 @@ import java.util.Random;
 import it.unibo.jnavy.model.Bot;
 import it.unibo.jnavy.model.Human;
 import it.unibo.jnavy.model.Player;
+import it.unibo.jnavy.model.bots.BeginnerBot;
+import it.unibo.jnavy.model.captains.Gunner;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
@@ -36,8 +38,8 @@ public class SetupControllerImpl implements SetupController {
         this.random = new Random();
         
         // TODO: The Captain and BotStrategy could be passed as arguments or set later.
-        this.human = new Human(null);
-        this.bot = new Bot(null);
+        this.human = new Human(new Gunner());
+        this.bot = new Bot(new BeginnerBot());
 
         this.placeFleetRandomly(this.bot, new ArrayList<>(FLEET_CONFIG));
     }
