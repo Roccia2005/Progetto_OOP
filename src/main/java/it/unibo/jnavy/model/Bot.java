@@ -71,4 +71,14 @@ public class Bot implements Player {
     public Position decideTarget(Grid enemyGrid) {
         return this.strategy.selectTarget(enemyGrid);
     }
+
+    /**
+     * Passes the result of the shot to the strategy so it can learn/update its state.
+     * Crucial for advanced bots like ProBot and SniperBot.
+     * @param target the position targeted
+     * @param result the outcome of the shot
+     */
+    public void receiveFeedback(final Position target, final HitType result) {
+        this.strategy.lastShotFeedback(target, result);
+    }
 }
