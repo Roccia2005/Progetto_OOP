@@ -4,6 +4,7 @@ import it.unibo.jnavy.model.weather.WeatherCondition;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 /**
  * Represents the graphical widget that displays the current weather icon.
@@ -14,6 +15,10 @@ import java.awt.*;
 public class WeatherWidget extends JPanel {
 
     private final JLabel iconLabel;
+
+    private ImageIcon sunIcon;
+    private ImageIcon fogIcon;
+
     private Color borderColor;
     private Color backgroundColor;
 
@@ -25,14 +30,35 @@ public class WeatherWidget extends JPanel {
     public WeatherWidget() {
         this.setLayout(new GridBagLayout());
         this.setOpaque(false);
-        this.setPreferredSize(new Dimension(70, 70));
+        this.setPreferredSize(new Dimension(80, 80));
 
-        this.iconLabel = new JLabel("☀\uFE0F", SwingConstants.CENTER);
-        this.iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 45));
+        loadIcons();
+
+        this.iconLabel = new JLabel();
+        this.iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         this.add(iconLabel);
 
         updateWeather(WeatherCondition.SUNNY);
+    }
+
+    private void loadIcons() {
+        int iconSize = 50;
+
+        this.sunIcon = loadResizedIcon("/images/sun.png", iconSize, iconSize);
+        this.fogIcon = loadResizedIcon("/images/fog.png", iconSize, iconSize);
+    }
+
+    private ImageIcon loadResizedIcon(String path, int width, int height) {
+        URL imgUrl = getClass().getResource(path);
+        if (imgUrl != null) {
+            ImageIcon original = new ImageIcon(imgUrl);
+            Image scaled = original.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            return new ImageIcon(scaled);
+        } else {
+            System.err.println("ERROR. Can't find the image: " + path);
+            return null;
+        }
     }
 
     @Override
@@ -53,7 +79,6 @@ public class WeatherWidget extends JPanel {
         g2.drawOval(x, y, diameter, diameter);
 
         g2.dispose();
-
         super.paintComponent(g);
     }
 
@@ -65,13 +90,16 @@ public class WeatherWidget extends JPanel {
     public void updateWeather(WeatherCondition condition) {
         switch (condition) {
             case SUNNY -> {
-                this.iconLabel.setText("☀\uFE0F");
+                this.iconLabel.setIcon(sunIcon);
+                this.iconLabel.setText("");
+
                 this.borderColor = new Color(255, 200, 50);
                 this.backgroundColor = new Color(255, 250, 200, 150);
                 this.setToolTipText("Weather: sunny");
             }
             case FOG -> {
-                this.iconLabel.setText("🌫️");
+                this.iconLabel.setIcon(fogIcon);
+                this.iconLabel.setText("");
                 this.borderColor = new Color(100, 120, 140);
                 this.backgroundColor = new Color(200, 210, 220, 150);
                 this.setToolTipText("Weather: fog");
