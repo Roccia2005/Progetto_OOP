@@ -54,7 +54,7 @@ public class GameControllerImpl implements GameController{
     @Override
     public boolean processAbility(Position p) {
         if (!isHumanTurn()) {
-            return false; 
+            return false;
         }
 
         Human humanPlayer = (Human) this.human;
@@ -68,7 +68,7 @@ public class GameControllerImpl implements GameController{
             }
             return true;
         }
-        return false; 
+        return false;
     }
 
     @Override
@@ -81,6 +81,14 @@ public class GameControllerImpl implements GameController{
     }
 
     private void playBotTurn() {
-        return;
+        if (isGameOver()) {
+            return;
+        }
+        if (this.bot instanceof Bot botPlayer) {
+            Position target = botPlayer.decideTarget(this.human.getGrid());
+            ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
+            botPlayer.receiveFeedback(result.position(), result.hitType());
+        }
+        endTurn();
     }
 }
