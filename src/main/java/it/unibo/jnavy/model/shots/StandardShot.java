@@ -3,6 +3,7 @@ package it.unibo.jnavy.model.shots;
 import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
 import java.util.List;
 
@@ -12,13 +13,9 @@ import java.util.List;
  */
 public class StandardShot implements HitStrategy {
 
-    //aggiungere campo position dello shot
-    Position shotPosition;
-    //aggiungere costruttore
-
     @Override
     public List<ShotResult> execute(final Position target, final Grid grid) {
-        ShotResult result = grid.receiveShot(target); //deve diventare weatherManager.receiveShot(target) e va usato grid.receiveShot(target) in weatherManager
+        ShotResult result = WeatherManagerImpl.getInstance().applyWeatherEffects(target, grid);
         return List.of(result);
     }
 }
