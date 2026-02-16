@@ -3,6 +3,7 @@ package it.unibo.jnavy.view.components;
 import it.unibo.jnavy.model.weather.WeatherCondition;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Represents the graphical widget that displays the current weather icon.
@@ -13,7 +14,6 @@ import javax.swing.*;
 public class WeatherWidget extends JPanel {
 
     private final JLabel iconLabel;
-    private final JLabel textLabel;
 
     /**
      * Constructs a new {@code WeatherWidget}.
@@ -21,7 +21,16 @@ public class WeatherWidget extends JPanel {
      * a large centered icon.
      */
     public WeatherWidget() {
+        this.setLayout(new BorderLayout());
+        this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        this.setPreferredSize(new Dimension(80, 80));
 
+        this.iconLabel = new JLabel("☀\uFE0F", SwingConstants.CENTER);
+        this.iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 50));
+
+        this.add(iconLabel, BorderLayout.CENTER);
+
+        updateWeather(WeatherCondition.SUNNY);
     }
 
     /**
@@ -30,6 +39,16 @@ public class WeatherWidget extends JPanel {
      * @param condition the new {@link WeatherCondition} to display.
      */
     public void updateWeather(WeatherCondition condition) {
-
+        switch (condition) {
+            case SUNNY -> {
+                this.iconLabel.setText("☀\uFE0F");
+                this.setToolTipText("Weather: sunny");
+            }
+            case FOG -> {
+                this.iconLabel.setText("🌫️");
+                this.setToolTipText("Weather: fog");
+            }
+        }
+        this.repaint();
     }
 }
