@@ -13,6 +13,7 @@ public abstract class AbstractCaptain implements Captain {
 
     private final int cooldown;
     private int currentCooldown;
+    private boolean usedThisTurn = false;
 
     protected AbstractCaptain(final int cooldown) {
         this.cooldown = cooldown;
@@ -26,7 +27,11 @@ public abstract class AbstractCaptain implements Captain {
 
     @Override
     public void processTurnEnd() {
-        this.currentCooldown++;
+        if (this.usedThisTurn) {
+            this.usedThisTurn = false; 
+        } else {
+            this.currentCooldown++;
+        }
     }
 
     /**
@@ -34,6 +39,7 @@ public abstract class AbstractCaptain implements Captain {
      */
     protected void resetCooldown() {
         this.currentCooldown = 0;
+        this.usedThisTurn = true;
     }
 
 }

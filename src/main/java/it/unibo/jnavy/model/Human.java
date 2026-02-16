@@ -58,4 +58,11 @@ public class Human implements Player {
     public boolean useAbility(Position target, Grid grid) {
         return this.captain.useAbility(grid, target);
     }
+
+    /**
+     * @return the captain of the human
+     */
+    public Captain getCaptain() {
+        return this.captain;
+    }
 }

@@ -53,6 +53,16 @@ class CaptainTest {
                 }
                 return false;
             }
+
+            @Override
+            public boolean doesAbilityConsumeTurn() {
+                return false;
+            }
+
+            @Override
+            public boolean targetsEnemyGrid() {
+                return false;
+            }
             
         };
         this.assertAbilityIsNotCharged();
@@ -72,6 +82,8 @@ class CaptainTest {
     @Test
     void testEngineer() {
         this.captain = new Engineer();
+        assertFalse(this.captain.targetsEnemyGrid());
+        assertFalse(this.captain.doesAbilityConsumeTurn());
         this.chargeAbility(Engineer.COOLDOWN);
         /**
          * The ability should not reset if the position is 
@@ -93,6 +105,8 @@ class CaptainTest {
     @Test
     void testGunner() {
         this.captain = new Gunner();
+        assertTrue(this.captain.targetsEnemyGrid());
+        assertTrue(this.captain.doesAbilityConsumeTurn());
         this.chargeAbility(Gunner.COOLDOWN);
 
         assertFalse(this.captain.useAbility(grid, invalidPosition));
@@ -118,6 +132,8 @@ class CaptainTest {
     @Test
     void testSonarOfficer() {
         this.captain = new SonarOfficer();
+        assertTrue(this.captain.targetsEnemyGrid());
+        assertFalse(this.captain.doesAbilityConsumeTurn());
         this.chargeAbility(SonarOfficer.COOLDOWN);
         
         assertFalse(this.captain.useAbility(grid, invalidPosition));

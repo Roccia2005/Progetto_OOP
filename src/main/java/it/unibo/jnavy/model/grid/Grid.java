@@ -85,4 +85,11 @@ public interface Grid {
      * @return true if the position is within grid's bounds
      */
     boolean isPositionValid(Position p);
+
+
+    /**
+     * Removes a specific ship from the grid.
+     * @param ship the ship to remove.
+    */
+    void removeShip(Ship ship);
 }

@@ -4,9 +4,11 @@ import it.unibo.jnavy.model.utilities.Position;
 
 public interface GameController {
 
-    void startGame();
-
     void processShot(Position p);
 
+    boolean processAbility(Position p);
+
     int endTurn();
+
+    boolean isGameOver();
 }

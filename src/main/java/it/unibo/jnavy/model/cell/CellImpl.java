@@ -1,5 +1,7 @@
 package it.unibo.jnavy.model.cell;
 
+import java.util.Optional;
+
 import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.Position;
@@ -44,13 +46,13 @@ public class CellImpl implements Cell{
     }
 
     @Override
-    public Ship getShip() {
-        return this.ship;
+    public Optional<Ship> getShip() {
+        return Optional.ofNullable(this.ship);
     }
 
     @Override
     public boolean isOccupied() {
-        return this.ship != null;
+        return getShip().isPresent();
     }
 
     @Override

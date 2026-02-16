@@ -29,4 +29,21 @@ public interface Captain extends TurnObserver{
      * @return true if the ability was successfully executed, false otherwise.
      */
     boolean useAbility(Grid grid, Position p);
+
+    /**
+     * Checks if the use of this captain's special ability istantly end the player's turn.
+     * If an ability consumes the turn, the player will not be able to perform a standard 
+     * shot or other actions after using it.
+     *
+     * @return true if using the ability ends the turn, false otherwise.
+     */
+    boolean doesAbilityConsumeTurn();
+
+    /**
+     * Determines the target grid for this captain's special ability.
+     *
+     * @return true if the ability is applied to the enemy's grid, 
+     * false if it is applied to the player's own grid.
+     */
+    boolean targetsEnemyGrid();
 }

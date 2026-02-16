@@ -33,4 +33,14 @@ public class SonarOfficer extends AbstractCaptain {
         return false;
     }
 
+    @Override
+    public boolean doesAbilityConsumeTurn() {
+        return false;
+    }
+
+    @Override
+    public boolean targetsEnemyGrid() {
+        return true;
+    }
+
 }

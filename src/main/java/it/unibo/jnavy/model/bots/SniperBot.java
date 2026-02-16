@@ -75,7 +75,7 @@ public class SniperBot extends ProBot{
                 if (optCell.isPresent()) {
                     Cell cell = optCell.get();
                     if (cell.isHit() && cell.isOccupied()) {
-                        Ship ship = cell.getShip();
+                        Ship ship = cell.getShip().get();
 
                         //ora se la nave nella cella non è affondata
                         if (!ship.isSunk()) {

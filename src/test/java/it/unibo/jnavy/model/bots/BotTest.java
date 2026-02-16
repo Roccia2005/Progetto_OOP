@@ -150,7 +150,7 @@ class BotTest {
 
         Cell knownTargetCell = this.grid.getCell(knownTarget).get();
         assertTrue(knownTargetCell.isOccupied());
-        assertEquals(ship, knownTargetCell.getShip());
+        assertEquals(ship, knownTargetCell.getShip().get());
     }
 
     /**

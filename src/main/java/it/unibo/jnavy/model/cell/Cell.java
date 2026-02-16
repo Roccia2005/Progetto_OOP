@@ -1,5 +1,7 @@
 package it.unibo.jnavy.model.cell;
 
+import java.util.Optional;
+
 import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.Position;
@@ -27,7 +29,7 @@ public interface Cell {
      * Retrieves the ship occupying this cell.
      * @return the ship reference, or null if the cell is water.
      */
-    Ship getShip();
+    Optional<Ship> getShip();
 
     /**
      * Checks if the cell is occupied by a ship.
