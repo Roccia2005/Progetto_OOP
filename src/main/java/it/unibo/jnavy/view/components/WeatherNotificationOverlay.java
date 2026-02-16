@@ -3,6 +3,11 @@ package it.unibo.jnavy.view.components;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A transient, semi-transparent overlay that displays weather changes.
+ * This component appears when the weather changes and disappears automatically
+ * after a few seconds.
+ */
 public class WeatherNotificationOverlay extends JComponent {
 
     private String title = "";
@@ -12,6 +17,10 @@ public class WeatherNotificationOverlay extends JComponent {
     private static final int PADDING = 40;
     private static final int CORNER_RADIUS = 30;
 
+    /**
+     * Constructs a new WeatherNotificationOverlay.
+     * Initializing the timer to automatically hide the overlay after 3 seconds.
+     */
     public WeatherNotificationOverlay() {
         this.timer = new Timer(3000, e -> {
             title = "";
@@ -22,6 +31,12 @@ public class WeatherNotificationOverlay extends JComponent {
         this.setOpaque(false);
     }
 
+    /**
+     * Displays the overlay with the specified weather name.
+     * The notification becomes visible and the auto-hide timer starts.
+     *
+     * @param weatherName the name of the current weather condition to display in the subtitle.
+     */
     public void showWeatherAlert(String weatherName) {
         this.title = "Attention! Weather changed.";
         this.subtitle = "Current weather: " + weatherName;
@@ -31,6 +46,11 @@ public class WeatherNotificationOverlay extends JComponent {
         this.repaint();
     }
 
+    /**
+     * Overrides the default paintComponent method to draw a semi-transparent overlay with the weather name.
+     *
+     * @param g the Graphics object used for drawing.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         if (title.isEmpty()) return;
