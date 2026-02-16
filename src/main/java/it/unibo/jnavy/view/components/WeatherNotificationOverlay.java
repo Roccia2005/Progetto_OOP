@@ -57,6 +57,7 @@ public class WeatherNotificationOverlay extends JComponent {
 
         Graphics2D g2 = (Graphics2D) g;
 
+        // Enable anti-aliasing for smoother rendering
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
@@ -66,6 +67,7 @@ public class WeatherNotificationOverlay extends JComponent {
         FontMetrics fmTitle = g2.getFontMetrics(titleFont);
         FontMetrics fmSub = g2.getFontMetrics(subFont);
 
+        // Calculate dimensions of the overlay box
         int textWidth = Math.max(fmTitle.stringWidth(title), fmSub.stringWidth(subtitle));
         int boxWidth = textWidth + (PADDING * 2);
         int boxHeight = 120;
@@ -73,18 +75,22 @@ public class WeatherNotificationOverlay extends JComponent {
         int boxX = (getWidth() - boxWidth) / 2;
         int boxY = (getHeight() - boxHeight) / 2;
 
+        // Draw the semi-transparent background
         g2.setColor(new Color(20, 20, 30, 220));
         g2.fillRoundRect(boxX, boxY, boxWidth, boxHeight, CORNER_RADIUS, CORNER_RADIUS);
 
+        // Draw the border
         g2.setColor(new Color(255, 200, 50));
         g2.setStroke(new BasicStroke(3f));
         g2.drawRoundRect(boxX, boxY, boxWidth, boxHeight, CORNER_RADIUS, CORNER_RADIUS);
 
+        // Draw the title text
         g2.setFont(titleFont);
         g2.setColor(new Color(255, 200, 50));
         int titleX = boxX + (boxWidth - fmTitle.stringWidth(title)) / 2;
         g2.drawString(title, titleX, boxY + 50);
 
+        // Draw the subtitle text
         g2.setFont(subFont);
         g2.setColor(new Color(240, 240, 255));
         int subX = boxX + (boxWidth - fmSub.stringWidth(subtitle)) / 2;
