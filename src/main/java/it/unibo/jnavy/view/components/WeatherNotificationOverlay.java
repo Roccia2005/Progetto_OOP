@@ -3,7 +3,7 @@ package it.unibo.jnavy.view.components;
 import javax.swing.*;
 import java.awt.*;
 
-public class NotificationOverlay extends JComponent {
+public class WeatherNotificationOverlay extends JComponent {
 
     private String title = "";
     private String subtitle = "";
@@ -12,7 +12,7 @@ public class NotificationOverlay extends JComponent {
     private static final int PADDING = 40;
     private static final int CORNER_RADIUS = 30;
 
-    public NotificationOverlay() {
+    public WeatherNotificationOverlay() {
         this.timer = new Timer(3000, e -> {
             title = "";
             subtitle = "";
