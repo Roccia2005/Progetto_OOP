@@ -14,6 +14,7 @@ import java.awt.*;
 public class WeatherWidget extends JPanel {
 
     private final JLabel iconLabel;
+    private Color circleColor;
 
     /**
      * Constructs a new {@code WeatherWidget}.
