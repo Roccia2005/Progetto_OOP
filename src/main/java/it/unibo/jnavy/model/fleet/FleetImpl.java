@@ -10,7 +10,7 @@ import it.unibo.jnavy.model.ship.Ship;
  */
 public class FleetImpl implements Fleet {
 
-    private List<Ship> ships;
+    final private List<Ship> ships;
     private static final int MAX_SHIPS = 5;
 
     public FleetImpl() {
@@ -67,5 +67,10 @@ public class FleetImpl implements Fleet {
 
         return size2 == 1 && size3 == 2 && size4 == 1 && size5 == 1;
     }
-    
+
+    @Override
+    public void removeShip(Ship ship) {
+        this.ships.remove(ship);
+    }
+
 }
