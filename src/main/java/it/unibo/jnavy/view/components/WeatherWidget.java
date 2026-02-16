@@ -7,10 +7,8 @@ import java.awt.*;
 import java.net.URL;
 
 /**
- * Represents the graphical widget that displays the current weather icon.
- * This component is designed to be placed in the top-right corner of the HUD.
- * It shows <b>only the icon</b> representing the active weather state (e.g., Sunny, Fog),
- * keeping the interface clean.
+ * A circular widget that displays the current weather condition using a
+ * distinct icon and a colored border.
  */
 public class WeatherWidget extends JPanel {
 
@@ -25,7 +23,7 @@ public class WeatherWidget extends JPanel {
     /**
      * Constructs a new {@code WeatherWidget}.
      * The widget is initialized with a default "Sunny" state and contains only
-     * a large centered icon.
+     * a large-centered icon.
      */
     public WeatherWidget() {
         this.setLayout(new GridBagLayout());
@@ -42,6 +40,9 @@ public class WeatherWidget extends JPanel {
         updateWeather(WeatherCondition.SUNNY);
     }
 
+    /**
+     * Loads the weather icons from application resources.
+     */
     private void loadIcons() {
         int iconSize = 50;
 
@@ -49,6 +50,14 @@ public class WeatherWidget extends JPanel {
         this.fogIcon = loadResizedIcon("/images/fog.png", iconSize, iconSize);
     }
 
+    /**
+     * Loads an image and scales it to the specified dimensions.
+     *
+     * @param path the resource path of the image.
+     * @param width the target width of the image.
+     * @param height the target height of the image.
+     * @return the resized image, or {@code null} if the image could not be loaded.
+     */
     private ImageIcon loadResizedIcon(String path, int width, int height) {
         URL imgUrl = getClass().getResource(path);
         if (imgUrl != null) {
@@ -61,6 +70,13 @@ public class WeatherWidget extends JPanel {
         }
     }
 
+    /**
+     * Overrides the default painting behavior to draw a colored border around the widget.
+     * This method renders a filled circle with a colored border, creating the main body
+     * of the widget. It uses anti-aliasing to improve the visual quality.
+     *
+     * @param g the Graphics object used for drawing.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -71,9 +87,11 @@ public class WeatherWidget extends JPanel {
         int x = (getWidth() - diameter) / 2;
         int y = (getHeight() - diameter) / 2;
 
+        // Draw the semi-transparent background circle
         g2.setColor(this.backgroundColor);
         g2.fillOval(x, y, diameter, diameter);
 
+        // Draw the accent border
         g2.setColor(this.borderColor);
         g2.setStroke(new BasicStroke(strokeWidth));
         g2.drawOval(x, y, diameter, diameter);
@@ -96,6 +114,7 @@ public class WeatherWidget extends JPanel {
                 this.borderColor = new Color(255, 200, 50);
                 this.backgroundColor = new Color(255, 250, 200, 150);
                 this.setToolTipText("Weather: sunny");
+                break;
             }
             case FOG -> {
                 this.iconLabel.setIcon(fogIcon);
@@ -103,6 +122,7 @@ public class WeatherWidget extends JPanel {
                 this.borderColor = new Color(100, 120, 140);
                 this.backgroundColor = new Color(200, 210, 220, 150);
                 this.setToolTipText("Weather: fog");
+                break;
             }
         }
         this.repaint();
