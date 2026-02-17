@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.grid;
 
+import java.util.List;
 import java.util.Optional;
 
 import it.unibo.jnavy.model.ShotResult;
@@ -75,10 +76,9 @@ public interface Grid {
      */
     Fleet getFleet();
 
-    /**
-     * @return the matrix of the grid.
-     */
-    Cell[][] getCellMatrix();
+    List<Position> getPositions();
+
+    boolean isTargetValid(Position target);
 
     /**
      * @param p position to verify

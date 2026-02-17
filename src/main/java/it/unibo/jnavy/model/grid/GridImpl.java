@@ -10,8 +10,11 @@ import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -123,10 +126,33 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public Cell[][] getCellMatrix() {
-        if(this.cells == null) return null;
-        return this.cells;
+    public List<Position> getPositions() {
+        final Cell[][] matrix = this.getCellMatrix();
+        if (matrix == null) {
+            return new ArrayList<>();
+        }
+
+        return Arrays.stream(matrix)
+                .flatMap(Arrays::stream)
+                .filter(c -> !c.isHit())
+                .map(Cell::getPosition)
+                .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean isTargetValid(Position target) {
+        Cell[][] matrix = this.getCellMatrix();
+        int x = target.x();
+        int y = target.y();
+        return x >= 0
+                && x < matrix.length
+                && y >= 0
+                && y < matrix[0].length
+                && this.getCell(target)  //metto il controllo sulla cell in fondo così non rischio che venga controllato un index non valido sulla grid
+                .map(c -> !c.isHit())
+                .orElse(false);
+    }
+
 
     @Override
     public boolean isPositionValid(Position p) {
@@ -143,4 +169,7 @@ public class GridImpl implements Grid {
         this.fleet.removeShip(ship);
     }
 
+    private Cell[][] getCellMatrix() {
+        return this.cells;
+    }
 }
