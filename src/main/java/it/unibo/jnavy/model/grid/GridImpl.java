@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 
@@ -81,13 +82,16 @@ public class GridImpl implements Grid {
         var targetCell = cells[p.x()][p.y()];
 
         HitType cellResult = targetCell.receiveShot();
+        Ship ship = targetCell.getShip().orElse(null);
 
         if (cellResult == HitType.SUNK) {
-            Ship sunkShip = targetCell.getShip().get();
-            return ShotResult.sunk(p, sunkShip);
+            if (ship == null) {
+                throw new IllegalArgumentException("Sunk ship is null!");
+            }
+            return ShotResult.sunk(p, ship);
+        } else {
+            return new ShotResult(cellResult, p, Optional.empty());
         }
-
-        return new ShotResult(cellResult, p, Optional.empty());
     }
 
     @Override
@@ -97,14 +101,17 @@ public class GridImpl implements Grid {
 
     @Override
     public boolean repair(Position p) {
-        Cell cellToRapair = getCell(p).get();
-        if(cellToRapair.isOccupied() && cellToRapair.isHit() && !cellToRapair.getShip().get().isSunk()) {
-            cellToRapair.repair();
-            Ship s = cellToRapair.getShip().get();
-            s.setHealth(s.getHealth() + 1);
-            return true;
-        }
-        return false;
+        return getCell(p).map(c -> {
+            boolean result = false;
+
+            if (c.isOccupied() && c.isHit() && !c.getShip().map(Ship::isSunk).orElse(false)) {
+                c.repair();
+                Ship s = c.getShip().get();
+                s.setHealth(s.getHealth() + 1);
+                result = true;
+            }
+            return result;
+        }).orElse(false);
     }
 
     @Override
