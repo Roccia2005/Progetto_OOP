@@ -2,6 +2,7 @@ package it.unibo.jnavy.view.components;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 public class EffectsPanel extends JPanel {
 
@@ -25,5 +26,13 @@ public class EffectsPanel extends JPanel {
         this.splashGif = loadImage("watersplash.gif");
 
         this.animationTimer = new Timer(15, e -> updateAnimation());
+    }
+
+    private Image loadImage(final String filename) {
+        URL url = getClass().getResource("/images/" + filename);
+        if (url == null) {
+            return null;
+        }
+        return new ImageIcon(url).getImage();
     }
 }
