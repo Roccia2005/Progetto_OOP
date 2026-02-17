@@ -25,8 +25,13 @@ public class CaptainAbilityButton extends JButton {
     public CaptainAbilityButton(int maxCooldown) {
         super(BUTTON_TEXT);
         this.maxCooldown = maxCooldown;
+        
+        setForeground(Color.WHITE);
         setContentAreaFilled(false);
         setFocusPainted(false);
+        setBorderPainted(false); 
+        setOpaque(false);       
+        
         this.setPreferredSize(new Dimension(DIMENSION, DIMENSION));
     }
 
@@ -141,7 +146,6 @@ public class CaptainAbilityButton extends JButton {
         int yStart = height - fillHeight;
         g2d.fillRect(0, yStart, width, fillHeight);
 
-        setForeground(Color.WHITE);
         super.paintComponent(g);
     }
 }
