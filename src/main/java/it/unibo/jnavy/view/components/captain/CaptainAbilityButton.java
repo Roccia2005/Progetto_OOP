@@ -10,33 +10,37 @@ import java.io.IOException;
 
 public class CaptainAbilityButton extends JButton {
 
+    private static final String BUTTON_TEXT = "Ability";
     private static final String IMAGE_PATH = "/image/captain.png";
     private static final String READY = "READY";
     private static final String ACTIVE = "ACTIVE";
     private static final String POPUP_MESSAGE = "Abilità del Capitano attivata! Scegli la posizione.";
+    private static final double MAX_PERCENTAGE = 1.0;
+    private static final int DIMENSION = 100;
 
     private final int maxCooldown;
     private double fillPercentage = 0.0;
     private boolean isActive = false;
 
     public CaptainAbilityButton(int maxCooldown) {
-        super();
+        super(BUTTON_TEXT);
         this.maxCooldown = maxCooldown;
         setContentAreaFilled(false);
         setFocusPainted(false);
+        this.setPreferredSize(new Dimension(DIMENSION, DIMENSION));
     }
 
     public void updateState(int currentCooldown) {
         if (maxCooldown > 0) {
             this.fillPercentage = (double) currentCooldown / this.maxCooldown;
-            this.fillPercentage = Math.min(this.fillPercentage, 1.0);
+            this.fillPercentage = Math.min(this.fillPercentage, MAX_PERCENTAGE);
         } else {
-            this.fillPercentage = 1.0;
+            this.fillPercentage = MAX_PERCENTAGE;
         }
         
-        setEnabled(this.fillPercentage >= 1.0);
+        setEnabled(this.fillPercentage >= MAX_PERCENTAGE);
 
-        if (this.fillPercentage >= 1.0) {
+        if (this.fillPercentage >= MAX_PERCENTAGE) {
             setText(isActive ? ACTIVE : READY);
         } else {
             setText("(" + currentCooldown + "/" + this.maxCooldown + ")");
@@ -127,7 +131,7 @@ public class CaptainAbilityButton extends JButton {
 
         if (isActive) {
             g2d.setColor(Color.GREEN);
-        } else if (fillPercentage >= 1.0) {
+        } else if (fillPercentage >= MAX_PERCENTAGE) {
             g2d.setColor(Color.BLUE);
         } else {
             g2d.setColor(Color.DARK_GRAY);
