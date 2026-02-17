@@ -1,8 +1,6 @@
 package it.unibo.jnavy.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import it.unibo.jnavy.model.Bot;
 import it.unibo.jnavy.model.Human;
@@ -10,6 +8,7 @@ import it.unibo.jnavy.model.Player;
 import it.unibo.jnavy.model.bots.BeginnerBot;
 import it.unibo.jnavy.model.captains.Gunner;
 import it.unibo.jnavy.model.cell.Cell;
+import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
@@ -20,8 +19,6 @@ import it.unibo.jnavy.model.utilities.Position;
  * Implementation of SetupController interface.
  */
 public class SetupControllerImpl implements SetupController {
-
-    private static final List<Integer> FLEET_CONFIG = List.of(5, 4, 3, 3, 2);
 
     private final List<Integer> shipsToPlace;
     private final Random random;
@@ -35,14 +32,14 @@ public class SetupControllerImpl implements SetupController {
     private Ship currentShipObject;
 
     public SetupControllerImpl() {
-        this.shipsToPlace = new ArrayList<>(FLEET_CONFIG);
+        this.shipsToPlace = new ArrayList<>(buildFleetConfig());
         this.random = new Random();
         
         // TODO: The Captain and BotStrategy could be passed as arguments or set later.
         this.human = new Human(new Gunner());
         this.bot = new Bot(new BeginnerBot());
 
-        this.placeFleetRandomly(this.bot, new ArrayList<>(FLEET_CONFIG));
+        this.placeFleetRandomly(this.bot, new ArrayList<>(buildFleetConfig()));
     }
 
     @Override
@@ -127,6 +124,13 @@ public class SetupControllerImpl implements SetupController {
                 hasSameShip(grid, ship, new Position(pos.x(), pos.y() - 1)),
                 hasSameShip(grid, ship, new Position(pos.x(), pos.y() + 1))
         );
+    }
+
+    private static List<Integer> buildFleetConfig() {
+        return Fleet.FLEET_COMPOSITION.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByKey().reversed()) // largest first
+                .flatMap(e -> Collections.nCopies(e.getValue(), e.getKey()).stream())
+                .toList();
     }
 
     private boolean hasSameShip(Grid grid, Ship ship, Position neighbor) {
