@@ -87,7 +87,7 @@ public class EffectsPanel extends JPanel {
 
         if (this.animationTimer.isRunning()) {
             if (this.bulletImg != null) {
-                g2.drawImage(this.bulletImg, bulletX, bulletY, 30, 40, this);
+                g2.drawImage(this.bulletImg, this.bulletX, this.bulletY, 30, 40, this);
             }
         } else if (this.currentEffect != null) {
             g2.drawImage(this.currentEffect, this.bulletX - 15, this.bulletY - 10, 60, 60, this);
