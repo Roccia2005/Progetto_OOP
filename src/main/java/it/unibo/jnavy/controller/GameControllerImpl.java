@@ -1,6 +1,5 @@
 package it.unibo.jnavy.controller;
 
-
 import java.util.List;
 
 import it.unibo.jnavy.model.Bot;
@@ -15,10 +14,10 @@ import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
 public class GameControllerImpl implements GameController{
 
-    private Human human;
-    private Bot bot;
+    private final Human human;
+    private final Bot bot;
     private Player currentPlayer;
-    private WeatherManager weather;
+    private final WeatherManager weather;
 
     private int turnCounter = 0;
 
@@ -31,13 +30,13 @@ public class GameControllerImpl implements GameController{
 
     
     @Override
-    public int getCaptainCooldown() {
-        return this.human.getCaptain().getCooldown();
+    public int getGridSize() {
+        return this.human.getGrid().getSize();
     }
 
     @Override
-    public int getGridSize() {
-        return this.human.getGrid().getSize();
+    public int getCaptainCooldown() {
+        return this.human.getCaptain().getCooldown();
     }
 
     @Override
@@ -51,14 +50,13 @@ public class GameControllerImpl implements GameController{
 
     @Override
     public int endTurn() {
-        this.human.processTurnEnd();
-        this.weather.processTurnEnd();
         this.turnCounter++;
-        this.currentPlayer = this.currentPlayer == this.human ? this.bot : this.human;
+        this.currentPlayer.processTurnEnd();
+        this.weather.processTurnEnd();
+        this.currentPlayer = (this.currentPlayer == this.human) ? this.bot : this.human;
         if (this.currentPlayer == this.bot) {
             playBotTurn();
         }
-        this.bot.processTurnEnd();
         return this.turnCounter;
     }
 
@@ -68,12 +66,11 @@ public class GameControllerImpl implements GameController{
             return false;
         }
 
-        Human humanPlayer = (Human) this.human;
-        Captain currentCaptain = humanPlayer.getCaptain();
+        Captain currentCaptain = this.human.getCaptain();
         boolean targetsEnemy = currentCaptain.targetsEnemyGrid();
         Grid targetGrid = targetsEnemy ? this.bot.getGrid() : this.human.getGrid();
 
-        if (humanPlayer.useAbility(p, targetGrid)) {
+        if (this.human.useAbility(p, targetGrid)) {
             if (currentCaptain.doesAbilityConsumeTurn()) {
                 endTurn();
             }
@@ -87,19 +84,21 @@ public class GameControllerImpl implements GameController{
         return this.human.getFleet().isDefeated() || this.bot.getFleet().isDefeated();
     }
 
+    @Override
+    public int getCurrentCaptainCooldown() {
+        return this.human.getCaptain().getCurrentCooldown();
+    }
+
     private boolean isHumanTurn() {
         return this.currentPlayer == this.human;
     }
 
     private void playBotTurn() {
-        if (isGameOver()) {
-            return;
-        }
-        if (this.bot instanceof Bot botPlayer) {
-            Position target = botPlayer.decideTarget(this.human.getGrid());
-            ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
-            botPlayer.receiveFeedback(result.position(), result.hitType());
-        }
+        if (isGameOver()) return;
+
+        Position target = this.bot.decideTarget(this.human.getGrid());
+        ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
+        this.bot.receiveFeedback(result.position(), result.hitType());
         endTurn();
     }
 }
