@@ -63,7 +63,7 @@ public class EffectsPanel extends JPanel {
 
     private void triggerImpact() {
         animationTimer.stop();
-        
+
         Timer effectDuration = new Timer(1000, e -> {
             isAnimating = false;
             currentEffect = null;
@@ -74,5 +74,23 @@ public class EffectsPanel extends JPanel {
         effectDuration.start();
 
         repaint();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        if (!this.isAnimating && this.currentEffect == null) return;
+
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        if (this.animationTimer.isRunning()) {
+            if (this.bulletImg != null) {
+                g2.drawImage(this.bulletImg, bulletX, bulletY, 30, 40, this);
+            }
+        } else if (this.currentEffect != null) {
+            g2.drawImage(this.currentEffect, this.bulletX - 15, this.bulletY - 10, 60, 60, this);
+        }
     }
 }
