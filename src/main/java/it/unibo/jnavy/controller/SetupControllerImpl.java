@@ -9,6 +9,7 @@ import it.unibo.jnavy.model.Human;
 import it.unibo.jnavy.model.Player;
 import it.unibo.jnavy.model.bots.BeginnerBot;
 import it.unibo.jnavy.model.captains.Gunner;
+import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
@@ -108,6 +109,34 @@ public class SetupControllerImpl implements SetupController {
     public Bot getBotPlayer() {
         return this.bot;
     }
+
+    @Override
+    public CellState getCellState(Position pos) {
+        Grid grid = human.getGrid();
+        var cellOpt = grid.getCell(pos);
+        if (cellOpt.isEmpty() || cellOpt.get().getShip().isEmpty()) {
+            return CellState.water();
+        }
+        Ship ship = cellOpt.get().getShip().get();
+        int shipId = ship.hashCode(); // or a proper ID
+        return new CellState(
+                true,
+                shipId,
+                hasSameShip(grid, ship, new Position(pos.x() - 1, pos.y())),
+                hasSameShip(grid, ship, new Position(pos.x() + 1, pos.y())),
+                hasSameShip(grid, ship, new Position(pos.x(), pos.y() - 1)),
+                hasSameShip(grid, ship, new Position(pos.x(), pos.y() + 1))
+        );
+    }
+
+    private boolean hasSameShip(Grid grid, Ship ship, Position neighbor) {
+        if (!grid.isPositionValid(neighbor)) return false;
+        return grid.getCell(neighbor)
+                .flatMap(Cell::getShip)
+                .map(s -> s.equals(ship))
+                .orElse(false);
+    }
+
 
     private void unsetShip() {
         if (this.currentShipObject != null) {

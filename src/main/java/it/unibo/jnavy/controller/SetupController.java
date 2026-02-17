@@ -67,4 +67,6 @@ public interface SetupController {
      * @return the Bot player instance.
      */
     Bot getBotPlayer();
+
+    CellState getCellState(Position pos);
 }

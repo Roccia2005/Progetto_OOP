@@ -5,10 +5,8 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import it.unibo.jnavy.controller.CellState;
 import it.unibo.jnavy.controller.SetupController;
-import it.unibo.jnavy.model.cell.Cell;
-import it.unibo.jnavy.model.grid.Grid;
-import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
@@ -193,25 +191,18 @@ public class SetupView extends JFrame {
     }
 
     private void updateView() {
-        var grid = controller.getHumanPlayer().getGrid();
-
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
                 Position pos = new Position(i, j);
                 JButton button = gridButtons.get(pos);
-                button.setText("");
+                CellState state = controller.getCellState(pos);
 
-                var shipOpt = grid.getCell(pos).flatMap(Cell::getShip);
-
-                if (shipOpt.isPresent()) {
-                    var ship = shipOpt.get();
+                if (state.hasShip()) {
                     button.setBackground(COLOR_SHIP);
-
-                    int top = isSameShip(grid, ship, new Position(i - 1, j)) ? 0 : BORDER_THICKNESS;
-                    int left = isSameShip(grid, ship, new Position(i, j - 1)) ? 0 : BORDER_THICKNESS;
-                    int bottom = isSameShip(grid, ship, new Position(i + 1, j)) ? 0 : BORDER_THICKNESS;
-                    int right = isSameShip(grid, ship, new Position(i, j + 1)) ? 0 : BORDER_THICKNESS;
-
+                    int top    = state.connectedTop()    ? 0 : BORDER_THICKNESS;
+                    int left   = state.connectedLeft()   ? 0 : BORDER_THICKNESS;
+                    int bottom = state.connectedBottom()  ? 0 : BORDER_THICKNESS;
+                    int right  = state.connectedRight()   ? 0 : BORDER_THICKNESS;
                     button.setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, COLOR_BORDER));
                 } else {
                     button.setBackground(COLOR_WATER);
@@ -225,13 +216,5 @@ public class SetupView extends JFrame {
         } else {
             infoLabel.setText("Size: " + controller.getNextShipSize());
         }
-    }
-
-    private boolean isSameShip(Grid grid, Ship currentShip, Position neighborPos) {
-        if (!grid.isPositionValid(neighborPos)) {
-            return false;
-        }
-        var neighborShipOpt = grid.getCell(neighborPos).flatMap(Cell::getShip);
-        return neighborShipOpt.map(ship -> ship.equals(currentShip)).orElse(false);
     }
 }
