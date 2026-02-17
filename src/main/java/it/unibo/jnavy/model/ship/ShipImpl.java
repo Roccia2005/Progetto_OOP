@@ -46,6 +46,6 @@ public class ShipImpl implements Ship {
 
     @Override
     public void setHealth(int value) {
-        this.health = value;
+        this.health = Math.min(Math.max(value, 0), this.size);
     }
 }
