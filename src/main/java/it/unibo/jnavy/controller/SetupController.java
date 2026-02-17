@@ -2,6 +2,7 @@ package it.unibo.jnavy.controller;
 
 import it.unibo.jnavy.model.Bot;
 import it.unibo.jnavy.model.Human;
+import it.unibo.jnavy.model.Player;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
@@ -54,19 +55,19 @@ public interface SetupController {
      */
     boolean isSetupFinished();
 
-    /**
-     * Gets the initialized Human player.
-     *
-     * @return the Human player instance.
-     */
-    Human getHumanPlayer();
-
-    /**
-     * Gets the initialized Bot player.
-     *
-     * @return the Bot player instance.
-     */
-    Bot getBotPlayer();
+//    /**
+//     * Gets the initialized Human player.
+//     *
+//     * @return the Human player instance.
+//     */
+//    Player getHumanPlayer();
+//
+//    /**
+//     * Gets the initialized Bot player.
+//     *
+//     * @return the Bot player instance.
+//     */
+//    Player getBotPlayer();
 
     CellState getCellState(Position pos);
 }
