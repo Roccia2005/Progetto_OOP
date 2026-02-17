@@ -45,7 +45,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass.set("it.unibo.jnavi.JNavyApp")
+    mainClass.set("it.unibo.jnavy.JNavyApp")
 }
 
 tasks.withType<Test>().configureEach {

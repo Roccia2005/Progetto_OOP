@@ -15,8 +15,8 @@ import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
 public class GameControllerImpl implements GameController{
 
-    private Player human;
-    private Player bot;
+    private Human human;
+    private Bot bot;
     private Player currentPlayer;
     private WeatherManager weather;
 
@@ -27,6 +27,17 @@ public class GameControllerImpl implements GameController{
         this.bot = bot;
         this.currentPlayer = this.human;
         this.weather = WeatherManagerImpl.getInstance();
+    }
+
+    
+    @Override
+    public int getCaptainCooldown() {
+        return this.human.getCaptain().getCooldown();
+    }
+
+    @Override
+    public int getGridSize() {
+        return this.human.getGrid().getSize();
     }
 
     @Override

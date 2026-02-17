@@ -4,6 +4,10 @@ import it.unibo.jnavy.model.utilities.Position;
 
 public interface GameController {
 
+    int getGridSize();
+
+    int getCaptainCooldown();
+
     void processShot(Position p);
 
     boolean processAbility(Position p);
