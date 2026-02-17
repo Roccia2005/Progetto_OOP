@@ -100,6 +100,5 @@ public class GameControllerImpl implements GameController{
             ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
             botPlayer.receiveFeedback(result.position(), result.hitType());
         }
-        endTurn();
     }
 }
