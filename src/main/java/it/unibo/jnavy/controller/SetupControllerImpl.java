@@ -98,15 +98,15 @@ public class SetupControllerImpl implements SetupController {
         return shipsToPlace.isEmpty() && currentShipObject == null;
     }
 
-//    @Override
-//    public Player getHumanPlayer() {
-//        return this.human;
-//    }
-//
-//    @Override
-//    public Player getBotPlayer() {
-//        return this.bot;
-//    }
+    @Override
+    public Player getHumanPlayer() {
+        return this.human;
+    }
+
+    @Override
+    public Player getBotPlayer() {
+        return this.bot;
+    }
 
     @Override
     public CellState getCellState(Position pos) {

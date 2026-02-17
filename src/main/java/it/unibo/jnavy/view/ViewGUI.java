@@ -7,6 +7,8 @@ import it.unibo.jnavy.controller.GameController;
 import it.unibo.jnavy.controller.GameControllerImpl;
 import it.unibo.jnavy.controller.SetupController;
 import it.unibo.jnavy.controller.SetupControllerImpl;
+import it.unibo.jnavy.model.Bot;
+import it.unibo.jnavy.model.Human;
 import it.unibo.jnavy.model.bots.*;
 import it.unibo.jnavy.model.captains.*;
 import it.unibo.jnavy.view.BotSelectionPanel.BotLevel;
@@ -82,8 +84,8 @@ public class ViewGUI extends JFrame implements View {
     }
 
     private void startGamePhase(final SetupController completedSetup) {
-        var humanPlayer = completedSetup.getHumanPlayer();
-        var botPlayer = completedSetup.getBotPlayer();
+        var humanPlayer = (Human)completedSetup.getHumanPlayer();
+        var botPlayer = (Bot)completedSetup.getBotPlayer();
 
         if (isSniperSelected) {
             botPlayer.setStrategy(new SniperBot(humanPlayer.getGrid()));

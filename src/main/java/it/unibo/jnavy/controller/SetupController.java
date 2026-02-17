@@ -1,5 +1,6 @@
 package it.unibo.jnavy.controller;
 
+import it.unibo.jnavy.model.Player;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
@@ -11,9 +12,9 @@ import it.unibo.jnavy.model.utilities.Position;
 public interface SetupController {
 
     /**
-     * Attempts to place the current ship (the one at the top of the list) 
+     * Attempts to place the current ship (the one at the top of the list)
      * at the specified position.
-     * If a temporary ship was already placed (but not confirmed), it will be removed 
+     * If a temporary ship was already placed (but not confirmed), it will be removed
      * before placing the new one.
      *
      * @param pos The position of the ship's head.
@@ -51,19 +52,19 @@ public interface SetupController {
      */
     boolean isSetupFinished();
 
-//    /**
-//     * Gets the initialized Human player.
-//     *
-//     * @return the Human player instance.
-//     */
-//    Player getHumanPlayer();
-//
-//    /**
-//     * Gets the initialized Bot player.
-//     *
-//     * @return the Bot player instance.
-//     */
-//    Player getBotPlayer();
+    /**
+     * Gets the initialized Human player.
+     *
+     * @return the Human player instance.
+     */
+    Player getHumanPlayer();
+
+    /**
+     * Gets the initialized Bot player.
+     *
+     * @return the Bot player instance.
+     */
+    Player getBotPlayer();
 
     CellState getCellState(Position pos);
 }
