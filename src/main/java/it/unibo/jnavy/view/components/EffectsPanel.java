@@ -62,11 +62,11 @@ public class EffectsPanel extends JPanel {
     }
 
     private void triggerImpact() {
-        animationTimer.stop();
+        this.animationTimer.stop();
 
         Timer effectDuration = new Timer(1000, e -> {
-            isAnimating = false;
-            currentEffect = null;
+            this.isAnimating = false;
+            this.currentEffect = null;
             repaint();
             ((Timer)e.getSource()).stop();
         });
