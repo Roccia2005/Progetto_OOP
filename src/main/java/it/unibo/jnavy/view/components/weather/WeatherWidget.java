@@ -1,4 +1,4 @@
-package it.unibo.jnavy.view.components;
+package it.unibo.jnavy.view.components.weather;
 
 import it.unibo.jnavy.model.weather.WeatherCondition;
 
