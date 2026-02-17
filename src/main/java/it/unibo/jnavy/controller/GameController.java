@@ -15,4 +15,6 @@ public interface GameController {
     int endTurn();
 
     boolean isGameOver();
+
+    int getCurrentCaptainCooldown();
 }
