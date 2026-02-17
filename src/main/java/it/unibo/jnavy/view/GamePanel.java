@@ -11,6 +11,9 @@ import it.unibo.jnavy.view.components.grid.GridPanel;
 
 public class GamePanel extends JPanel {
 
+    private static final String HUMAN_FLEET = "My Fleet";
+    private static final String BOT_FLEET = "Enemy Fleet";
+
     private final JPanel humanGridPanel;
     private final JPanel botGridPanel;
     private final WeatherWidget weatherWidget;
@@ -24,8 +27,8 @@ public class GamePanel extends JPanel {
         JPanel gridsContainer = new JPanel(new GridLayout(1, 2, 40, 0));
         gridsContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        this.humanGridPanel = new GridPanel("Fleet", controller.getGridSize(), false); 
-        this.botGridPanel = new GridPanel("Enemy", controller.getGridSize(), true); // Solo questa sarà cliccabile
+        this.humanGridPanel = new GridPanel(HUMAN_FLEET, controller.getGridSize(), false); 
+        this.botGridPanel = new GridPanel(BOT_FLEET, controller.getGridSize(), true); // Solo questa sarà cliccabile
 
         gridsContainer.add(this.humanGridPanel);
         gridsContainer.add(this.botGridPanel);
