@@ -62,10 +62,8 @@ public class EffectsPanel extends JPanel {
         if (url == null) {
             System.err.println("Critical error: image not found: /images/" + filename + "");
             return null;
-        } else {
-            System.out.println("✅ Immagine caricata correttamente: " + filename);
-            return new ImageIcon(url).getImage();
         }
+        return new ImageIcon(url).getImage();
     }
 
     /**
@@ -101,7 +99,7 @@ public class EffectsPanel extends JPanel {
     }
 
     /**
-     * Updates the bullets position during its flight.
+     * Updates the bullet position during its flight.
      * This method is called repeatedly by the animation timer.
      */
     private void updateAnimation() {
