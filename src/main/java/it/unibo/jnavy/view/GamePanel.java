@@ -47,6 +47,7 @@ public class GamePanel extends JPanel {
                                                 if (captainButton.isActive()) {
                                                     controller.processAbility(p);
                                                     captainButton.reset();
+                                                    this.updateDashboard();
                                                 }
                                              }); 
         this.botGridPanel = new GridPanel(this.controller, BOT_FLEET, 
@@ -57,6 +58,7 @@ public class GamePanel extends JPanel {
                                                 } else {
                                                     controller.processShot(p);
                                                 }
+                                                this.updateDashboard();
                                             });
 
         gridsContainer.add(this.humanGridPanel);
@@ -70,4 +72,12 @@ public class GamePanel extends JPanel {
         this.add(gridsContainer, BorderLayout.CENTER);
         this.add(dashboardPanel, BorderLayout.SOUTH);
     }
+
+    private void updateDashboard() {
+    int currentCooldown = controller.getCurrentCaptainCooldown();
+    captainButton.updateState(currentCooldown);
+
+    // WeatherCondition currentCondition = WeatherManagerImpl.getInstance().getCurrentWeather();
+    // weatherWidget.updateWeather(currentCondition);
+}
 }
