@@ -12,14 +12,13 @@ import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
-public class SetupView extends JFrame {
+public class SetupView extends JPanel {
+    private final SetupController controller;
+    private final Runnable gameStartCall;
 
     private static final int GRID_SIZE = 10;
-
-    // --- COLORI THEME ---
     private static final Color THEME_BACKGROUND = new Color(20, 20, 30);
     private static final Color THEME_TEXT = new Color(240, 240, 255);
-
     private static final Color COLOR_WATER = new Color(41, 86, 246);
     private static final Color COLOR_SHIP = Color.BLACK;
     private static final Color COLOR_BORDER = Color.GRAY;
@@ -27,31 +26,25 @@ public class SetupView extends JFrame {
     private static final int FONT_ICON_SIZE = 120;
     private static final int BORDER_THICKNESS = 2;
 
-    private final SetupController controller;
     private final Map<Position, JButton> gridButtons = new HashMap<>();
-
     private CardinalDirection currentDirection = CardinalDirection.RIGHT;
 
-    // Componenti UI promossi a campi di classe per gestirne lo stato
     private JLabel infoLabel;
     private JButton rotateButton;
     private JButton nextShipButton;
     private JButton randomBotton;
 
-    public SetupView(final SetupController controller) {
+    public SetupView(final SetupController controller, final Runnable gameStartCall) {
         this.controller = controller;
+        this.gameStartCall = gameStartCall;
         this.initUI();
     }
 
     private void initUI() {
-        this.setTitle("JNavy - Setup your Fleet");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1000, 700);
+        this.setPreferredSize(new Dimension(1000, 700));
         this.setLayout(new BorderLayout());
+        this.setBackground(THEME_BACKGROUND);
 
-        this.getContentPane().setBackground(THEME_BACKGROUND);
-
-        // --- Pannello Centrale: La Griglia ---
         JPanel gridPanel = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE));
         gridPanel.setBackground(THEME_BACKGROUND);
         gridPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -73,25 +66,26 @@ public class SetupView extends JFrame {
         }
         this.add(gridPanel, BorderLayout.CENTER);
 
-        // --- Pannello Laterale ---
+        //pannello Laterale
         final JPanel sidePanel = new JPanel(new BorderLayout());
         sidePanel.setBackground(THEME_BACKGROUND);
         sidePanel.setPreferredSize(new Dimension(250, 0));
         sidePanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
 
-        // 1. Info Label
-        infoLabel = new JLabel("Size: " + controller.getNextShipSize());
+        //info Label
+        String sizeText = controller.isSetupFinished() ? "Ready" : String.valueOf(controller.getNextShipSize());
+        infoLabel = new JLabel("Size: " + sizeText);
         infoLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
         infoLabel.setForeground(THEME_TEXT);
         infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         infoLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         sidePanel.add(infoLabel, BorderLayout.NORTH);
 
-        // 2. Container Bottoni
+        //container bottoni
         final JPanel buttonsContainer = new JPanel(new GridLayout(3, 1, 0, 15));
         buttonsContainer.setBackground(THEME_BACKGROUND);
 
-        // --- BOTTONE 1: ROTATE ---
+        //bottone 1 rotate
         rotateButton = createBigButton("→", FONT_ICON_SIZE);
         rotateButton.setToolTipText("Rotate Ship (Horizontal/Vertical)");
         rotateButton.addActionListener(e -> {
@@ -105,7 +99,7 @@ public class SetupView extends JFrame {
             rotateButton.repaint();
         });
 
-        // --- BOTTONE 2: CONFIRM / START GAME ---
+        // bottone 2 confirm/start game
         nextShipButton = createBigButton("Confirm", FONT_DEFAULT_SIZE);
         nextShipButton.addActionListener(e -> {
             try {
@@ -116,12 +110,14 @@ public class SetupView extends JFrame {
             }
         });
 
-        // --- BOTTONE 3: RANDOMIZE ---
+        // bottone 3 randomize
         randomBotton = createBigButton("Randomize", FONT_DEFAULT_SIZE);
         randomBotton.addActionListener(e -> {
             controller.randomizeHumanShips();
             updateView();
-            enableStartGameMode(); // Passa alla modalità "Avvio Partita"
+            if (this.controller.isSetupFinished()) {
+                enableStartGameMode(); // Passa alla modalità "Avvio Partita"
+            }
         });
 
         buttonsContainer.add(rotateButton);
@@ -159,10 +155,9 @@ public class SetupView extends JFrame {
     }
 
     private void startGame() {
-        // 1. Chiudiamo la finestra di Setup
-        this.dispose();
-
-        //capire come collegare le varie view
+        if (gameStartCall != null) {
+            gameStartCall.run();
+        }
     }
 
     private JButton createBigButton(String text, int fontSize) {
