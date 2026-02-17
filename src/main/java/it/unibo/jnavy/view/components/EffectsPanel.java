@@ -15,9 +15,11 @@ public class EffectsPanel extends JPanel {
     private int targetY;
     private Image currentEffect = null;
 
+    private int targetSize = 0;
+    private Point targetTopLeft;
+
     private final Timer animationTimer;
     private final int SPEED = 20;
-    private final int YSTART = -50;
 
     public EffectsPanel() {
         this.setOpaque(false);
@@ -40,11 +42,13 @@ public class EffectsPanel extends JPanel {
     public void startShot(Component targetBtn, boolean isHit) {
         if (this.isAnimating) return;
 
-        Point p = SwingUtilities.convertPoint(targetBtn.getParent(), targetBtn.getLocation(), this);
-        int cellSize = targetBtn.getWidth();
-        this.bulletX = p.x + (cellSize / 2) - 15;
-        this.bulletY = this.YSTART;
-        this.targetY = p.y + (cellSize / 2) - 20;
+        this.targetTopLeft = SwingUtilities.convertPoint(targetBtn.getParent(), targetBtn.getLocation(), this);
+        this.targetSize = targetBtn.getWidth();
+        int scaledBulletWidth = (int)(this.targetSize * 0.4);
+
+        this.bulletX = this.targetTopLeft.x + (this.targetSize - scaledBulletWidth) / 2;
+        this.bulletY = -scaledBulletWidth * 2;
+        this.targetY = this.targetTopLeft.y + (this.targetSize / 2) - (scaledBulletWidth / 2);
 
         this.currentEffect = isHit ? this.explosionGif : this.splashGif;
 
