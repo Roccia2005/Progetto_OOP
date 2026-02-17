@@ -2,6 +2,7 @@ package it.unibo.jnavy.model.fleet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import it.unibo.jnavy.model.ship.Ship;
 
@@ -10,8 +11,7 @@ import it.unibo.jnavy.model.ship.Ship;
  */
 public class FleetImpl implements Fleet {
 
-    final private List<Ship> ships;
-    private static final int MAX_SHIPS = 5;
+    private final List<Ship> ships;
 
     public FleetImpl() {
         this.ships = new ArrayList<>();
@@ -19,25 +19,17 @@ public class FleetImpl implements Fleet {
 
     @Override
     public void addShip(Ship s) {
-        if (this.ships.size() >= MAX_SHIPS) {
-            throw new IllegalStateException("Fleet is full! Max " + MAX_SHIPS + " ships allowed.");
+        int allowedMax = Fleet.FLEET_COMPOSITION.getOrDefault(s.getSize(), 0);
+        if (allowedMax == 0) {
+            throw new IllegalArgumentException("Ship of size " + s.getSize() + " is not allowed.");
         }
-        long currentCountOfThisSize = ships.stream()
-                                       .filter(ship -> ship.getSize() == s.getSize())
-                                       .count();
-        
-        int allowedMax = switch (s.getSize()) {
-            case 2 -> 1;
-            case 3 -> 2;
-            case 4 -> 1;
-            case 5 -> 1;
-            default -> 0;
-        };
 
-        if (currentCountOfThisSize >= allowedMax) {
+        long currentCount = ships.stream()
+                .filter(ship -> ship.getSize() == s.getSize())
+                .count();
+        if (currentCount >= allowedMax) {
             throw new IllegalStateException("Cannot add more ships of size " + s.getSize());
         }
-        
         this.ships.add(s);
     }
 
@@ -60,12 +52,10 @@ public class FleetImpl implements Fleet {
 
     @Override
     public boolean isTopologyValid() {
-        long size2 = ships.stream().filter(s -> s.getSize() == 2).count();
-        long size3 = ships.stream().filter(s -> s.getSize() == 3).count();
-        long size4 = ships.stream().filter(s -> s.getSize() == 4).count();
-        long size5 = ships.stream().filter(s -> s.getSize() == 5).count();
-
-        return size2 == 1 && size3 == 2 && size4 == 1 && size5 == 1;
+        return Fleet.FLEET_COMPOSITION.entrySet().stream().allMatch(entry -> {
+            long actual = ships.stream().filter(s -> s.getSize() == entry.getKey()).count();
+            return actual == entry.getValue();
+        });
     }
 
     @Override

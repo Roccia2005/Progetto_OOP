@@ -1,7 +1,5 @@
 package it.unibo.jnavy.controller;
 
-import it.unibo.jnavy.model.Bot;
-import it.unibo.jnavy.model.Human;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
@@ -33,7 +31,6 @@ public interface SetupController {
 
     /**
      * Randomly places the remaining ships for the human player.
-     *
      * If the user was in the middle of placing a ship manually (unconfirmed),
      * that ship is removed and placed randomly along with the others.
      */
@@ -54,17 +51,19 @@ public interface SetupController {
      */
     boolean isSetupFinished();
 
-    /**
-     * Gets the initialized Human player.
-     *
-     * @return the Human player instance.
-     */
-    Human getHumanPlayer();
+//    /**
+//     * Gets the initialized Human player.
+//     *
+//     * @return the Human player instance.
+//     */
+//    Player getHumanPlayer();
+//
+//    /**
+//     * Gets the initialized Bot player.
+//     *
+//     * @return the Bot player instance.
+//     */
+//    Player getBotPlayer();
 
-    /**
-     * Gets the initialized Bot player.
-     *
-     * @return the Bot player instance.
-     */
-    Bot getBotPlayer();
+    CellState getCellState(Position pos);
 }

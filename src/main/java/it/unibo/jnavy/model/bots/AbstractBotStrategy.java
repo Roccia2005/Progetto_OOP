@@ -25,16 +25,7 @@ public abstract class AbstractBotStrategy implements BotStrategy{
     }
 
     protected List<Position> getValidCellsList(Grid grid) {
-        final Cell[][] matrix = grid.getCellMatrix();
-        if (matrix == null) {
-            return new ArrayList<>();
-        }
-
-        return Arrays.stream(matrix)
-        .flatMap(Arrays::stream)
-        .filter(c -> !c.isHit())
-        .map(Cell::getPosition)
-        .collect(Collectors.toList());
+        return grid.getPositions();
     }
 
     protected int getRandomIndex(final List<Position> cellsList) {

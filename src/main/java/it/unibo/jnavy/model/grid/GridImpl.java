@@ -10,8 +10,11 @@ import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -78,13 +81,16 @@ public class GridImpl implements Grid {
         var targetCell = cells[p.x()][p.y()];
 
         HitType cellResult = targetCell.receiveShot();
+        Ship ship = targetCell.getShip().orElse(null);
 
         if (cellResult == HitType.SUNK) {
-            Ship sunkShip = targetCell.getShip().get();
-            return ShotResult.sunk(p, sunkShip);
+            if (ship == null) {
+                throw new IllegalArgumentException("Sunk ship is null!");
+            }
+            return ShotResult.sunk(p, ship);
+        } else {
+            return new ShotResult(cellResult, p, Optional.empty());
         }
-
-        return new ShotResult(cellResult, p, Optional.empty());
     }
 
     @Override
@@ -94,14 +100,17 @@ public class GridImpl implements Grid {
 
     @Override
     public boolean repair(Position p) {
-        Cell cellToRapair = getCell(p).get();
-        if(cellToRapair.isOccupied() && cellToRapair.isHit() && !cellToRapair.getShip().get().isSunk()) {
-            cellToRapair.repair();
-            Ship s = cellToRapair.getShip().get();
-            s.setHealth(s.getHealth() + 1);
-            return true;
-        }
-        return false;
+        return getCell(p).map(c -> {
+            boolean result = false;
+
+            if (c.isOccupied() && c.isHit() && !c.getShip().map(Ship::isSunk).orElse(false)) {
+                c.repair();
+                Ship s = c.getShip().get();
+                s.setHealth(s.getHealth() + 1);
+                result = true;
+            }
+            return result;
+        }).orElse(false);
     }
 
     @Override
@@ -123,10 +132,33 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public Cell[][] getCellMatrix() {
-        if(this.cells == null) return null;
-        return this.cells;
+    public List<Position> getPositions() {
+        final Cell[][] matrix = this.getCellMatrix();
+        if (matrix == null) {
+            return new ArrayList<>();
+        }
+
+        return Arrays.stream(matrix)
+                .flatMap(Arrays::stream)
+                .filter(c -> !c.isHit())
+                .map(Cell::getPosition)
+                .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean isTargetValid(Position target) {
+        Cell[][] matrix = this.getCellMatrix();
+        int x = target.x();
+        int y = target.y();
+        return x >= 0
+                && x < matrix.length
+                && y >= 0
+                && y < matrix[0].length
+                && this.getCell(target)  //metto il controllo sulla cell in fondo così non rischio che venga controllato un index non valido sulla grid
+                .map(c -> !c.isHit())
+                .orElse(false);
+    }
+
 
     @Override
     public boolean isPositionValid(Position p) {
@@ -137,10 +169,13 @@ public class GridImpl implements Grid {
     public void removeShip(Ship ship) {
         Arrays.stream(this.cells)              
           .flatMap(Arrays::stream)         
-          .filter(cell -> cell.isOccupied() && cell.getShip().get().equals(ship))
-          .forEach(cell -> cell.setShip(null));
+          .filter(c -> c.isOccupied() && c.getShip().map(s -> s.equals(ship)).orElse(false))
+          .forEach(c -> c.setShip(null));
 
         this.fleet.removeShip(ship);
     }
 
+    private Cell[][] getCellMatrix() {
+        return this.cells;
+    }
 }

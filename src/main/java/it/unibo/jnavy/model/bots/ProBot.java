@@ -49,7 +49,7 @@ public class ProBot extends AbstractBotStrategy{
                 while(nextTarget == null && !availableDirections.isEmpty()){
                     currentDirection = availableDirections.getFirst();
                     temporaryTarget = targetCalc(firstHitPosition);
-                    if (!isTargetValid(temporaryTarget, enemyGrid)) {
+                    if (!enemyGrid.isTargetValid(temporaryTarget)) {
                         // al momento mi trovo meglio usando una lista in cui rimuovo le direction non valide
                         this.availableDirections.removeFirst();
                     } else {
@@ -68,7 +68,7 @@ public class ProBot extends AbstractBotStrategy{
 
             case DESTROYING:
                 temporaryTarget = targetCalc(lastTargetPosition);
-                if (!isTargetValid(temporaryTarget, enemyGrid)) {
+                if (!enemyGrid.isTargetValid(temporaryTarget)) {
                     this.currentDirection = this.currentDirection.opposite();
                     nextTarget = targetCalc(firstHitPosition);
                     lastTargetPosition = firstHitPosition;
@@ -157,17 +157,4 @@ public class ProBot extends AbstractBotStrategy{
         return new Position(target.x()+currentDirection.getRowOffset(), target.y()+currentDirection.getColOffset());
     }
 
-    //estraggo lo status della cell dall'optional e verifico se è valido o meno + verifico se è in bounds
-    public boolean isTargetValid(final Position target, final Grid grid) {
-        Cell[][] matrix = grid.getCellMatrix();
-        int x = target.x();
-        int y = target.y();
-        return x >= 0
-        && x < matrix.length
-        && y >= 0
-        && y < matrix[0].length
-        && grid.getCell(target)  //metto il controllo sulla cell in fondo così non rischio che venga controllato un index non valido sulla grid
-        .map(c -> !c.isHit())
-        .orElse(false);
-    }
 }

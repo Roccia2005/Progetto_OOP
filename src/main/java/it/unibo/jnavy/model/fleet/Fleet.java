@@ -1,6 +1,7 @@
 package it.unibo.jnavy.model.fleet;
 
 import java.util.List;
+import java.util.Map;
 
 import it.unibo.jnavy.model.ship.Ship;
 
@@ -9,6 +10,16 @@ import it.unibo.jnavy.model.ship.Ship;
  * It provides methods to check the overall status of the players's fleet.
  */
 public interface Fleet {
+
+    /**
+     * The standard fleet composition: ship size -> allowed count.
+     */
+    Map<Integer, Integer> FLEET_COMPOSITION = Map.of(
+            5, 1,
+            4, 1,
+            3, 2,
+            2, 1
+    );
     
     /**
      * Adds a ship to the fleet.

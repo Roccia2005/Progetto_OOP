@@ -1,8 +1,6 @@
 package it.unibo.jnavy.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import it.unibo.jnavy.model.Bot;
 import it.unibo.jnavy.model.Human;
@@ -11,6 +9,8 @@ import it.unibo.jnavy.model.bots.BeginnerBot;
 import it.unibo.jnavy.model.bots.BotStrategy;
 import it.unibo.jnavy.model.captains.Captain;
 import it.unibo.jnavy.model.captains.Gunner;
+import it.unibo.jnavy.model.cell.Cell;
+import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
@@ -23,12 +23,10 @@ import it.unibo.jnavy.view.CapSelectionPanel.CaptainAbility;
  */
 public class SetupControllerImpl implements SetupController {
 
-    private static final List<Integer> FLEET_CONFIG = List.of(5, 4, 3, 3, 2);
-
     private final List<Integer> shipsToPlace;
     private final Random random;
-    private final Human human;
-    private final Bot bot;
+    private final Player human;
+    private final Player bot;
 
     /**
      * The ship object currently placed on the grid but NOT yet confirmed.
@@ -37,13 +35,12 @@ public class SetupControllerImpl implements SetupController {
     private Ship currentShipObject;
 
     public SetupControllerImpl(final Captain selectedCaptain, final BotStrategy selectedBotStrategy) {
-        this.shipsToPlace = new ArrayList<>(FLEET_CONFIG);
+        this.shipsToPlace = new ArrayList<>(buildFleetConfig());
         this.random = new Random();
 
         this.human = new Human(selectedCaptain);
         this.bot = new Bot(selectedBotStrategy);
-
-        this.placeFleetRandomly(this.bot, new ArrayList<>(FLEET_CONFIG));
+        this.placeFleetRandomly(this.bot, new ArrayList<>(buildFleetConfig()));
     }
 
     @Override
@@ -101,15 +98,50 @@ public class SetupControllerImpl implements SetupController {
         return shipsToPlace.isEmpty() && currentShipObject == null;
     }
 
-    @Override
-    public Human getHumanPlayer() {
-        return this.human;
-    }
+//    @Override
+//    public Player getHumanPlayer() {
+//        return this.human;
+//    }
+//
+//    @Override
+//    public Player getBotPlayer() {
+//        return this.bot;
+//    }
 
     @Override
-    public Bot getBotPlayer() {
-        return this.bot;
+    public CellState getCellState(Position pos) {
+        Grid grid = human.getGrid();
+        var cellOpt = grid.getCell(pos);
+        if (cellOpt.isEmpty() || cellOpt.get().getShip().isEmpty()) {
+            return CellState.water();
+        }
+        Ship ship = cellOpt.get().getShip().get();
+        int shipId = ship.hashCode(); // or a proper ID
+        return new CellState(
+                true,
+                shipId,
+                hasSameShip(grid, ship, new Position(pos.x() - 1, pos.y())),
+                hasSameShip(grid, ship, new Position(pos.x() + 1, pos.y())),
+                hasSameShip(grid, ship, new Position(pos.x(), pos.y() - 1)),
+                hasSameShip(grid, ship, new Position(pos.x(), pos.y() + 1))
+        );
     }
+
+    private static List<Integer> buildFleetConfig() {
+        return Fleet.FLEET_COMPOSITION.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByKey().reversed()) // largest first
+                .flatMap(e -> Collections.nCopies(e.getValue(), e.getKey()).stream())
+                .toList();
+    }
+
+    private boolean hasSameShip(Grid grid, Ship ship, Position neighbor) {
+        if (!grid.isPositionValid(neighbor)) return false;
+        return grid.getCell(neighbor)
+                .flatMap(Cell::getShip)
+                .map(s -> s.equals(ship))
+                .orElse(false);
+    }
+
 
     private void unsetShip() {
         if (this.currentShipObject != null) {
