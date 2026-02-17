@@ -24,8 +24,8 @@ public class SetupControllerImpl implements SetupController {
 
     private final List<Integer> shipsToPlace;
     private final Random random;
-    private final Player human;
-    private final Player bot;
+    private final Human human;
+    private final Bot bot;
 
     /**
      * The ship object currently placed on the grid but NOT yet confirmed.
@@ -100,12 +100,12 @@ public class SetupControllerImpl implements SetupController {
     }
 
     @Override
-    public Player getHumanPlayer() {
+    public Human getHumanPlayer() {
         return this.human;
     }
 
     @Override
-    public Player getBotPlayer() {
+    public Bot getBotPlayer() {
         return this.bot;
     }
 

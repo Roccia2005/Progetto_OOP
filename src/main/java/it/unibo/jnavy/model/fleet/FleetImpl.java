@@ -27,11 +27,11 @@ public class FleetImpl implements Fleet {
                                        .count();
         
         int allowedMax = switch (s.getSize()) {
-        case 2 -> 1;
-        case 3 -> 2;
-        case 4 -> 1;
-        case 5 -> 1;
-        default -> 0;
+            case 2 -> 1;
+            case 3 -> 2;
+            case 4 -> 1;
+            case 5 -> 1;
+            default -> 0;
         };
 
         if (currentCountOfThisSize >= allowedMax) {
