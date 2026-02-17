@@ -8,12 +8,15 @@ import it.unibo.jnavy.model.Bot;
 import it.unibo.jnavy.model.Human;
 import it.unibo.jnavy.model.Player;
 import it.unibo.jnavy.model.bots.BeginnerBot;
+import it.unibo.jnavy.model.bots.BotStrategy;
+import it.unibo.jnavy.model.captains.Captain;
 import it.unibo.jnavy.model.captains.Gunner;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.view.CapSelectionPanel.CaptainAbility;
 
 /**
  * Implementation of SetupController interface.
@@ -33,13 +36,12 @@ public class SetupControllerImpl implements SetupController {
      */
     private Ship currentShipObject;
 
-    public SetupControllerImpl() {
+    public SetupControllerImpl(final Captain selectedCaptain, final BotStrategy selectedBotStrategy) {
         this.shipsToPlace = new ArrayList<>(FLEET_CONFIG);
         this.random = new Random();
-        
-        // TODO: The Captain and BotStrategy could be passed as arguments or set later.
-        this.human = new Human(new Gunner());
-        this.bot = new Bot(new BeginnerBot());
+
+        this.human = new Human(selectedCaptain);
+        this.bot = new Bot(selectedBotStrategy);
 
         this.placeFleetRandomly(this.bot, new ArrayList<>(FLEET_CONFIG));
     }
@@ -51,7 +53,7 @@ public class SetupControllerImpl implements SetupController {
         }
 
         final Grid grid = human.getGrid();
-        
+
         if (this.currentShipObject != null) {
             grid.removeShip(this.currentShipObject);
         }
@@ -62,8 +64,8 @@ public class SetupControllerImpl implements SetupController {
             grid.placeShip(newShip, pos, dir);
             this.currentShipObject = newShip;
             return true;
-        } 
-        
+        }
+
         this.currentShipObject = null;
         return false;
     }
@@ -73,16 +75,16 @@ public class SetupControllerImpl implements SetupController {
         if (this.currentShipObject == null) {
             throw new IllegalStateException("Cannot confirm: no valid ship is currently placed.");
         }
-        
+
         shipsToPlace.removeFirst();
         this.currentShipObject = null;
     }
 
     @Override
     public void randomizeHumanShips() {
-    
+
         this.unsetShip();
-        
+
         if (!shipsToPlace.isEmpty()) {
             placeFleetRandomly(this.human, this.shipsToPlace);
             this.shipsToPlace.clear();
@@ -123,7 +125,7 @@ public class SetupControllerImpl implements SetupController {
      */
     private void placeFleetRandomly(final Player player, final List<Integer> shipsToInsert) {
         final Grid grid = player.getGrid();
-        
+
         for (final int size : shipsToInsert) {
             boolean placed = false;
             while (!placed) {
