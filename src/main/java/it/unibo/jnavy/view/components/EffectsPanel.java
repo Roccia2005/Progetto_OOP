@@ -84,17 +84,18 @@ public class EffectsPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if (!this.isAnimating && this.currentEffect == null) return;
+        if (!this.isAnimating && this.currentEffect == null || this.targetSize == 0) return;
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-        if (this.animationTimer.isRunning()) {
-            if (this.bulletImg != null) {
-                g2.drawImage(this.bulletImg, this.bulletX, this.bulletY, 30, 40, this);
-            }
+        if (this.animationTimer.isRunning() && this.bulletImg != null) {
+            int bulletW = (int) (this.targetSize * 0.4);
+            int bulletH = (int) (bulletW * 1.5);
+            g2.drawImage(this.bulletImg, this.bulletX, this.bulletY, bulletW, bulletH, this);
         } else if (this.currentEffect != null) {
-            g2.drawImage(this.currentEffect, this.bulletX - 15, this.bulletY - 10, 60, 60, this);
+            g2.drawImage(this.currentEffect, this.targetTopLeft.x, this.targetTopLeft.y, this.targetSize, this.targetSize, this);
         }
     }
 }
