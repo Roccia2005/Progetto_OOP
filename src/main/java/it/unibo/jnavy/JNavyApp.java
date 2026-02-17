@@ -1,13 +1,16 @@
 package it.unibo.jnavy;
 
 import javax.swing.SwingUtilities;
-import it.unibo.jnavy.controller.SetupController;
-import it.unibo.jnavy.controller.SetupControllerImpl;
-import it.unibo.jnavy.view.SetupView;
+import it.unibo.jnavy.view.View;
+import it.unibo.jnavy.view.ViewGUI;
 
-/**
- * Main class.
- */
 public final class JNavyApp {
 
+    private JNavyApp() {}
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            View view = new ViewGUI();
+            view.start();
+        });
+    }
 }
