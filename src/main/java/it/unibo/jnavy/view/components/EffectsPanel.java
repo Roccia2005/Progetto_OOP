@@ -6,11 +6,13 @@ import java.net.URL;
 
 public class EffectsPanel extends JPanel {
 
-    private final Image bulletImg;
-    private final Image explosionGif;
-    private final Image splashGif;
+    private Image bulletImg;
+    private Image explosionGif;
+    private Image splashGif;
 
     private boolean isAnimating = false;
+    private boolean bulletVisible = false;
+
     private int bulletX, bulletY;
     private int targetY;
     private Image currentEffect = null;
@@ -19,40 +21,61 @@ public class EffectsPanel extends JPanel {
     private Point targetTopLeft;
 
     private final Timer animationTimer;
-    private final int SPEED = 20;
+    private final int SPEED = 15;
 
     public EffectsPanel() {
         this.setOpaque(false);
-
-        this.bulletImg = loadImage("cannonball.png");
-        this.explosionGif = loadImage("explosion.gif");
-        this.splashGif = loadImage("watersplash.gif");
-
+        loadImages();
         this.animationTimer = new Timer(15, e -> updateAnimation());
     }
 
-    private Image loadImage(final String filename) {
+    private void loadImages() {
+        this.bulletImg    = tryLoad("cannonball.png");
+        this.explosionGif = tryLoad("explosion.gif");
+        this.splashGif    = tryLoad("watersplash.gif");
+    }
+
+    private Image tryLoad(final String filename) {
         URL url = getClass().getResource("/images/" + filename);
         if (url == null) {
+            System.err.println("❌ ERRORE CRITICO: Non trovo l'immagine: " + filename);
+            System.err.println("   Controlla in src/main/resources/images/");
             return null;
+        } else {
+            System.out.println("✅ Immagine caricata correttamente: " + filename);
+            return new ImageIcon(url).getImage();
         }
-        return new ImageIcon(url).getImage();
     }
 
     public void startShot(Component targetBtn, boolean isHit) {
         if (this.isAnimating) return;
 
-        this.targetTopLeft = SwingUtilities.convertPoint(targetBtn.getParent(), targetBtn.getLocation(), this);
+        // FIX: usa getLocationOnScreen per evitare problemi di conversione
+        // con JLayeredPane e null layout
+        Point btnLocationOnScreen   = targetBtn.getLocationOnScreen();
+        Point panelLocationOnScreen = this.getLocationOnScreen();
+        this.targetTopLeft = new Point(
+                btnLocationOnScreen.x - panelLocationOnScreen.x,
+                btnLocationOnScreen.y - panelLocationOnScreen.y
+        );
+
         this.targetSize = targetBtn.getWidth();
-        int scaledBulletWidth = (int)(this.targetSize * 0.4);
+        int scaledBulletWidth = (int) (this.targetSize * 0.4);
 
         this.bulletX = this.targetTopLeft.x + (this.targetSize - scaledBulletWidth) / 2;
-        this.bulletY = -scaledBulletWidth * 2;
+        this.bulletY = -scaledBulletWidth * 2;   // parte da sopra la finestra
         this.targetY = this.targetTopLeft.y + (this.targetSize / 2) - (scaledBulletWidth / 2);
 
-        this.currentEffect = isHit ? this.explosionGif : this.splashGif;
+        System.out.println("--- INIZIO SPARO ---");
+        System.out.println("targetTopLeft=" + targetTopLeft);
+        System.out.println("bulletX=" + bulletX + "  bulletY iniziale=" + bulletY);
+        System.out.println("targetY=" + targetY + "  differenza=" + (targetY - bulletY));
 
-        this.isAnimating = true;
+        // Resetta stato precedente e imposta effetto
+        this.currentEffect = isHit ? this.explosionGif : this.splashGif;
+        this.bulletVisible = true;
+        this.isAnimating   = true;
+
         this.animationTimer.start();
     }
 
@@ -66,36 +89,53 @@ public class EffectsPanel extends JPanel {
     }
 
     private void triggerImpact() {
+        // Nascondi il proiettile PRIMA di fermare il timer
+        this.bulletVisible = false;
         this.animationTimer.stop();
+        System.out.println("💥 IMPATTO! Mostro l'effetto.");
+
+        repaint(); // disegna l'effetto (esplosione o splash)
 
         Timer effectDuration = new Timer(1000, e -> {
-            this.isAnimating = false;
+            this.isAnimating   = false;
             this.currentEffect = null;
             repaint();
-            ((Timer)e.getSource()).stop();
+            ((Timer) e.getSource()).stop();
         });
         effectDuration.setRepeats(false);
         effectDuration.start();
-
-        repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if (!this.isAnimating && this.currentEffect == null || this.targetSize == 0) return;
+        if ((!isAnimating && currentEffect == null) || targetSize == 0) return;
 
         Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-        if (this.animationTimer.isRunning() && this.bulletImg != null) {
-            int bulletW = (int) (this.targetSize * 0.4);
+        // FASE 1: PROIETTILE IN VOLO
+        if (bulletVisible) {
+            int bulletW = (int) (targetSize * 0.4);
             int bulletH = (int) (bulletW * 1.5);
-            g2.drawImage(this.bulletImg, this.bulletX, this.bulletY, bulletW, bulletH, this);
-        } else if (this.currentEffect != null) {
-            g2.drawImage(this.currentEffect, this.targetTopLeft.x, this.targetTopLeft.y, this.targetSize, this.targetSize, this);
+
+            if (bulletImg != null) {
+                g2.drawImage(bulletImg, bulletX, bulletY, bulletW, bulletH, this);
+            } else {
+                // Fallback grafico se l'immagine non è stata trovata
+                g2.setColor(Color.RED);
+                g2.fillRect(bulletX, bulletY, bulletW, bulletH);
+                g2.setColor(Color.WHITE);
+                g2.drawRect(bulletX, bulletY, bulletW, bulletH);
+            }
+        }
+        // FASE 2: EFFETTO IMPATTO (esplosione o splash)
+        else if (currentEffect != null) {
+            g2.drawImage(currentEffect,
+                    targetTopLeft.x, targetTopLeft.y,
+                    targetSize, targetSize, this); // null evita il loop infinito delle GIF
         }
     }
 }
