@@ -20,7 +20,7 @@ public final class WeatherManagerImpl implements WeatherManager {
 
     private static WeatherManagerImpl instance;
 
-    private static final int WEATHER_DURATION = 5;
+    private static final int WEATHER_DURATION = 6;
     private WeatherCondition condition;
     private int turnCounter;
     private Random random;
@@ -92,6 +92,7 @@ public final class WeatherManagerImpl implements WeatherManager {
             } else {
                 this.condition = WeatherCondition.FOG;
             }
+            this.turnCounter = 0;
         }
     }
 }

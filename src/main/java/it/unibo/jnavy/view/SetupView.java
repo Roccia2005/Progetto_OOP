@@ -146,6 +146,7 @@ public class SetupView extends JPanel {
 
     private JButton createBigButton(String text, int fontSize) {
         JButton b = new JButton(text);
+        b.setFocusPainted(false);
         b.setBackground(THEME_BACKGROUND);
         b.setForeground(THEME_TEXT);
         b.setFont(new Font("SansSerif", Font.BOLD, fontSize));
