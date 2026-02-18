@@ -6,6 +6,7 @@ import java.awt.*;
 import it.unibo.jnavy.controller.GameController;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherCondition;
+import it.unibo.jnavy.view.components.bot.BotDifficultyPanel;
 import it.unibo.jnavy.view.components.captain.CaptainAbilityButton;
 import it.unibo.jnavy.view.components.weather.WeatherWidget;
 
@@ -18,6 +19,7 @@ public class GamePanel extends JPanel {
 
     private final GridPanel humanGridPanel;
     private final GridPanel botGridPanel;
+    private final BotDifficultyPanel difficultyPanel;
     private final WeatherWidget weatherWidget;
     private final CaptainAbilityButton captainButton;
     private final GameController controller;
@@ -33,6 +35,7 @@ public class GamePanel extends JPanel {
 
         this.weatherWidget = new WeatherWidget();
         this.captainButton = new CaptainAbilityButton(this.controller.getCaptainCooldown());
+        this.difficultyPanel = new BotDifficultyPanel(controller.getBotDifficulty());
 
         this.captainButton.addActionListener(e -> {
             if (this.captainButton.isEnabled()) {
@@ -40,6 +43,7 @@ public class GamePanel extends JPanel {
             }
         });
 
+        dashboardPanel.add(this.difficultyPanel);
         dashboardPanel.add(this.weatherWidget);
         dashboardPanel.add(this.captainButton);
 
