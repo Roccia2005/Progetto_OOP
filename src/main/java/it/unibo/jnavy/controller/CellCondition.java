@@ -6,5 +6,7 @@ public enum CellCondition {
     SHIP,         
     HIT_WATER,    
     HIT_SHIP,    
-    SUNK_SHIP     
+    SUNK_SHIP,
+    REVEALED_SHIP,
+    REVEALED_WATER
 }
