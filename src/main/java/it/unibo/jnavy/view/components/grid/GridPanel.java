@@ -12,6 +12,7 @@ import it.unibo.jnavy.model.utilities.Position;
 
 public class GridPanel extends JPanel {
 
+    private static final Color MENUBLUE = new Color(41, 86, 246);
     //private final ImageIcon fogIcon;
     private final int size;
     private final Map<Position, JButton> buttons = new HashMap<>();
@@ -63,27 +64,27 @@ public class GridPanel extends JPanel {
                     case FOG:
                         //button.setIcon(fogIcon);       
                         //button.setBackground(null);    
-                        button.setBackground(Color.CYAN);
+                        button.setBackground(Color.LIGHT_GRAY);
                         button.setEnabled(true);
                         break;
                     case WATER:
-                        button.setBackground(Color.BLUE);
+                        button.setBackground(Color.LIGHT_GRAY);
                         button.setEnabled(true);
                         break;
                     case SHIP:
-                        button.setBackground(Color.GRAY);
+                        button.setBackground(Color.DARK_GRAY);
                         button.setEnabled(true);
                         break;
                     case HIT_WATER:
-                        button.setBackground(Color.DARK_GRAY);
+                        button.setBackground(MENUBLUE);
                         button.setEnabled(false);
                         break;
                     case HIT_SHIP:
                         button.setBackground(Color.ORANGE);
-                        button.setEnabled(false);
+                        button.setEnabled(true);
                         break;
                     case SUNK_SHIP:
-                        button.setBackground(Color.BLACK);
+                        button.setBackground(Color.RED);
                         button.setEnabled(false);
                         break;
                 }
