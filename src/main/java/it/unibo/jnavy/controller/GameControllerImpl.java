@@ -100,9 +100,6 @@ public class GameControllerImpl implements GameController{
         this.currentPlayer.processTurnEnd();
         this.weather.processTurnEnd();
         this.currentPlayer = (this.currentPlayer == this.human) ? this.bot : this.human;
-        if (this.currentPlayer == this.bot) {
-            playBotTurn();
-        }
         return this.turnCounter;
     }
 
@@ -132,11 +129,13 @@ public class GameControllerImpl implements GameController{
         }
     }
 
-    private boolean isHumanTurn() {
+    @Override
+    public boolean isHumanTurn() {
         return this.currentPlayer == this.human;
     }
 
-    private void playBotTurn() {
+    @Override
+    public void playBotTurn() {
         if (isGameOver()) return;
 
         Position target = this.bot.decideTarget(this.human.getGrid());

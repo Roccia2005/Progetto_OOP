@@ -22,4 +22,8 @@ public interface GameController {
     CellCondition getBotCellState(Position p);
 
     WeatherCondition getWeatherCondition();
+
+    boolean isHumanTurn();
+
+    void playBotTurn();
 }
