@@ -31,6 +31,8 @@ public class SetupView extends JPanel {
     private JButton rotateButton;
     private JButton nextShipButton;
     private JButton randomBotton;
+    private JButton clearButton;
+
 
     public SetupView(final SetupController controller, final Runnable gameStartCall) {
         this.controller = controller;
@@ -80,7 +82,7 @@ public class SetupView extends JPanel {
         sidePanel.add(infoLabel, BorderLayout.NORTH);
 
         //container bottoni
-        final JPanel buttonsContainer = new JPanel(new GridLayout(3, 1, 0, 15));
+        final JPanel buttonsContainer = new JPanel(new GridLayout(4, 1, 0, 15));
         buttonsContainer.setBackground(THEME_BACKGROUND);
 
         //bottone 1 rotate
@@ -100,11 +102,15 @@ public class SetupView extends JPanel {
         // bottone 2 confirm/start game
         nextShipButton = createBigButton("Confirm", FONT_DEFAULT_SIZE);
         nextShipButton.addActionListener(e -> {
-            try {
-                controller.nextShip();
-                updateView();
-            } catch (IllegalStateException ex) {
-                JOptionPane.showMessageDialog(this, "Place a ship first!", "Error", JOptionPane.WARNING_MESSAGE);
+            if (controller.isSetupFinished()) {
+                startGame();
+            } else {
+                try {
+                    controller.nextShip();
+                    updateView();
+                } catch (IllegalStateException ex) {
+                    JOptionPane.showMessageDialog(this, "Place a ship first!", "Error", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
 
@@ -113,14 +119,20 @@ public class SetupView extends JPanel {
         randomBotton.addActionListener(e -> {
             controller.randomizeHumanShips();
             updateView();
-            if (this.controller.isSetupFinished()) {
-                enableStartGameMode(); // Passa alla modalità "Avvio Partita"
-            }
+        });
+
+        // --- NUOVO TASTO CLEAR ---
+        clearButton = createBigButton("Clear Fleet", FONT_DEFAULT_SIZE);
+        clearButton.setForeground(THEME_TEXT); // Un colore rossastro per indicare "Reset"
+        clearButton.addActionListener(e -> {
+            controller.clearFleet();
+            updateView(); // Fondamentale: ridisegna la griglia vuota
         });
 
         buttonsContainer.add(rotateButton);
         buttonsContainer.add(nextShipButton);
         buttonsContainer.add(randomBotton);
+        buttonsContainer.add(clearButton);
 
         sidePanel.add(buttonsContainer, BorderLayout.CENTER);
         this.add(sidePanel, BorderLayout.EAST);
@@ -128,31 +140,12 @@ public class SetupView extends JPanel {
         updateView();
     }
 
-    /**
-     * Metodo chiave: Gestisce la transizione visiva e logica quando il setup è finito.
-     * Disabilita i controlli di editing e trasforma il tasto Confirm in Start Game.
-     */
-    private void enableStartGameMode() {
-        infoLabel.setText("Ready!");
-
-        // Disabilitiamo i bottoni non più utili
+    private void startGame() {
         rotateButton.setEnabled(false);
         randomBotton.setEnabled(false);
+        clearButton.setEnabled(false);
+        nextShipButton.setEnabled(false);
 
-        // Trasformiamo il tasto Confirm nel tasto Start
-        nextShipButton.setText("Start Game!");
-        nextShipButton.setForeground(THEME_TEXT);
-
-        // Rimuoviamo i vecchi listener
-        for (var al : nextShipButton.getActionListeners()) {
-            nextShipButton.removeActionListener(al);
-        }
-
-        // Aggiungiamo il nuovo listener per il cambio schermata
-        nextShipButton.addActionListener(e -> startGame());
-    }
-
-    private void startGame() {
         if (gameStartCall != null) {
             gameStartCall.run();
         }
@@ -174,8 +167,7 @@ public class SetupView extends JPanel {
         if (controller.setShip(pos, currentDirection)) {
             updateView();
         } else {
-            //decidere se tenere il suono o il messaggio di avviso
-            //Toolkit.getDefaultToolkit().beep();
+            Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(
                     this,
                     "Invalid placement!",
@@ -205,11 +197,25 @@ public class SetupView extends JPanel {
                 }
             }
         }
-        // 2. Aggiorna le etichette e lo stato dei bottoni
+
         if (controller.isSetupFinished()) {
-            enableStartGameMode();
+            infoLabel.setText("Ready!");
+
+            nextShipButton.setText("Start Game!");
+
+            rotateButton.setEnabled(false);
+            randomBotton.setEnabled(false);
+            clearButton.setEnabled(true);
         } else {
             infoLabel.setText("Size: " + controller.getNextShipSize());
+
+            nextShipButton.setText("Confirm");
+            nextShipButton.setForeground(THEME_TEXT);
+
+            rotateButton.setEnabled(true);
+            randomBotton.setEnabled(true);
+            clearButton.setEnabled(true);
         }
+        this.repaint();
     }
 }
