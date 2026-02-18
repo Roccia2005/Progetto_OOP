@@ -8,6 +8,7 @@ import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Represents an area attack strategy.
@@ -20,12 +21,12 @@ public class AreaShot implements HitStrategy {
         final List<ShotResult> results = new ArrayList<>();
         Position effectiveTarget = target;
         if (WeatherManagerImpl.getInstance().getCurrentWeather() == WeatherCondition.FOG) {
-            int offsetX = new Random.nextInt(3) - 1;
-            int offsetY = new Random.nextInt(3) - 1;
-            effectiveTarget = new Position(target.x() + offsetX, target.y() + offsetY);
+            final int offsetX = new Random().nextInt(3) - 1;
+            final int offsetY = new Random().nextInt(3) - 1;
+            Position candidate = new Position(target.x() + offsetX, target.y() + offsetY);
 
-            if (!grid.isPositionValid(effectiveTarget)) {
-                effectiveTarget = target;
+            if (grid.isPositionValid(candidate)) {
+                effectiveTarget = candidate;
             }
         }
 
