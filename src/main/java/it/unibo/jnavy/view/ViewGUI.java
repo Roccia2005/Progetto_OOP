@@ -31,7 +31,7 @@ public class ViewGUI extends JFrame implements View {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        this.setResizable(true);
 
         this.cardLayout = new CardLayout();
         this.mainPanel = new JPanel(this.cardLayout);
