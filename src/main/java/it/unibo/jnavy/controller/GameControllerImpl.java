@@ -35,7 +35,7 @@ public class GameControllerImpl implements GameController{
 
     @Override
     public int getCaptainCooldown() {
-        return this.human.getCaptain().getCooldown();
+        return this.human.getCaptainCooldown();
     }
 
     @Override
@@ -53,12 +53,10 @@ public class GameControllerImpl implements GameController{
             return false;
         }
 
-        Captain currentCaptain = this.human.getCaptain();
-        boolean targetsEnemy = currentCaptain.targetsEnemyGrid();
-        Grid targetGrid = targetsEnemy ? this.bot.getGrid() : this.human.getGrid();
+        Grid targetGrid = this.human.captainAbilityTargetsEnemyGrid() ? this.bot.getGrid() : this.human.getGrid();
 
         if (this.human.useAbility(p, targetGrid)) {
-            if (currentCaptain.doesAbilityConsumeTurn()) {
+            if (this.human.doescaptainAbilityConsumeTurn()) {
                 endTurn();
             }
             return true;
@@ -73,7 +71,7 @@ public class GameControllerImpl implements GameController{
 
     @Override
     public int getCurrentCaptainCooldown() {
-        return this.human.getCaptain().getCurrentCooldown();
+        return this.human.getCaptainCurrentCooldown();
     }
 
     @Override

@@ -16,8 +16,8 @@ import it.unibo.jnavy.model.weather.WeatherManagerImpl;
  */
 public class Human implements Player {
 
-    private Captain captain;
-    private Grid grid;
+    private final Captain captain;
+    private final Grid grid;
 
     /**
      * Constructs a new Human player with the selected captain.
@@ -60,12 +60,41 @@ public class Human implements Player {
     }
 
     /**
-     * @return the captain of the human
+     * @return the cooldown value of the Captain's special ability.
      */
-    public Captain getCaptain() {
-        return this.captain;
+    public int getCaptainCooldown() {
+        return this.captain.getCooldown();
     }
 
+    /**
+     * * @return the current progress of the ability's cooldown.
+     */
+    public int getCaptainCurrentCooldown() {
+        return this.captain.getCurrentCooldown();
+    }
+
+    /**
+     * Checks if the Captain's ability targets the enemy grid.
+     *
+     * @return true if the ability targets the opponent, false otherwise.
+     */
+    public boolean captainAbilityTargetsEnemyGrid() {
+        return this.captain.targetsEnemyGrid();
+    }
+
+    /**
+     * Checks if using the Captain's ability consumes the player's turn.
+     *
+     * @return true if using the ability ends the turn,
+     * false if the player can still shoot after using it.
+     */
+    public boolean doescaptainAbilityConsumeTurn() {
+        return this.captain.doesAbilityConsumeTurn();
+    }
+
+    /**
+     * @return a String representing the name of the captain.
+     */
     public String getCaptainName() {
         return this.captain.getName();
     }
