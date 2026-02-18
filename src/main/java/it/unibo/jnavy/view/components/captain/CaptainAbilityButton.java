@@ -11,7 +11,8 @@ import java.io.IOException;
 public class CaptainAbilityButton extends JButton {
 
     private static final String BUTTON_TEXT = "Ability";
-    private static final String IMAGE_PATH = "/image/captain.png";
+    private static final String CAPTAIN_IMAGE_PATH = "/images/captain.png"; 
+    private static final String ALERT_IMAGE_PATH = "/images/alert.png";
     private static final String READY = "READY";
     private static final String ACTIVE = "ACTIVE";
     private static final String POPUP_MESSAGE = "Abilità del Capitano attivata! Scegli la posizione.";
@@ -30,9 +31,18 @@ public class CaptainAbilityButton extends JButton {
         setContentAreaFilled(false);
         setFocusPainted(false);
         setBorderPainted(false); 
-        setOpaque(false);       
-        
+        setOpaque(false);  
+                
         this.setPreferredSize(new Dimension(DIMENSION, DIMENSION));
+
+        Icon captainIcon = loadIcon(CAPTAIN_IMAGE_PATH, 64);
+        if (captainIcon != null) {
+            this.setIcon(captainIcon);
+        }
+
+        this.setVerticalTextPosition(SwingConstants.BOTTOM);
+        this.setHorizontalTextPosition(SwingConstants.CENTER);
+        this.setIconTextGap(5);
     }
 
     public void updateState(int currentCooldown) {
@@ -89,7 +99,12 @@ public class CaptainAbilityButton extends JButton {
         JLabel messageLabel = new JLabel(POPUP_MESSAGE, SwingConstants.CENTER);
         messageLabel.setForeground(Color.WHITE);
         messageLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
-        messageLabel.setIcon(getAbilityIcon());
+        
+        Icon alertIcon = loadIcon(ALERT_IMAGE_PATH, 64);
+        if (alertIcon != null) {
+            messageLabel.setIcon(alertIcon);
+        }
+
         messageLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
         messageLabel.setHorizontalTextPosition(SwingConstants.CENTER);
         messageLabel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
@@ -100,23 +115,23 @@ public class CaptainAbilityButton extends JButton {
         popup.pack();
         popup.setLocationRelativeTo(parentWindow);
 
-        Timer timer = new Timer(1000, e -> popup.dispose());
+        Timer timer = new Timer(1500, e -> popup.dispose());
         timer.setRepeats(false);
         timer.start();
 
         popup.setVisible(true);
     }
 
-    private Icon getAbilityIcon() {
+    private Icon loadIcon(String path, int size) {
         try {
-            URL imageUrl = getClass().getResource(IMAGE_PATH);
+            URL imageUrl = getClass().getResource(path);
             if (imageUrl != null) {
                 BufferedImage localImg = ImageIO.read(imageUrl);
                 if (localImg != null) {
-                    Image scaledImg = localImg.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+                    Image scaledImg = localImg.getScaledInstance(size, size, Image.SCALE_SMOOTH);
                     return new ImageIcon(scaledImg);
                 }
-            }
+            } 
         } catch (IOException e) {
             e.printStackTrace();
         }
