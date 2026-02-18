@@ -56,4 +56,10 @@ public interface Captain extends TurnObserver{
      * @return the current progress of the ability's cooldown.
      */
     int getCurrentCooldown();
+
+    /**
+     * Returns the name of the captain.
+     * @return the simple class name representing the captain type.
+     */
+    String getName();
 }

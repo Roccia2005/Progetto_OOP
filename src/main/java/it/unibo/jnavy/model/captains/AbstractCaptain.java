@@ -44,6 +44,11 @@ public abstract class AbstractCaptain implements Captain {
         return this.currentCooldown;
     }
 
+    @Override
+    public String getName() {
+        return this.getClass().getSimpleName();
+    }
+
     /**
      * Resets the cooldown counter to zero.
      */
