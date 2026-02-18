@@ -19,6 +19,7 @@ public class GamePanel extends JPanel {
     private static final String BOT_FLEET = "Enemy Fleet";
 
     private boolean inputBlocked = false;
+    private final JLabel statusLabel;
     private final GridPanel humanGridPanel;
     private final GridPanel botGridPanel;
     private final BotDifficultyPanel difficultyPanel;
@@ -52,6 +53,19 @@ public class GamePanel extends JPanel {
         dashboardPanel.add(this.captainButton);
         dashboardPanel.add(this.captainNamePanel);
 
+        JPanel headerPanel = new JPanel(new GridLayout(2, 1)); 
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0)); 
+
+        JLabel titleLabel = new JLabel("J-NAVY", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        
+        this.statusLabel = new JLabel("Your Turn", SwingConstants.CENTER);
+        this.statusLabel.setFont(new Font("SansSerif", Font.ITALIC, 16));
+        this.statusLabel.setForeground(Color.DARK_GRAY);
+
+        headerPanel.add(titleLabel);
+        headerPanel.add(this.statusLabel);
+
         this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET,
                                 (Position p) -> {
                                     if (this.inputBlocked || !controller.isHumanTurn()) {
@@ -84,12 +98,16 @@ public class GamePanel extends JPanel {
                                     if (!controller.isHumanTurn() && !controller.isGameOver()) {
                                         
                                         this.inputBlocked = true;
+                                        this.statusLabel.setText("Bot is thinking...");
+                                        this.statusLabel.setForeground(Color.RED);
 
                                         Timer botTimer = new Timer(1000, e -> {
                                             controller.playBotTurn(); 
                                             this.updateDashboard();
                                             
                                             this.inputBlocked = false; 
+                                            this.statusLabel.setText("Your Turn");
+                                            this.statusLabel.setForeground(Color.DARK_GRAY);
                                         });
                                         
                                         botTimer.setRepeats(false); 
@@ -101,11 +119,7 @@ public class GamePanel extends JPanel {
         gridsContainer.add(this.humanGridPanel);
         gridsContainer.add(this.botGridPanel);
 
-        JLabel titleLabel = new JLabel("J-NAVY", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-
-        this.add(titleLabel, BorderLayout.NORTH);
+        this.add(headerPanel, BorderLayout.NORTH);
         this.add(gridsContainer, BorderLayout.CENTER);
         this.add(dashboardPanel, BorderLayout.SOUTH);
     }
