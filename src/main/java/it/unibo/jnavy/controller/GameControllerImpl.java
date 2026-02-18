@@ -143,4 +143,9 @@ public class GameControllerImpl implements GameController{
         this.bot.receiveFeedback(result.position(), result.hitType());
         endTurn();
     }
+
+    @Override
+    public String getBotDifficulty() {
+        return this.bot.getStrategyName();
+    }
 }
