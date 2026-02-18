@@ -116,7 +116,16 @@ public class GameControllerImpl implements GameController{
             }
         } else {
             if (cell.isVisible() || (!isEnemyGrid && cell.isOccupied())) {
-                return cell.isOccupied() ? CellCondition.SHIP : CellCondition.WATER;
+                
+                if (cell.isOccupied()) {
+                    if (isEnemyGrid && cell.isVisible()) {
+                        return CellCondition.REVEALED_SHIP; 
+                    }
+                    return CellCondition.SHIP;
+                } else {
+                    return CellCondition.REVEALED_WATER; 
+                }
+                
             } else {
                 return CellCondition.FOG;
             }
