@@ -88,12 +88,12 @@ public class GridPanel extends JPanel {
                         button.setEnabled(false);
                         break;
                     case REVEALED_WATER:
-                        button.setBackground(Color.CYAN); // Colore dell'acqua
-                        button.setEnabled(true);          // IMPORTANTE: Si può sparare nell'acqua rivelata!
+                        button.setBackground(Color.CYAN); 
+                        button.setEnabled(true);          
                         break;
                     case REVEALED_SHIP:
-                        button.setBackground(Color.YELLOW); // O Color.YELLOW
-                        button.setEnabled(true); // È ancora cliccabile per poterla colpire!
+                        button.setBackground(Color.YELLOW); 
+                        button.setEnabled(true);
                         break;
                 }
             }
