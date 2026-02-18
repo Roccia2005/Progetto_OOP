@@ -16,7 +16,7 @@ public class BotDifficultyPanel extends JPanel {
 
         final JLabel difficultyLabel = new JLabel("Difficulty: " + difficultyName);
         difficultyLabel.setForeground(Color.BLACK);
-        difficultyLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        difficultyLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
 
         this.add(difficultyLabel);
     }
