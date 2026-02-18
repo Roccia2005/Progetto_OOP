@@ -18,6 +18,7 @@ public class GamePanel extends JPanel {
     private static final String HUMAN_FLEET = "My Fleet";
     private static final String BOT_FLEET = "Enemy Fleet";
 
+    private boolean inputBlocked = false;
     private final GridPanel humanGridPanel;
     private final GridPanel botGridPanel;
     private final BotDifficultyPanel difficultyPanel;
@@ -52,31 +53,46 @@ public class GamePanel extends JPanel {
         dashboardPanel.add(this.captainNamePanel);
 
         this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET,
-                                            (Position p) -> {
-                                                if (captainButton.isActive()) {
-                                                    controller.processAbility(p);
-                                                    this.captainButton.reset();
-                                                    this.updateDashboard();
-                                                }
-                                             }); 
+                                (Position p) -> {
+                                    if (this.inputBlocked || !controller.isHumanTurn()) {
+                                        return;
+                                    }
+                                    if (captainButton.isActive()) {
+                                        controller.processAbility(p);
+                                        this.captainButton.reset();
+                                        this.updateDashboard();
+                                    }
+                                });
         this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET, 
-                                            (Position p) -> {
-                                                if (captainButton.isActive()) {
-                                                    controller.processAbility(p);
-                                                    this.captainButton.reset();
-                                                } else {
-                                                    controller.processShot(p);
-                                                }
-                                                this.updateDashboard();
-                                                if (!controller.isHumanTurn() && !controller.isGameOver()) {
-                                                    Timer botTimer = new Timer(1000, e -> {
-                                                        controller.playBotTurn(); 
-                                                        this.updateDashboard();   
-                                                    });
-                                                botTimer.setRepeats(false); 
-                                                botTimer.start();
-                                                }
-                                            });
+                                (Position p) -> {
+                                    if (this.inputBlocked || !controller.isHumanTurn()) {
+                                        return;
+                                    }
+
+                                    if (captainButton.isActive()) {
+                                        controller.processAbility(p);
+                                        this.captainButton.reset();
+                                    } else {
+                                        controller.processShot(p);
+                                    }
+                                    
+                                    this.updateDashboard();
+
+                                    if (!controller.isHumanTurn() && !controller.isGameOver()) {
+                                        
+                                        this.inputBlocked = true;
+
+                                        Timer botTimer = new Timer(1000, e -> {
+                                            controller.playBotTurn(); 
+                                            this.updateDashboard();
+                                            
+                                            this.inputBlocked = false; 
+                                        });
+                                        
+                                        botTimer.setRepeats(false); 
+                                        botTimer.start();
+                                    }
+                                });
 
         this.updateDashboard();
         gridsContainer.add(this.humanGridPanel);
