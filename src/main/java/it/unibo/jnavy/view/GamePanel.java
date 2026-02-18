@@ -8,6 +8,7 @@ import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.view.components.bot.BotDifficultyPanel;
 import it.unibo.jnavy.view.components.captain.CaptainAbilityButton;
+import it.unibo.jnavy.view.components.captain.CaptainNamePanel;
 import it.unibo.jnavy.view.components.weather.WeatherWidget;
 
 import it.unibo.jnavy.view.components.grid.GridPanel;
@@ -22,6 +23,7 @@ public class GamePanel extends JPanel {
     private final BotDifficultyPanel difficultyPanel;
     private final WeatherWidget weatherWidget;
     private final CaptainAbilityButton captainButton;
+    private final CaptainNamePanel captainNamePanel;
     private final GameController controller;
 
     public GamePanel(GameController controller) {
@@ -35,7 +37,8 @@ public class GamePanel extends JPanel {
 
         this.weatherWidget = new WeatherWidget();
         this.captainButton = new CaptainAbilityButton(this.controller.getCaptainCooldown());
-        this.difficultyPanel = new BotDifficultyPanel(controller.getBotDifficulty());
+        this.difficultyPanel = new BotDifficultyPanel(this.controller.getBotDifficulty());
+        this.captainNamePanel = new CaptainNamePanel(this.controller.getPlayerCaptainName());
 
         this.captainButton.addActionListener(e -> {
             if (this.captainButton.isEnabled()) {
@@ -46,6 +49,7 @@ public class GamePanel extends JPanel {
         dashboardPanel.add(this.difficultyPanel);
         dashboardPanel.add(this.weatherWidget);
         dashboardPanel.add(this.captainButton);
+        dashboardPanel.add(this.captainNamePanel);
 
         this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET,
                                             (Position p) -> {
