@@ -124,6 +124,20 @@ public class SetupControllerImpl implements SetupController {
         );
     }
 
+    @Override
+    public void clearFleet() {
+
+        this.unsetShip();
+
+        List<Ship> placedShips = new ArrayList<>(this.human.getGrid().getFleet().getShips());
+        for (Ship s : placedShips) {
+            this.human.getGrid().removeShip(s);
+        }
+
+        this.shipsToPlace.clear();
+        this.shipsToPlace.addAll(buildFleetConfig());
+    }
+
     private static List<Integer> buildFleetConfig() {
         return Fleet.FLEET_COMPOSITION.entrySet().stream()
                 .sorted(Map.Entry.<Integer, Integer>comparingByKey().reversed()) // largest first
