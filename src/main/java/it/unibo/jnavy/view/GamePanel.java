@@ -73,6 +73,9 @@ public class GamePanel extends JPanel {
                                         controller.processAbility(p);
                                         this.captainButton.reset();
                                     } else {
+                                        if (controller.getBotCellState(p).isAlreadyHit()) {
+                                            return; 
+                                        }
                                         controller.processShot(p);
                                     }
                                     

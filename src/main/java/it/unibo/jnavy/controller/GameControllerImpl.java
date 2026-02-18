@@ -4,7 +4,6 @@ import it.unibo.jnavy.model.Bot;
 import it.unibo.jnavy.model.Human;
 import it.unibo.jnavy.model.Player;
 import it.unibo.jnavy.model.ShotResult;
-import it.unibo.jnavy.model.captains.Captain;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;

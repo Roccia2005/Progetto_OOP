@@ -8,5 +8,9 @@ public enum CellCondition {
     HIT_SHIP,    
     SUNK_SHIP,
     REVEALED_SHIP,
-    REVEALED_WATER
+    REVEALED_WATER;
+
+    public boolean isAlreadyHit() {
+        return this == HIT_WATER || this == HIT_SHIP;
+    }
 }
