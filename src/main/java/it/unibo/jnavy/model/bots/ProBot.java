@@ -3,6 +3,7 @@ package it.unibo.jnavy.model.bots;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Collections;
 
 import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.grid.Grid;
@@ -45,6 +46,10 @@ public class ProBot extends AbstractBotStrategy{
             break;
 
             case SEEKING:
+                if (this.availableDirections.isEmpty() && this.firstHitPosition != null) {
+                    resetAvailableDirections();
+                }
+
                 while(nextTarget == null && !availableDirections.isEmpty()){
                     currentDirection = availableDirections.getFirst();
                     temporaryTarget = targetCalc(firstHitPosition);
@@ -58,9 +63,15 @@ public class ProBot extends AbstractBotStrategy{
 
                 }
 
-                if (availableDirections.isEmpty() || nextTarget == null) {
-                    currentState = State.HUNTING;
-                    nextTarget = getRandomValidPosition(enemyGrid);
+                if (nextTarget == null) {
+                    if (this.firstHitPosition != null) {
+                        resetAvailableDirections();
+                        this.currentState = State.HUNTING;
+                        nextTarget = getRandomValidPosition(enemyGrid);
+                    } else {
+                        this.currentState = State.HUNTING;
+                        nextTarget = getRandomValidPosition(enemyGrid);
+                    }
                 }
 
             break;
@@ -70,7 +81,14 @@ public class ProBot extends AbstractBotStrategy{
                 if (!enemyGrid.isTargetValid(temporaryTarget)) {
                     this.currentDirection = this.currentDirection.opposite();
                     nextTarget = targetCalc(firstHitPosition);
-                    lastTargetPosition = firstHitPosition;
+
+                    if (!enemyGrid.isTargetValid(nextTarget)) {
+                         this.currentState = State.SEEKING;
+                         resetAvailableDirections();
+                         return this.selectTarget(enemyGrid);
+                    } else {
+                        lastTargetPosition = firstHitPosition;
+                    }
                 } else {
                     nextTarget = temporaryTarget;
                 }
@@ -122,6 +140,10 @@ public class ProBot extends AbstractBotStrategy{
                         this.currentDirection = this.currentDirection.opposite();
                     }
                     this.lastTargetPosition = firstHitPosition;
+                } else if (this.currentState == State.SEEKING) {
+                    if (!this.availableDirections.isEmpty()) {
+                        this.availableDirections.removeFirst();
+                    }
                 }
             break;
 
@@ -153,6 +175,9 @@ public class ProBot extends AbstractBotStrategy{
     // posizione calcolata aggiungendo alla x e alla y gli offset della direzione corrispondente
     //non deve mai essere null!!!
     public Position targetCalc(final Position target) {
+        if (this.currentDirection == null) {
+            return target;
+        }
         return new Position(target.x()+currentDirection.getRowOffset(), target.y()+currentDirection.getColOffset());
     }
 
