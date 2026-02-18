@@ -15,7 +15,7 @@ public class CaptainAbilityButton extends JButton {
     private static final String ALERT_IMAGE_PATH = "/images/alert.png";
     private static final String READY = "READY";
     private static final String ACTIVE = "ACTIVE";
-    private static final String POPUP_MESSAGE = "Abilità del Capitano attivata! Scegli la posizione.";
+    private static final String POPUP_MESSAGE = "Ability activate! Choose the position.";
     private static final double MAX_PERCENTAGE = 1.0;
     private static final int DIMENSION = 100;
 
