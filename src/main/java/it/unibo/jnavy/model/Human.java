@@ -65,4 +65,8 @@ public class Human implements Player {
     public Captain getCaptain() {
         return this.captain;
     }
+
+    public String getCaptainName() {
+        return this.captain.getName();
+    }
 }
