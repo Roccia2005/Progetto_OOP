@@ -28,4 +28,9 @@ public abstract class AbstractBotStrategy implements BotStrategy{
         int index = random.nextInt(cellsList.size());
         return index;
     }
+
+    @Override
+    public String getStrategy() {
+        return this.getClass().getSimpleName().replace("Bot", "");
+    }
 }

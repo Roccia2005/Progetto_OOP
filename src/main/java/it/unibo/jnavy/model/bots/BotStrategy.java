@@ -18,7 +18,7 @@ public interface BotStrategy {
 
     /**
      * Receives feedback on the outcome of the last shot.
-     * <p>
+     * 
      * This allows smart strategies (like Pro) to "learn" from the result.
      * Used by simplified "Reinforced Learning" bot implementations.
      * For example: if the result is {@link HitType#HIT}, the bot will try adjacent cells next.
@@ -26,4 +26,12 @@ public interface BotStrategy {
      * @param result The outcome of the shot (HIT, MISS, SUNK, etc.).
      */
     default void lastShotFeedback(Position target, HitType result) {}
+
+    /**
+     * Return the display name of this shooting strategy,
+     * providing a human-readable identifier for the difficulty level.
+     *
+     * @return a {@code String} representing the name of the strategy.
+     */
+    String getStrategy();
 }
