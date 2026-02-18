@@ -148,4 +148,10 @@ public class GameControllerImpl implements GameController{
     public String getBotDifficulty() {
         return this.bot.getStrategyName();
     }
+
+
+    @Override
+    public String getPlayerCaptainName() {
+        return this.human.getCaptainName();
+    }
 }

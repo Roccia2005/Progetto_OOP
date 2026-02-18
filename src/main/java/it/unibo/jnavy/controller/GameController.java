@@ -28,4 +28,6 @@ public interface GameController {
     void playBotTurn();
 
     String getBotDifficulty();
+
+    String getPlayerCaptainName();
 }
