@@ -52,7 +52,9 @@ public class GameControllerImpl implements GameController{
     public int endTurn() {
         this.turnCounter++;
         this.currentPlayer.processTurnEnd();
-        this.weather.processTurnEnd();
+        if (this.currentPlayer == this.bot) {
+            this.weather.processTurnEnd();
+        }
         this.currentPlayer = (this.currentPlayer == this.human) ? this.bot : this.human;
         if (this.currentPlayer == this.bot) {
             playBotTurn();
