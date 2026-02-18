@@ -86,14 +86,11 @@ public final class WeatherManagerImpl implements WeatherManager {
     public void processTurnEnd() {
         this.turnCounter++;
         if (this.turnCounter >= WEATHER_DURATION) {
-            if (this.condition == WeatherCondition.SUNNY) {
-                this.condition = WeatherCondition.FOG;
-                // for debugging
-                System.out.println("METEO CAMBIATO: " + this.condition);
-            } else {
+            final int chance = this.random.nextInt(3);
+            if (chance < 2) {
                 this.condition = WeatherCondition.SUNNY;
-                // for debugging
-                System.out.println("METEO CAMBIATO: " + this.condition);
+            } else {
+                this.condition = WeatherCondition.FOG;
             }
             this.turnCounter = 0;
         }
