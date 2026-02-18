@@ -45,6 +45,12 @@ public class SetupView extends JPanel {
         this.setLayout(new BorderLayout());
         this.setBackground(THEME_BACKGROUND);
 
+        JLabel titleLabel = new JLabel("DEPLOY YOUR FLEET!", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Impact", Font.PLAIN, 30));
+        titleLabel.setForeground(THEME_TEXT);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+        this.add(titleLabel, BorderLayout.NORTH);
+
         JPanel gridPanel = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE));
         gridPanel.setBackground(THEME_BACKGROUND);
         gridPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
