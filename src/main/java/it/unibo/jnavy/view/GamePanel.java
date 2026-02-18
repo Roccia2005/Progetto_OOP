@@ -15,8 +15,8 @@ public class GamePanel extends JPanel {
     private static final String HUMAN_FLEET = "My Fleet";
     private static final String BOT_FLEET = "Enemy Fleet";
 
-    private final JPanel humanGridPanel;
-    private final JPanel botGridPanel;
+    private final GridPanel humanGridPanel;
+    private final GridPanel botGridPanel;
     private final WeatherWidget weatherWidget;
     private final CaptainAbilityButton captainButton;
     private final GameController controller;
@@ -42,7 +42,7 @@ public class GamePanel extends JPanel {
         dashboardPanel.add(weatherWidget);
         dashboardPanel.add(captainButton);
 
-        this.humanGridPanel = new GridPanel(this.controller, HUMAN_FLEET,
+        this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET,
                                             (Position p) -> {
                                                 if (captainButton.isActive()) {
                                                     controller.processAbility(p);
@@ -50,7 +50,7 @@ public class GamePanel extends JPanel {
                                                     this.updateDashboard();
                                                 }
                                              }); 
-        this.botGridPanel = new GridPanel(this.controller, BOT_FLEET, 
+        this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET, 
                                             (Position p) -> {
                                                 if (captainButton.isActive()) {
                                                     controller.processAbility(p);
@@ -61,6 +61,7 @@ public class GamePanel extends JPanel {
                                                 this.updateDashboard();
                                             });
 
+        this.updateDashboard();
         gridsContainer.add(this.humanGridPanel);
         gridsContainer.add(this.botGridPanel);
 
@@ -77,7 +78,10 @@ public class GamePanel extends JPanel {
     int currentCooldown = controller.getCurrentCaptainCooldown();
     captainButton.updateState(currentCooldown);
 
+    humanGridPanel.refresh(pos -> controller.getHumanCellState(pos));
+    botGridPanel.refresh(pos -> controller.getBotCellState(pos));
+
     // WeatherCondition currentCondition = WeatherManagerImpl.getInstance().getCurrentWeather();
     // weatherWidget.updateWeather(currentCondition);
-}
+    }
 }
