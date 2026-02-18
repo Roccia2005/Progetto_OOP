@@ -81,4 +81,8 @@ public class Bot implements Player {
     public void receiveFeedback(final Position target, final HitType result) {
         this.strategy.lastShotFeedback(target, result);
     }
+
+    public String getStrategyName() {
+        return this.strategy.getStrategy();
+    }
 }
