@@ -60,6 +60,14 @@ public class GamePanel extends JPanel {
                                                     controller.processShot(p);
                                                 }
                                                 this.updateDashboard();
+                                                if (!controller.isHumanTurn() && !controller.isGameOver()) {
+                                                    Timer botTimer = new Timer(1000, e -> {
+                                                        controller.playBotTurn(); 
+                                                        this.updateDashboard();   
+                                                    });
+                                                botTimer.setRepeats(false); 
+                                                botTimer.start();
+                                                }
                                             });
 
         this.updateDashboard();
