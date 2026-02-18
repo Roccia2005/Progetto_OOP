@@ -1,14 +1,14 @@
 package it.unibo.jnavy.view;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-
+import edu.umd.cs.findbugs.annotations.NonNull;
 import it.unibo.jnavy.controller.CellState;
 import it.unibo.jnavy.controller.SetupController;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SetupView extends JPanel {
     private final SetupController controller;
@@ -66,13 +66,11 @@ public class SetupView extends JPanel {
         }
         this.add(gridPanel, BorderLayout.CENTER);
 
-        //pannello Laterale
         final JPanel sidePanel = new JPanel(new BorderLayout());
         sidePanel.setBackground(THEME_BACKGROUND);
         sidePanel.setPreferredSize(new Dimension(250, 0));
         sidePanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
 
-        //info Label
         String sizeText = controller.isSetupFinished() ? "Ready" : String.valueOf(controller.getNextShipSize());
         infoLabel = new JLabel("Size: " + sizeText);
         infoLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
@@ -81,11 +79,9 @@ public class SetupView extends JPanel {
         infoLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         sidePanel.add(infoLabel, BorderLayout.NORTH);
 
-        //container bottoni
         final JPanel buttonsContainer = new JPanel(new GridLayout(4, 1, 0, 15));
         buttonsContainer.setBackground(THEME_BACKGROUND);
 
-        //bottone 1 rotate
         rotateButton = createBigButton("→", FONT_ICON_SIZE);
         rotateButton.setToolTipText("Rotate Ship (Horizontal/Vertical)");
         rotateButton.addActionListener(e -> {
@@ -99,7 +95,6 @@ public class SetupView extends JPanel {
             rotateButton.repaint();
         });
 
-        // bottone 2 confirm/start game
         nextShipButton = createBigButton("Confirm", FONT_DEFAULT_SIZE);
         nextShipButton.addActionListener(e -> {
             if (controller.isSetupFinished()) {
@@ -114,14 +109,12 @@ public class SetupView extends JPanel {
             }
         });
 
-        // bottone 3 randomize
         randomBotton = createBigButton("Randomize", FONT_DEFAULT_SIZE);
         randomBotton.addActionListener(e -> {
             controller.randomizeHumanShips();
             updateView();
         });
 
-        // --- NUOVO TASTO CLEAR ---
         clearButton = createBigButton("Clear Fleet", FONT_DEFAULT_SIZE);
         clearButton.setForeground(THEME_TEXT); // Un colore rossastro per indicare "Reset"
         clearButton.addActionListener(e -> {
@@ -168,12 +161,7 @@ public class SetupView extends JPanel {
             updateView();
         } else {
             Toolkit.getDefaultToolkit().beep();
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid placement!",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            showAutoClosingMessage("Invalid placement!");
         }
     }
 
@@ -217,5 +205,44 @@ public class SetupView extends JPanel {
             clearButton.setEnabled(true);
         }
         this.repaint();
+    }
+
+    private void showAutoClosingMessage(String message) {
+        final JWindow toast = new JWindow(SwingUtilities.getWindowAncestor(this));
+
+        JLabel label = getJLabel(message);
+
+        toast.add(label);
+        toast.pack();
+
+        Point location = this.getLocationOnScreen();
+        int x = location.x + (this.getWidth() - toast.getWidth()) / 2;
+        int y = location.y + (this.getHeight() - toast.getHeight()) / 2;
+        toast.setLocation(x, y);
+
+        toast.setVisible(true);
+
+        Timer timer = new Timer(1000, e -> {
+            toast.setVisible(false);
+            toast.dispose();
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    @NonNull
+    private static JLabel getJLabel(String message) {
+        JLabel label = new JLabel(message, SwingConstants.CENTER);
+        label.setFont(new Font("SansSerif", Font.BOLD, 18));
+        label.setForeground(Color.WHITE);
+        label.setBackground(new Color(200, 50, 50));
+        label.setOpaque(true);
+        label.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+
+        label.setBorder(BorderFactory.createCompoundBorder(
+                label.getBorder(),
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+        ));
+        return label;
     }
 }
