@@ -46,7 +46,6 @@ class BotTest {
         Optional<Cell> cell = this.grid.getCell(randomTarget);
         assertTrue(cell.isPresent());
         assertFalse(cell.get().isHit());
-        this.grid.receiveShot(randomTarget);
     }
 
     /**
@@ -138,52 +137,25 @@ class BotTest {
 
     /**
      * Test for {@link SniperBot}.
-     * Verifies it cheats by looking at the left half of the grid first.
+     * SniperBot has an 18% chance to miss.
+     * We place a ship and verify that the bot targets it immediately most of the time.
      */
     @Test
-    void testSniperBotHalfGridPriority() {
+    void testSniperBotCheatingLogic() {
         Ship ship = new ShipImpl(3);
-        this.grid.placeShip(ship, new Position(0, 0), CardinalDirection.DOWN);
+        Position p = new Position(0, 0);
+        this.grid.placeShip(ship, p, CardinalDirection.DOWN);
 
-        BotStrategy bot = new SniperBot(this.grid);
-        Position knownTarget = bot.selectTarget(this.grid);
-
-        Cell knownTargetCell = this.grid.getCell(knownTarget).get();
-        assertTrue(knownTargetCell.isOccupied());
-        assertEquals(ship, knownTargetCell.getShip().get());
-    }
-
-    /**
-     * Test for {@link SniperBot} right half switch behaviour.
-     * When left half is empty, it should switch to ProBot behavior on the right half only.
-     */
-    @Test
-    void testSniperBotSwitchOnRight() {
-        BotStrategy bot = new SniperBot(this.grid);
-
-        Position rightHalfTarget = bot.selectTarget(this.grid);
-        grid.receiveShot(rightHalfTarget);
-        assertTrue(rightHalfTarget.y() >= G_SIZE / 2);
-    }
-
-    /**
-     * Test for {@link SniperBot} half border crossing.
-     * Logic: Hit left -> Ship continues to right -> Bot crosses on the right half.
-     */
-    @Test
-    void testSniperBotBorderCrossing() {
-        Ship ship = new ShipImpl(2);
-        this.grid.placeShip(ship, new Position(5, 4), CardinalDirection.RIGHT);
-
-        BotStrategy bot = new SniperBot(this.grid);
-
-        Position firstHit = bot.selectTarget(this.grid);
-        assertEquals(new Position(5, 4), firstHit);
-        this.grid.receiveShot(firstHit);
-        bot.lastShotFeedback(firstHit, HitType.HIT);
-
-        Position secondHit = bot.selectTarget(this.grid);
-        assertEquals(new Position(5, 5), secondHit);
+        int hits = 0;
+        int max = 100;
+        for (int i = 0; i < max; i++) {
+            BotStrategy bot = new SniperBot(this.grid);
+            Position target = bot.selectTarget(this.grid);
+            if (target.equals(p) || target.equals(new Position(1,0)) || target.equals(new Position(2,0))) {
+                hits++;
+            }
+        }
+        assertTrue(hits > 50);
     }
 
     /**
