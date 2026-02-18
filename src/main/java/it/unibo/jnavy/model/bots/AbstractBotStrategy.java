@@ -1,12 +1,8 @@
 package it.unibo.jnavy.model.bots;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.stream.Collectors;
 
-import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 

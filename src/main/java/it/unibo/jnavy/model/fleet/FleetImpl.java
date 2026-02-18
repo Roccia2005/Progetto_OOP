@@ -2,7 +2,6 @@ package it.unibo.jnavy.model.fleet;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import it.unibo.jnavy.model.ship.Ship;
 

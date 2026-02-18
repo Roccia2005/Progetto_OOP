@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import it.unibo.jnavy.model.HitType;
-import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
