@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 class BotTest {
 
     private Grid grid;
-    private static final int G_SIZE = 10;
 
     @BeforeEach
     void setUp() {

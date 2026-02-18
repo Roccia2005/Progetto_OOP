@@ -3,7 +3,6 @@ package it.unibo.jnavy.model.bots;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Collections;
 
 import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.grid.Grid;
