@@ -12,9 +12,11 @@ public interface GameController {
 
     boolean processAbility(Position p);
 
-    int endTurn();
-
     boolean isGameOver();
 
     int getCurrentCaptainCooldown();
+    
+    CellCondition getHumanCellState(Position p);
+    
+    CellCondition getBotCellState(Position p);
 }

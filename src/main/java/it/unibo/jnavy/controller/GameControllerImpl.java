@@ -1,12 +1,11 @@
 package it.unibo.jnavy.controller;
 
-import java.util.List;
-
 import it.unibo.jnavy.model.Bot;
 import it.unibo.jnavy.model.Human;
 import it.unibo.jnavy.model.Player;
 import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.captains.Captain;
+import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherManager;
@@ -16,9 +15,8 @@ public class GameControllerImpl implements GameController{
 
     private final Human human;
     private final Bot bot;
-    private Player currentPlayer;
     private final WeatherManager weather;
-
+    private Player currentPlayer;
     private int turnCounter = 0;
 
     public GameControllerImpl(Human player, Bot bot) {
@@ -44,20 +42,8 @@ public class GameControllerImpl implements GameController{
         if (!isHumanTurn()) {
             return;
         }
-        List<ShotResult> results = this.human.createShot(p, this.bot.getGrid());
+        this.human.createShot(p, this.bot.getGrid());
         endTurn();
-    }
-
-    @Override
-    public int endTurn() {
-        this.turnCounter++;
-        this.currentPlayer.processTurnEnd();
-        this.weather.processTurnEnd();
-        this.currentPlayer = (this.currentPlayer == this.human) ? this.bot : this.human;
-        if (this.currentPlayer == this.bot) {
-            playBotTurn();
-        }
-        return this.turnCounter;
     }
 
     @Override
@@ -100,5 +86,48 @@ public class GameControllerImpl implements GameController{
         ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
         this.bot.receiveFeedback(result.position(), result.hitType());
         endTurn();
+    }
+
+
+    @Override
+    public CellCondition getHumanCellState(Position p) {
+        return this.human.getGrid().getCell(p)
+                   .map(cell -> mapCellToCondition(cell, false))
+                   .orElse(CellCondition.WATER);
+    }
+
+    @Override
+    public CellCondition getBotCellState(Position p) {
+        return this.bot.getGrid().getCell(p)
+                   .map(cell -> mapCellToCondition(cell, true))
+                   .orElse(CellCondition.FOG);
+    }
+
+    private int endTurn() {
+        this.turnCounter++;
+        this.currentPlayer.processTurnEnd();
+        this.weather.processTurnEnd();
+        this.currentPlayer = (this.currentPlayer == this.human) ? this.bot : this.human;
+        if (this.currentPlayer == this.bot) {
+            playBotTurn();
+        }
+        return this.turnCounter;
+    }
+
+    private CellCondition mapCellToCondition(Cell cell, boolean isEnemyGrid) {
+        if (cell.isHit()) {
+            if (cell.isOccupied()) {
+                boolean isSunk = cell.getShip().isPresent() && cell.getShip().get().isSunk();
+                return isSunk ? CellCondition.SUNK_SHIP : CellCondition.HIT_SHIP;
+            } else {
+                return CellCondition.HIT_WATER;
+            }
+        } else {
+            if (cell.isVisible() || (!isEnemyGrid && cell.isOccupied())) {
+                return cell.isOccupied() ? CellCondition.SHIP : CellCondition.WATER;
+            } else {
+                return CellCondition.FOG;
+            }
+        }
     }
 }
