@@ -8,6 +8,7 @@ import it.unibo.jnavy.model.captains.Captain;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.model.weather.WeatherManager;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
@@ -75,20 +76,6 @@ public class GameControllerImpl implements GameController{
         return this.human.getCaptain().getCurrentCooldown();
     }
 
-    private boolean isHumanTurn() {
-        return this.currentPlayer == this.human;
-    }
-
-    private void playBotTurn() {
-        if (isGameOver()) return;
-
-        Position target = this.bot.decideTarget(this.human.getGrid());
-        ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
-        this.bot.receiveFeedback(result.position(), result.hitType());
-        endTurn();
-    }
-
-
     @Override
     public CellCondition getHumanCellState(Position p) {
         return this.human.getGrid().getCell(p)
@@ -101,6 +88,11 @@ public class GameControllerImpl implements GameController{
         return this.bot.getGrid().getCell(p)
                    .map(cell -> mapCellToCondition(cell, true))
                    .orElse(CellCondition.FOG);
+    }
+
+    @Override
+    public WeatherCondition getWeatherCondition() {
+        return this.weather.getCurrentWeather();
     }
 
     private int endTurn() {
@@ -124,10 +116,32 @@ public class GameControllerImpl implements GameController{
             }
         } else {
             if (cell.isVisible() || (!isEnemyGrid && cell.isOccupied())) {
-                return cell.isOccupied() ? CellCondition.SHIP : CellCondition.WATER;
+                
+                if (cell.isOccupied()) {
+                    if (isEnemyGrid && cell.isVisible()) {
+                        return CellCondition.REVEALED_SHIP; 
+                    }
+                    return CellCondition.SHIP;
+                } else {
+                    return CellCondition.REVEALED_WATER; 
+                }
+                
             } else {
                 return CellCondition.FOG;
             }
         }
+    }
+
+    private boolean isHumanTurn() {
+        return this.currentPlayer == this.human;
+    }
+
+    private void playBotTurn() {
+        if (isGameOver()) return;
+
+        Position target = this.bot.decideTarget(this.human.getGrid());
+        ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
+        this.bot.receiveFeedback(result.position(), result.hitType());
+        endTurn();
     }
 }

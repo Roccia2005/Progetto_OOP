@@ -67,4 +67,9 @@ public interface SetupController {
     Player getBotPlayer();
 
     CellState getCellState(Position pos);
+
+    /**
+     * Removes all ships from the human player's grid and resets the placement list.
+     */
+    void clearFleet();
 }

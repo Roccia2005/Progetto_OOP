@@ -87,6 +87,14 @@ public class GridPanel extends JPanel {
                         button.setBackground(Color.RED);
                         button.setEnabled(false);
                         break;
+                    case REVEALED_WATER:
+                        button.setBackground(Color.CYAN); 
+                        button.setEnabled(true);          
+                        break;
+                    case REVEALED_SHIP:
+                        button.setBackground(Color.YELLOW); 
+                        button.setEnabled(true);
+                        break;
                 }
             }
         }

@@ -1,14 +1,14 @@
 package it.unibo.jnavy.view;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-
+import edu.umd.cs.findbugs.annotations.NonNull;
 import it.unibo.jnavy.controller.CellState;
 import it.unibo.jnavy.controller.SetupController;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SetupView extends JPanel {
     private final SetupController controller;
@@ -31,6 +31,8 @@ public class SetupView extends JPanel {
     private JButton rotateButton;
     private JButton nextShipButton;
     private JButton randomBotton;
+    private JButton clearButton;
+
 
     public SetupView(final SetupController controller, final Runnable gameStartCall) {
         this.controller = controller;
@@ -64,13 +66,11 @@ public class SetupView extends JPanel {
         }
         this.add(gridPanel, BorderLayout.CENTER);
 
-        //pannello Laterale
         final JPanel sidePanel = new JPanel(new BorderLayout());
         sidePanel.setBackground(THEME_BACKGROUND);
         sidePanel.setPreferredSize(new Dimension(250, 0));
         sidePanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
 
-        //info Label
         String sizeText = controller.isSetupFinished() ? "Ready" : String.valueOf(controller.getNextShipSize());
         infoLabel = new JLabel("Size: " + sizeText);
         infoLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
@@ -79,11 +79,9 @@ public class SetupView extends JPanel {
         infoLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         sidePanel.add(infoLabel, BorderLayout.NORTH);
 
-        //container bottoni
-        final JPanel buttonsContainer = new JPanel(new GridLayout(3, 1, 0, 15));
+        final JPanel buttonsContainer = new JPanel(new GridLayout(4, 1, 0, 15));
         buttonsContainer.setBackground(THEME_BACKGROUND);
 
-        //bottone 1 rotate
         rotateButton = createBigButton("→", FONT_ICON_SIZE);
         rotateButton.setToolTipText("Rotate Ship (Horizontal/Vertical)");
         rotateButton.addActionListener(e -> {
@@ -97,30 +95,37 @@ public class SetupView extends JPanel {
             rotateButton.repaint();
         });
 
-        // bottone 2 confirm/start game
         nextShipButton = createBigButton("Confirm", FONT_DEFAULT_SIZE);
         nextShipButton.addActionListener(e -> {
-            try {
-                controller.nextShip();
-                updateView();
-            } catch (IllegalStateException ex) {
-                JOptionPane.showMessageDialog(this, "Place a ship first!", "Error", JOptionPane.WARNING_MESSAGE);
+            if (controller.isSetupFinished()) {
+                startGame();
+            } else {
+                try {
+                    controller.nextShip();
+                    updateView();
+                } catch (IllegalStateException ex) {
+                    JOptionPane.showMessageDialog(this, "Place a ship first!", "Error", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
 
-        // bottone 3 randomize
         randomBotton = createBigButton("Randomize", FONT_DEFAULT_SIZE);
         randomBotton.addActionListener(e -> {
             controller.randomizeHumanShips();
             updateView();
-            if (this.controller.isSetupFinished()) {
-                enableStartGameMode(); // Passa alla modalità "Avvio Partita"
-            }
+        });
+
+        clearButton = createBigButton("Clear Fleet", FONT_DEFAULT_SIZE);
+        clearButton.setForeground(THEME_TEXT); // Un colore rossastro per indicare "Reset"
+        clearButton.addActionListener(e -> {
+            controller.clearFleet();
+            updateView(); // Fondamentale: ridisegna la griglia vuota
         });
 
         buttonsContainer.add(rotateButton);
         buttonsContainer.add(nextShipButton);
         buttonsContainer.add(randomBotton);
+        buttonsContainer.add(clearButton);
 
         sidePanel.add(buttonsContainer, BorderLayout.CENTER);
         this.add(sidePanel, BorderLayout.EAST);
@@ -128,31 +133,12 @@ public class SetupView extends JPanel {
         updateView();
     }
 
-    /**
-     * Metodo chiave: Gestisce la transizione visiva e logica quando il setup è finito.
-     * Disabilita i controlli di editing e trasforma il tasto Confirm in Start Game.
-     */
-    private void enableStartGameMode() {
-        infoLabel.setText("Ready!");
-
-        // Disabilitiamo i bottoni non più utili
+    private void startGame() {
         rotateButton.setEnabled(false);
         randomBotton.setEnabled(false);
+        clearButton.setEnabled(false);
+        nextShipButton.setEnabled(false);
 
-        // Trasformiamo il tasto Confirm nel tasto Start
-        nextShipButton.setText("Start Game!");
-        nextShipButton.setForeground(THEME_TEXT);
-
-        // Rimuoviamo i vecchi listener
-        for (var al : nextShipButton.getActionListeners()) {
-            nextShipButton.removeActionListener(al);
-        }
-
-        // Aggiungiamo il nuovo listener per il cambio schermata
-        nextShipButton.addActionListener(e -> startGame());
-    }
-
-    private void startGame() {
         if (gameStartCall != null) {
             gameStartCall.run();
         }
@@ -174,14 +160,8 @@ public class SetupView extends JPanel {
         if (controller.setShip(pos, currentDirection)) {
             updateView();
         } else {
-            //decidere se tenere il suono o il messaggio di avviso
-            //Toolkit.getDefaultToolkit().beep();
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid placement!",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            Toolkit.getDefaultToolkit().beep();
+            showAutoClosingMessage("Invalid placement!");
         }
     }
 
@@ -205,11 +185,64 @@ public class SetupView extends JPanel {
                 }
             }
         }
-        // 2. Aggiorna le etichette e lo stato dei bottoni
+
         if (controller.isSetupFinished()) {
-            enableStartGameMode();
+            infoLabel.setText("Ready!");
+
+            nextShipButton.setText("Start Game!");
+
+            rotateButton.setEnabled(false);
+            randomBotton.setEnabled(false);
+            clearButton.setEnabled(true);
         } else {
             infoLabel.setText("Size: " + controller.getNextShipSize());
+
+            nextShipButton.setText("Confirm");
+            nextShipButton.setForeground(THEME_TEXT);
+
+            rotateButton.setEnabled(true);
+            randomBotton.setEnabled(true);
+            clearButton.setEnabled(true);
         }
+        this.repaint();
+    }
+
+    private void showAutoClosingMessage(String message) {
+        final JWindow toast = new JWindow(SwingUtilities.getWindowAncestor(this));
+
+        JLabel label = getJLabel(message);
+
+        toast.add(label);
+        toast.pack();
+
+        Point location = this.getLocationOnScreen();
+        int x = location.x + (this.getWidth() - toast.getWidth()) / 2;
+        int y = location.y + (this.getHeight() - toast.getHeight()) / 2;
+        toast.setLocation(x, y);
+
+        toast.setVisible(true);
+
+        Timer timer = new Timer(1000, e -> {
+            toast.setVisible(false);
+            toast.dispose();
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    @NonNull
+    private static JLabel getJLabel(String message) {
+        JLabel label = new JLabel(message, SwingConstants.CENTER);
+        label.setFont(new Font("SansSerif", Font.BOLD, 18));
+        label.setForeground(Color.WHITE);
+        label.setBackground(new Color(200, 50, 50));
+        label.setOpaque(true);
+        label.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+
+        label.setBorder(BorderFactory.createCompoundBorder(
+                label.getBorder(),
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+        ));
+        return label;
     }
 }

@@ -5,6 +5,7 @@ import java.awt.*;
 
 import it.unibo.jnavy.controller.GameController;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.view.components.captain.CaptainAbilityButton;
 import it.unibo.jnavy.view.components.weather.WeatherWidget;
 
@@ -30,23 +31,23 @@ public class GamePanel extends JPanel {
         
         JPanel dashboardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 10));
 
-        weatherWidget = new WeatherWidget();
-        captainButton = new CaptainAbilityButton(this.controller.getCaptainCooldown());
+        this.weatherWidget = new WeatherWidget();
+        this.captainButton = new CaptainAbilityButton(this.controller.getCaptainCooldown());
 
-        captainButton.addActionListener(e -> {
-            if (captainButton.isEnabled()) {
-                captainButton.select();
+        this.captainButton.addActionListener(e -> {
+            if (this.captainButton.isEnabled()) {
+                this.captainButton.select();
             }
         });
 
-        dashboardPanel.add(weatherWidget);
-        dashboardPanel.add(captainButton);
+        dashboardPanel.add(this.weatherWidget);
+        dashboardPanel.add(this.captainButton);
 
         this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET,
                                             (Position p) -> {
                                                 if (captainButton.isActive()) {
                                                     controller.processAbility(p);
-                                                    captainButton.reset();
+                                                    this.captainButton.reset();
                                                     this.updateDashboard();
                                                 }
                                              }); 
@@ -54,7 +55,7 @@ public class GamePanel extends JPanel {
                                             (Position p) -> {
                                                 if (captainButton.isActive()) {
                                                     controller.processAbility(p);
-                                                    captainButton.reset();
+                                                    this.captainButton.reset();
                                                 } else {
                                                     controller.processShot(p);
                                                 }
@@ -75,13 +76,13 @@ public class GamePanel extends JPanel {
     }
 
     private void updateDashboard() {
-    int currentCooldown = controller.getCurrentCaptainCooldown();
-    captainButton.updateState(currentCooldown);
+        int currentCooldown = controller.getCurrentCaptainCooldown();
+        captainButton.updateState(currentCooldown);
 
-    humanGridPanel.refresh(pos -> controller.getHumanCellState(pos));
-    botGridPanel.refresh(pos -> controller.getBotCellState(pos));
+        humanGridPanel.refresh(pos -> controller.getHumanCellState(pos));
+        botGridPanel.refresh(pos -> controller.getBotCellState(pos));
 
-    // WeatherCondition currentCondition = WeatherManagerImpl.getInstance().getCurrentWeather();
-    // weatherWidget.updateWeather(currentCondition);
+        WeatherCondition currentCondition = this.controller.getWeatherCondition();
+        this.weatherWidget.updateWeather(currentCondition);
     }
 }
