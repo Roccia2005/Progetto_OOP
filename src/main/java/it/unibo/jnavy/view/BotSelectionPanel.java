@@ -110,6 +110,28 @@ public class BotSelectionPanel extends JPanel {
         controlsPanel.setBackground(BACKGROUND_COLOR);
 
         levelComboBox = new JComboBox<>(BotLevel.values());
+        levelComboBox.setUI(new javax.swing.plaf.basic.BasicComboBoxUI() {
+
+            @Override
+            public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus) {
+                g.setColor(MENUBLUE);
+                g.fillRect(bounds.x, bounds.y, bounds.width + 10, bounds.height);
+            }
+
+            @Override
+            protected JButton createArrowButton() {
+                JButton btn = new javax.swing.plaf.basic.BasicArrowButton(
+                    javax.swing.plaf.basic.BasicArrowButton.SOUTH,
+                    MENUBLUE,       // botton background color
+                    MENUBLUE,       // shadow color, the same to uniform that to the background
+                    FOREGROUND_COLOR, // arrow color
+                    MENUBLUE        // highlight color
+                );
+                btn.setBorder(BorderFactory.createEmptyBorder());
+                btn.setContentAreaFilled(false);
+                return btn;
+            }
+        });
         levelComboBox.setPreferredSize(new Dimension(SETWIDTH / CONTROL_WIDTH_DIVISOR, SETHEIGHT / CONTROL_HEIGHT_DIVISOR));
         levelComboBox.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_CTRL));
         levelComboBox.setRenderer(new customRenderer());
@@ -117,18 +139,12 @@ public class BotSelectionPanel extends JPanel {
         levelComboBox.setBackground(MENUBLUE);
         levelComboBox.setForeground(FOREGROUND_COLOR);
 
-        for (int i = 0; i < levelComboBox.getComponentCount(); i++) {
-            Component c = levelComboBox.getComponent(i);
-            if (c instanceof JButton) {
-                c.setBackground(MENUBLUE);
-                ((JButton) c).setBorder(BorderFactory.createEmptyBorder());
-            }
-        }
         levelComboBox.setOpaque(true);
         levelComboBox.addActionListener(e -> updatePreview());
         levelComboBox.setBorder(BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS));
 
         JButton confirmButton = new JButton("Confirm");
+        confirmButton.setFocusPainted(false);
         confirmButton.setPreferredSize(new Dimension(SETWIDTH / CONTROL_WIDTH_DIVISOR, SETHEIGHT / CONTROL_HEIGHT_DIVISOR));
         confirmButton.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_CTRL));
         confirmButton.setBackground(MENUBLUE);
@@ -178,6 +194,8 @@ public class BotSelectionPanel extends JPanel {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, false);
+
+            label.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
 
             if (index == -1) {
                 label.setBackground(MENUBLUE);

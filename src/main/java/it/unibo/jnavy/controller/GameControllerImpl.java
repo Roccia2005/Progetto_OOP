@@ -26,7 +26,7 @@ public class GameControllerImpl implements GameController{
         this.weather = WeatherManagerImpl.getInstance();
     }
 
-    
+
     @Override
     public int getGridSize() {
         return this.human.getGrid().getSize();
