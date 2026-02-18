@@ -1,6 +1,7 @@
 package it.unibo.jnavy.controller;
 
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.weather.WeatherCondition;
 
 public interface GameController {
 
@@ -19,4 +20,6 @@ public interface GameController {
     CellCondition getHumanCellState(Position p);
     
     CellCondition getBotCellState(Position p);
+
+    WeatherCondition getWeatherCondition();
 }
