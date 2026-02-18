@@ -5,6 +5,7 @@ import java.awt.*;
 
 import it.unibo.jnavy.controller.GameController;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.view.components.captain.CaptainAbilityButton;
 import it.unibo.jnavy.view.components.weather.WeatherWidget;
 
@@ -15,8 +16,8 @@ public class GamePanel extends JPanel {
     private static final String HUMAN_FLEET = "My Fleet";
     private static final String BOT_FLEET = "Enemy Fleet";
 
-    private final JPanel humanGridPanel;
-    private final JPanel botGridPanel;
+    private final GridPanel humanGridPanel;
+    private final GridPanel botGridPanel;
     private final WeatherWidget weatherWidget;
     private final CaptainAbilityButton captainButton;
     private final GameController controller;
@@ -30,37 +31,38 @@ public class GamePanel extends JPanel {
         
         JPanel dashboardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 10));
 
-        weatherWidget = new WeatherWidget();
-        captainButton = new CaptainAbilityButton(this.controller.getCaptainCooldown());
+        this.weatherWidget = new WeatherWidget();
+        this.captainButton = new CaptainAbilityButton(this.controller.getCaptainCooldown());
 
-        captainButton.addActionListener(e -> {
-            if (captainButton.isEnabled()) {
-                captainButton.select();
+        this.captainButton.addActionListener(e -> {
+            if (this.captainButton.isEnabled()) {
+                this.captainButton.select();
             }
         });
 
-        dashboardPanel.add(weatherWidget);
-        dashboardPanel.add(captainButton);
+        dashboardPanel.add(this.weatherWidget);
+        dashboardPanel.add(this.captainButton);
 
-        this.humanGridPanel = new GridPanel(this.controller, HUMAN_FLEET,
+        this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET,
                                             (Position p) -> {
                                                 if (captainButton.isActive()) {
                                                     controller.processAbility(p);
-                                                    captainButton.reset();
+                                                    this.captainButton.reset();
                                                     this.updateDashboard();
                                                 }
                                              }); 
-        this.botGridPanel = new GridPanel(this.controller, BOT_FLEET, 
+        this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET, 
                                             (Position p) -> {
                                                 if (captainButton.isActive()) {
                                                     controller.processAbility(p);
-                                                    captainButton.reset();
+                                                    this.captainButton.reset();
                                                 } else {
                                                     controller.processShot(p);
                                                 }
                                                 this.updateDashboard();
                                             });
 
+        this.updateDashboard();
         gridsContainer.add(this.humanGridPanel);
         gridsContainer.add(this.botGridPanel);
 
@@ -74,10 +76,13 @@ public class GamePanel extends JPanel {
     }
 
     private void updateDashboard() {
-    int currentCooldown = controller.getCurrentCaptainCooldown();
-    captainButton.updateState(currentCooldown);
+        int currentCooldown = controller.getCurrentCaptainCooldown();
+        captainButton.updateState(currentCooldown);
 
-    // WeatherCondition currentCondition = WeatherManagerImpl.getInstance().getCurrentWeather();
-    // weatherWidget.updateWeather(currentCondition);
-}
+        humanGridPanel.refresh(pos -> controller.getHumanCellState(pos));
+        botGridPanel.refresh(pos -> controller.getBotCellState(pos));
+
+        WeatherCondition currentCondition = this.controller.getWeatherCondition();
+        this.weatherWidget.updateWeather(currentCondition);
+    }
 }
