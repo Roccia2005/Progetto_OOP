@@ -4,6 +4,8 @@ import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -63,15 +65,21 @@ public final class WeatherManagerImpl implements WeatherManager {
         if (this.condition == WeatherCondition.SUNNY) {
             return grid.receiveShot(target);
         }
-        Position nextPossiblePosition;
-        final int gridSize = grid.getSize();
-        do {
-            final int offsetX = this.random.nextInt(3) - 1;
-            final int offsetY = this.random.nextInt(3) - 1;
-            nextPossiblePosition = new Position(target.x() + offsetX, target.y() + offsetY);
-        } while (nextPossiblePosition.x() < 0 || nextPossiblePosition.x() >= gridSize
-                || nextPossiblePosition.y() < 0 || nextPossiblePosition.y() >= gridSize);
-        return grid.receiveShot(nextPossiblePosition);
+
+        final List<Position> validPosition = new ArrayList<>();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                final Position p = new Position(target.x() + dx, target.y() + dy);
+                if (grid.isTargetValid(p)) {
+                    validPosition.add(p);
+                }
+            }
+        }
+        if (validPosition.isEmpty()) {
+            return grid.receiveShot(target);
+        }
+        final Position chosenPosition = validPosition.get(this.random.nextInt(validPosition.size()));
+        return grid.receiveShot(chosenPosition);
     }
 
     @Override

@@ -3,6 +3,7 @@ package it.unibo.jnavy.model.shots;
 import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
 import java.util.ArrayList;
@@ -17,19 +18,31 @@ public class AreaShot implements HitStrategy {
     @Override
     public List<ShotResult> execute(final Position target, final Grid grid) {
         final List<ShotResult> results = new ArrayList<>();
-        final int vetX = target.x() >= grid.getSize()/2 ? -1 : 1;
-        final int vetY = target.y() >= grid.getSize()/2 ? -1 : 1;
+        Position effectiveTarget = target;
+        if (WeatherManagerImpl.getInstance().getCurrentWeather() == WeatherCondition.FOG) {
+            int offsetX = new Random.nextInt(3) - 1;
+            int offsetY = new Random.nextInt(3) - 1;
+            effectiveTarget = new Position(target.x() + offsetX, target.y() + offsetY);
+
+            if (!grid.isPositionValid(effectiveTarget)) {
+                effectiveTarget = target;
+            }
+        }
+
+        final int vetX = effectiveTarget.x() >= grid.getSize() / 2 ? -1 : 1;
+        final int vetY = effectiveTarget.y() >= grid.getSize() / 2 ? -1 : 1;
 
         final List<Position> targets = List.of(
-                target,
-                new Position(target.x() + vetX, target.y()),
-                new Position(target.x(), target.y() + vetY),
-                new Position(target.x() + vetX, target.y() + vetY)
+                effectiveTarget,
+                new Position(effectiveTarget.x() + vetX, effectiveTarget.y()),
+                new Position(effectiveTarget.x(), effectiveTarget.y() + vetY),
+                new Position(effectiveTarget.x() + vetX, effectiveTarget.y() + vetY)
         );
 
         for (final Position pos : targets) {
-            final ShotResult shotResult = WeatherManagerImpl.getInstance().applyWeatherEffects(pos, grid);
-            results.add(shotResult);
+            if (grid.isTargetValid(pos)) {
+                results.add(grid.receiveShot(pos));
+            }
         }
         return results;
     }
