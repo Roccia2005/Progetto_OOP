@@ -92,7 +92,6 @@ public final class WeatherManagerImpl implements WeatherManager {
             } else {
                 this.condition = WeatherCondition.FOG;
             }
-            this.turnCounter = 0;
         }
     }
 }
