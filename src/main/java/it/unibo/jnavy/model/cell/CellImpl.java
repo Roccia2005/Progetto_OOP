@@ -83,5 +83,4 @@ public class CellImpl implements Cell{
         }
         return false;
     }
-
 }
