@@ -202,19 +202,28 @@ public class GamePanel extends JPanel {
     }
 
     private void playOneShotSound(String filePath) {
-        try {
-            URL soundUrl = getClass().getResource(filePath);
-            if (soundUrl != null) {
-                AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundUrl);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioIn);
-                clip.start();
-            } else {
-                System.err.println("Sound file not found: " + filePath);
+        new Thread(() -> {
+            try {
+                URL soundUrl = getClass().getResource(filePath);
+                if (soundUrl != null) {
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundUrl);
+                    Clip clip = AudioSystem.getClip();
+
+                    clip.addLineListener(event -> {
+                        if (event.getType() == javax.sound.sampled.LineEvent.Type.STOP) {
+                            clip.close();
+                        }
+                    });
+
+                    clip.open(audioIn);
+                    clip.start();
+                } else {
+                    System.err.println("Sound file not found: " + filePath);
+                }
+            } catch (Exception e) {
+                System.err.println("Error playing sound: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.err.println("Error playing sound: " + e.getMessage());
-        }
+        }).start();
     }
 
     public void showEndGameScreen(boolean isVictory) {
