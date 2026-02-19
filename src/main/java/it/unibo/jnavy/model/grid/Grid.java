@@ -91,4 +91,9 @@ public interface Grid {
      * @param ship the ship to remove.
     */
     void removeShip(Ship ship);
+
+    /**
+     * @return the positions occupied by the fleet.
+     */
+    List<Position> getOccupiedPositions();
 }

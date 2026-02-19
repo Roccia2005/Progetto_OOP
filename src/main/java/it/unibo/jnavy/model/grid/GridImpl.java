@@ -165,4 +165,13 @@ public class GridImpl implements Grid {
 
         this.fleet.removeShip(ship);
     }
+
+    @Override
+    public List<Position> getOccupiedPositions() {
+        return Arrays.stream(this.cells)
+                .flatMap(Arrays::stream)
+                .filter(Cell::isOccupied)
+                .map(Cell::getPosition)
+                .collect(Collectors.toList());
+    }
 }
