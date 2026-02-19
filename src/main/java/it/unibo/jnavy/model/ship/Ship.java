@@ -31,8 +31,8 @@ public interface Ship {
     int getHealth();
 
     /**
-     * set the current health of the ship.
-     * @param value the new health of the ship
+     * Repairs the ship by increasing its health by 1, up to its maximum size.
+     * @return true if the ship was actually repaired.
      */
-    void setHealth(int value);
+    boolean repair();
 }

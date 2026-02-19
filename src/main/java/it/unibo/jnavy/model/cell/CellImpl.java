@@ -12,7 +12,7 @@ import it.unibo.jnavy.model.utilities.Position;
 public class CellImpl implements Cell{
 
     private final Position position;
-    private Ship ship;
+        private Ship ship;
     private HitType status;
     private boolean isVisible;
 

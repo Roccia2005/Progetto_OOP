@@ -45,7 +45,11 @@ public class ShipImpl implements Ship {
     }
 
     @Override
-    public void setHealth(int value) {
-        this.health = Math.min(Math.max(value, 0), this.size);
+    public boolean repair() {
+        if (this.health < this.size && !isSunk()) {
+            this.health++;
+            return true;
+        }
+        return false;
     }
 }
