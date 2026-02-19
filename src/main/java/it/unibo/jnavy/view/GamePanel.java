@@ -184,8 +184,7 @@ public class GamePanel extends JPanel {
         this.weatherWidget.updateWeather(currentCondition);
 
         if (controller.isGameOver()) {
-            boolean playerWon = controller.getBotCellState(new Position(0, 0)) != CellCondition.FOG;
-            gameOverPanel.showResult(playerWon);
+            gameOverPanel.showResult(controller.isBotDefeated());
         }
     }
 }
