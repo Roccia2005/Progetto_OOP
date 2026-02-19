@@ -2,10 +2,9 @@ package it.unibo.jnavy.model.utilities;
 
 /**
  * Represents a two-dimensional position within the game grid.
- * This record is used to identify specific coordinates on the map.
- * 
- * @param x the horizontal coordinate (often referred to as the column).
- * @param y the vertical coordinate (often referred to as the row).
+ * The game uses a Matrix coordinate system (Row-Major Order), not a standard Cartesian one.
+ * @param x the vertical coordinate (represents the row index in the grid matrix).
+ * @param y the horizontal coordinate (represents the column index in the grid matrix).
  */
 public record Position(int x, int y) {
 }
