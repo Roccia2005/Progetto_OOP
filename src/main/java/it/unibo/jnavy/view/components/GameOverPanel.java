@@ -45,7 +45,7 @@ public class GameOverPanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
 
         gbc.gridy = 0;
-        add(Box.createVerticalStrut(350), gbc);
+        add(Box.createVerticalStrut(250), gbc);
 
         gbc.gridy = 1;
         gbc.insets = new Insets(10, 0, 10, 0);
@@ -62,7 +62,7 @@ public class GameOverPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(new Color(0, 0, 0, 200));
+        g2.setColor(new Color(0, 0, 0, 220));
         g2.fillRect(0, 0, getWidth(), getHeight());
 
         Image imgToDraw = isWin ? winImage : loseImage;
@@ -72,7 +72,7 @@ public class GameOverPanel extends JPanel {
             int targetH = (int) ((double)imgToDraw.getHeight(null) / imgToDraw.getWidth(null) * targetW);
 
             int x = (getWidth() - targetW) / 2;
-            int y = (getHeight() / 2) - targetH - 50;
+            int y = (getHeight() / 2) - targetH - 20;
 
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g2.drawImage(imgToDraw, x, y, targetW, targetH, this);
