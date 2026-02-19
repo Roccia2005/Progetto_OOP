@@ -20,8 +20,6 @@ public class ViewGUI extends JFrame implements View {
     private static final String CAPTAIN_CARD = "CAPTAIN_SELECTION";
     private static final String SETUP_CARD = "SETUP";
     private static final String GAME_CARD = "GAME";
-    private static final String VICTORY_CARD = "VICTORY";
-    private static final String DEFEAT_CARD = "DEFEAT";
 
     private final CardLayout cardLayout;
     private final JPanel mainPanel;
@@ -42,7 +40,6 @@ public class ViewGUI extends JFrame implements View {
 
         initStartPhase();
         initSelectionPhase();
-        initEndGamePhase();
 
         this.cardLayout.show(this.mainPanel, START_CARD);
     }
@@ -104,36 +101,9 @@ public class ViewGUI extends JFrame implements View {
             botPlayer.setStrategy(new SniperBot(humanPlayer.getGrid()));
         }
 
-        GameController gameController = new GameControllerImpl(humanPlayer, botPlayer, isVictory -> this.showEndGame(isVictory));
+        GameController gameController = new GameControllerImpl(humanPlayer, botPlayer);
         GamePanel gamePanel = new GamePanel(gameController);
         this.mainPanel.add(gamePanel, GAME_CARD);
         this.cardLayout.show(this.mainPanel, GAME_CARD);
-    }
-
-    private void initEndGamePhase() {
-        Runnable exit = () -> System.exit(0);
-
-        Runnable start = () -> {
-            this.selectedBotStrategy = null;
-            this.selectedCaptain = null;
-            this.isSniperSelected = false;
-            this.cardLayout.show(this.mainPanel, START_CARD);
-        };
-
-        /*
-            VictoryView = victoryView = new VictoryView(onHomeAction, onExitAction);
-            this.mainPanel.add(victoryView, VICTORY_CARD);
-
-            DefeatView defeatView = new DefeatView(onHomeAction, onExitAction);
-            this.mainPanel.add(defeatView, DEFEAT_CARD);
-        */
-    }
-
-    public void showEndGame(boolean isVictory) {
-        if (isVictory) {
-            this.cardLayout.show(this.mainPanel, VICTORY_CARD);
-        } else {
-            this.cardLayout.show(this.mainPanel, DEFEAT_CARD);
-        }
     }
 }
