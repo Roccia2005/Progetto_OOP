@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URL;
 
 public class GameOverPanel extends JPanel {
 
@@ -79,7 +80,12 @@ public class GameOverPanel extends JPanel {
     }
 
     private Image loadImage(final String filename) {
-
+        URL url = getClass().getResource("/images/" + filename);
+        if (url == null) {
+            System.err.println("Images not found: " + filename);
+            return null;
+        }
+        return new ImageIcon(url).getImage();
     }
 
     private JButton createStyledButton(final String label) {
