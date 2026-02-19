@@ -108,22 +108,17 @@ public class GameControllerImpl implements GameController {
             } else {
                 return CellCondition.HIT_WATER;
             }
-        } else {
-            if (cell.isVisible() || (!isEnemyGrid && cell.isOccupied())) {
-
-                if (cell.isOccupied()) {
-                    if (isEnemyGrid && cell.isVisible()) {
-                        return CellCondition.REVEALED_SHIP;
-                    }
-                    return CellCondition.SHIP;
-                } else {
-                    return CellCondition.REVEALED_WATER;
-                }
-
-            } else {
-                return CellCondition.FOG;
-            }
+        } 
+        
+        if (isEnemyGrid && cell.getScanResult().isPresent()) {
+            return cell.getScanResult().get() ? CellCondition.REVEALED_SHIP : CellCondition.REVEALED_WATER;
         }
+
+        if (!isEnemyGrid) {
+            return cell.isOccupied() ? CellCondition.SHIP : CellCondition.WATER;
+        }
+
+        return CellCondition.FOG;
     }
 
     @Override

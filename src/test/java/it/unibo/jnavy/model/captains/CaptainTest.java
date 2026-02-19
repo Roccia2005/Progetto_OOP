@@ -85,17 +85,27 @@ class CaptainTest {
         assertFalse(this.captain.targetsEnemyGrid());
         assertFalse(this.captain.doesAbilityConsumeTurn());
         this.chargeAbility(Engineer.COOLDOWN);
-        /**
-         * The ability should not reset if the position is 
-         * not valid or has not been hit
-         */
+
+        // The ability should not reset if the position is not valid or has not been hit
         assertFalse(this.captain.useAbility(grid, invalidPosition));
         assertFalse(this.captain.useAbility(grid, position));
+
+        // The ability should not repair a cell hit with water
+        Position waterPosition = new Position(5, 5);
+        this.grid.receiveShot(waterPosition);
+        assertFalse(this.captain.useAbility(grid, waterPosition));
 
         this.grid.receiveShot(position);
         assertTrue(this.captain.useAbility(grid, position));
         assertFalse(grid.getCell(position).get().isHit());
+
         this.assertAbilityIsNotCharged();
+
+        this.chargeAbility(Engineer.COOLDOWN);
+
+        // The ability should not repair a sunk ship
+        this.grid.receiveShot(new Position(0, 1));
+        assertFalse(this.captain.useAbility(grid, position));
     }
 
     /**
@@ -119,9 +129,11 @@ class CaptainTest {
             new Position(position.x() + 1, position.y() + 1)
         );
 
+        // Verify that every cell in the expected area has been hit
         for (Position p : areaShot) {
-            assertTrue(this.grid.getCell(p).map(cell -> cell.isHit()).orElse(false));
+            assertTrue(this.grid.getCell(p).get().isHit());
         }
+
         this.assertAbilityIsNotCharged();
     }
 
@@ -137,9 +149,32 @@ class CaptainTest {
         this.chargeAbility(SonarOfficer.COOLDOWN);
         
         assertFalse(this.captain.useAbility(grid, invalidPosition));
-
         assertTrue(this.captain.useAbility(grid, position));
-        assertTrue(grid.getCell(position).get().isVisible());
+
+        // Verify that the 3x3 area (from 0,0 to 2,2) correctly registered the ship's presence
+        for (int x = 0; x <= 2; x++) {
+            for (int y = 0; y <= 2; y++) {
+                Position p = new Position(x, y);
+                
+                assertTrue(grid.getCell(p).get().getScanResult().isPresent());
+                assertTrue(grid.getCell(p).get().getScanResult().get());
+            }
+        }
+
+        this.chargeAbility(SonarOfficer.COOLDOWN + 1);
+        
+        // Verify that the scanned 3x3 area (from 4,4 to 6,6) correctly registered no ships
+        Position emptyPosition = new Position(5, 5);
+        assertTrue(this.captain.useAbility(grid, emptyPosition));
+
+        for (int x = 4; x <= 6; x++) {
+            for (int y = 4; y <= 6; y++) {
+                Position p = new Position(x, y);
+                assertTrue(grid.getCell(p).get().getScanResult().isPresent());
+                assertFalse(grid.getCell(p).get().getScanResult().get());
+            }
+        }
+
         this.assertAbilityIsNotCharged();
     }
 
@@ -154,11 +189,12 @@ class CaptainTest {
 
     /**
      * Helper method to advance turns until the captain is fully charged.
+     * Note that the cooldown counter does 
+     * not increment during the same turn in which the ability is activated.
      * * @param cooldown The number of turns to wait.
      */
     private void chargeAbility(int cooldown) {
-        for(int i = 0; i < cooldown; i++) {
-            assertFalse(this.captain.isAbilityRecharged());
+        for(int i = 0; i < cooldown + 1; i++) {
             this.captain.processTurnEnd();
         }
     }

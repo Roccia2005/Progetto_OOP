@@ -12,15 +12,14 @@ import it.unibo.jnavy.model.utilities.Position;
 public class CellImpl implements Cell{
 
     private final Position position;
-        private Ship ship;
+    private Ship ship;
     private HitType status;
-    private boolean isVisible;
+    private Boolean scanResult = null;
 
     public CellImpl(final Position p) {
         this.position = p;
         this.ship = null;
         this.status = null;
-        this.isVisible = false;
     }
 
     @Override
@@ -59,18 +58,8 @@ public class CellImpl implements Cell{
     }
 
     @Override
-    public void setVisible() {
-        this.isVisible = true;
-    }
-
-    @Override
     public boolean isHit() {
         return this.status != null;
-    }
-
-    @Override
-    public boolean isVisible() {
-        return this.isVisible;
     }
 
     @Override
@@ -82,5 +71,21 @@ public class CellImpl implements Cell{
             }
         }
         return false;
+    }
+
+    @Override
+    public void setScanResult(boolean shipFound) {
+        this.scanResult = shipFound;
+    }
+
+    @Override
+    public Optional<Boolean> getScanResult() {
+        return Optional.ofNullable(this.scanResult);
+    }
+
+    
+    @Override
+    public boolean hisDetectable() {
+        return getShip().map(ship -> !ship.isSunk() && !isHit()).orElse(false);
     }
 }

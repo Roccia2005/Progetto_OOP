@@ -44,19 +44,9 @@ public interface Cell {
     Position getPosition();
 
     /**
-     * Set the content of the cell visible
-     */
-    void setVisible();
-
-    /**
      * @return if the cell has been hit or no.
      */
     boolean isHit();
-
-    /**
-     * @return if the cell is visible
-     */
-    boolean isVisible();
 
     /**
      * Resets the cell's hit status if the ship occupying it is not sunk.
@@ -65,4 +55,32 @@ public interface Cell {
      *          false if the ship is already sunk or no ship is present.
      */
     boolean repair();
+
+    /**
+     * Sets the result of a scan for this cell.
+     * This represents whether a ship was detected in the area during a 
+     * reconnaissance action, without physically hitting the cell.
+     *
+     * @param shipFound true if a ship was detected in the scanned area, 
+     * false otherwise.
+     */
+    public void setScanResult(boolean shipFound);
+
+    /**
+     * Retrieves the result of the last sonar scan performed on this cell.git
+     *
+     * @return an {@link Optional} containing true if a ship was found, 
+     * false if only water was found, or an empty Optional 
+     * if this cell has never been scanned.
+     */
+    public Optional<Boolean> getScanResult();
+
+    /**
+     * Determines whether the cell contains an active and hidden entity 
+     * that can be detected by sensors.
+     * 
+     * @return true if the cell represents an undiscovered cell,
+     * false otherwise.
+     */
+    public boolean hisDetectable();
 }
