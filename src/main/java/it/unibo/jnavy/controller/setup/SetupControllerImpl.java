@@ -31,6 +31,9 @@ public class SetupControllerImpl implements SetupController {
      * Needed to remove it if the user moves it to another position.
      */
     private Ship currentShipObject;
+    private Position currentShipPos;
+    private CardinalDirection currentShipDir;
+
 
     public SetupControllerImpl(final Captain selectedCaptain, final BotStrategy selectedBotStrategy) {
         this.shipsToPlace = new ArrayList<>(buildFleetConfig());
@@ -49,8 +52,12 @@ public class SetupControllerImpl implements SetupController {
 
         final Grid grid = human.getGrid();
 
-        if (this.currentShipObject != null) {
-            grid.removeShip(this.currentShipObject);
+        Ship oldShip = this.currentShipObject;
+        Position oldPos = this.currentShipPos;
+        CardinalDirection oldDir = this.currentShipDir;
+
+        if (oldShip != null) {
+            grid.removeShip(oldShip);
         }
 
         final Ship newShip = new ShipImpl(shipsToPlace.getFirst());
@@ -58,10 +65,18 @@ public class SetupControllerImpl implements SetupController {
         if (grid.isPlacementValid(newShip, pos, dir)) {
             grid.placeShip(newShip, pos, dir);
             this.currentShipObject = newShip;
+            this.currentShipPos = pos;
+            this.currentShipDir = dir;
             return true;
         }
 
-        this.currentShipObject = null;
+        if (oldShip != null && oldPos != null && oldDir != null) {
+            grid.placeShip(oldShip, oldPos, oldDir);
+            this.currentShipObject = oldShip;
+        } else {
+            this.currentShipObject = null;
+        }
+
         return false;
     }
 
@@ -73,6 +88,8 @@ public class SetupControllerImpl implements SetupController {
 
         shipsToPlace.removeFirst();
         this.currentShipObject = null;
+        this.currentShipPos = null;
+        this.currentShipDir = null;
     }
 
     @Override
@@ -159,6 +176,8 @@ public class SetupControllerImpl implements SetupController {
         if (this.currentShipObject != null) {
             human.getGrid().removeShip(this.currentShipObject);
             this.currentShipObject = null;
+            this.currentShipPos = null;
+            this.currentShipDir = null;
         }
     }
 
