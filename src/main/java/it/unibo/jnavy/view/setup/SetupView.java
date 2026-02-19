@@ -1,4 +1,4 @@
-package it.unibo.jnavy.view;
+package it.unibo.jnavy.view.setup;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import it.unibo.jnavy.controller.setup.SetupController;

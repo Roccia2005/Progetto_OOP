@@ -1,4 +1,4 @@
-package it.unibo.jnavy.view;
+package it.unibo.jnavy.view.selection;
 
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;

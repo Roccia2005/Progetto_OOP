@@ -1,4 +1,4 @@
-package it.unibo.jnavy.view;
+package it.unibo.jnavy.view.start;
 
 import javax.sound.sampled.*;
 import javax.swing.*;

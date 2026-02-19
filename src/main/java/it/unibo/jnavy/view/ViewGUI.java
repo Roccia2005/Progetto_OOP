@@ -11,8 +11,13 @@ import it.unibo.jnavy.model.bots.*;
 import it.unibo.jnavy.model.captains.*;
 import it.unibo.jnavy.model.player.Bot;
 import it.unibo.jnavy.model.player.Human;
-import it.unibo.jnavy.view.BotSelectionPanel.BotLevel;
-import it.unibo.jnavy.view.CapSelectionPanel.CaptainAbility;
+import it.unibo.jnavy.view.game.GamePanel;
+import it.unibo.jnavy.view.selection.BotSelectionPanel;
+import it.unibo.jnavy.view.selection.CapSelectionPanel;
+import it.unibo.jnavy.view.selection.BotSelectionPanel.BotLevel;
+import it.unibo.jnavy.view.selection.CapSelectionPanel.CaptainAbility;
+import it.unibo.jnavy.view.setup.SetupView;
+import it.unibo.jnavy.view.start.StartView;
 
 public class ViewGUI extends JFrame implements View {
     private static final String START_CARD = "START";
