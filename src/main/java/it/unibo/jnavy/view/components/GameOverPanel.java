@@ -9,9 +9,9 @@ import java.net.URL;
 
 public class GameOverPanel extends JPanel {
 
-    private final Image winImage;
-    private final Image loseImage;
-    private boolean isWin;
+    private final ImageIcon winIcon;
+    private final ImageIcon loseIcon;
+    private final JLabel imageLabel;
 
     private final JButton menuButton;
     private final JButton exitButton;
@@ -26,8 +26,10 @@ public class GameOverPanel extends JPanel {
             public void mousePressed(MouseEvent e) { }
         });
 
-        this.winImage = loadImage("winner.png");
-        this.loseImage = loadImage("loser.png");
+        this.winIcon = loadAndScaleIcon("winner.png", 400);
+        this.loseIcon = loadAndScaleIcon("loser.png", 400);
+
+        this.imageLabel = new JLabel();
 
         this.menuButton = createStyledButton("Back to the menu");
         this.exitButton = createStyledButton("Exit the game");
@@ -37,7 +39,7 @@ public class GameOverPanel extends JPanel {
     }
 
     public void showResult(final boolean victory) {
-        this.isWin = victory;
+        this.imageLabel.setIcon(victory ? winIcon : loseIcon);
         removeAll();
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -45,13 +47,15 @@ public class GameOverPanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
 
         gbc.gridy = 0;
-        add(Box.createVerticalStrut(230), gbc);
+        gbc.insets = new Insets(0, 0, 40, 0);
+        add(imageLabel, gbc);
 
         gbc.gridy = 1;
-        gbc.insets = new Insets(10, 0, 10, 0);
+        gbc.insets = new Insets(0, 0, 15, 0);
         add(menuButton, gbc);
 
         gbc.gridy = 2;
+        gbc.insets = new Insets(0, 0, 0, 0);
         add(exitButton, gbc);
 
         revalidate();
@@ -61,31 +65,22 @@ public class GameOverPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(new Color(0, 0, 0, 230));
         g2.fillRect(0, 0, getWidth(), getHeight());
-
-        Image imgToDraw = isWin ? winImage : loseImage;
-
-        if (imgToDraw != null) {
-            int targetW = 400;
-            int targetH = (int) ((double)imgToDraw.getHeight(null) / imgToDraw.getWidth(null) * targetW);
-
-            int x = (getWidth() - targetW) / 2;
-            int y = (getHeight() / 2) - targetH + 40;
-
-            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-            g2.drawImage(imgToDraw, x, y, targetW, targetH, this);
-        }
     }
 
-    private Image loadImage(final String filename) {
+    private ImageIcon loadAndScaleIcon(final String filename, final int targetWidth) {
         URL url = getClass().getResource("/images/" + filename);
         if (url == null) {
-            System.err.println("Images not found: " + filename);
+            System.err.println("Image not found: " + filename);
             return null;
         }
-        return new ImageIcon(url).getImage();
+        Image img = new ImageIcon(url).getImage();
+        int targetHeight = (int) ((double) img.getHeight(null) / img.getWidth(null) * targetWidth);
+        Image scaledImg = img.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImg);
     }
 
     private JButton createStyledButton(final String label) {
