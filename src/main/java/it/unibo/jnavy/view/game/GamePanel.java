@@ -199,7 +199,12 @@ public class GamePanel extends JPanel {
 
         if (controller.isGameOver() && !this.gameOverHandled) {
             this.gameOverHandled = true;
-            this.showEndGameScreen(controller.isBotDefeated());
+
+            Timer delayTimer = new Timer(900, e -> {
+                this.showEndGameScreen(controller.isBotDefeated());
+            });
+            delayTimer.setRepeats(false); // Only trigger once!
+            delayTimer.start();
         }
     }
 
