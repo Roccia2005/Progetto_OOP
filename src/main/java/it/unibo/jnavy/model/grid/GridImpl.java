@@ -102,14 +102,8 @@ public class GridImpl implements Grid {
     public boolean repair(Position p) {
         return getCell(p).map(c -> {
             if (c.isOccupied() && c.isHit()) {
-
-                Optional<Ship> shipOpt = c.getShip();
-
-                if (shipOpt.isPresent() && shipOpt.get().repair()) {
-                    c.repair();
-                    return true;
+                    return c.repair();
                 }
-            }
             return false;
         }).orElse(false);
     }

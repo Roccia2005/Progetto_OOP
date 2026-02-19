@@ -34,9 +34,7 @@ public class CellImpl implements Cell{
             return HitType.MISS;
         } else {
             this.ship.hit();
-            this.status = HitType.HIT;
-
-            return this.ship.isSunk() ? HitType.SUNK : HitType.HIT;
+            return this.status = this.ship.isSunk() ? HitType.SUNK : HitType.HIT;
         }
     }
 
@@ -79,8 +77,10 @@ public class CellImpl implements Cell{
     @Override
     public boolean repair() {
         if (this.ship != null && !this.ship.isSunk()) {
-            this.status = null;
-            return true;
+            if ( this.ship.repair()) {
+                this.status = null;
+                return true;
+            }
         }
         return false;
     }
