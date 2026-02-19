@@ -41,7 +41,6 @@ public class CellImpl implements Cell{
     @Override
     public void setShip(Ship ship) {
         this.ship = ship;
-        if(ship == null) {this.status =  null;}
     }
 
     @Override
