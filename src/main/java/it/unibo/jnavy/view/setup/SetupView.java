@@ -20,6 +20,7 @@ public class SetupView extends JPanel {
     private static final Color COLOR_WATER = new Color(41, 86, 246);
     private static final Color COLOR_SHIP = Color.BLACK;
     private static final Color COLOR_BORDER = Color.GRAY;
+    private static final Color COLOR_BORDER_WATER = new Color(0, 80, 120);
     private static final int FONT_DEFAULT_SIZE = 22;
     private static final int FONT_ICON_SIZE = 120;
     private static final int BORDER_THICKNESS = 2;
@@ -188,7 +189,7 @@ public class SetupView extends JPanel {
                     button.setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, COLOR_BORDER));
                 } else {
                     button.setBackground(COLOR_WATER);
-                    button.setBorder(BorderFactory.createLineBorder(new Color(0, 80, 120), 1));
+                    button.setBorder(BorderFactory.createLineBorder(COLOR_BORDER_WATER, 1));
                 }
             }
         }
