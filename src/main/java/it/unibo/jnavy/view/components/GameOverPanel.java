@@ -46,8 +46,10 @@ public class GameOverPanel extends JPanel {
         gbc.gridx = 0;
         gbc.anchor = GridBagConstraints.CENTER;
 
+        int bottomMargin = victory ? 40 : 15;
+
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 40, 0);
+        gbc.insets = new Insets(0, 0, bottomMargin, 0);
         add(imageLabel, gbc);
 
         gbc.gridy = 1;
