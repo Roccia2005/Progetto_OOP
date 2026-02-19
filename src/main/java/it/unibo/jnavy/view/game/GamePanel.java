@@ -218,6 +218,14 @@ public class GamePanel extends JPanel {
     }
 
     public void showEndGameScreen(boolean isVictory) {
+        if (this.ambientSound != null) {
+            this.ambientSound.stop();
+        }
+        if (isVictory) {
+            playOneShotSound("/sounds/win.wav");
+        } else {
+            playOneShotSound("/sounds/gameover.wav");
+        }
         this.gameOverPanel.showResult(isVictory);
     }
 }
