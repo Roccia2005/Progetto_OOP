@@ -2,8 +2,8 @@ package it.unibo.jnavy.model.cell;
 
 import java.util.Optional;
 
-import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.ship.Ship;
+import it.unibo.jnavy.model.utilities.HitType;
 import it.unibo.jnavy.model.utilities.Position;
 
 /**
@@ -22,7 +22,7 @@ public class CellImpl implements Cell{
         this.status = null;
         this.isVisible = false;
     }
-    
+
     @Override
     public HitType receiveShot() {
         if (isHit()) {

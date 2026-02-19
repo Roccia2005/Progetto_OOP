@@ -1,10 +1,12 @@
-package it.unibo.jnavy.model;
+package it.unibo.jnavy.model.player;
 
 import java.util.List;
 
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.grid.Grid;
+import it.unibo.jnavy.model.observer.TurnObserver;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.utilities.ShotResult;
 
 /**
  * Defines the contract for a participant in the game.
@@ -50,7 +52,7 @@ public interface Player extends TurnObserver {
      * @return The {@link ShotResult} representing the list of generated shot outcomes.
      */
     List<ShotResult> createShot(Position target, Grid grid);
-    
+
     @Override
     default void processTurnEnd() {
     }

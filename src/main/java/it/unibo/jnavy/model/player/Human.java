@@ -1,4 +1,4 @@
-package it.unibo.jnavy.model;
+package it.unibo.jnavy.model.player;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import it.unibo.jnavy.model.captains.Captain;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.grid.GridImpl;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.utilities.ShotResult;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
 /**
@@ -47,7 +48,7 @@ public class Human implements Player {
 
     /**
      * Attempts to activate the Captain's special ability.
-     * 
+     *
      * This method acts as a bridge between the User Interface and the Captain's internal logic.
      *
      * @param target The target {@link Position} for the ability.

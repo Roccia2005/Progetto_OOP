@@ -1,14 +1,14 @@
 package it.unibo.jnavy.model.grid;
 
-import it.unibo.jnavy.model.HitType;
-import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.cell.CellImpl;
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.fleet.FleetImpl;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
+import it.unibo.jnavy.model.utilities.HitType;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.utilities.ShotResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -167,8 +167,8 @@ public class GridImpl implements Grid {
 
     @Override
     public void removeShip(Ship ship) {
-        Arrays.stream(this.cells)              
-          .flatMap(Arrays::stream)         
+        Arrays.stream(this.cells)
+          .flatMap(Arrays::stream)
           .filter(c -> c.isOccupied() && c.getShip().map(s -> s.equals(ship)).orElse(false))
           .forEach(c -> c.setShip(null));
 

@@ -1,6 +1,6 @@
 package it.unibo.jnavy.controller;
 
-import it.unibo.jnavy.model.Player;
+import it.unibo.jnavy.model.player.Player;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 

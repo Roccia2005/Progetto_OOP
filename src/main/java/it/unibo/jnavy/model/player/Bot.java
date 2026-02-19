@@ -1,4 +1,4 @@
-package it.unibo.jnavy.model;
+package it.unibo.jnavy.model.player;
 
 import java.util.List;
 
@@ -8,7 +8,9 @@ import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.grid.GridImpl;
 import it.unibo.jnavy.model.shots.HitStrategy;
 import it.unibo.jnavy.model.shots.StandardShot;
+import it.unibo.jnavy.model.utilities.HitType;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.utilities.ShotResult;
 
 /**
  * Represents a computer-controlled player (Bot) in the game.

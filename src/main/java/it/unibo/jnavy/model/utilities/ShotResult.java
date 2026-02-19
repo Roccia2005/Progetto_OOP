@@ -1,7 +1,6 @@
-package it.unibo.jnavy.model;
+package it.unibo.jnavy.model.utilities;
 
 import it.unibo.jnavy.model.ship.Ship;
-import it.unibo.jnavy.model.utilities.Position;
 
 import java.util.Optional;
 

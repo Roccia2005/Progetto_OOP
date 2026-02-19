@@ -2,14 +2,14 @@ package it.unibo.jnavy.controller;
 
 import java.util.*;
 
-import it.unibo.jnavy.model.Bot;
-import it.unibo.jnavy.model.Human;
-import it.unibo.jnavy.model.Player;
 import it.unibo.jnavy.model.bots.BotStrategy;
 import it.unibo.jnavy.model.captains.Captain;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.grid.Grid;
+import it.unibo.jnavy.model.player.Bot;
+import it.unibo.jnavy.model.player.Human;
+import it.unibo.jnavy.model.player.Player;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
