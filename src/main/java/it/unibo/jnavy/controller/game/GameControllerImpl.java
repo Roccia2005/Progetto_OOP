@@ -1,7 +1,5 @@
 package it.unibo.jnavy.controller.game;
 
-import java.util.function.Consumer;
-
 import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;

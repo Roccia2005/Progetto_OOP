@@ -14,17 +14,16 @@ public class GridPanel extends JPanel {
 
     private static final Color MENUBLUE = new Color(41, 86, 246);
     private static final Color BACKGROUND_COLOR = new Color(20, 20, 30);
-    //private final ImageIcon fogIcon;
     private final int size;
     private final Map<Position, JButton> buttons = new HashMap<>();
 
     public GridPanel(int size, String title, Consumer<Position> onClick) {
         super(new BorderLayout(0, 10));
         this.size = size;
-        //this.fogIcon = new ImageIcon(getClass().getResource("/images/fog.png"));
 
         JLabel label = new JLabel(title, SwingConstants.CENTER);
         label.setFont(new Font("SansSerif", Font.BOLD, 16));
+        label.setForeground(Color.WHITE);
         label.setBackground(BACKGROUND_COLOR);
         this.add(label, BorderLayout.NORTH);
 
@@ -64,8 +63,6 @@ public class GridPanel extends JPanel {
 
                 switch (state) {
                     case FOG:
-                        //button.setIcon(fogIcon);
-                        //button.setBackground(null);
                         button.setBackground(Color.LIGHT_GRAY);
                         button.setEnabled(true);
                         break;

@@ -5,21 +5,32 @@ import javax.swing.Timer;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Manages the periodic playback of an ambient audio file.
+ * 
+ * This class uses a {@link javax.swing.Timer} to repeatedly trigger a sound 
+ * at a specified interval. It is designed to handle background noises 
+ * or environmental effects.
+ */
 public class AmbientSoundManager {
 
     private Clip clip;
     private Timer loopTimer;
 
     /**
-     * @param soundFile Il percorso del file (es. "/sounds/sonar.wav")
-     * @param intervalMs Ogni quanti millisecondi riprodurre il suono
+     * Constructs a new manager for the specified sound file.
+     *
+     * The audio file is loaded into memory upon instantiation to ensure 
+     * zero latency during playback. Ensure the file is in a supported 
+     * format.
+     *
+     * @param soundFile  the relative path to the audio resource file.
+     * @param intervalMs the time interval, in milliseconds, between each playback trigger.
      */
     public AmbientSoundManager(String soundFile, int intervalMs) {
         try {
-            // 1. Carica il file audio in memoria (Clip)
             URL url = getClass().getResource(soundFile);
             if (url == null) {
-                System.err.println("Audio file not found: " + soundFile);
                 return;
             }
             
@@ -27,7 +38,6 @@ public class AmbientSoundManager {
             this.clip = AudioSystem.getClip();
             this.clip.open(audioIn);
 
-            // 2. Imposta il Timer per ripetere l'azione
             this.loopTimer = new Timer(intervalMs, e -> playSound());
             this.loopTimer.setRepeats(true);
 
@@ -36,23 +46,10 @@ public class AmbientSoundManager {
         }
     }
 
-    private void playSound() {
-        if (clip != null) {
-            // Ferma se stava ancora suonando (opzionale, per suoni brevi meglio non farlo)
-            if (clip.isRunning()) {
-                clip.stop();
-            }
-            // Riavvolgi il nastro all'inizio
-            clip.setFramePosition(0);
-            // Spara l'audio
-            clip.start();
-        }
-    }
-
     public void start() {
         if (loopTimer != null) {
-            playSound(); // Suona subito la prima volta
-            loopTimer.start(); // E poi ogni tot secondi
+            playSound();
+            loopTimer.start();
         }
     }
 
@@ -62,6 +59,16 @@ public class AmbientSoundManager {
         }
         if (clip != null && clip.isRunning()) {
             clip.stop();
+        }
+    }
+
+    private void playSound() {
+        if (clip != null) {
+            if (clip.isRunning()) {
+                clip.stop();
+            }
+            clip.setFramePosition(0);
+            clip.start();
         }
     }
 }

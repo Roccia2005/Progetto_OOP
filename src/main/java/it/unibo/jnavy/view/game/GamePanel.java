@@ -34,8 +34,7 @@ public class GamePanel extends JPanel {
     private final CaptainAbilityButton captainButton;
     private final CaptainNamePanel captainNamePanel;
     private final GameController controller;
-
-    private AmbientSoundManager ambientSound;
+    private final AmbientSoundManager ambientSound;
 
     private final JLayeredPane layeredPane;
     private final JPanel mainContent;
@@ -45,8 +44,10 @@ public class GamePanel extends JPanel {
 
     public GamePanel(GameController controller, Runnable onMenu) {
         this.controller = controller;
+        this.setBackground(BACKGROUND_COLOR);
         this.setLayout(new BorderLayout());
 
+        this.ambientSound = new AmbientSoundManager("/sounds/game_soundtrack.wav", 144000);
         this.layeredPane = new JLayeredPane();
         this.add(layeredPane, BorderLayout.CENTER);
 
@@ -82,10 +83,11 @@ public class GamePanel extends JPanel {
 
         JLabel titleLabel = new JLabel("J-NAVY", SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        titleLabel.setForeground(Color.WHITE);
 
         this.statusLabel = new JLabel("Your Turn", SwingConstants.CENTER);
         this.statusLabel.setFont(new Font("SansSerif", Font.ITALIC, 16));
-        this.statusLabel.setForeground(Color.DARK_GRAY);
+        this.statusLabel.setForeground(Color.WHITE);
 
         headerPanel.add(titleLabel);
         headerPanel.add(this.statusLabel);
@@ -132,7 +134,7 @@ public class GamePanel extends JPanel {
 
                                             this.inputBlocked = false;
                                             this.statusLabel.setText("Your Turn");
-                                            this.statusLabel.setForeground(Color.DARK_GRAY);
+                                            this.statusLabel.setForeground(Color.WHITE);
                                         });
 
                                         botTimer.setRepeats(false);
@@ -151,7 +153,6 @@ public class GamePanel extends JPanel {
         gridsContainer.add(this.botGridPanel);
         gridsContainer.setBackground(BACKGROUND_COLOR);
 
-        this.ambientSound = new AmbientSoundManager("/sounds/ship_horn.wav", 15000);
         this.ambientSound.start();
         this.mainContent.add(headerPanel, BorderLayout.NORTH);
         this.mainContent.add(gridsContainer, BorderLayout.CENTER);
@@ -180,11 +181,6 @@ public class GamePanel extends JPanel {
                 layeredPane.revalidate();
             }
         });
-        this.updateDashboard();
-    }
-
-    private void handlePlayerShot(Position p) {
-        controller.processShot(p);
         this.updateDashboard();
     }
 
