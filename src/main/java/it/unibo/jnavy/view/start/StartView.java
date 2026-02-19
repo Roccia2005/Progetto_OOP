@@ -1,8 +1,9 @@
 package it.unibo.jnavy.view.start;
 
-import javax.sound.sampled.*;
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+
+import it.unibo.jnavy.view.AmbientSoundManager;
 
 /**
  * Game start screen.

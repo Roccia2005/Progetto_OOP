@@ -59,10 +59,6 @@ public interface Cell {
     boolean isVisible();
 
     /**
-     * Repair the cell if the ship is not sunk
-     * @return true if the cell can be repaired, false otherwise
-     */
-    /**
      * Resets the cell's hit status if the ship occupying it is not sunk.
      * This allows the cell to be targeted again or to be considered "repaired".
      *  @return true if the status was successfully reset,

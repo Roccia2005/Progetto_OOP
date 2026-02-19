@@ -12,7 +12,7 @@ import it.unibo.jnavy.model.utilities.Position;
 public class CellImpl implements Cell{
 
     private final Position position;
-    private Ship ship;
+        private Ship ship;
     private HitType status;
     private boolean isVisible;
 
@@ -34,16 +34,13 @@ public class CellImpl implements Cell{
             return HitType.MISS;
         } else {
             this.ship.hit();
-            this.status = HitType.HIT;
-
-            return this.ship.isSunk() ? HitType.SUNK : HitType.HIT;
+            return this.status = this.ship.isSunk() ? HitType.SUNK : HitType.HIT;
         }
     }
 
     @Override
     public void setShip(Ship ship) {
         this.ship = ship;
-        if(ship == null) {this.status =  null;}
     }
 
     @Override
@@ -79,10 +76,11 @@ public class CellImpl implements Cell{
     @Override
     public boolean repair() {
         if (this.ship != null && !this.ship.isSunk()) {
-            this.status = null;
-            return true;
+            if ( this.ship.repair()) {
+                this.status = null;
+                return true;
+            }
         }
         return false;
     }
-
 }

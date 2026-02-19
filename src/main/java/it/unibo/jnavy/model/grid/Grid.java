@@ -86,7 +86,6 @@ public interface Grid {
      */
     boolean isPositionValid(Position p);
 
-
     /**
      * Removes a specific ship from the grid.
      * @param ship the ship to remove.

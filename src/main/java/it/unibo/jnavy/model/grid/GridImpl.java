@@ -101,15 +101,10 @@ public class GridImpl implements Grid {
     @Override
     public boolean repair(Position p) {
         return getCell(p).map(c -> {
-            boolean result = false;
-
-            if (c.isOccupied() && c.isHit() && !c.getShip().map(Ship::isSunk).orElse(false)) {
-                c.repair();
-                Ship s = c.getShip().get();
-                s.setHealth(s.getHealth() + 1);
-                result = true;
-            }
-            return result;
+            if (c.isOccupied() && c.isHit()) {
+                    return c.repair();
+                }
+            return false;
         }).orElse(false);
     }
 

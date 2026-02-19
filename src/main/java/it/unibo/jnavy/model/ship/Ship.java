@@ -8,7 +8,8 @@ public interface Ship {
 
     /**
      * Registers a hit on the ship, decreasing its health.
-     * @return true if the ship is sunk after this hit.
+     * * @return true if the ship is sunk after this hit.
+     * @throws IllegalStateException if the ship is already sunk.
      */
     boolean hit();
 
@@ -31,8 +32,8 @@ public interface Ship {
     int getHealth();
 
     /**
-     * set the current health of the ship.
-     * @param value the new health of the ship
+     * Repairs the ship by increasing its health by 1, up to its maximum size.
+     * @return true if the ship was actually repaired.
      */
-    void setHealth(int value);
+    boolean repair();
 }

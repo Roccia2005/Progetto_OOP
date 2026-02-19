@@ -12,7 +12,7 @@ import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.model.weather.WeatherManager;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
-public class GameControllerImpl implements GameController{
+public class GameControllerImpl implements GameController {
 
     private final Human human;
     private final Bot bot;
@@ -150,5 +150,15 @@ public class GameControllerImpl implements GameController{
     @Override
     public String getPlayerCaptainName() {
         return this.human.getCaptainName();
+    }
+
+    @Override
+    public boolean isBotDefeated() {
+        return this.bot.getFleet().isDefeated();
+    }
+
+    @Override
+    public boolean captainAbilityTargetsEnemyGrid() {
+        return this.human.captainAbilityTargetsEnemyGrid();
     }
 }

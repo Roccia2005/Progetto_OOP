@@ -30,7 +30,7 @@ public class SetupView extends JPanel {
     private JLabel infoLabel;
     private JButton rotateButton;
     private JButton nextShipButton;
-    private JButton randomBotton;
+    private JButton randomButton;
     private JButton clearButton;
 
 
@@ -115,8 +115,8 @@ public class SetupView extends JPanel {
             }
         });
 
-        randomBotton = createBigButton("Randomize", FONT_DEFAULT_SIZE);
-        randomBotton.addActionListener(e -> {
+        randomButton = createBigButton("Randomize", FONT_DEFAULT_SIZE);
+        randomButton.addActionListener(e -> {
             controller.randomizeHumanShips();
             updateView();
         });
@@ -130,7 +130,7 @@ public class SetupView extends JPanel {
 
         buttonsContainer.add(rotateButton);
         buttonsContainer.add(nextShipButton);
-        buttonsContainer.add(randomBotton);
+        buttonsContainer.add(randomButton);
         buttonsContainer.add(clearButton);
 
         sidePanel.add(buttonsContainer, BorderLayout.CENTER);
@@ -141,7 +141,7 @@ public class SetupView extends JPanel {
 
     private void startGame() {
         rotateButton.setEnabled(false);
-        randomBotton.setEnabled(false);
+        randomButton.setEnabled(false);
         clearButton.setEnabled(false);
         nextShipButton.setEnabled(false);
 
@@ -199,7 +199,7 @@ public class SetupView extends JPanel {
             nextShipButton.setText("Start Game!");
 
             rotateButton.setEnabled(false);
-            randomBotton.setEnabled(false);
+            randomButton.setEnabled(false);
             clearButton.setEnabled(true);
         } else {
             infoLabel.setText("Size: " + controller.getNextShipSize());
@@ -208,7 +208,7 @@ public class SetupView extends JPanel {
             nextShipButton.setForeground(THEME_TEXT);
 
             rotateButton.setEnabled(true);
-            randomBotton.setEnabled(true);
+            randomButton.setEnabled(true);
             clearButton.setEnabled(true);
         }
         this.repaint();
