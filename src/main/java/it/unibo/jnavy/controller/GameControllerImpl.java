@@ -1,5 +1,7 @@
 package it.unibo.jnavy.controller;
 
+import java.util.function.Consumer;
+
 import it.unibo.jnavy.model.Bot;
 import it.unibo.jnavy.model.Human;
 import it.unibo.jnavy.model.Player;
@@ -16,16 +18,24 @@ public class GameControllerImpl implements GameController{
     private final Human human;
     private final Bot bot;
     private final WeatherManager weather;
+    private final Consumer<Boolean> gameOver;
     private Player currentPlayer;
     private int turnCounter = 0;
 
-    public GameControllerImpl(Human player, Bot bot) {
+    public GameControllerImpl(Human player, Bot bot, Consumer<Boolean> gameOver) {
         this.human = player;
         this.bot = bot;
         this.currentPlayer = this.human;
         this.weather = WeatherManagerImpl.getInstance();
+        this.gameOver = gameOver;
     }
 
+    private void checkWinGUI() {
+        if (isGameOver() && this.gameOver != null) {
+            boolean isHumanWinner = this.bot.getFleet().isDefeated();
+            this.gameOver.accept(isHumanWinner);
+        }
+    }
 
     @Override
     public int getGridSize() {
@@ -44,6 +54,7 @@ public class GameControllerImpl implements GameController{
         }
         this.human.createShot(p, this.bot.getGrid());
         endTurn();
+        checkWinGUI();
     }
 
     @Override
@@ -58,6 +69,7 @@ public class GameControllerImpl implements GameController{
             if (this.human.doescaptainAbilityConsumeTurn()) {
                 endTurn();
             }
+            checkWinGUI();
             return true;
         }
         return false;
@@ -110,16 +122,16 @@ public class GameControllerImpl implements GameController{
             }
         } else {
             if (cell.isVisible() || (!isEnemyGrid && cell.isOccupied())) {
-                
+
                 if (cell.isOccupied()) {
                     if (isEnemyGrid && cell.isVisible()) {
-                        return CellCondition.REVEALED_SHIP; 
+                        return CellCondition.REVEALED_SHIP;
                     }
                     return CellCondition.SHIP;
                 } else {
-                    return CellCondition.REVEALED_WATER; 
+                    return CellCondition.REVEALED_WATER;
                 }
-                
+
             } else {
                 return CellCondition.FOG;
             }
@@ -139,6 +151,7 @@ public class GameControllerImpl implements GameController{
         ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
         this.bot.receiveFeedback(result.position(), result.hitType());
         endTurn();
+        checkWinGUI();
     }
 
     @Override

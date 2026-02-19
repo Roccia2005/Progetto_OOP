@@ -34,7 +34,7 @@ public class GamePanel extends JPanel {
 
         JPanel gridsContainer = new JPanel(new GridLayout(1, 2, 40, 0));
         gridsContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
+
         JPanel dashboardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 10));
 
         this.weatherWidget = new WeatherWidget();
@@ -53,12 +53,12 @@ public class GamePanel extends JPanel {
         dashboardPanel.add(this.captainButton);
         dashboardPanel.add(this.captainNamePanel);
 
-        JPanel headerPanel = new JPanel(new GridLayout(2, 1)); 
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0)); 
+        JPanel headerPanel = new JPanel(new GridLayout(2, 1));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
         JLabel titleLabel = new JLabel("J-NAVY", SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        
+
         this.statusLabel = new JLabel("Your Turn", SwingConstants.CENTER);
         this.statusLabel.setFont(new Font("SansSerif", Font.ITALIC, 16));
         this.statusLabel.setForeground(Color.DARK_GRAY);
@@ -77,7 +77,7 @@ public class GamePanel extends JPanel {
                                         this.updateDashboard();
                                     }
                                 });
-        this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET, 
+        this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET,
                                 (Position p) -> {
                                     if (this.inputBlocked || !controller.isHumanTurn()) {
                                         return;
@@ -88,29 +88,29 @@ public class GamePanel extends JPanel {
                                         this.captainButton.reset();
                                     } else {
                                         if (controller.getBotCellState(p).isAlreadyHit()) {
-                                            return; 
+                                            return;
                                         }
                                         controller.processShot(p);
                                     }
-                                    
+
                                     this.updateDashboard();
 
                                     if (!controller.isHumanTurn() && !controller.isGameOver()) {
-                                        
+
                                         this.inputBlocked = true;
                                         this.statusLabel.setText("Bot is thinking...");
                                         this.statusLabel.setForeground(Color.RED);
 
                                         Timer botTimer = new Timer(1000, e -> {
-                                            controller.playBotTurn(); 
+                                            controller.playBotTurn();
                                             this.updateDashboard();
-                                            
-                                            this.inputBlocked = false; 
+
+                                            this.inputBlocked = false;
                                             this.statusLabel.setText("Your Turn");
                                             this.statusLabel.setForeground(Color.DARK_GRAY);
                                         });
-                                        
-                                        botTimer.setRepeats(false); 
+
+                                        botTimer.setRepeats(false);
                                         botTimer.start();
                                     }
                                 });
