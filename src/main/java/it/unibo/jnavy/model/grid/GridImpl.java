@@ -80,6 +80,8 @@ public class GridImpl implements Grid {
         }
         var targetCell = cells[p.x()][p.y()];
 
+        if (targetCell.isHit()) return ShotResult.failure(p, HitType.INVALID);
+
         HitType cellResult = targetCell.receiveShot();
         Ship ship = targetCell.getShip().orElse(null);
 
