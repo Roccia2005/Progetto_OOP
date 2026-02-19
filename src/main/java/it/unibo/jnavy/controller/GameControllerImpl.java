@@ -1,5 +1,7 @@
 package it.unibo.jnavy.controller;
 
+import java.util.function.Consumer;
+
 import it.unibo.jnavy.model.Bot;
 import it.unibo.jnavy.model.Human;
 import it.unibo.jnavy.model.Player;
@@ -25,7 +27,6 @@ public class GameControllerImpl implements GameController{
         this.currentPlayer = this.human;
         this.weather = WeatherManagerImpl.getInstance();
     }
-
 
     @Override
     public int getGridSize() {
@@ -110,16 +111,16 @@ public class GameControllerImpl implements GameController{
             }
         } else {
             if (cell.isVisible() || (!isEnemyGrid && cell.isOccupied())) {
-                
+
                 if (cell.isOccupied()) {
                     if (isEnemyGrid && cell.isVisible()) {
-                        return CellCondition.REVEALED_SHIP; 
+                        return CellCondition.REVEALED_SHIP;
                     }
                     return CellCondition.SHIP;
                 } else {
-                    return CellCondition.REVEALED_WATER; 
+                    return CellCondition.REVEALED_WATER;
                 }
-                
+
             } else {
                 return CellCondition.FOG;
             }

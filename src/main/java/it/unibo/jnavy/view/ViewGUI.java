@@ -15,11 +15,12 @@ import it.unibo.jnavy.view.BotSelectionPanel.BotLevel;
 import it.unibo.jnavy.view.CapSelectionPanel.CaptainAbility;
 
 public class ViewGUI extends JFrame implements View {
-
+    private static final String START_CARD = "START";
     private static final String BOT_CARD = "BOT_SELECTION";
     private static final String CAPTAIN_CARD = "CAPTAIN_SELECTION";
     private static final String SETUP_CARD = "SETUP";
     private static final String GAME_CARD = "GAME";
+
     private final CardLayout cardLayout;
     private final JPanel mainPanel;
     private BotStrategy selectedBotStrategy;
@@ -37,13 +38,22 @@ public class ViewGUI extends JFrame implements View {
         this.mainPanel = new JPanel(this.cardLayout);
         this.add(this.mainPanel);
 
+        initStartPhase();
         initSelectionPhase();
-        this.cardLayout.show(this.mainPanel, BOT_CARD);
+
+        this.cardLayout.show(this.mainPanel, START_CARD);
     }
 
     @Override
     public void start() {
         this.setVisible(true);
+    }
+
+    private void initStartPhase() {
+        StartView startView = new StartView(() -> {
+            this.cardLayout.show(this.mainPanel, BOT_CARD);
+        });
+        this.mainPanel.add(startView, START_CARD);
     }
 
     private void initSelectionPhase() {
