@@ -1,5 +1,7 @@
 package it.unibo.jnavy.view.start;
 
+import it.unibo.jnavy.view.AmbientSoundManager;
+
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
