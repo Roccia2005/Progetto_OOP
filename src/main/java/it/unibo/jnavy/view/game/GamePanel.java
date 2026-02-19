@@ -17,6 +17,10 @@ import it.unibo.jnavy.view.components.captain.CaptainNamePanel;
 import it.unibo.jnavy.view.components.weather.WeatherNotificationOverlay;
 import it.unibo.jnavy.view.components.weather.WeatherWidget;
 import it.unibo.jnavy.view.components.grid.GridPanel;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.net.URL;
 
 public class GamePanel extends JPanel {
 
@@ -194,6 +198,22 @@ public class GamePanel extends JPanel {
 
         if (controller.isGameOver()) {
             gameOverPanel.showResult(controller.isBotDefeated());
+        }
+    }
+
+    private void playOneShotSound(String filePath) {
+        try {
+            URL soundUrl = getClass().getResource(filePath);
+            if (soundUrl != null) {
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundUrl);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioIn);
+                clip.start();
+            } else {
+                System.err.println("Sound file not found: " + filePath);
+            }
+        } catch (Exception e) {
+            System.err.println("Error playing sound: " + e.getMessage());
         }
     }
 
