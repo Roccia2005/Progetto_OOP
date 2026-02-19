@@ -7,25 +7,9 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.net.URL;
 
+import static it.unibo.jnavy.view.utilities.ViewConstants.*;
+
 public class BotSelectionPanel extends JPanel {
-    private static final Color MENUBLUE = new Color(41, 86, 246);
-    private static final Color BACKGROUND_COLOR = new Color(20, 20, 30);
-    private static final Color FOREGROUND_COLOR = Color.WHITE;
-    private static final int SETWIDTH = 1000;
-    private static final int SETHEIGHT = 700;
-    private static final int BORDER_THICKNESS = 2;
-    private static final int IMAGE_SIZE = 140;
-    private static final int INSET_PADDING = 10;
-    private static final int FLOW_HGAP = 10;
-    private static final int FLOW_VGAP = 0;
-    private static final int DESC_WIDTH_DIVISOR = 3;
-    private static final int DESC_HEIGHT_DIVISOR = 12;
-    private static final int CONTROL_WIDTH_DIVISOR = 7;
-    private static final int CONTROL_HEIGHT_DIVISOR = 16;
-    private static final String FONT_FAMILY = "SansSerif";
-    private static final int FONT_SIZE_TITLE = 36;
-    private static final int FONT_SIZE_DESC = 18;
-    private static final int FONT_SIZE_CTRL = 14;
 
     public enum BotLevel {
         BEGINNER("Beginner", "He shoots randomly at your grid, as if blindfolded", "images/beginner.png"),
