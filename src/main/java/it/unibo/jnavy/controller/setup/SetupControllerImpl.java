@@ -114,7 +114,7 @@ public class SetupControllerImpl implements SetupController {
             return CellState.water();
         }
         Ship ship = cellOpt.get().getShip().get();
-        int shipId = ship.hashCode(); // or a proper ID
+        int shipId = ship.hashCode();
         return new CellState(
                 true,
                 shipId,
@@ -164,7 +164,7 @@ public class SetupControllerImpl implements SetupController {
 
     /**
      * Internal helper to place a list of ships randomly on a player's grid.
-     * * @param player The player target.
+     * @param player The player target.
      * @param shipsToInsert The list of ship sizes to place.
      */
     private void placeFleetRandomly(final Player player, final List<Integer> shipsToInsert) {
@@ -172,8 +172,8 @@ public class SetupControllerImpl implements SetupController {
 
         for (final int size : shipsToInsert) {
             boolean placed = false;
+            final Ship ship = new ShipImpl(size);
             while (!placed) {
-                final Ship ship = new ShipImpl(size);
                 final Position pos = new Position(random.nextInt(grid.getSize()), random.nextInt(grid.getSize()));
 
                 final CardinalDirection[] directions = CardinalDirection.values();
