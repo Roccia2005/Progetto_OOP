@@ -99,15 +99,22 @@ public class ViewGUI extends JFrame implements View {
     }
 
     private void startGamePhase(final SetupController completedSetup) {
-        var humanPlayer = (Human)completedSetup.getHumanPlayer();
-        var botPlayer = (Bot)completedSetup.getBotPlayer();
+        var humanPlayer = (Human) completedSetup.getHumanPlayer();
+        var botPlayer = (Bot) completedSetup.getBotPlayer();
 
         if (isSniperSelected) {
             botPlayer.setStrategy(new SniperBot(humanPlayer.getGrid()));
         }
 
         GameController gameController = new GameControllerImpl(humanPlayer, botPlayer);
-        GamePanel gamePanel = new GamePanel(gameController);
+
+        GamePanel gamePanel = new GamePanel(gameController, () -> {
+            this.selectedBotStrategy = null;
+            this.selectedCaptain = null;
+            this.isSniperSelected = false;
+            this.cardLayout.show(this.mainPanel, START_CARD);
+        });
+
         this.mainPanel.add(gamePanel, GAME_CARD);
         this.cardLayout.show(this.mainPanel, GAME_CARD);
     }

@@ -31,4 +31,6 @@ public interface GameController {
     String getBotDifficulty();
 
     String getPlayerCaptainName();
+
+    boolean isBotDefeated();
 }
