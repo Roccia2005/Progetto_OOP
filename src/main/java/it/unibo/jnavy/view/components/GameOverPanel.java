@@ -45,7 +45,7 @@ public class GameOverPanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
 
         gbc.gridy = 0;
-        add(Box.createVerticalStrut(250), gbc);
+        add(Box.createVerticalStrut(230), gbc);
 
         gbc.gridy = 1;
         gbc.insets = new Insets(10, 0, 10, 0);
@@ -72,7 +72,7 @@ public class GameOverPanel extends JPanel {
             int targetH = (int) ((double)imgToDraw.getHeight(null) / imgToDraw.getWidth(null) * targetW);
 
             int x = (getWidth() - targetW) / 2;
-            int y = (getHeight() / 2) - targetH - 10;
+            int y = (getHeight() / 2) - targetH + 40;
 
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g2.drawImage(imgToDraw, x, y, targetW, targetH, this);
