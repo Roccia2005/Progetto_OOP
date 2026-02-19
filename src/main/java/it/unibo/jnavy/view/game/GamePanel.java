@@ -17,6 +17,10 @@ import it.unibo.jnavy.view.components.captain.CaptainNamePanel;
 import it.unibo.jnavy.view.components.weather.WeatherNotificationOverlay;
 import it.unibo.jnavy.view.components.weather.WeatherWidget;
 import it.unibo.jnavy.view.components.grid.GridPanel;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.net.URL;
 
 public class GamePanel extends JPanel {
 
@@ -35,6 +39,7 @@ public class GamePanel extends JPanel {
     private final CaptainNamePanel captainNamePanel;
     private final GameController controller;
     private final AmbientSoundManager ambientSound;
+    private boolean gameOverHandled = false;
 
     private final JLayeredPane layeredPane;
     private final JPanel mainContent;
@@ -137,11 +142,11 @@ public class GamePanel extends JPanel {
 
                                         botTimer.setRepeats(false);
                                         botTimer.start();
-                                    } else if (controller.isGameOver()) {
-                                        if (this.ambientSound != null) {
-                                            this.ambientSound.stop();
-                                        }
-                                    }
+//                                    } else if (controller.isGameOver()) {
+//                                        if (this.ambientSound != null) {
+//                                            this.ambientSound.stop();
+//                                        }
+                                   }
                                 });
 
         this.humanGridPanel.setBackground(BACKGROUND_COLOR);
@@ -192,12 +197,46 @@ public class GamePanel extends JPanel {
         WeatherCondition currentCondition = this.controller.getWeatherCondition();
         this.weatherWidget.updateWeather(currentCondition);
 
-        if (controller.isGameOver()) {
-            gameOverPanel.showResult(controller.isBotDefeated());
+        if (controller.isGameOver() && !this.gameOverHandled) {
+            this.gameOverHandled = true;
+
+            Timer delayTimer = new Timer(900, e -> {
+                this.showEndGameScreen(controller.isBotDefeated());
+            });
+            delayTimer.setRepeats(false); // Only trigger once!
+            delayTimer.start();
         }
     }
 
+    private void playOneShotSound(String filePath) {
+        new Thread(() -> {
+            try {
+                URL soundUrl = getClass().getResource(filePath);
+                if (soundUrl != null) {
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundUrl);
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+                    clip.start();
+                } else {
+                    System.err.println("SOUND ERROR: File not found -> " + filePath);
+                }
+            } catch (Exception e) {
+                System.err.println("SOUND ERROR: Format not supported -> " + e.getMessage());
+            }
+        }).start();
+    }
+
     public void showEndGameScreen(boolean isVictory) {
+        if (this.ambientSound != null) {
+            this.ambientSound.stop();
+        }
+
+        if (isVictory) {
+            playOneShotSound("/sounds/win.wav");
+        } else {
+            playOneShotSound("/sounds/gameover.wav");
+        }
+
         this.gameOverPanel.showResult(isVictory);
     }
 }
