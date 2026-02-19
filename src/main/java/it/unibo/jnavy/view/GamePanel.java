@@ -10,7 +10,7 @@ import it.unibo.jnavy.view.components.bot.BotDifficultyPanel;
 import it.unibo.jnavy.view.components.captain.CaptainAbilityButton;
 import it.unibo.jnavy.view.components.captain.CaptainNamePanel;
 import it.unibo.jnavy.view.components.weather.WeatherWidget;
-
+import it.unibo.jnavy.view.components.grid.AmbientSoundManager;
 import it.unibo.jnavy.view.components.grid.GridPanel;
 
 public class GamePanel extends JPanel {
@@ -27,6 +27,8 @@ public class GamePanel extends JPanel {
     private final CaptainAbilityButton captainButton;
     private final CaptainNamePanel captainNamePanel;
     private final GameController controller;
+
+    private AmbientSoundManager ambientSound;
 
     public GamePanel(GameController controller) {
         this.controller = controller;
@@ -112,6 +114,10 @@ public class GamePanel extends JPanel {
                                         
                                         botTimer.setRepeats(false); 
                                         botTimer.start();
+                                    } else if (controller.isGameOver()) {
+                                        if (this.ambientSound != null) {
+                                            this.ambientSound.stop();
+                                        }
                                     }
                                 });
 
@@ -122,6 +128,9 @@ public class GamePanel extends JPanel {
         this.add(headerPanel, BorderLayout.NORTH);
         this.add(gridsContainer, BorderLayout.CENTER);
         this.add(dashboardPanel, BorderLayout.SOUTH);
+
+        this.ambientSound = new AmbientSoundManager("/sounds/ship_horn.wav", 15000);
+        this.ambientSound.start();
     }
 
     private void updateDashboard() {
