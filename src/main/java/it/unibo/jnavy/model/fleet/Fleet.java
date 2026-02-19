@@ -41,7 +41,7 @@ public interface Fleet {
 
     /**
      * Checks if the fleet composition matches the game rules:
-     * 2x size 2, 1x size 3, 1x size 4, 1x size 5.
+     * 1x size 2, 2x size 3, 1x size 4, 1x size 5.
      * @return true if the fleet is complete and valid.
      */
     boolean isTopologyValid();
