@@ -34,7 +34,7 @@ public class FleetImpl implements Fleet {
 
     @Override
     public boolean isDefeated() {
-        return this.ships.stream().allMatch(Ship::isSunk);
+        return !this.ships.isEmpty() && this.ships.stream().allMatch(Ship::isSunk);
     }
 
     @Override
