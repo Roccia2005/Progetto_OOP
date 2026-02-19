@@ -27,24 +27,17 @@ public class ProBot extends AbstractBotStrategy{
     @Override
     public Position selectTarget(final Grid enemyGrid) {
 
-        Position nextTarget = null;
-
         switch (currentState) {
-            case HUNTING:
-                nextTarget = handleHunting(enemyGrid);
-            break;
-
             case SEEKING:
-                nextTarget = handleSeeking(enemyGrid);
-            break;
+                return handleSeeking(enemyGrid);
 
             case DESTROYING:
-                nextTarget = handleDestroying(enemyGrid);
-            break;
-        }
+                return handleDestroying(enemyGrid);
 
-        this.lastTargetPosition = nextTarget;
-        return nextTarget;
+            case HUNTING:
+                default:
+                    return handleHunting(enemyGrid);
+        }
     }
 
     private Position handleHunting(final Grid enemyGrid) {
