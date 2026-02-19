@@ -22,7 +22,7 @@ public class Gunner extends AbstractCaptain{
     @Override
     public boolean useAbility(Grid grid, Position p) {
         if (this.isAbilityRecharged() && grid.isPositionValid(p)) {
-            HitStrategy areaShot = new AreaShot();
+            HitStrategy areaShot = new AreaShot(true);
             areaShot.execute(p, grid);
             this.resetCooldown();
             return true;
