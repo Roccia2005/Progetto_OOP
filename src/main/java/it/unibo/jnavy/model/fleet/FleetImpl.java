@@ -37,13 +37,6 @@ public class FleetImpl implements Fleet {
         return this.ships.stream().allMatch(Ship::isSunk);
     }
 
-    //per adesso non lo implementiamo
-    @Override
-    public int getShipsAlive() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getShipsAlive'");
-    }
-
     @Override
     public List<Ship> getShips() {
         return new ArrayList<>(this.ships);
