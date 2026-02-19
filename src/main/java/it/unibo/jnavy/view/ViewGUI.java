@@ -55,9 +55,7 @@ public class ViewGUI extends JFrame implements View {
     }
 
     private void initStartPhase() {
-        StartView startView = new StartView(() -> {
-            this.cardLayout.show(this.mainPanel, BOT_CARD);
-        });
+        StartView startView = new StartView(() -> this.cardLayout.show(this.mainPanel, BOT_CARD));
         this.mainPanel.add(startView, START_CARD);
     }
 
@@ -90,10 +88,9 @@ public class ViewGUI extends JFrame implements View {
 
     private void startSetupPhase() {
         SetupController setupController = new SetupControllerImpl(this.selectedCaptain, this.selectedBotStrategy);
-        SetupView setupView = new SetupView(setupController,
-                () -> {
-                    startGamePhase(setupController);
-                },
+        SetupView setupView = new SetupView(
+                setupController,
+                () -> startGamePhase(setupController),
                 () -> {
                     this.selectedCaptain = null;
                     this.cardLayout.show(this.mainPanel, CAPTAIN_CARD);
