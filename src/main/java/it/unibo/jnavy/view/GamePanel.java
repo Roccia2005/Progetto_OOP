@@ -18,6 +18,8 @@ public class GamePanel extends JPanel {
     private static final String HUMAN_FLEET = "My Fleet";
     private static final String BOT_FLEET = "Enemy Fleet";
 
+    private static final Color BACKGROUND_COLOR = new Color(20, 20, 30);
+
     private boolean inputBlocked = false;
     private final JLabel statusLabel;
     private final GridPanel humanGridPanel;
@@ -52,6 +54,7 @@ public class GamePanel extends JPanel {
         dashboardPanel.add(this.weatherWidget);
         dashboardPanel.add(this.captainButton);
         dashboardPanel.add(this.captainNamePanel);
+        dashboardPanel.setBackground(BACKGROUND_COLOR);
 
         JPanel headerPanel = new JPanel(new GridLayout(2, 1));
         headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
@@ -65,6 +68,7 @@ public class GamePanel extends JPanel {
 
         headerPanel.add(titleLabel);
         headerPanel.add(this.statusLabel);
+        headerPanel.setBackground(BACKGROUND_COLOR);
 
         this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET,
                                 (Position p) -> {
@@ -115,9 +119,12 @@ public class GamePanel extends JPanel {
                                     }
                                 });
 
+        this.humanGridPanel.setBackground(BACKGROUND_COLOR);
+        this.botGridPanel.setBackground(BACKGROUND_COLOR);
         this.updateDashboard();
         gridsContainer.add(this.humanGridPanel);
         gridsContainer.add(this.botGridPanel);
+        gridsContainer.setBackground(BACKGROUND_COLOR);
 
         this.add(headerPanel, BorderLayout.NORTH);
         this.add(gridsContainer, BorderLayout.CENTER);

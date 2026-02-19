@@ -13,6 +13,7 @@ import it.unibo.jnavy.model.utilities.Position;
 public class GridPanel extends JPanel {
 
     private static final Color MENUBLUE = new Color(41, 86, 246);
+    private static final Color BACKGROUND_COLOR = new Color(20, 20, 30);
     //private final ImageIcon fogIcon;
     private final int size;
     private final Map<Position, JButton> buttons = new HashMap<>();
@@ -24,6 +25,7 @@ public class GridPanel extends JPanel {
 
         JLabel label = new JLabel(title, SwingConstants.CENTER);
         label.setFont(new Font("SansSerif", Font.BOLD, 16));
+        label.setBackground(BACKGROUND_COLOR);
         this.add(label, BorderLayout.NORTH);
 
         JPanel grid = new JPanel(new GridLayout(this.size, this.size, 2, 2));
@@ -52,18 +54,18 @@ public class GridPanel extends JPanel {
     public void refresh(Function<Position, CellCondition> stateProvider) {
         for (int row = 0; row < this.size; row++) {
             for (int col = 0; col < this.size; col++) {
-                
+
                 Position pos = new Position(row, col);
                 JButton button = this.buttons.get(pos);
-                
+
                 CellCondition state = stateProvider.apply(pos);
-                
-                button.setText(""); 
-                
+
+                button.setText("");
+
                 switch (state) {
                     case FOG:
-                        //button.setIcon(fogIcon);       
-                        //button.setBackground(null);    
+                        //button.setIcon(fogIcon);
+                        //button.setBackground(null);
                         button.setBackground(Color.LIGHT_GRAY);
                         button.setEnabled(true);
                         break;
@@ -88,11 +90,11 @@ public class GridPanel extends JPanel {
                         button.setEnabled(false);
                         break;
                     case REVEALED_WATER:
-                        button.setBackground(Color.CYAN); 
-                        button.setEnabled(true);          
+                        button.setBackground(Color.CYAN);
+                        button.setEnabled(true);
                         break;
                     case REVEALED_SHIP:
-                        button.setBackground(Color.YELLOW); 
+                        button.setBackground(Color.YELLOW);
                         button.setEnabled(true);
                         break;
                 }
