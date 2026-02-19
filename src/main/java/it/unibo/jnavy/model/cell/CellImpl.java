@@ -82,4 +82,10 @@ public class CellImpl implements Cell{
     public Optional<Boolean> getScanResult() {
         return Optional.ofNullable(this.scanResult);
     }
+
+    
+    @Override
+    public boolean hisDetectable() {
+        return getShip().map(ship -> !ship.isSunk() && !isHit()).orElse(false);
+    }
 }

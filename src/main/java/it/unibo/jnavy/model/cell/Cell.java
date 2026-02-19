@@ -74,4 +74,13 @@ public interface Cell {
      * if this cell has never been scanned.
      */
     public Optional<Boolean> getScanResult();
+
+    /**
+     * Determines whether the cell contains an active and hidden entity 
+     * that can be detected by sensors.
+     * 
+     * @return true if the cell represents an undiscovered cell,
+     * false otherwise.
+     */
+    public boolean hisDetectable();
 }

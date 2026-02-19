@@ -35,7 +35,7 @@ public class SonarOfficer extends AbstractCaptain {
                     }
                 }
             }
-            boolean shipFound = targetCells.stream().anyMatch(Cell::isOccupied);
+            boolean shipFound = targetCells.stream().anyMatch(Cell::hisDetectable);
             targetCells.forEach(cell -> cell.setScanResult(shipFound));
             this.resetCooldown();
             return true;
