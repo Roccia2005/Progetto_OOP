@@ -39,6 +39,7 @@ public class GamePanel extends JPanel {
     private final CaptainNamePanel captainNamePanel;
     private final GameController controller;
     private final AmbientSoundManager ambientSound;
+    private boolean gameOverHandled = false;
 
     private final JLayeredPane layeredPane;
     private final JPanel mainContent;
@@ -141,11 +142,11 @@ public class GamePanel extends JPanel {
 
                                         botTimer.setRepeats(false);
                                         botTimer.start();
-                                    } else if (controller.isGameOver()) {
-                                        if (this.ambientSound != null) {
-                                            this.ambientSound.stop();
-                                        }
-                                    }
+//                                    } else if (controller.isGameOver()) {
+//                                        if (this.ambientSound != null) {
+//                                            this.ambientSound.stop();
+//                                        }
+                                   }
                                 });
 
         this.humanGridPanel.setBackground(BACKGROUND_COLOR);
@@ -196,8 +197,9 @@ public class GamePanel extends JPanel {
         WeatherCondition currentCondition = this.controller.getWeatherCondition();
         this.weatherWidget.updateWeather(currentCondition);
 
-        if (controller.isGameOver()) {
-            gameOverPanel.showResult(controller.isBotDefeated());
+        if (controller.isGameOver() && !this.gameOverHandled) {
+            this.gameOverHandled = true;
+            this.showEndGameScreen(controller.isBotDefeated());
         }
     }
 
@@ -208,20 +210,13 @@ public class GamePanel extends JPanel {
                 if (soundUrl != null) {
                     AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundUrl);
                     Clip clip = AudioSystem.getClip();
-
-                    clip.addLineListener(event -> {
-                        if (event.getType() == javax.sound.sampled.LineEvent.Type.STOP) {
-                            clip.close();
-                        }
-                    });
-
                     clip.open(audioIn);
                     clip.start();
                 } else {
-                    System.err.println("Sound file not found: " + filePath);
+                    System.err.println("SOUND ERROR: File not found -> " + filePath);
                 }
             } catch (Exception e) {
-                System.err.println("Error playing sound: " + e.getMessage());
+                System.err.println("SOUND ERROR: Format not supported -> " + e.getMessage());
             }
         }).start();
     }
@@ -230,11 +225,13 @@ public class GamePanel extends JPanel {
         if (this.ambientSound != null) {
             this.ambientSound.stop();
         }
+
         if (isVictory) {
             playOneShotSound("/sounds/win.wav");
         } else {
             playOneShotSound("/sounds/gameover.wav");
         }
+
         this.gameOverPanel.showResult(isVictory);
     }
 }
