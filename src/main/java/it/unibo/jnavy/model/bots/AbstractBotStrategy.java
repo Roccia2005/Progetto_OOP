@@ -19,7 +19,7 @@ public abstract class AbstractBotStrategy implements BotStrategy{
     }
 
     protected List<Position> getValidCellsList(Grid grid) {
-        return grid.getPositions();
+        return grid.getAvailableTargets();
     }
 
     protected int getRandomIndex(final List<Position> cellsList) {

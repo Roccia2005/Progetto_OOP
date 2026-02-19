@@ -34,14 +34,7 @@ public class FleetImpl implements Fleet {
 
     @Override
     public boolean isDefeated() {
-        return this.ships.stream().allMatch(Ship::isSunk);
-    }
-
-    //per adesso non lo implementiamo
-    @Override
-    public int getShipsAlive() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getShipsAlive'");
+        return !this.ships.isEmpty() && this.ships.stream().allMatch(Ship::isSunk);
     }
 
     @Override

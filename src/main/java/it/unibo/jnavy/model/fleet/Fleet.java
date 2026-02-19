@@ -6,8 +6,8 @@ import java.util.Map;
 import it.unibo.jnavy.model.ship.Ship;
 
 /**
- * Maneges a collection of ships for a player.
- * It provides methods to check the overall status of the players's fleet.
+ * Manages a collection of ships for a player.
+ * It provides methods to check the overall status of the players' fleet.
  */
 public interface Fleet {
 
@@ -34,12 +34,6 @@ public interface Fleet {
     boolean isDefeated();
 
     /**
-     * Counts the number of ships that are still afloat.
-     * @return the number of active ships.
-     */
-    int getShipsAlive(); 
-
-    /**
      * Returns a copy of the list of ships.
      * @return a new list containing the ships.
      */
@@ -47,7 +41,7 @@ public interface Fleet {
 
     /**
      * Checks if the fleet composition matches the game rules:
-     * 2x size 2, 1x size 3, 1x size 4, 1x size 5.
+     * 1x size 2, 2x size 3, 1x size 4, 1x size 5.
      * @return true if the fleet is complete and valid.
      */
     boolean isTopologyValid();
