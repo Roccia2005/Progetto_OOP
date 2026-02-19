@@ -7,7 +7,7 @@ import it.unibo.jnavy.model.ship.Ship;
 
 /**
  * Manages a collection of ships for a player.
- * It provides methods to check the overall status of the players's fleet.
+ * It provides methods to check the overall status of the players' fleet.
  */
 public interface Fleet {
 
