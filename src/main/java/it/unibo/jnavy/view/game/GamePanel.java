@@ -44,6 +44,7 @@ public class GamePanel extends JPanel {
 
     public GamePanel(GameController controller, Runnable onMenu) {
         this.controller = controller;
+        this.setBackground(BACKGROUND_COLOR);
         this.setLayout(new BorderLayout());
 
         this.ambientSound = new AmbientSoundManager("/sounds/game_soundtrack.wav", 144000);
