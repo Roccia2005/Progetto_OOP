@@ -200,7 +200,7 @@ public class CapSelectionPanel extends JPanel {
         URL imgUrl = getClass().getClassLoader().getResource(path);
         if (imgUrl != null) {
             ImageIcon originalIcon = new ImageIcon(imgUrl);
-            Image scaledImage = originalIcon.getImage().getScaledInstance(IMAGE_SCALE_SIZE, IMAGE_SCALE_SIZE, Image.SCALE_SMOOTH);
+            Image scaledImage = originalIcon.getImage().getScaledInstance(IMAGE_SIZE, IMAGE_SIZE, Image.SCALE_SMOOTH);
             return new ImageIcon(scaledImage);
         } else {
             System.err.println("image not found at path: " + path);

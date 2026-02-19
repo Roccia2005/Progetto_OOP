@@ -24,6 +24,8 @@ public final class ViewConstants {
     public static final int DESC_HEIGHT_DIVISOR = 12;
     public static final int CONTROL_WIDTH_DIVISOR = 7;
     public static final int CONTROL_HEIGHT_DIVISOR = 16;
+    public static final int IMG_LABEL_WIDTH_DIVISOR = 7;
+    public static final int IMG_LABEL_HEIGHT_DIVISOR = 5;
 
     //font
     public static final String FONT_FAMILY = "SansSerif";
