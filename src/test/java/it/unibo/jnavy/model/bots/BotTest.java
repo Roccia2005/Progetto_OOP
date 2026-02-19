@@ -1,4 +1,6 @@
 package it.unibo.jnavy.model.bots;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -144,13 +146,18 @@ class BotTest {
         Ship ship = new ShipImpl(3);
         Position p = new Position(0, 0);
         this.grid.placeShip(ship, p, CardinalDirection.DOWN);
+        List<Position> ships = Arrays.asList(
+            new Position(0, 0),
+            new Position(1, 0),
+            new Position(2, 0)
+        );
 
         int hits = 0;
         int max = 100;
         for (int i = 0; i < max; i++) {
-            BotStrategy bot = new SniperBot(this.grid);
+            BotStrategy bot = new SniperBot(ships);
             Position target = bot.selectTarget(this.grid);
-            if (target.equals(p) || target.equals(new Position(1,0)) || target.equals(new Position(2,0))) {
+            if (ships.contains(target)) {
                 hits++;
             }
         }

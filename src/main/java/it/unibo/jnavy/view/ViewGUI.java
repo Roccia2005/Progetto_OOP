@@ -2,13 +2,18 @@ package it.unibo.jnavy.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.List;
 
 import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.controller.game.GameControllerImpl;
 import it.unibo.jnavy.controller.setup.SetupController;
 import it.unibo.jnavy.controller.setup.SetupControllerImpl;
 import it.unibo.jnavy.model.bots.*;
+import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.captains.*;
+import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.player.Bot;
 import it.unibo.jnavy.model.player.Human;
 import it.unibo.jnavy.view.game.GamePanel;
@@ -103,7 +108,14 @@ public class ViewGUI extends JFrame implements View {
         var botPlayer = (Bot) completedSetup.getBotPlayer();
 
         if (isSniperSelected) {
-            botPlayer.setStrategy(new SniperBot(humanPlayer.getGrid()));
+            List<Position> humanShips = new ArrayList<>();
+            for (Position p : humanPlayer.getGrid().getPositions()) {
+                Optional<Cell> cellOpt = humanPlayer.getGrid().getCell(p);
+                if (cellOpt.isPresent() && cellOpt.get().isOccupied()) {
+                    humanShips.add(p);
+                }
+            }
+            botPlayer.setStrategy(new SniperBot(humanShips));
         }
 
         GameController gameController = new GameControllerImpl(humanPlayer, botPlayer);
