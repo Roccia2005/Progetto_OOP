@@ -68,11 +68,11 @@ public class GridPanel extends JPanel {
                         break;
                     case WATER:
                         button.setBackground(Color.LIGHT_GRAY);
-                        button.setEnabled(true);
+                        button.setEnabled(false);
                         break;
                     case SHIP:
                         button.setBackground(Color.DARK_GRAY);
-                        button.setEnabled(true);
+                        button.setEnabled(false);
                         break;
                     case HIT_WATER:
                         button.setBackground(MENUBLUE);

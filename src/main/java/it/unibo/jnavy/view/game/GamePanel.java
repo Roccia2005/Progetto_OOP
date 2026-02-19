@@ -98,7 +98,7 @@ public class GamePanel extends JPanel {
                                     if (this.inputBlocked || !controller.isHumanTurn()) {
                                         return;
                                     }
-                                    if (captainButton.isActive()) {
+                                    if (captainButton.isActive() && !controller.captainAbilityTargetsEnemyGrid()) {
                                         controller.processAbility(p);
                                         this.captainButton.reset();
                                         this.updateDashboard();
@@ -106,17 +106,15 @@ public class GamePanel extends JPanel {
                                 });
         this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET,
                                 (Position p) -> {
-                                    if (this.inputBlocked || !controller.isHumanTurn()) {
-                                        return;
-                                    }
+                                    if (this.inputBlocked || !controller.isHumanTurn()) return;
 
                                     if (captainButton.isActive()) {
+                                        if (!controller.captainAbilityTargetsEnemyGrid()) return;
+                                        if (controller.getBotCellState(p).isAlreadyHit()) return;
                                         controller.processAbility(p);
                                         this.captainButton.reset();
                                     } else {
-                                        if (controller.getBotCellState(p).isAlreadyHit()) {
-                                            return;
-                                        }
+                                        if (controller.getBotCellState(p).isAlreadyHit()) return;
                                         controller.processShot(p);
                                     }
 
