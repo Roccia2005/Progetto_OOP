@@ -25,6 +25,7 @@ public class GridPanel extends JPanel {
 
         JLabel label = new JLabel(title, SwingConstants.CENTER);
         label.setFont(new Font("SansSerif", Font.BOLD, 16));
+        label.setForeground(Color.WHITE);
         label.setBackground(BACKGROUND_COLOR);
         this.add(label, BorderLayout.NORTH);
 

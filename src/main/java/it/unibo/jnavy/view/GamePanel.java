@@ -28,12 +28,13 @@ public class GamePanel extends JPanel {
     private final CaptainAbilityButton captainButton;
     private final CaptainNamePanel captainNamePanel;
     private final GameController controller;
-
-    private AmbientSoundManager ambientSound;
+    private final AmbientSoundManager ambientSound;
 
     public GamePanel(GameController controller) {
         this.controller = controller;
         this.setLayout(new BorderLayout());
+
+        this.ambientSound = new AmbientSoundManager("/sounds/game_soundtrack.wav", 1);
 
         JPanel gridsContainer = new JPanel(new GridLayout(1, 2, 40, 0));
         gridsContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -62,10 +63,11 @@ public class GamePanel extends JPanel {
 
         JLabel titleLabel = new JLabel("J-NAVY", SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        titleLabel.setForeground(Color.WHITE);
 
         this.statusLabel = new JLabel("Your Turn", SwingConstants.CENTER);
         this.statusLabel.setFont(new Font("SansSerif", Font.ITALIC, 16));
-        this.statusLabel.setForeground(Color.DARK_GRAY);
+        this.statusLabel.setForeground(Color.WHITE);
 
         headerPanel.add(titleLabel);
         headerPanel.add(this.statusLabel);
@@ -112,7 +114,7 @@ public class GamePanel extends JPanel {
 
                                             this.inputBlocked = false;
                                             this.statusLabel.setText("Your Turn");
-                                            this.statusLabel.setForeground(Color.DARK_GRAY);
+                                            this.statusLabel.setForeground(Color.WHITE);
                                         });
 
                                         botTimer.setRepeats(false);
@@ -135,7 +137,6 @@ public class GamePanel extends JPanel {
         this.add(gridsContainer, BorderLayout.CENTER);
         this.add(dashboardPanel, BorderLayout.SOUTH);
 
-        this.ambientSound = new AmbientSoundManager("/sounds/ship_horn.wav", 15000);
         this.ambientSound.start();
     }
 

@@ -15,7 +15,7 @@ public class CaptainNamePanel extends JPanel {
         this.setOpaque(false);
 
         JLabel nameLabel = new JLabel("Captain: " + captainName);
-        nameLabel.setForeground(Color.BLACK);
+        nameLabel.setForeground(Color.WHITE);
         nameLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
 
         this.add(nameLabel);
