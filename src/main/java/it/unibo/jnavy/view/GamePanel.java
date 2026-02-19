@@ -187,4 +187,8 @@ public class GamePanel extends JPanel {
             gameOverPanel.showResult(controller.isBotDefeated());
         }
     }
+
+    public void showEndGameScreen(boolean isVictory) {
+        this.gameOverPanel.showResult(isVictory);
+    }
 }
