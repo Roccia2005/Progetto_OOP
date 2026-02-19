@@ -90,9 +90,15 @@ public class ViewGUI extends JFrame implements View {
 
     private void startSetupPhase() {
         SetupController setupController = new SetupControllerImpl(this.selectedCaptain, this.selectedBotStrategy);
-        SetupView setupView = new SetupView(setupController, () -> {
-            startGamePhase(setupController);
-        });
+        SetupView setupView = new SetupView(setupController,
+                () -> {
+                    startGamePhase(setupController);
+                },
+                () -> {
+                    this.selectedCaptain = null;
+                    this.cardLayout.show(this.mainPanel, CAPTAIN_CARD);
+                }
+        );
 
         this.mainPanel.add(setupView, SETUP_CARD);
         this.cardLayout.show(this.mainPanel, SETUP_CARD);

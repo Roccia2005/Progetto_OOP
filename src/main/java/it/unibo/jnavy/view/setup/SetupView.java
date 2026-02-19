@@ -13,6 +13,7 @@ import java.util.Map;
 public class SetupView extends JPanel {
     private final SetupController controller;
     private final Runnable gameStartCall;
+    private final Runnable backCall;
 
     private static final int GRID_SIZE = 10;
     private static final Color THEME_BACKGROUND = new Color(20, 20, 30);
@@ -33,11 +34,13 @@ public class SetupView extends JPanel {
     private JButton nextShipButton;
     private JButton randomButton;
     private JButton clearButton;
+    private JButton backButton;
 
 
-    public SetupView(final SetupController controller, final Runnable gameStartCall) {
+    public SetupView(final SetupController controller, final Runnable gameStartCall, Runnable backCall) {
         this.controller = controller;
         this.gameStartCall = gameStartCall;
+        this.backCall = backCall;
         this.initUI();
     }
 
@@ -46,11 +49,25 @@ public class SetupView extends JPanel {
         this.setLayout(new BorderLayout());
         this.setBackground(THEME_BACKGROUND);
 
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(THEME_BACKGROUND);
+        topPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 0, 15));
+
+        backButton = createBigButton("Back", 15);
+        backButton.setForeground(THEME_TEXT);
+        backButton.addActionListener(e -> {
+            if (backCall != null) {
+                backCall.run();
+            }
+        });
+        topPanel.add(backButton, BorderLayout.WEST);
+
         JLabel titleLabel = new JLabel("DEPLOY YOUR FLEET!", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Impact", Font.PLAIN, 30));
         titleLabel.setForeground(THEME_TEXT);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
-        this.add(titleLabel, BorderLayout.NORTH);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 100));
+        topPanel.add(titleLabel, BorderLayout.CENTER);
+        this.add(topPanel, BorderLayout.NORTH);
 
         JPanel gridPanel = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE));
         gridPanel.setBackground(THEME_BACKGROUND);
@@ -146,6 +163,7 @@ public class SetupView extends JPanel {
         randomButton.setEnabled(false);
         clearButton.setEnabled(false);
         nextShipButton.setEnabled(false);
+        backButton.setEnabled(false);
 
         if (gameStartCall != null) {
             gameStartCall.run();
