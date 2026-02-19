@@ -20,12 +20,14 @@ public class StartView extends JPanel {
     public StartView(final Runnable onStartAction) {
         this.onStartAction = onStartAction;
         this.initUI();
-        this.playStartSound();
     }
 
     private void initUI() {
         this.setLayout(new GridBagLayout());
         this.setBackground(THEME_BACKGROUND);
+        AmbientSoundManager ambientSound = new AmbientSoundManager("/sounds/ship_horn.wav", 10000);
+        ambientSound.start();
+
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -58,26 +60,11 @@ public class StartView extends JPanel {
 
         startButton.addActionListener(e -> {
             if (onStartAction != null) {
+                ambientSound.stop();
                 onStartAction.run();
             }
         });
 
         this.add(startButton, gbc);
-    }
-
-    private void playStartSound() {
-        new Thread(() -> {
-            try {
-                URL soundURL = getClass().getResource("/sounds/ship_horn.wav");
-                if (soundURL != null) {
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundURL);
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioIn);
-                    clip.start();
-                }
-            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-                System.err.println("Audio di avvio non disponibile: " + e.getMessage());
-            }
-        }).start();
     }
 }
