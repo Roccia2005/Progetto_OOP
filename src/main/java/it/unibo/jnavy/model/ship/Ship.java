@@ -8,7 +8,8 @@ public interface Ship {
 
     /**
      * Registers a hit on the ship, decreasing its health.
-     * @return true if the ship is sunk after this hit.
+     * * @return true if the ship is sunk after this hit.
+     * @throws IllegalStateException if the ship is already sunk.
      */
     boolean hit();
 
