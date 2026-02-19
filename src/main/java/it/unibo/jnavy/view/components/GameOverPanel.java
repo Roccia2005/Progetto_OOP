@@ -35,6 +35,29 @@ public class GameOverPanel extends JPanel {
         this.exitButton.addActionListener(onExit);
     }
 
+    public void showResult(final boolean victory) {
+        this.isWin = victory;
+        removeAll();
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        gbc.gridy = 0;
+        add(Box.createVerticalStrut(350), gbc);
+
+        gbc.gridy = 1;
+        gbc.insets = new Insets(10, 0, 10, 0);
+        add(menuButton, gbc);
+
+        gbc.gridy = 2;
+        add(exitButton, gbc);
+
+        revalidate();
+        repaint();
+        setVisible(true);
+    }
+
     private Image loadImage(final String filename) {
 
     }
@@ -42,4 +65,5 @@ public class GameOverPanel extends JPanel {
     private JButton createStyledButton(final String label) {
 
     }
+
 }
