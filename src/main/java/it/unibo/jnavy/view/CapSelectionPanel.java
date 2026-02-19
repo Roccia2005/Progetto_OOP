@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class CapSelectionPanel extends JPanel {
     private static final Color MENUBLUE = new Color(41, 86, 246);
-    private static final Color BACKGROUND_COLOR = Color.BLACK;
+    private static final Color BACKGROUND_COLOR = new Color(20, 20, 30);
     private static final Color FOREGROUND_COLOR = Color.WHITE;
     private static final int SETWIDTH = 1000;
     private static final int SETHEIGHT = 700;
@@ -25,6 +25,7 @@ public class CapSelectionPanel extends JPanel {
     private static final int CONTROL_WIDTH_DIVISOR = 7;
     private static final int CONTROL_HEIGHT_DIVISOR = 16;
     private static final String FONT_FAMILY = "SansSerif";
+    private static final int FONT_SIZE_TITLE = 36;
     private static final int FONT_SIZE_DESC = 18;
     private static final int FONT_SIZE_CTRL = 14;
 
@@ -82,6 +83,14 @@ public class CapSelectionPanel extends JPanel {
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.CENTER;
 
+        JLabel titleLabel = new JLabel("Choose the captain of your fleet");
+        titleLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_TITLE));
+        titleLabel.setForeground(FOREGROUND_COLOR);
+        gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, 30, INSET_PADDING);
+        this.add(titleLabel, gbc);
+
+        gbc.gridy++;
+        gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, INSET_PADDING, INSET_PADDING);
         imageLabel = new JLabel();
         imageLabel.setPreferredSize(new Dimension(SETWIDTH / IMG_LABEL_WIDTH_DIVISOR, SETHEIGHT / IMG_LABEL_HEIGHT_DIVISOR));
         imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -95,7 +104,7 @@ public class CapSelectionPanel extends JPanel {
         descriptionArea.setPreferredSize(new Dimension(SETWIDTH / DESC_WIDTH_DIVISOR, SETHEIGHT / DESC_HEIGHT_DIVISOR));
         descriptionArea.setEditable(false);
         descriptionArea.setFocusable(false);
-        descriptionArea.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_DESC));
+        descriptionArea.setFont(new Font(FONT_FAMILY, Font.PLAIN, FONT_SIZE_DESC));
         descriptionArea.setBackground(BACKGROUND_COLOR);
         descriptionArea.setForeground(FOREGROUND_COLOR);
         descriptionArea.setBorder(BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS));
