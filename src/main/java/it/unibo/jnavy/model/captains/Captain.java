@@ -1,7 +1,7 @@
 package it.unibo.jnavy.model.captains;
 
-import it.unibo.jnavy.model.TurnObserver;
 import it.unibo.jnavy.model.grid.Grid;
+import it.unibo.jnavy.model.observer.TurnObserver;
 import it.unibo.jnavy.model.utilities.Position;
 
 /**
@@ -32,7 +32,7 @@ public interface Captain extends TurnObserver{
 
     /**
      * Checks if the use of this captain's special ability istantly end the player's turn.
-     * If an ability consumes the turn, the player will not be able to perform a standard 
+     * If an ability consumes the turn, the player will not be able to perform a standard
      * shot or other actions after using it.
      *
      * @return true if using the ability ends the turn, false otherwise.
@@ -42,7 +42,7 @@ public interface Captain extends TurnObserver{
     /**
      * Determines the target grid for this captain's special ability.
      *
-     * @return true if the ability is applied to the enemy's grid, 
+     * @return true if the ability is applied to the enemy's grid,
      * false if it is applied to the player's own grid.
      */
     boolean targetsEnemyGrid();

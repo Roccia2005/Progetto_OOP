@@ -1,11 +1,12 @@
-package it.unibo.jnavy.view;
+package it.unibo.jnavy.view.game;
 
 import javax.swing.*;
 import java.awt.*;
 
-import it.unibo.jnavy.controller.GameController;
+import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherCondition;
+import it.unibo.jnavy.view.AmbientSoundManager;
 import it.unibo.jnavy.view.components.bot.BotDifficultyPanel;
 import it.unibo.jnavy.view.components.captain.CaptainAbilityButton;
 import it.unibo.jnavy.view.components.captain.CaptainNamePanel;

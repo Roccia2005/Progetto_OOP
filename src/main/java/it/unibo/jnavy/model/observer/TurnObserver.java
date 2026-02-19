@@ -1,4 +1,4 @@
-package it.unibo.jnavy.model;
+package it.unibo.jnavy.model.observer;
 
 /**
  * An observer interface for handling turn-based events in the game.

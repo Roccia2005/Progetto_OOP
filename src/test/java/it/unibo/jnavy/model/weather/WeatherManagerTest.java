@@ -1,6 +1,5 @@
 package it.unibo.jnavy.model.weather;
 
-import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.grid.Grid;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import it.unibo.jnavy.model.grid.GridImpl;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.utilities.ShotResult;
 
 /**
  * Test class for {@link WeatherManagerImpl}.

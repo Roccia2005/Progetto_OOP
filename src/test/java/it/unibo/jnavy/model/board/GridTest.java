@@ -8,20 +8,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.jnavy.model.HitType;
-import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.grid.GridImpl;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
+import it.unibo.jnavy.model.utilities.HitType;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.utilities.ShotResult;
 
 /**
  * Test class for {@link GridImpl}.
  */
 public class GridTest {
-    
+
     private Grid grid;
     private static final int SHIP_SIZE = 3;
 
@@ -34,18 +34,18 @@ public class GridTest {
     void testValidPlacement() {
         final Ship ship = new ShipImpl(SHIP_SIZE);
         final Position startPos = new Position(0,0);
-        
+
         // Test positioning towards RIGHT (0.0 -> 0.1 -> 0.2)
         assertTrue(grid.isPlacementValid(ship, startPos, CardinalDirection.RIGHT),
             "Placement should be valid within bounds");
-        
+
         grid.placeShip(ship, startPos, CardinalDirection.RIGHT);
 
         // I check that the cells are occupied
         assertTrue(grid.getCell(new Position(0, 0)).get().isOccupied());
         assertTrue(grid.getCell(new Position(0, 1)).get().isOccupied());
         assertTrue(grid.getCell(new Position(0, 2)).get().isOccupied());
-        
+
         // I'm checking that a cell outside the ship is free.
         assertFalse(grid.getCell(new Position(0, 3)).get().isOccupied());
     }
@@ -65,9 +65,9 @@ public class GridTest {
         // 3. Test outboard to DOWN starting from (0,0)
         assertFalse(grid.isPlacementValid(ship, new Position(9, 0), CardinalDirection.DOWN),
             "Should not place ship out of bounds (DOWN)");
-            
+
         // Make sure it throws an exception if I try to place anyway
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(IllegalArgumentException.class, () ->
             grid.placeShip(ship, new Position(0, 0), CardinalDirection.UP));
     }
 
@@ -75,7 +75,7 @@ public class GridTest {
     void testCollision() {
         final Ship ship1 = new ShipImpl(SHIP_SIZE);
         final Ship ship2 = new ShipImpl(SHIP_SIZE);
-        
+
         // I place the first ship in (2,2) towards DOWN (2,2), (3,2), (4,2)
         grid.placeShip(ship1, new Position(2, 2), CardinalDirection.DOWN);
 
@@ -84,7 +84,7 @@ public class GridTest {
         assertFalse(grid.isPlacementValid(ship2, new Position(3, 1), CardinalDirection.RIGHT),
             "Should detect collision with existing ship");
 
-        assertThrows(IllegalArgumentException.class, () -> 
+        assertThrows(IllegalArgumentException.class, () ->
             grid.placeShip(ship2, new Position(3, 1), CardinalDirection.RIGHT));
     }
 
@@ -101,7 +101,7 @@ public class GridTest {
         // 2. I hit the ship (HIT)
         ShotResult resultHit = grid.receiveShot(new Position(5, 5));
         assertEquals(HitType.HIT, resultHit.hitType());
-        
+
         // 3. I hit the same spot (Exception)
         assertThrows(IllegalStateException.class, () -> {
             grid.receiveShot(new Position(5, 5));
@@ -110,25 +110,25 @@ public class GridTest {
         // 4. I'm sinking the ship (SUNK)
         ShotResult resultSunk = grid.receiveShot(new Position(5, 6));
         assertEquals(HitType.SUNK, resultSunk.hitType());
-        
+
         // Check that the result contains the sunken ship
         assertTrue(resultSunk.sunkShip().isPresent());
         assertEquals(ship, resultSunk.sunkShip().get());
     }
-    
+
     @Test
     void testRepair() {
         final Ship ship = new ShipImpl(3);
         final Position pos = new Position(1, 1);
         grid.placeShip(ship, pos, CardinalDirection.RIGHT);
-        
+
         // I damage the ship
         grid.receiveShot(pos);
         int healthAfterHit = ship.getHealth();
-        
+
         // Repair
         boolean repaired = grid.repair(pos);
-        
+
         assertTrue(repaired, "Repair should return true on damaged ship cell");
         assertEquals(healthAfterHit + 1, ship.getHealth(), "Ship health should increase by 1");
     }

@@ -1,8 +1,8 @@
 package it.unibo.jnavy.model.bots;
 
+import it.unibo.jnavy.model.utilities.HitType;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.grid.Grid;
-import it.unibo.jnavy.model.HitType;
 
 /**
  * Defines the contract for the Bot's decision-making algorithms.
@@ -18,7 +18,7 @@ public interface BotStrategy {
 
     /**
      * Receives feedback on the outcome of the last shot.
-     * 
+     *
      * This allows smart strategies (like Pro) to "learn" from the result.
      * Used by simplified "Reinforced Learning" bot implementations.
      * For example: if the result is {@link HitType#HIT}, the bot will try adjacent cells next.
