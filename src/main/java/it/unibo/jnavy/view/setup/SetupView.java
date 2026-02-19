@@ -111,7 +111,8 @@ public class SetupView extends JPanel {
                     controller.nextShip();
                     updateView();
                 } catch (IllegalStateException ex) {
-                    JOptionPane.showMessageDialog(this, "Place a ship first!", "Error", JOptionPane.WARNING_MESSAGE);
+                    Toolkit.getDefaultToolkit().beep();
+                    showAutoClosingMessage("Place a ship first!");
                 }
             }
         });
