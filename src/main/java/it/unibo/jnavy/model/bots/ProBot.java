@@ -9,21 +9,12 @@ import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.HitType;
 
-
-/**
- * nel controller avverrà questo:
- * - INIZIO TURNO BOT!
- * - bot.decideTarget(enemyGrid) ---> viene generata uno "sparo" in una certa position in base a selectTarget(enemyGrid)
- * - ShotResult risultato = humanGrid.receiveShot("sparo") ---> viene inserito l'esito dello shot sulla vera griglia nemica in risultato
- * - bot.lastShotFeedback(risultato) ---> il bot impara da questo risultato cambiando le varie modalità in base ad esso
- * - FINE TURNO BOT!
- */
 public class ProBot extends AbstractBotStrategy{
 
     public enum State{
         HUNTING,
         SEEKING,
-        DESTROYING;
+        DESTROYING
     }
 
     private State currentState = State.HUNTING;
@@ -37,66 +28,63 @@ public class ProBot extends AbstractBotStrategy{
     public Position selectTarget(final Grid enemyGrid) {
 
         Position nextTarget = null;
-        Position temporaryTarget = null;
 
         switch (currentState) {
             case HUNTING:
-                nextTarget = getRandomValidPosition(enemyGrid);
+                nextTarget = handleHunting(enemyGrid);
             break;
 
             case SEEKING:
-                if (this.availableDirections.isEmpty() && this.firstHitPosition != null) {
-                    resetAvailableDirections();
-                }
-
-                while(nextTarget == null && !availableDirections.isEmpty()){
-                    currentDirection = availableDirections.getFirst();
-                    temporaryTarget = targetCalc(firstHitPosition);
-                    if (!enemyGrid.isTargetValid(temporaryTarget)) {
-                        // al momento mi trovo meglio usando una lista in cui rimuovo le direction non valide
-                        this.availableDirections.removeFirst();
-                    } else {
-                        nextTarget = temporaryTarget;
-                        break;
-                    }
-
-                }
-
-                if (nextTarget == null) {
-                    if (this.firstHitPosition != null) {
-                        resetAvailableDirections();
-                        this.currentState = State.HUNTING;
-                        nextTarget = getRandomValidPosition(enemyGrid);
-                    } else {
-                        this.currentState = State.HUNTING;
-                        nextTarget = getRandomValidPosition(enemyGrid);
-                    }
-                }
-
+                nextTarget = handleSeeking(enemyGrid);
             break;
 
             case DESTROYING:
-                temporaryTarget = targetCalc(lastTargetPosition);
-                if (!enemyGrid.isTargetValid(temporaryTarget)) {
-                    this.currentDirection = this.currentDirection.opposite();
-                    nextTarget = targetCalc(firstHitPosition);
-
-                    if (!enemyGrid.isTargetValid(nextTarget)) {
-                         this.currentState = State.SEEKING;
-                         resetAvailableDirections();
-                         return this.selectTarget(enemyGrid);
-                    } else {
-                        lastTargetPosition = firstHitPosition;
-                    }
-                } else {
-                    nextTarget = temporaryTarget;
-                }
-
+                nextTarget = handleDestroying(enemyGrid);
             break;
         }
 
         this.lastTargetPosition = nextTarget;
         return nextTarget;
+    }
+
+    private Position handleHunting(final Grid enemyGrid) {
+        return getRandomValidPosition(enemyGrid);
+    }
+
+    private Position handleSeeking(final Grid enemyGrid) {
+        if (this.availableDirections.isEmpty() && this.firstHitPosition != null) {
+            resetAvailableDirections();
+        }
+        while(!this.availableDirections.isEmpty()){
+            currentDirection = availableDirections.getFirst();
+            Position target = targetCalc(firstHitPosition);
+            if (enemyGrid.isTargetValid(target)) {
+                return target;
+            }
+            this.availableDirections.removeFirst();
+        }
+
+        resetAvailableDirections();
+        this.currentState = State.HUNTING;
+        return getRandomValidPosition(enemyGrid);
+    }
+
+    private Position handleDestroying(final Grid enemyGrid) {
+        Position target = targetCalc(lastTargetPosition);
+        if (!enemyGrid.isTargetValid(target)) {
+            this.currentDirection = this.currentDirection.opposite();
+            Position secondTarget = targetCalc(firstHitPosition);
+
+            if (!enemyGrid.isTargetValid(secondTarget)) {
+                this.currentState = State.SEEKING;
+                resetAvailableDirections();
+                return this.selectTarget(enemyGrid);
+            } else {
+                this.lastTargetPosition = this.firstHitPosition;
+                return secondTarget;
+            }
+        }
+        return target;
     }
 
     //uso questo metodo per far imparare al bot, viene chiamato dopo che si conosce il risultato del colpo sulla grid dell'enemy
@@ -113,37 +101,11 @@ public class ProBot extends AbstractBotStrategy{
                 return;
 
             case HIT:
-                switch (this.currentState) {
-                    case HUNTING:
-                        this.currentState = State.SEEKING;
-                        this.firstHitPosition = target;
-                        resetAvailableDirections();
-                        break;
-                    case SEEKING:
-                        this.currentState = State.DESTROYING;
-                        this.lastTargetPosition = target;
-
-                        if (this.currentDirection == null && this.firstHitPosition != null) {
-                            this.currentDirection = findDirection(this.firstHitPosition, target);
-                        }
-                        break;
-                    case DESTROYING:
-                        this.lastTargetPosition = target;
-                        break;
-                }
+                handleHit(target);
             break;
 
             case MISS:
-                if (this.currentState == State.DESTROYING) {
-                    if (this.currentDirection != null) {
-                        this.currentDirection = this.currentDirection.opposite();
-                    }
-                    this.lastTargetPosition = firstHitPosition;
-                } else if (this.currentState == State.SEEKING) {
-                    if (!this.availableDirections.isEmpty()) {
-                        this.availableDirections.removeFirst();
-                    }
-                }
+                handleMiss();
             break;
 
             case INVALID:
@@ -152,6 +114,40 @@ public class ProBot extends AbstractBotStrategy{
             break;
         }
 
+    }
+
+    private void handleHit(final Position target) {
+        switch (this.currentState) {
+            case HUNTING:
+                this.currentState = State.SEEKING;
+                this.firstHitPosition = target;
+                resetAvailableDirections();
+                break;
+            case SEEKING:
+                this.currentState = State.DESTROYING;
+                this.lastTargetPosition = target;
+
+                if (this.currentDirection == null && this.firstHitPosition != null) {
+                    this.currentDirection = findDirection(this.firstHitPosition, target);
+                }
+                break;
+            case DESTROYING:
+                this.lastTargetPosition = target;
+                break;
+        }
+    }
+
+    private void handleMiss() {
+        if (this.currentState == State.DESTROYING) {
+            if (this.currentDirection != null) {
+                this.currentDirection = this.currentDirection.opposite();
+            }
+            this.lastTargetPosition = firstHitPosition;
+        } else if (this.currentState == State.SEEKING) {
+            if (!this.availableDirections.isEmpty()) {
+                this.availableDirections.removeFirst();
+            }
+        }
     }
 
     // metodo per capire la direzione tra due celle data la precedente(p1) e quella attuale(p2)uso per i test
@@ -172,12 +168,16 @@ public class ProBot extends AbstractBotStrategy{
     }
 
     // posizione calcolata aggiungendo alla x e alla y gli offset della direzione corrispondente
-    //non deve mai essere null!!!
     public Position targetCalc(final Position target) {
         if (this.currentDirection == null) {
             return target;
         }
         return new Position(target.x()+currentDirection.getRowOffset(), target.y()+currentDirection.getColOffset());
+    }
+
+    @Override
+    protected String getStrategyName() {
+        return "Pro";
     }
 
 }

@@ -15,9 +15,7 @@ public abstract class AbstractBotStrategy implements BotStrategy{
         if (cellsList.isEmpty()) {
             throw new IllegalStateException("The bot can't shoot, no valid cells in grid");
         }
-        int randomIndex = getRandomIndex(cellsList);
-
-        return cellsList.get(randomIndex);
+        return cellsList.get(getRandomIndex(cellsList));
     }
 
     protected List<Position> getValidCellsList(Grid grid) {
@@ -25,12 +23,13 @@ public abstract class AbstractBotStrategy implements BotStrategy{
     }
 
     protected int getRandomIndex(final List<Position> cellsList) {
-        int index = random.nextInt(cellsList.size());
-        return index;
+        return this.random.nextInt(cellsList.size());
     }
+
+    protected abstract String getStrategyName();
 
     @Override
     public String getStrategy() {
-        return this.getClass().getSimpleName().replace("Bot", "");
+        return getStrategyName();
     }
 }

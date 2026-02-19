@@ -9,4 +9,9 @@ public class BeginnerBot extends AbstractBotStrategy{
     public Position selectTarget(Grid enemyGrid) {
         return super.getRandomValidPosition(enemyGrid);
     }
+
+    @Override
+    protected String getStrategyName() {
+        return "Beginner";
+    }
 }

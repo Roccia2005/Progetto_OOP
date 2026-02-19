@@ -15,19 +15,8 @@ public class SniperBot extends AbstractBotStrategy{
     private static final double ERROR_PERCENTAGE = 0.18;
     private final Random random = new Random();
 
-    public SniperBot(final Grid humanGrid) {
-        super();
-        this.knownTargets = new ArrayList<>();
-        populateKnownTargets(humanGrid);
-    }
-
-    private void populateKnownTargets(final Grid grid) {
-        for (Position p : grid.getPositions()) {
-            Optional<Cell> c = grid.getCell(p);
-            if (c.isPresent() && c.get().isOccupied()) {
-                this.knownTargets.add(p);
-            }
-        }
+    public SniperBot(final List<Position> targetPositions) {
+        this.knownTargets = new ArrayList<>(targetPositions);
     }
 
     @Override
@@ -36,10 +25,16 @@ public class SniperBot extends AbstractBotStrategy{
         boolean miss = this.random.nextDouble() < ERROR_PERCENTAGE;
 
         if (!miss && !this.knownTargets.isEmpty()) {
-            return this.knownTargets.get(0);
+            int randomIndex = this.random.nextInt(this.knownTargets.size());
+            return this.knownTargets.get(randomIndex);
         } else {
             return super.getRandomValidPosition(enemyGrid);
         }
+    }
+
+    @Override
+    protected String getStrategyName() {
+        return "Sniper";
     }
 
 }
