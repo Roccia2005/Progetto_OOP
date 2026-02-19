@@ -1,5 +1,6 @@
-package it.unibo.jnavy.controller;
+package it.unibo.jnavy.controller.setup;
 
+import it.unibo.jnavy.controller.utilities.CellState;
 import it.unibo.jnavy.model.player.Player;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;

@@ -3,7 +3,7 @@ package it.unibo.jnavy.view;
 import javax.swing.*;
 import java.awt.*;
 
-import it.unibo.jnavy.controller.GameController;
+import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.view.components.bot.BotDifficultyPanel;

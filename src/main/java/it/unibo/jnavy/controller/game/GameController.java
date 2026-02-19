@@ -1,5 +1,6 @@
-package it.unibo.jnavy.controller;
+package it.unibo.jnavy.controller.game;
 
+import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherCondition;
 
@@ -16,9 +17,9 @@ public interface GameController {
     boolean isGameOver();
 
     int getCurrentCaptainCooldown();
-    
+
     CellCondition getHumanCellState(Position p);
-    
+
     CellCondition getBotCellState(Position p);
 
     WeatherCondition getWeatherCondition();

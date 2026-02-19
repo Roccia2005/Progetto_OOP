@@ -1,7 +1,8 @@
-package it.unibo.jnavy.controller;
+package it.unibo.jnavy.controller.setup;
 
 import java.util.*;
 
+import it.unibo.jnavy.controller.utilities.CellState;
 import it.unibo.jnavy.model.bots.BotStrategy;
 import it.unibo.jnavy.model.captains.Captain;
 import it.unibo.jnavy.model.cell.Cell;

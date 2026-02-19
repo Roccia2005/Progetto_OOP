@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import it.unibo.jnavy.controller.CellCondition;
+import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.utilities.Position;
 
 public class GridPanel extends JPanel {
