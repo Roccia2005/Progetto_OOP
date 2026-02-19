@@ -1,0 +1,255 @@
+package it.unibo.jnavy.view.setup;
+
+import edu.umd.cs.findbugs.annotations.NonNull;
+import it.unibo.jnavy.controller.setup.SetupController;
+import it.unibo.jnavy.controller.utilities.CellState;
+import it.unibo.jnavy.model.utilities.CardinalDirection;
+import it.unibo.jnavy.model.utilities.Position;
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+
+public class SetupView extends JPanel {
+    private final SetupController controller;
+    private final Runnable gameStartCall;
+
+    private static final int GRID_SIZE = 10;
+    private static final Color THEME_BACKGROUND = new Color(20, 20, 30);
+    private static final Color THEME_TEXT = new Color(240, 240, 255);
+    private static final Color COLOR_WATER = new Color(41, 86, 246);
+    private static final Color COLOR_SHIP = Color.BLACK;
+    private static final Color COLOR_BORDER = Color.GRAY;
+    private static final int FONT_DEFAULT_SIZE = 22;
+    private static final int FONT_ICON_SIZE = 120;
+    private static final int BORDER_THICKNESS = 2;
+
+    private final Map<Position, JButton> gridButtons = new HashMap<>();
+    private CardinalDirection currentDirection = CardinalDirection.RIGHT;
+
+    private JLabel infoLabel;
+    private JButton rotateButton;
+    private JButton nextShipButton;
+    private JButton randomBotton;
+    private JButton clearButton;
+
+
+    public SetupView(final SetupController controller, final Runnable gameStartCall) {
+        this.controller = controller;
+        this.gameStartCall = gameStartCall;
+        this.initUI();
+    }
+
+    private void initUI() {
+        this.setPreferredSize(new Dimension(1000, 700));
+        this.setLayout(new BorderLayout());
+        this.setBackground(THEME_BACKGROUND);
+
+        JLabel titleLabel = new JLabel("DEPLOY YOUR FLEET!", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Impact", Font.PLAIN, 30));
+        titleLabel.setForeground(THEME_TEXT);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+        this.add(titleLabel, BorderLayout.NORTH);
+
+        JPanel gridPanel = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE));
+        gridPanel.setBackground(THEME_BACKGROUND);
+        gridPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                final JButton button = new JButton();
+                final Position pos = new Position(i, j);
+
+                button.setBackground(COLOR_WATER);
+                button.setOpaque(true);
+                button.setBorderPainted(true);
+
+                button.addActionListener(e -> placeShipAt(pos));
+
+                gridButtons.put(pos, button);
+                gridPanel.add(button);
+            }
+        }
+        this.add(gridPanel, BorderLayout.CENTER);
+
+        final JPanel sidePanel = new JPanel(new BorderLayout());
+        sidePanel.setBackground(THEME_BACKGROUND);
+        sidePanel.setPreferredSize(new Dimension(250, 0));
+        sidePanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
+
+        String sizeText = controller.isSetupFinished() ? "Ready" : String.valueOf(controller.getNextShipSize());
+        infoLabel = new JLabel("Size: " + sizeText);
+        infoLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        infoLabel.setForeground(THEME_TEXT);
+        infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        infoLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        sidePanel.add(infoLabel, BorderLayout.NORTH);
+
+        final JPanel buttonsContainer = new JPanel(new GridLayout(4, 1, 0, 15));
+        buttonsContainer.setBackground(THEME_BACKGROUND);
+
+        rotateButton = createBigButton("→", FONT_ICON_SIZE);
+        rotateButton.setToolTipText("Rotate Ship (Horizontal/Vertical)");
+        rotateButton.addActionListener(e -> {
+            if (currentDirection == CardinalDirection.RIGHT) {
+                currentDirection = CardinalDirection.DOWN;
+                rotateButton.setText("↓");
+            } else {
+                currentDirection = CardinalDirection.RIGHT;
+                rotateButton.setText("→");
+            }
+            rotateButton.repaint();
+        });
+
+        nextShipButton = createBigButton("Confirm", FONT_DEFAULT_SIZE);
+        nextShipButton.addActionListener(e -> {
+            if (controller.isSetupFinished()) {
+                startGame();
+            } else {
+                try {
+                    controller.nextShip();
+                    updateView();
+                } catch (IllegalStateException ex) {
+                    JOptionPane.showMessageDialog(this, "Place a ship first!", "Error", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+
+        randomBotton = createBigButton("Randomize", FONT_DEFAULT_SIZE);
+        randomBotton.addActionListener(e -> {
+            controller.randomizeHumanShips();
+            updateView();
+        });
+
+        clearButton = createBigButton("Clear Fleet", FONT_DEFAULT_SIZE);
+        clearButton.setForeground(THEME_TEXT); // Un colore rossastro per indicare "Reset"
+        clearButton.addActionListener(e -> {
+            controller.clearFleet();
+            updateView(); // Fondamentale: ridisegna la griglia vuota
+        });
+
+        buttonsContainer.add(rotateButton);
+        buttonsContainer.add(nextShipButton);
+        buttonsContainer.add(randomBotton);
+        buttonsContainer.add(clearButton);
+
+        sidePanel.add(buttonsContainer, BorderLayout.CENTER);
+        this.add(sidePanel, BorderLayout.EAST);
+
+        updateView();
+    }
+
+    private void startGame() {
+        rotateButton.setEnabled(false);
+        randomBotton.setEnabled(false);
+        clearButton.setEnabled(false);
+        nextShipButton.setEnabled(false);
+
+        if (gameStartCall != null) {
+            gameStartCall.run();
+        }
+    }
+
+    private JButton createBigButton(String text, int fontSize) {
+        JButton b = new JButton(text);
+        b.setFocusPainted(false);
+        b.setBackground(THEME_BACKGROUND);
+        b.setForeground(THEME_TEXT);
+        b.setFont(new Font("SansSerif", Font.BOLD, fontSize));
+        b.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        return b;
+    }
+
+    private void placeShipAt(final Position pos) {
+        if (controller.isSetupFinished()) {
+            return;
+        }
+        if (controller.setShip(pos, currentDirection)) {
+            updateView();
+        } else {
+            Toolkit.getDefaultToolkit().beep();
+            showAutoClosingMessage("Invalid placement!");
+        }
+    }
+
+    private void updateView() {
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                Position pos = new Position(i, j);
+                JButton button = gridButtons.get(pos);
+                CellState state = controller.getCellState(pos);
+
+                if (state.hasShip()) {
+                    button.setBackground(COLOR_SHIP);
+                    int top    = state.connectedTop()    ? 0 : BORDER_THICKNESS;
+                    int left   = state.connectedLeft()   ? 0 : BORDER_THICKNESS;
+                    int bottom = state.connectedBottom()  ? 0 : BORDER_THICKNESS;
+                    int right  = state.connectedRight()   ? 0 : BORDER_THICKNESS;
+                    button.setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, COLOR_BORDER));
+                } else {
+                    button.setBackground(COLOR_WATER);
+                    button.setBorder(BorderFactory.createLineBorder(new Color(0, 80, 120), 1));
+                }
+            }
+        }
+
+        if (controller.isSetupFinished()) {
+            infoLabel.setText("Ready!");
+
+            nextShipButton.setText("Start Game!");
+
+            rotateButton.setEnabled(false);
+            randomBotton.setEnabled(false);
+            clearButton.setEnabled(true);
+        } else {
+            infoLabel.setText("Size: " + controller.getNextShipSize());
+
+            nextShipButton.setText("Confirm");
+            nextShipButton.setForeground(THEME_TEXT);
+
+            rotateButton.setEnabled(true);
+            randomBotton.setEnabled(true);
+            clearButton.setEnabled(true);
+        }
+        this.repaint();
+    }
+
+    private void showAutoClosingMessage(String message) {
+        final JWindow toast = new JWindow(SwingUtilities.getWindowAncestor(this));
+
+        JLabel label = getJLabel(message);
+
+        toast.add(label);
+        toast.pack();
+
+        Point location = this.getLocationOnScreen();
+        int x = location.x + (this.getWidth() - toast.getWidth()) / 2;
+        int y = location.y + (this.getHeight() - toast.getHeight()) / 2;
+        toast.setLocation(x, y);
+
+        toast.setVisible(true);
+
+        Timer timer = new Timer(1000, e -> {
+            toast.setVisible(false);
+            toast.dispose();
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    @NonNull
+    private static JLabel getJLabel(String message) {
+        JLabel label = new JLabel(message, SwingConstants.CENTER);
+        label.setFont(new Font("SansSerif", Font.BOLD, 18));
+        label.setForeground(Color.WHITE);
+        label.setBackground(new Color(200, 50, 50));
+        label.setOpaque(true);
+        label.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+
+        label.setBorder(BorderFactory.createCompoundBorder(
+                label.getBorder(),
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+        ));
+        return label;
+    }
+}
