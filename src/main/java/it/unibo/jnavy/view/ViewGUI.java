@@ -105,7 +105,9 @@ public class ViewGUI extends JFrame implements View {
         }
 
         GameController gameController = new GameControllerImpl(humanPlayer, botPlayer, isVictory -> this.showEndGame(isVictory));
-        GamePanel gamePanel = new GamePanel(gameController);
+        GamePanel gamePanel = new GamePanel(gameController, () -> {
+            this.cardLayout.show(this.mainPanel, BOT_CARD);
+        });
         this.mainPanel.add(gamePanel, GAME_CARD);
         this.cardLayout.show(this.mainPanel, GAME_CARD);
     }
