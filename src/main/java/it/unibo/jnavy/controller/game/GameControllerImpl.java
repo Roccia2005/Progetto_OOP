@@ -156,4 +156,9 @@ public class GameControllerImpl implements GameController {
     public boolean isBotDefeated() {
         return this.bot.getFleet().isDefeated();
     }
+
+    @Override
+    public boolean captainAbilityTargetsEnemyGrid() {
+        return this.human.captainAbilityTargetsEnemyGrid();
+    }
 }

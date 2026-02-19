@@ -33,4 +33,6 @@ public interface GameController {
     String getPlayerCaptainName();
 
     boolean isBotDefeated();
+
+    boolean captainAbilityTargetsEnemyGrid();
 }
