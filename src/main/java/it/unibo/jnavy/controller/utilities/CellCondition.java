@@ -1,11 +1,11 @@
-package it.unibo.jnavy.controller; 
+package it.unibo.jnavy.controller.utilities;
 
 public enum CellCondition {
-    FOG,          
-    WATER,        
-    SHIP,         
-    HIT_WATER,    
-    HIT_SHIP,    
+    FOG,
+    WATER,
+    SHIP,
+    HIT_WATER,
+    HIT_SHIP,
     SUNK_SHIP,
     REVEALED_SHIP,
     REVEALED_WATER;

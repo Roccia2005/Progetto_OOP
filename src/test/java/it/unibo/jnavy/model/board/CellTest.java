@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.cell.CellImpl;
 import it.unibo.jnavy.model.ship.ShipImpl;
+import it.unibo.jnavy.model.utilities.HitType;
 import it.unibo.jnavy.model.utilities.Position;
 
 /**
@@ -31,7 +31,7 @@ class CellTest {
     void testDoubleShotStrict() {
         // 1. First shot (Water / MISS)
         assertEquals(HitType.MISS, cell.receiveShot(), "First shot on empty cell should be MISS");
-        
+
         // Check if the cell status is updated
         assertTrue(cell.isHit(), "Cell should be marked as hit after receiving a shot");
 
@@ -46,13 +46,13 @@ class CellTest {
     void testHitOnShip() {
         // Place a ship in the cell
         cell.setShip(new ShipImpl(3));
-        
+
         // 1. First shot -> HIT
         assertEquals(HitType.HIT, cell.receiveShot(), "Shot on occupied cell should return HIT");
         assertTrue(cell.isHit(), "Cell should be marked as hit");
-        
+
         // 2. Second shot -> Exception
-        assertThrows(IllegalStateException.class, () -> cell.receiveShot(), 
+        assertThrows(IllegalStateException.class, () -> cell.receiveShot(),
             "Shooting again on a hit ship segment must throw exception");
     }
 }

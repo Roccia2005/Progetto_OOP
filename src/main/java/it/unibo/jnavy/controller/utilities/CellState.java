@@ -1,4 +1,4 @@
-package it.unibo.jnavy.controller;
+package it.unibo.jnavy.controller.utilities;
 
 public record CellState(
         boolean hasShip,

@@ -1,8 +1,8 @@
 package it.unibo.jnavy.view;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import it.unibo.jnavy.controller.CellState;
-import it.unibo.jnavy.controller.SetupController;
+import it.unibo.jnavy.controller.setup.SetupController;
+import it.unibo.jnavy.controller.utilities.CellState;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 import javax.swing.*;

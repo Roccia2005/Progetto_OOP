@@ -1,4 +1,4 @@
-package it.unibo.jnavy.model;
+package it.unibo.jnavy.model.utilities;
 
 /**
  * Represents the possible outcomes of a shot fired at the game grid.

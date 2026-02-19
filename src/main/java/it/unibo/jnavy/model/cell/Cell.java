@@ -2,8 +2,8 @@ package it.unibo.jnavy.model.cell;
 
 import java.util.Optional;
 
-import it.unibo.jnavy.model.HitType;
 import it.unibo.jnavy.model.ship.Ship;
+import it.unibo.jnavy.model.utilities.HitType;
 import it.unibo.jnavy.model.utilities.Position;
 
 /**
@@ -11,7 +11,7 @@ import it.unibo.jnavy.model.utilities.Position;
  * A cell can be empty (water) or occupied by a ship.
  */
 public interface Cell {
-    
+
     /**
      * Handles a shot fired at this cell.
      * Updates the cell status and damages the ship if present.
@@ -65,7 +65,7 @@ public interface Cell {
     /**
      * Resets the cell's hit status if the ship occupying it is not sunk.
      * This allows the cell to be targeted again or to be considered "repaired".
-     *  @return true if the status was successfully reset, 
+     *  @return true if the status was successfully reset,
      *          false if the ship is already sunk or no ship is present.
      */
     boolean repair();

@@ -3,12 +3,12 @@ package it.unibo.jnavy.model.grid;
 import java.util.List;
 import java.util.Optional;
 
-import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.utilities.ShotResult;
 
 /**
  * Represents the game board (10x10).

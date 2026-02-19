@@ -1,14 +1,15 @@
-package it.unibo.jnavy.controller;
+package it.unibo.jnavy.controller.game;
 
 import java.util.function.Consumer;
 
-import it.unibo.jnavy.model.Bot;
-import it.unibo.jnavy.model.Human;
-import it.unibo.jnavy.model.Player;
-import it.unibo.jnavy.model.ShotResult;
+import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
+import it.unibo.jnavy.model.player.Bot;
+import it.unibo.jnavy.model.player.Human;
+import it.unibo.jnavy.model.player.Player;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.utilities.ShotResult;
 import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.model.weather.WeatherManager;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;

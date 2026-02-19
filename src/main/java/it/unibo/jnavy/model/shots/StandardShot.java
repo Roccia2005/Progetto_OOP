@@ -1,8 +1,8 @@
 package it.unibo.jnavy.model.shots;
 
-import it.unibo.jnavy.model.ShotResult;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.model.utilities.ShotResult;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
 import java.util.List;
