@@ -73,7 +73,7 @@ public class ViewGUI extends JFrame implements View {
                 }
             }
             this.cardLayout.show(this.mainPanel, CAPTAIN_CARD);
-        });
+        }, () -> this.cardLayout.show(this.mainPanel, START_CARD));
 
         CapSelectionPanel capPanel = new CapSelectionPanel((CaptainAbility ability) -> {
             switch(ability) {
@@ -82,7 +82,7 @@ public class ViewGUI extends JFrame implements View {
                 case SONAROFFICER -> this.selectedCaptain = new SonarOfficer();
             }
             startSetupPhase();
-        });
+        }, () -> this.cardLayout.show(this.mainPanel, BOT_CARD));
 
         this.mainPanel.add(botPanel, BOT_CARD);
         this.mainPanel.add(capPanel, CAPTAIN_CARD);

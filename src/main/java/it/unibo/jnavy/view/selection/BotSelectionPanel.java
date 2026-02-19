@@ -61,19 +61,24 @@ public class BotSelectionPanel extends JPanel {
     }
 
     private final DifficultySelectionListener listener;
+    private final Runnable backAction;
     private JLabel imageLabel;
     private JComboBox<BotLevel> levelComboBox;
     private JTextPane descriptionArea;
 
-    public BotSelectionPanel(final DifficultySelectionListener listener) {
+    public BotSelectionPanel(final DifficultySelectionListener listener, final Runnable backAction) {
         this.listener = listener;
-        this.setLayout(new GridBagLayout());
+        this.backAction = backAction;
+        this.setLayout(new BorderLayout());
         this.setBackground(BACKGROUND_COLOR);
         initUI();
     }
 
     private void initUI() {
         this.setPreferredSize(new Dimension(SETWIDTH, SETHEIGHT));
+
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.setBackground(BACKGROUND_COLOR);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, INSET_PADDING, INSET_PADDING);
@@ -85,7 +90,7 @@ public class BotSelectionPanel extends JPanel {
         title.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_TITLE));
         title.setForeground(FOREGROUND_COLOR);
         gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, 30, INSET_PADDING);
-        this.add(title, gbc);
+        centerPanel.add(title, gbc);
 
         gbc.gridy++;
         gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, INSET_PADDING, INSET_PADDING);
@@ -94,7 +99,7 @@ public class BotSelectionPanel extends JPanel {
         imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         imageLabel.setVerticalAlignment(SwingConstants.CENTER);
         imageLabel.setBorder(BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS));
-        this.add(imageLabel, gbc);
+        centerPanel.add(imageLabel, gbc);
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridy++;
@@ -112,7 +117,7 @@ public class BotSelectionPanel extends JPanel {
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
-        this.add(descriptionArea, gbc);
+        centerPanel.add(descriptionArea, gbc);
 
         gbc.gridy++;
         JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, FLOW_HGAP, FLOW_VGAP));
@@ -168,7 +173,28 @@ public class BotSelectionPanel extends JPanel {
 
         controlsPanel.add(levelComboBox);
         controlsPanel.add(confirmButton);
-        this.add(controlsPanel, gbc);
+        centerPanel.add(controlsPanel, gbc);
+
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 30));
+        bottomPanel.setBackground(BACKGROUND_COLOR);
+
+        JButton backButton = new JButton("Back");
+        backButton.setFocusPainted(false);
+        backButton.setPreferredSize(new Dimension(SETWIDTH / CONTROL_WIDTH_DIVISOR, SETHEIGHT / CONTROL_HEIGHT_DIVISOR));
+        backButton.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_CTRL));
+        backButton.setBackground(MENUBLUE);
+        backButton.setForeground(FOREGROUND_COLOR);
+        backButton.setBorder(BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS));
+        backButton.addActionListener(e -> {
+            if (this.backAction != null) {
+                this.backAction.run();
+            }
+        });
+        bottomPanel.add(backButton);
+
+        this.add(centerPanel, BorderLayout.CENTER);
+        this.add(bottomPanel, BorderLayout.SOUTH);
+
         levelComboBox.setSelectedIndex(0);
         updatePreview();
     }
