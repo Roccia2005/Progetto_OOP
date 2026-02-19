@@ -10,7 +10,6 @@ import it.unibo.jnavy.view.components.bot.BotDifficultyPanel;
 import it.unibo.jnavy.view.components.captain.CaptainAbilityButton;
 import it.unibo.jnavy.view.components.captain.CaptainNamePanel;
 import it.unibo.jnavy.view.components.weather.WeatherWidget;
-import it.unibo.jnavy.view.components.grid.AmbientSoundManager;
 import it.unibo.jnavy.view.components.grid.GridPanel;
 
 public class GamePanel extends JPanel {

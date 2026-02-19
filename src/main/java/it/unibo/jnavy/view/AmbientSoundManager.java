@@ -1,4 +1,4 @@
-package it.unibo.jnavy.view.components.grid;
+package it.unibo.jnavy.view;
 
 import javax.sound.sampled.*;
 import javax.swing.Timer;
