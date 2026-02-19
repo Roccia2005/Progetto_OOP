@@ -35,7 +35,7 @@ public class GamePanel extends JPanel {
         this.controller = controller;
         this.setLayout(new BorderLayout());
 
-        this.ambientSound = new AmbientSoundManager("/sounds/game_soundtrack.wav", 1);
+        this.ambientSound = new AmbientSoundManager("/sounds/game_soundtrack.wav", 144000);
 
         JPanel gridsContainer = new JPanel(new GridLayout(1, 2, 40, 0));
         gridsContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
