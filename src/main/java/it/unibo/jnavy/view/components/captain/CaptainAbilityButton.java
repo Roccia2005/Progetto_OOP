@@ -10,6 +10,9 @@ import java.io.IOException;
 
 public class CaptainAbilityButton extends JButton {
 
+    private static final Color BUTTON_ACTIVE = Color.GREEN;
+    private static final Color BUTTON_CHARGED = Color.BLUE;
+    private static final Color BUTTON_RECHARGING = Color.CYAN;
     private static final String BUTTON_TEXT = "Ability";
     private static final String CAPTAIN_IMAGE_PATH = "/images/captain.png"; 
     private static final String ALERT_IMAGE_PATH = "/images/alert.png";
@@ -150,11 +153,11 @@ public class CaptainAbilityButton extends JButton {
         g2d.fillRect(0, 0, width, height);
 
         if (isActive) {
-            g2d.setColor(Color.GREEN);
+            g2d.setColor(BUTTON_ACTIVE);
         } else if (fillPercentage >= MAX_PERCENTAGE) {
-            g2d.setColor(Color.BLUE);
+            g2d.setColor(BUTTON_CHARGED);
         } else {
-            g2d.setColor(Color.DARK_GRAY);
+            g2d.setColor(BUTTON_RECHARGING);
         }
 
         int fillHeight = (int) (height * fillPercentage);
