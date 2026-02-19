@@ -83,7 +83,28 @@ public class GameOverPanel extends JPanel {
     }
 
     private JButton createStyledButton(final String label) {
+        JButton button = new JButton(label);
+        button.setFont(new Font("Sanserif", Font.BOLD, 18));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(30, 100, 255));
+        button.setFocusPainted(false);
 
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.WHITE, 2),
+                BorderFactory.createEmptyBorder(10, 40, 10, 40)
+        ));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(60, 130, 255)); // Più chiaro
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(30, 100, 255)); // Normale
+            }
+        });
+
+        return button;
     }
 
 }
