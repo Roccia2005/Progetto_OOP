@@ -3,8 +3,6 @@ package it.unibo.jnavy.view;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.net.URL;
 
 /**
  * Game start screen.
