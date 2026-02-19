@@ -22,7 +22,7 @@ public class SniperBot extends AbstractBotStrategy{
     }
 
     private void populateKnownTargets(final Grid grid) {
-        for (Position p : grid.getPositions()) {
+        for (Position p : grid.getAvailableTargets()) {
             Optional<Cell> c = grid.getCell(p);
             if (c.isPresent() && c.get().isOccupied()) {
                 this.knownTargets.add(p);

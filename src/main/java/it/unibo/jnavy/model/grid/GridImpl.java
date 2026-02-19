@@ -129,13 +129,8 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public List<Position> getPositions() {
-        final Cell[][] matrix = this.getCellMatrix();
-        if (matrix == null) {
-            return new ArrayList<>();
-        }
-
-        return Arrays.stream(matrix)
+    public List<Position> getAvailableTargets() {
+        return Arrays.stream(this.cells)
                 .flatMap(Arrays::stream)
                 .filter(c -> !c.isHit())
                 .map(Cell::getPosition)
@@ -144,7 +139,7 @@ public class GridImpl implements Grid {
 
     @Override
     public boolean isTargetValid(Position target) {
-        Cell[][] matrix = this.getCellMatrix();
+        Cell[][] matrix = this.cells;
         int x = target.x();
         int y = target.y();
         return x >= 0
@@ -170,9 +165,5 @@ public class GridImpl implements Grid {
           .forEach(c -> c.setShip(null));
 
         this.fleet.removeShip(ship);
-    }
-
-    private Cell[][] getCellMatrix() {
-        return this.cells;
     }
 }

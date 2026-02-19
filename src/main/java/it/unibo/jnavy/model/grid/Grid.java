@@ -76,7 +76,7 @@ public interface Grid {
      */
     Fleet getFleet();
 
-    List<Position> getPositions();
+    List<Position> getAvailableTargets();
 
     boolean isTargetValid(Position target);
 
