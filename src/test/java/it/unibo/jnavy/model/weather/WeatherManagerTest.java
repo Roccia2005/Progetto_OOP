@@ -103,24 +103,17 @@ public class WeatherManagerTest {
      */
     @Test
     void testFogDeviation() {
-        assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
-
-        for (int i = 0; i < 5; i++) {
-            this.weatherManager.processTurnEnd();
-        }
-        assertEquals(WeatherCondition.FOG, this.weatherManager.getCurrentWeather());
-
+        this.weatherManager.setCondition(WeatherCondition.FOG);
         Grid grid = new GridImpl();
         Position target = new Position(5, 5);
-        ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
 
-        // Calculate distance (Delta)
-        Position actualPos = shotResult.position();
-        int diffX = Math.abs(target.x() - actualPos.x());
-        int diffY = Math.abs(target.y() - actualPos.y());
-
-        assertTrue(diffX <= 1 && diffY <= 1);
-
+        for (int i = 0; i < 20; i++) {
+            ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
+            Position actualPos = shotResult.position();
+            int diffX = Math.abs(target.x() - actualPos.x());
+            int diffY = Math.abs(target.y() - actualPos.y());
+            assertTrue(diffX <= 1 && diffY <= 1);
+        }
     }
 
     /**

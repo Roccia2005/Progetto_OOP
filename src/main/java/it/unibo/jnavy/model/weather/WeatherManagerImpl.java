@@ -95,4 +95,10 @@ public final class WeatherManagerImpl implements WeatherManager {
             this.turnCounter = 0;
         }
     }
+
+    @Override
+    public void setCondition(final WeatherCondition condition) {
+        this.condition = condition;
+        this.turnCounter = 0;
+    }
 }
