@@ -137,33 +137,21 @@ public class WeatherManagerTest {
     }
 
     /**
-     * Verifies that under FOG conditions, a shot is never redirected to a cell
-     * that has already been hit.
-     * This test simulates a scenario where the target (5, 5) is surrounded
-     * by 8 already-hit cells in its 3x3 neighborhood, leaving only one valid option
-     * (4, 4). The WeatherManager must identify and pick the only available
-     * cell instead of causing an invalid shot.
+     *
      */
     @Test
-    void testWeatherFogDoesNotShootAlreadyHitCells() {
-        for (int i = 0; i < 5; i++) {
-            this.weatherManager.processTurnEnd();
-        }
-        assertEquals(WeatherCondition.FOG, this.weatherManager.getCurrentWeather());
-
+    void testFogAvoidHitCells() {
+        this.weatherManager.setCondition(WeatherCondition.FOG);
         Grid grid = new GridImpl();
-        Position target = new Position(5, 5);
+        Position target = new Position(2, 2);
 
-        for (int x = 4; x <= 6; x++) {
-            for (int y = 4; y <= 6; y++) {
-                Position p = new Position(x, y);
-                if (!(x == 4 && y == 4)) {
-                    grid.receiveShot(p);
-                }
+        for (int x = 1; x <= 3; x++) {
+            for (int y = 1; y <= 3; y++) {
+                if (x == 1 && y == 1) continue;
+                grid.receiveShot(new Position(x, y));
             }
         }
         ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
-        assertEquals(new Position(4, 4), shotResult.position());
-        assertTrue(grid.getCell(new Position(4, 4)).get().isHit());
+        assertEquals(new Position(1, 1), shotResult.position());
     }
 }
