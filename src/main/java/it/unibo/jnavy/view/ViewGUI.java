@@ -12,6 +12,7 @@ import it.unibo.jnavy.model.captains.*;
 import it.unibo.jnavy.model.player.Bot;
 import it.unibo.jnavy.model.player.Human;
 import it.unibo.jnavy.view.game.GamePanel;
+import it.unibo.jnavy.view.game.ToastNotification;
 import it.unibo.jnavy.view.selection.BotSelectionPanel;
 import it.unibo.jnavy.view.selection.CapSelectionPanel;
 import it.unibo.jnavy.view.selection.BotSelectionPanel.BotLevel;
@@ -27,6 +28,8 @@ public class ViewGUI extends JFrame implements View {
     private static final String CAPTAIN_CARD = "CAPTAIN_SELECTION";
     private static final String SETUP_CARD = "SETUP";
     private static final String GAME_CARD = "GAME";
+    private static final String ERROR_MESSAGE = "No valid save file found!";
+    private static final Color ERROR_COLOR = Color.RED;
 
     private final CardLayout cardLayout;
     private final JPanel mainPanel;
@@ -133,8 +136,7 @@ public class ViewGUI extends JFrame implements View {
                     launchGameWithController(loadedController);
                 },
                 () -> {
-                    JOptionPane.showMessageDialog(this,
-                            "No valid save file found!", "Load Error", JOptionPane.ERROR_MESSAGE);
+                    ToastNotification.show(this, ERROR_MESSAGE, ERROR_COLOR);
                     initStartPhase();
                 }
         );
