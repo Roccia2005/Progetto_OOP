@@ -25,6 +25,7 @@ public class GameControllerImpl implements GameController {
         this.bot = bot;
         this.currentPlayer = this.human;
         this.weather = WeatherManagerImpl.getInstance();
+        ((WeatherManagerImpl) this.weather).reset();
     }
 
     @Override
