@@ -16,14 +16,16 @@ public class StartView extends JPanel {
 
     private static final Color BACKGROUND_BUTTON = new Color(41, 86, 246);
     private static final String SOUND_PATH = "/sounds/ship_horn.wav";
-    private static final String TITLE = "Dominates the Ocean. Sink the Enemy.";
-    private static final String START_GAME = "START GAME";
+    private static final String TITLE = "Dominate the Ocean. Sink the Enemy.";
+    private static final String START_GAME = "NEW GAME";
 
     private final Runnable onStartAction;
     private SoundManager ambientSound;
+    private final Runnable onLoadAction;
 
-    public StartView(final Runnable onStartAction) {
+    public StartView(final Runnable onStartAction, final Runnable onLoadAction) {
         this.onStartAction = onStartAction;
+        this.onLoadAction = onLoadAction;
         this.initUI();
     }
 
@@ -82,5 +84,26 @@ public class StartView extends JPanel {
         });
 
         this.add(startButton, gbc);
+
+        gbc.insets = new Insets(20, 0, 0, 0);
+
+        JButton loadButton = new JButton("LOAD GAME");
+        loadButton.setFont(new Font("SansSerif", Font.BOLD, 22));
+        loadButton.setForeground(Color.WHITE);
+        loadButton.setBackground(new Color(60, 60, 80));
+        loadButton.setFocusPainted(false);
+        loadButton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY, 2),
+                BorderFactory.createEmptyBorder(10, 40, 10, 40)
+        ));
+        loadButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        loadButton.addActionListener(e -> {
+            if (onLoadAction != null) {
+                onLoadAction.run();
+            }
+        });
+
+        this.add(loadButton, gbc);
     }
 }

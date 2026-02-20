@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherCondition;
@@ -112,6 +113,27 @@ public class GamePanel extends JPanel {
         this.updateDashboard();
     }
 
+    @NonNull
+    private JPanel getSavePanel() {
+        JButton saveButton = new JButton("Save Game");
+        saveButton.setFocusPainted(false);
+        saveButton.setBackground(new Color(41, 86, 246));
+        saveButton.setForeground(Color.BLACK);
+        saveButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        saveButton.addActionListener(e -> {
+            if (this.controller.saveGame()) {
+                showAutoClosingMessage("Game saved successfully!");
+            } else {
+                showAutoClosingMessage("Error saving the game.");
+            }
+        });
+
+        JPanel savePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        savePanel.setOpaque(false);
+        savePanel.add(saveButton);
+        return savePanel;
+    }
+
     private void updateDashboard() {
         int currentCooldown = controller.getCurrentCaptainCooldown();
         captainButton.updateState(currentCooldown);
@@ -185,17 +207,30 @@ public class GamePanel extends JPanel {
     }
 
     private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new GridLayout(2, 1));
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         headerPanel.setBackground(BACKGROUND_COLOR);
+
+        JPanel centerTitlePanel = new JPanel(new GridLayout(2, 1));
+        centerTitlePanel.setOpaque(false);
 
         JLabel titleLabel = new JLabel("J-NAVY", SwingConstants.CENTER);
         titleLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, 24));
         titleLabel.setForeground(FOREGROUND_COLOR);
 
-        headerPanel.add(titleLabel);
-        headerPanel.add(this.statusLabel);
-        
+        centerTitlePanel.add(titleLabel);
+        centerTitlePanel.add(this.statusLabel);
+
+        JPanel savePanel = getSavePanel();
+
+        JPanel ghostPanel = new JPanel();
+        ghostPanel.setOpaque(false);
+        ghostPanel.setPreferredSize(savePanel.getPreferredSize());
+
+        headerPanel.add(ghostPanel, BorderLayout.WEST);
+        headerPanel.add(centerTitlePanel, BorderLayout.CENTER);
+        headerPanel.add(savePanel, BorderLayout.EAST);
+
         return headerPanel;
     }
 
@@ -230,5 +265,37 @@ public class GamePanel extends JPanel {
         }
 
         this.gameOverPanel.showResult(isVictory);
+    }
+
+    private void showAutoClosingMessage(String message) {
+        final JWindow toast = new JWindow(SwingUtilities.getWindowAncestor(this));
+
+        JLabel label = new JLabel(message, SwingConstants.CENTER);
+        label.setFont(new Font("SansSerif", Font.BOLD, 18));
+        label.setForeground(Color.WHITE);
+        label.setBackground(new Color(41, 86, 246));
+        label.setOpaque(true);
+        label.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.WHITE, 2),
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+        ));
+
+        toast.add(label);
+        toast.pack();
+
+        Point location = this.getLocationOnScreen();
+        int x = location.x + (this.getWidth() - toast.getWidth()) / 2;
+        int y = location.y + (this.getHeight() - toast.getHeight()) / 2;
+        toast.setLocation(x, y);
+
+        toast.setVisible(true);
+
+        // Il messaggio scompare da solo dopo 1.5 secondi
+        Timer timer = new Timer(1500, e -> {
+            toast.setVisible(false);
+            toast.dispose();
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 }
