@@ -1,15 +1,52 @@
 package it.unibo.jnavy.view.selection;
 
-import javax.swing.*;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BACKGROUND_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BORDER_THICKNESS;
+import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_HEIGHT_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_WIDTH_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.DESC_HEIGHT_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.DESC_WIDTH_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FLOW_HGAP;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FLOW_VGAP;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_SIZE_CTRL;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_SIZE_DESC;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_SIZE_TITLE;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.IMAGE_SIZE;
+import static it.unibo.jnavy.view.utilities.ViewConstants.IMG_LABEL_HEIGHT_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.IMG_LABEL_WIDTH_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.INSET_PADDING;
+import static it.unibo.jnavy.view.utilities.ViewConstants.MENUBLUE;
+import static it.unibo.jnavy.view.utilities.ViewConstants.SETHEIGHT;
+import static it.unibo.jnavy.view.utilities.ViewConstants.SETWIDTH;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Rectangle;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import it.unibo.jnavy.view.utilities.ImageLoader;
-
-import java.awt.*;
-
-import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
 public class CapSelectionPanel extends JPanel {
 
@@ -120,7 +157,7 @@ public class CapSelectionPanel extends JPanel {
 
             @Override
             protected JButton createArrowButton() {
-                JButton btn = new javax.swing.plaf.basic.BasicArrowButton(
+                final JButton btn = new javax.swing.plaf.basic.BasicArrowButton(
                     javax.swing.plaf.basic.BasicArrowButton.SOUTH,
                     MENUBLUE,       // botton background color
                     MENUBLUE,       // shadow color, the same to uniform that to the background
@@ -134,7 +171,7 @@ public class CapSelectionPanel extends JPanel {
         });
         levelComboBox.setPreferredSize(new Dimension(SETWIDTH / CONTROL_WIDTH_DIVISOR, SETHEIGHT / CONTROL_HEIGHT_DIVISOR));
         levelComboBox.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_CTRL));
-        levelComboBox.setRenderer(new customRenderer());
+        levelComboBox.setRenderer(new CustomRenderer());
         levelComboBox.setFocusable(false);
         levelComboBox.setBackground(MENUBLUE);
         levelComboBox.setForeground(FOREGROUND_COLOR);
@@ -143,14 +180,14 @@ public class CapSelectionPanel extends JPanel {
         levelComboBox.addActionListener(e -> updatePreview());
         levelComboBox.setBorder(BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS));
 
-        JButton confirmButton = new JButton("Confirm");
+        final JButton confirmButton = new JButton("Confirm");
         confirmButton.setPreferredSize(new Dimension(SETWIDTH / CONTROL_WIDTH_DIVISOR, SETHEIGHT / CONTROL_HEIGHT_DIVISOR));
         confirmButton.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_CTRL));
         confirmButton.setBackground(MENUBLUE);
         confirmButton.setForeground(FOREGROUND_COLOR);
         confirmButton.setBorder(BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS));
         confirmButton.addActionListener(e -> {
-            CaptainAbility selected = (CaptainAbility) levelComboBox.getSelectedItem();
+            final CaptainAbility selected = (CaptainAbility) levelComboBox.getSelectedItem();
             if (selected != null && listener != null) {
                 listener.abilitySelected(selected);
             }
@@ -160,10 +197,10 @@ public class CapSelectionPanel extends JPanel {
         controlsPanel.add(confirmButton);
         centerPanel.add(controlsPanel, gbc);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 30));
+        final JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 30));
         bottomPanel.setBackground(BACKGROUND_COLOR);
 
-        JButton backButton = new JButton("Back");
+        final JButton backButton = new JButton("Back");
         backButton.setFocusPainted(false);
         backButton.setPreferredSize(new Dimension(SETWIDTH / CONTROL_WIDTH_DIVISOR, SETHEIGHT / CONTROL_HEIGHT_DIVISOR));
         backButton.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_CTRL));
@@ -185,9 +222,9 @@ public class CapSelectionPanel extends JPanel {
     }
 
     private void updatePreview() {
-        CaptainAbility selected = (CaptainAbility) levelComboBox.getSelectedItem();
+        final CaptainAbility selected = (CaptainAbility) levelComboBox.getSelectedItem();
         if (selected != null) {
-            ImageIcon icon = ImageLoader.getScaledIcon(selected.getImagePath(), IMAGE_SIZE, IMAGE_SIZE);
+            final ImageIcon icon = ImageLoader.getScaledIcon(selected.getImagePath(), IMAGE_SIZE, IMAGE_SIZE);
             imageLabel.setIcon(icon);
             if (icon == null) {
                 imageLabel.setText("image not found");
@@ -198,10 +235,10 @@ public class CapSelectionPanel extends JPanel {
         }
     }
 
-    private final class customRenderer extends DefaultListCellRenderer {
+    private final class CustomRenderer extends DefaultListCellRenderer {
         @Override
-        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, false);
+        public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
+            final JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, false);
 
             label.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
 
