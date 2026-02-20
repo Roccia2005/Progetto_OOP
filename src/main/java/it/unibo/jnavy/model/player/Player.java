@@ -1,12 +1,14 @@
 package it.unibo.jnavy.model.player;
 
 import java.util.List;
+import java.util.Optional;
 
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.observer.TurnObserver;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.ShotResult;
+import it.unibo.jnavy.model.utilities.HitType;
 
 /**
  * Defines the contract for a participant in the game.
@@ -56,4 +58,44 @@ public interface Player extends TurnObserver {
     @Override
     default void processTurnEnd() {
     }
+
+    default boolean useAbility(Position target, Grid grid) {
+        return false;
+    }
+
+    default int getAbilityCooldown() {
+        return 0;
+    }
+
+    default int getCurrentAbilityCooldown() {
+        return 0;
+    }
+
+    default boolean abilityTargetsEnemyGrid() {
+        return false;
+    }
+
+    default boolean doesAbilityConsumeTurn() {
+        return false;
+    }
+
+    /**
+     * Chiede al giocatore di generare autonomamente una mossa.
+     * Utilizza Optional: se il giocatore è Umano, ritorna Optional.empty().
+     */
+    default Optional<Position> generateTarget(Grid enemyGrid) {
+        return Optional.empty();
+    }
+
+    /**
+     * Invia un feedback al giocatore sul colpo appena effettuato.
+     * Implementazione di default vuota.
+     */
+    default void receiveFeedback(Position target, HitType result) {}
+
+    /**
+     * Restituisce il nome identificativo del "profilo" del giocatore.
+     * (Es: Nome del Capitano per l'Umano, Difficoltà per il Bot).
+     */
+    String getProfileName();
 }
