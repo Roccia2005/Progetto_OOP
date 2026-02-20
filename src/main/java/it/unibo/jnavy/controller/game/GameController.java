@@ -26,7 +26,7 @@ public interface GameController {
 
     boolean isHumanTurn();
 
-    void playBotTurn();
+    Position playBotTurn();
 
     String getBotDifficulty();
 

@@ -128,13 +128,14 @@ public class GameControllerImpl implements GameController {
     }
 
     @Override
-    public void playBotTurn() {
-        if (isGameOver()) return;
+    public Position playBotTurn() {
+        if (isGameOver()) return null;
 
         Position target = this.bot.decideTarget(this.human.getGrid());
         ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
         this.bot.receiveFeedback(result.position(), result.hitType());
         endTurn();
+        return result.position();
     }
 
     @Override
