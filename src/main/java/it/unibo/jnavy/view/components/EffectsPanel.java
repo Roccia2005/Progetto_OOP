@@ -171,7 +171,7 @@ public class EffectsPanel extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-        // Phase 1: Draw bullet if it's visible
+        // Phase 1: Draw a bullet if it's visible
         if (bulletVisible) {
             int bulletW = (int) (targetSize * 0.6);
             int bulletH = (int) (bulletW * 1.5);

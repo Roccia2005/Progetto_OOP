@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.model.utilities.Position;
@@ -245,5 +247,18 @@ public class GamePanel extends JPanel {
         }
 
         this.gameOverPanel.showResult(isVictory);
+    }
+
+    private List<Position> getAreaPositions(Position p) {
+        List<Position> area = new ArrayList<>();
+        for (int r = 0; r < 2; r++) {
+            for (int c = 0; c < 2; c++) {
+                Position pos = new Position(p.x() + r, p.y() + c);
+                if (pos.x() < controller.getGridSize() && pos.y() < controller.getGridSize()) {
+                    area.add(pos);
+                }
+            }
+        }
+        return area;
     }
 }
