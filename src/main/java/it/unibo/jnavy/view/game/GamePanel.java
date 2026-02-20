@@ -117,9 +117,10 @@ public class GamePanel extends JPanel {
     private JPanel getSavePanel() {
         JButton saveButton = new JButton("Save Game");
         saveButton.setFocusPainted(false);
-        saveButton.setBackground(new Color(41, 86, 246));
+        saveButton.setBackground(Color.WHITE);
         saveButton.setForeground(Color.BLACK);
-        saveButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        saveButton.setBorderPainted(false);
+        saveButton.setFont(new Font(FONT_FAMILY, Font.BOLD, 14));
         saveButton.addActionListener(e -> {
             if (this.controller.saveGame()) {
                 showAutoClosingMessage("Game saved successfully!");
