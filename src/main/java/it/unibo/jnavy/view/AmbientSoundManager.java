@@ -57,8 +57,10 @@ public class AmbientSoundManager {
         if (loopTimer != null) {
             loopTimer.stop();
         }
-        if (clip != null && clip.isRunning()) {
+        if (clip != null) {
             clip.stop();
+            clip.flush();
+            clip.close();
         }
     }
 
