@@ -64,16 +64,16 @@ public interface Cell {
      * @param shipFound true if a ship was detected in the scanned area, 
      * false otherwise.
      */
-    public void setScanResult(boolean shipFound);
+    void setScanResult(boolean shipFound);
 
     /**
-     * Retrieves the result of the last sonar scan performed on this cell.git
+     * Retrieves the result of the last sonar scan performed on this cell.
      *
      * @return an {@link Optional} containing true if a ship was found, 
      * false if only water was found, or an empty Optional 
      * if this cell has never been scanned.
      */
-    public Optional<Boolean> getScanResult();
+    Optional<Boolean> getScanResult();
 
     /**
      * Determines whether the cell contains an active and hidden entity 
@@ -82,5 +82,5 @@ public interface Cell {
      * @return true if the cell represents an undiscovered cell,
      * false otherwise.
      */
-    public boolean hisDetectable();
+    boolean hisDetectable();
 }
