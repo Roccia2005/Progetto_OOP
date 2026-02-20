@@ -15,10 +15,11 @@ import it.unibo.jnavy.model.utilities.ShotResult;
 public class WeatherManagerTest {
 
     private WeatherManager weatherManager;
+    private static final int DURATION = 6;
 
     /**
      * Sets up the test environment before each test.
-     * Retrives the WeatherManager singleton instance and resets its internal state.
+     * Retries the WeatherManager singleton instance and resets its internal state.
      * This ensures that every test starts with a clean state
      * (SUNNY weather, turn counter at 0).
      */
@@ -39,26 +40,41 @@ public class WeatherManagerTest {
     }
 
     /**
-     * Verifies that the weather condition changes every 5 turns.
+     * Verifies that the weather condition does not change before the duration of the weather.
      */
     @Test
-    void testWeatherChangeOnTurns() {
+    void testNoChangeBeforeDuration() {
         // Verify initial state
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
-
-        // Advance 5 turns (Weather duration)
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < DURATION - 1; i++) {
             this.weatherManager.processTurnEnd();
+            assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
         }
-        // Weather should be FOG
-        assertEquals(WeatherCondition.FOG, this.weatherManager.getCurrentWeather());
+    }
 
-        //Advance another 5 turns
-        for (int i = 0; i < 5; i++) {
-            this.weatherManager.processTurnEnd();
+    /**
+     *
+     */
+    @Test
+    void testWeatherTransitions() {
+        boolean sawSunny = false;
+        boolean sawFog = false;
+        for (int i = 0; i < 100; i++) {
+            for (int t = 0; t < DURATION; t++) {
+                this.weatherManager.processTurnEnd();
+            }
+            if (this.weatherManager.getCurrentWeather() == WeatherCondition.SUNNY) {
+                sawSunny = true;
+            }
+            if (this.weatherManager.getCurrentWeather() == WeatherCondition.FOG) {
+                sawFog = true;
+            }
+            if (sawSunny && sawFog) {
+                break;
+            }
+            assertTrue(sawSunny, "Should have seen SUNNY weather");
+            assertTrue(sawFog, "Should have seen FOG weather after some transitions");
         }
-        // Weather should return to SUNNY
-        assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
     }
 
     /**
