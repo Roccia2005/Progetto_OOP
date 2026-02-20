@@ -31,6 +31,8 @@ public class GamePanel extends JPanel {
     private static final String YOUR_TURN_TEXT = "Your turn";
     private static final Color BOT_TURN_TEXT_COLOR = Color.RED;
     private static final Color YOUR_TURN_TEXT_COLOR = Color.WHITE;
+    private static final String GAME_SAVED = "Game saved successfully!";
+    private static final String SAVE_ERROR = "Error saving the game.";
 
     private boolean inputBlocked = false;
     private final GameHeaderPanel headerPanel;
@@ -76,9 +78,9 @@ public class GamePanel extends JPanel {
 
         this.headerPanel = new GameHeaderPanel(() -> {
             if (this.controller.saveGame()) {
-                showAutoClosingMessage("Game saved successfully!");
+                ToastNotification.show(this, GAME_SAVED);
             } else {
-                showAutoClosingMessage("Error saving the game.");
+                ToastNotification.show(this, SAVE_ERROR);
             }
         });
 
@@ -306,37 +308,5 @@ public class GamePanel extends JPanel {
             }
         }
         return area;
-    }
-
-    private void showAutoClosingMessage(String message) {
-        final JWindow toast = new JWindow(SwingUtilities.getWindowAncestor(this));
-
-        JLabel label = new JLabel(message, SwingConstants.CENTER);
-        label.setFont(new Font(FONT_FAMILY, Font.BOLD, 18));
-        label.setForeground(Color.WHITE);
-        label.setBackground(new Color(41, 86, 246));
-        label.setOpaque(true);
-        label.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.WHITE, 2),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
-        ));
-
-        toast.add(label);
-        toast.pack();
-
-        Point location = this.getLocationOnScreen();
-        int x = location.x + (this.getWidth() - toast.getWidth()) / 2;
-        int y = location.y + (this.getHeight() - toast.getHeight()) / 2;
-        toast.setLocation(x, y);
-
-        toast.setVisible(true);
-
-        // Il messaggio scompare da solo dopo 1.5 secondi
-        Timer timer = new Timer(1500, e -> {
-            toast.setVisible(false);
-            toast.dispose();
-        });
-        timer.setRepeats(false);
-        timer.start();
     }
 }
