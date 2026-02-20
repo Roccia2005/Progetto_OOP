@@ -1,4 +1,5 @@
 package it.unibo.jnavy.model.bots;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -39,12 +40,12 @@ class BotTest {
      */
     @Test
     void testBeginnerBot() {
-        BotStrategy bot = new BeginnerBot();
+        final BotStrategy bot = new BeginnerBot();
 
-        Position randomTarget = bot.selectTarget(this.grid);
+        final Position randomTarget = bot.selectTarget(this.grid);
         assertTrue(this.grid.isPositionValid(randomTarget));
 
-        Optional<Cell> cell = this.grid.getCell(randomTarget);
+        final Optional<Cell> cell = this.grid.getCell(randomTarget);
         assertTrue(cell.isPresent());
         assertFalse(cell.get().isHit());
     }
@@ -55,9 +56,9 @@ class BotTest {
      */
     @Test
     void testProBotHunting() {
-        BotStrategy bot = new ProBot();
+        final BotStrategy bot = new ProBot();
 
-        Position randomTarget = bot.selectTarget(this.grid);
+        final Position randomTarget = bot.selectTarget(this.grid);
         assertTrue(this.grid.isPositionValid(randomTarget));
     }
 
@@ -67,13 +68,13 @@ class BotTest {
      */
     @Test
     void testProBotSeeking() {
-        BotStrategy bot = new ProBot();
+        final BotStrategy bot = new ProBot();
 
-        Position firstHit = new Position(5, 5);
+        final Position firstHit = new Position(5, 5);
         this.grid.receiveShot(firstHit);
         bot.lastShotFeedback(firstHit, HitType.HIT);
 
-        Position secondHit = bot.selectTarget(this.grid);
+        final Position secondHit = bot.selectTarget(this.grid);
         assertTrue(isNear(firstHit, secondHit));
     }
 
@@ -83,17 +84,17 @@ class BotTest {
      */
     @Test
     void testProBotDestroying() {
-        BotStrategy bot = new ProBot();
+        final BotStrategy bot = new ProBot();
 
-        Position firstHit = new Position(5, 5);
+        final Position firstHit = new Position(5, 5);
         this.grid.receiveShot(firstHit);
         bot.lastShotFeedback(firstHit, HitType.HIT);
 
-        Position secondHit = new Position(5, 6);
+        final Position secondHit = new Position(5, 6);
         this.grid.receiveShot(secondHit);
         bot.lastShotFeedback(secondHit, HitType.HIT);
 
-        Position thirdHit = bot.selectTarget(this.grid);
+        final Position thirdHit = bot.selectTarget(this.grid);
         assertEquals(new Position(5, 7), thirdHit);
     }
 
@@ -103,12 +104,12 @@ class BotTest {
      */
     @Test
     void testProBotReturnToHuntingAfterSunk() {
-        BotStrategy bot = new ProBot();
+        final BotStrategy bot = new ProBot();
 
         bot.lastShotFeedback(new Position(3, 3), HitType.HIT);
         bot.lastShotFeedback(new Position(3, 4), HitType.SUNK);
 
-        Position randomTarget = bot.selectTarget(this.grid);
+        final Position randomTarget = bot.selectTarget(this.grid);
         assertTrue(this.grid.isPositionValid(randomTarget)); // da capire come valutare lo sparo random
     }
 
@@ -118,21 +119,21 @@ class BotTest {
      */
     @Test
     void testProBotReverseDirection() {
-        BotStrategy bot = new ProBot();
+        final BotStrategy bot = new ProBot();
 
-        Position firstHit = new Position(5, 5);
+        final Position firstHit = new Position(5, 5);
         this.grid.receiveShot(firstHit);
         bot.lastShotFeedback(firstHit, HitType.HIT);
 
-        Position secondHit = new Position(5, 6);
+        final Position secondHit = new Position(5, 6);
         this.grid.receiveShot(secondHit);
         bot.lastShotFeedback(secondHit, HitType.HIT);
 
-        Position firstMiss = new Position(5, 7);
+        final Position firstMiss = new Position(5, 7);
         this.grid.receiveShot(firstMiss);
         bot.lastShotFeedback(firstMiss, HitType.MISS);
 
-        Position reverseTarget = bot.selectTarget(this.grid);
+        final Position reverseTarget = bot.selectTarget(this.grid);
         assertEquals(new Position(5, 4), reverseTarget);
     }
 
@@ -143,20 +144,20 @@ class BotTest {
      */
     @Test
     void testSniperBotCheatingLogic() {
-        Ship ship = new ShipImpl(3);
-        Position p = new Position(0, 0);
+        final Ship ship = new ShipImpl(3);
+        final Position p = new Position(0, 0);
         this.grid.placeShip(ship, p, CardinalDirection.DOWN);
-        List<Position> ships = Arrays.asList(
+        final List<Position> ships = Arrays.asList(
             new Position(0, 0),
             new Position(1, 0),
             new Position(2, 0)
         );
 
         int hits = 0;
-        int max = 100;
+        final int max = 100;
         for (int i = 0; i < max; i++) {
-            BotStrategy bot = new SniperBot(ships);
-            Position target = bot.selectTarget(this.grid);
+            final BotStrategy bot = new SniperBot(ships);
+            final Position target = bot.selectTarget(this.grid);
             if (ships.contains(target)) {
                 hits++;
             }
@@ -166,6 +167,7 @@ class BotTest {
 
     /**
      * Helper method.
+     *
      * @param first position to use for distance calcs.
      * @param second position to use for distance calcs.
      * @return true if the two positions are adjacent.

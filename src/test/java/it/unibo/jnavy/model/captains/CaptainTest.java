@@ -46,7 +46,7 @@ class CaptainTest {
         this.captain = new AbstractCaptain(TEST_COOLDOWN) {
 
             @Override
-            public boolean useAbility(Grid grid, Position p) {
+            public boolean useAbility(final Grid grid, final Position p) {
                 if (this.isAbilityRecharged()) {
                     this.resetCooldown();
                     return true;
@@ -63,7 +63,6 @@ class CaptainTest {
             public boolean targetsEnemyGrid() {
                 return false;
             }
-            
         };
         this.assertAbilityIsNotCharged();
 
@@ -91,7 +90,7 @@ class CaptainTest {
         assertFalse(this.captain.useAbility(grid, position));
 
         // The ability should not repair a cell hit with water
-        Position waterPosition = new Position(5, 5);
+        final Position waterPosition = new Position(5, 5);
         this.grid.receiveShot(waterPosition);
         assertFalse(this.captain.useAbility(grid, waterPosition));
 
@@ -122,7 +121,7 @@ class CaptainTest {
         assertFalse(this.captain.useAbility(grid, invalidPosition));
         assertTrue(this.captain.useAbility(grid, position));
 
-        List<Position> areaShot = List.of(
+        final List<Position> areaShot = List.of(
             position,
             new Position(position.x(), position.y() + 1),
             new Position(position.x() + 1, position.y()),
@@ -130,7 +129,7 @@ class CaptainTest {
         );
 
         // Verify that every cell in the expected area has been hit
-        for (Position p : areaShot) {
+        for (final Position p : areaShot) {
             assertTrue(this.grid.getCell(p).get().isHit());
         }
 
@@ -147,7 +146,6 @@ class CaptainTest {
         assertTrue(this.captain.targetsEnemyGrid());
         assertFalse(this.captain.doesAbilityConsumeTurn());
         this.chargeAbility(SonarOfficer.COOLDOWN);
-        
         assertFalse(this.captain.useAbility(grid, invalidPosition));
         assertTrue(this.captain.useAbility(grid, position));
 
@@ -164,7 +162,7 @@ class CaptainTest {
         this.chargeAbility(SonarOfficer.COOLDOWN + 1);
         
         // Verify that the scanned 3x3 area (from 4,4 to 6,6) correctly registered no ships
-        Position emptyPosition = new Position(5, 5);
+        final Position emptyPosition = new Position(5, 5);
         assertTrue(this.captain.useAbility(grid, emptyPosition));
 
         for (int x = 4; x <= 6; x++) {
