@@ -84,141 +84,21 @@ public class GamePanel extends JPanel {
             }
         });
 
-        this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET,
-                                (Position p) -> {
-                                    if (this.inputBlocked || !controller.isHumanTurn()) {
-                                        return;
-                                    }
-                                    if (this.dashboardPanel.isCaptainAbilityActive() && !controller.captainAbilityTargetsEnemyGrid()) {
-                                        controller.processAbility(p);
-                                        this.dashboardPanel.resetCaptainAbility();;
-                                        this.updateDashboard();
-                                    }
-                                });
-        this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET,
-                                (Position p) -> {
-                                    if (this.inputBlocked || !controller.isHumanTurn() || controller.isGameOver()) return;
-
-                                    CellCondition clickedState = controller.getBotCellState(p);
-                                    boolean isAlreadyRevealed = (clickedState == CellCondition.HIT_SHIP ||
-                                                                 clickedState == CellCondition.SUNK_SHIP ||
-                                                                 clickedState == CellCondition.HIT_WATER);
-
-                                    if (isAlreadyRevealed && !this.dashboardPanel.isCaptainAbilityActive()) return;
-
-                                    this.inputBlocked = true;
-                                    boolean isAbility = this.dashboardPanel.isCaptainAbilityActive();
-                                    boolean isGunner = controller.getPlayerCaptainName().toLowerCase().contains("gunner");
-
-                                    List<Position> previousHits = new ArrayList<>();
-                                    int size = controller.getGridSize();
-                                    for (int r = 0; r < size; r++) {
-                                        for (int c = 0; c < size; c++) {
-                                            Position pos = new Position(r, c);
-                                            CellCondition state = controller.getBotCellState(pos);
-                                            if (state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP || state == CellCondition.HIT_WATER) {
-                                                previousHits.add(pos);
-                                            }
-                                        }
-                                    }
-
-                                    if (isAbility) {
-                                        controller.processAbility(p);
-                                        this.dashboardPanel.resetCaptainAbility();;
-                                    } else {
-                                        controller.processShot(p);
-                                    }
-
-                                    List<Position> newHits = new ArrayList<>();
-                                    for (int r = 0; r < size; r++) {
-                                        for (int c = 0; c < size; c++) {
-                                            Position pos = new Position(r, c);
-                                            CellCondition state = controller.getBotCellState(pos);
-                                            boolean isHitNow = (state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP || state == CellCondition.HIT_WATER);
-                                            if (isHitNow && !previousHits.contains(pos)) {
-                                                newHits.add(pos);
-                                            }
-                                        }
-                                    }
-
-                                    List<Position> tempTargets = new ArrayList<>();
-                                    if (newHits.isEmpty()) {
-                                        if (isAbility && isGunner) {
-                                            tempTargets = getAreaPositions(p);
-                                        } else {
-                                            tempTargets.add(p);
-                                        }
-                                    } else {
-                                        if (isAbility && isGunner) {
-                                            Position bestAnchor = newHits.get(0);
-                                            int minDistance = Integer.MAX_VALUE;
-
-                                            for (int r = 0; r < size; r++) {
-                                                for (int c = 0; c < size; c++) {
-                                                    boolean containsAll = true;
-                                                    for (Position n : newHits) {
-                                                        if (n.x() < r || n.x() > r + 1 || n.y() < c || n.y() > c + 1) {
-                                                            containsAll = false;
-                                                            break;
-                                                        }
-                                                    }
-                                                    if (containsAll) {
-                                                        int dist = Math.abs(r - p.x()) + Math.abs(c - p.y());
-                                                        if (dist < minDistance) {
-                                                            minDistance = dist;
-                                                            bestAnchor = new Position(r, c);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            tempTargets = getAreaPositions(bestAnchor);
-                                        } else {
-                                            tempTargets.add(newHits.get(0));
-                                        }
-                                    }
-
-                                    final List<Position> targets = tempTargets;
-
-                                    boolean anyHit = targets.stream().anyMatch(pos -> {
-                                        var state = controller.getBotCellState(pos);
-                                        return state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
-                                    });
-
-                                    List<Component> targetButtons = targets.stream()
-                                            .map(botGridPanel::getButtonAt)
-                                            .collect(Collectors.toList());
-
-                                    this.effectsPanel.startShot(targetButtons, anyHit,
-                                            () -> {
-                                                targets.forEach(pos -> botGridPanel.refreshCell(pos, controller.getBotCellState(pos)));
-                                            },
-                                            () -> {
-                                                this.updateDashboard();
-                                                if (!controller.isHumanTurn() && !controller.isGameOver()) {
-                                                    triggerBotTurn();
-                                                } else {
-                                                    this.inputBlocked = false;
-                                                }
-                                            }
-                                    );
-                                });
-
+        this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET, this::handleHumanGridClick);
+        this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET, this::handleBotGridClick);
         this.humanGridPanel.setBackground(BACKGROUND_COLOR);
         this.botGridPanel.setBackground(BACKGROUND_COLOR);
+
         this.updateDashboard();
+
         gridsContainer.add(this.humanGridPanel);
         gridsContainer.add(this.botGridPanel);
-        gridsContainer.setBackground(BACKGROUND_COLOR);
 
-        this.ambientSound.start();
         this.mainContent.add(this.headerPanel, BorderLayout.NORTH);
         this.mainContent.add(gridsContainer, BorderLayout.CENTER);
         this.mainContent.add(this.dashboardPanel, BorderLayout.SOUTH);
 
-        this.gameOverPanel = new GameOverPanel(
-                e -> onMenu.run(),
-                e -> System.exit(0)
-        );
+        this.gameOverPanel = new GameOverPanel(e -> onMenu.run(), e -> System.exit(0));
 
         layeredPane.add(this.mainContent, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(this.effectsPanel, JLayeredPane.PALETTE_LAYER);
@@ -237,6 +117,7 @@ public class GamePanel extends JPanel {
             }
         });
         this.updateDashboard();
+        this.ambientSound.start();
     }
 
     private void updateDashboard() {
@@ -272,7 +153,7 @@ public class GamePanel extends JPanel {
             var state = controller.getHumanCellState(target);
             boolean isHit = state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
             this.effectsPanel.startShot(List.of(targetButton), isHit,
-                    () -> humanGridPanel.refreshCell(target, state),
+                    () -> humanGridPanel.refresh(pos -> controller.getHumanCellState(pos)),
                     () -> {
                 this.updateDashboard();
                 this.inputBlocked = false;
@@ -308,5 +189,110 @@ public class GamePanel extends JPanel {
             }
         }
         return area;
+    }
+
+    private void handleHumanGridClick(Position p) {
+        if (this.inputBlocked || !controller.isHumanTurn()) return;
+        
+        if (this.dashboardPanel.isCaptainAbilityActive() && !controller.captainAbilityTargetsEnemyGrid()) {
+            controller.processAbility(p);
+            this.dashboardPanel.resetCaptainAbility();
+            this.updateDashboard();
+        }
+    }
+
+    private void handleBotGridClick(Position p) {
+        if (this.inputBlocked || !controller.isHumanTurn() || controller.isGameOver()) return;
+
+        CellCondition clickedState = controller.getBotCellState(p);
+        boolean isAlreadyRevealed = (clickedState == CellCondition.HIT_SHIP || clickedState == CellCondition.SUNK_SHIP || clickedState == CellCondition.HIT_WATER);
+
+        if (isAlreadyRevealed && !this.dashboardPanel.isCaptainAbilityActive()) return;
+
+        this.inputBlocked = true;
+        boolean isAbility = this.dashboardPanel.isCaptainAbilityActive();
+        boolean isGunner = controller.getPlayerCaptainName().toLowerCase().contains("gunner");
+
+        // Ottimizzazione: salviamo i colpi prima dell'attacco
+        List<Position> previousHits = getAllRevealedPositions();
+
+        if (isAbility) {
+            controller.processAbility(p);
+            this.dashboardPanel.resetCaptainAbility();
+        } else {
+            controller.processShot(p);
+        }
+
+        // Recuperiamo i nuovi colpi sottraendo quelli vecchi (molto più pulito!)
+        List<Position> newHits = getAllRevealedPositions();
+        newHits.removeAll(previousHits);
+
+        List<Position> targets = determineAnimationTargets(p, newHits, isAbility, isGunner);
+        boolean anyHit = targets.stream().anyMatch(pos -> {
+            var state = controller.getBotCellState(pos);
+            return state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
+        });
+
+        List<Component> targetButtons = targets.stream().map(botGridPanel::getButtonAt).collect(Collectors.toList());
+
+        this.effectsPanel.startShot(targetButtons, anyHit,
+                () -> botGridPanel.refresh(pos -> controller.getBotCellState(pos)),
+                () -> {
+                    this.updateDashboard();
+                    if (!controller.isHumanTurn() && !controller.isGameOver()) {
+                        triggerBotTurn();
+                    } else {
+                        this.inputBlocked = false;
+                    }
+                }
+        );
+    }
+
+    private List<Position> getAllRevealedPositions() {
+        List<Position> hits = new ArrayList<>();
+        int size = controller.getGridSize();
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
+                Position pos = new Position(r, c);
+                CellCondition state = controller.getBotCellState(pos);
+                if (state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP || state == CellCondition.HIT_WATER) {
+                    hits.add(pos);
+                }
+            }
+        }
+        return hits;
+    }
+
+    private List<Position> determineAnimationTargets(Position p, List<Position> newHits, boolean isAbility, boolean isGunner) {
+        if (!isAbility || !isGunner) {
+            return newHits.isEmpty() ? List.of(p) : List.of(newHits.get(0));
+        }
+        if (newHits.isEmpty()) {
+            return getAreaPositions(p);
+        }
+
+        Position bestAnchor = newHits.get(0);
+        int minDistance = Integer.MAX_VALUE;
+        int size = controller.getGridSize();
+
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
+                boolean containsAll = true;
+                for (Position n : newHits) {
+                    if (n.x() < r || n.x() > r + 1 || n.y() < c || n.y() > c + 1) {
+                        containsAll = false;
+                        break;
+                    }
+                }
+                if (containsAll) {
+                    int dist = Math.abs(r - p.x()) + Math.abs(c - p.y());
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                        bestAnchor = new Position(r, c);
+                    }
+                }
+            }
+        }
+        return getAreaPositions(bestAnchor);
     }
 }
