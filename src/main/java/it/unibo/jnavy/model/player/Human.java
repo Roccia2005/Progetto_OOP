@@ -56,6 +56,7 @@ public class Human implements Player {
      * @return true if the ability was successfully used (cooldown reset),
      * false if it was not ready or the target was invalid.
      */
+    @Override
     public boolean useAbility(Position target, Grid grid) {
         return this.captain.useAbility(grid, target);
     }
@@ -63,14 +64,16 @@ public class Human implements Player {
     /**
      * @return the cooldown value of the Captain's special ability.
      */
-    public int getCaptainCooldown() {
+    @Override
+    public int getAbilityCooldown() {
         return this.captain.getCooldown();
     }
 
     /**
      * * @return the current progress of the ability's cooldown.
      */
-    public int getCaptainCurrentCooldown() {
+    @Override
+    public int getCurrentAbilityCooldown() {
         return this.captain.getCurrentCooldown();
     }
 
@@ -79,7 +82,8 @@ public class Human implements Player {
      *
      * @return true if the ability targets the opponent, false otherwise.
      */
-    public boolean captainAbilityTargetsEnemyGrid() {
+    @Override
+    public boolean abilityTargetsEnemyGrid() {
         return this.captain.targetsEnemyGrid();
     }
 
@@ -89,14 +93,16 @@ public class Human implements Player {
      * @return true if using the ability ends the turn,
      * false if the player can still shoot after using it.
      */
-    public boolean doescaptainAbilityConsumeTurn() {
+    @Override
+    public boolean doesAbilityConsumeTurn() {
         return this.captain.doesAbilityConsumeTurn();
     }
 
     /**
      * @return a String representing the name of the captain.
      */
-    public String getCaptainName() {
+    @Override
+    public String getProfileName() {
         return this.captain.getName();
     }
 }

@@ -3,14 +3,14 @@ package it.unibo.jnavy.controller.setup;
 import java.util.*;
 
 import it.unibo.jnavy.controller.utilities.CellState;
-import it.unibo.jnavy.model.bots.BotStrategy;
-import it.unibo.jnavy.model.captains.Captain;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.grid.Grid;
+import it.unibo.jnavy.model.player.Player;
 import it.unibo.jnavy.model.player.Bot;
 import it.unibo.jnavy.model.player.Human;
-import it.unibo.jnavy.model.player.Player;
+import it.unibo.jnavy.model.bots.BotStrategy;
+import it.unibo.jnavy.model.captains.Captain;
 import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
@@ -38,7 +38,6 @@ public class SetupControllerImpl implements SetupController {
     public SetupControllerImpl(final Captain selectedCaptain, final BotStrategy selectedBotStrategy) {
         this.shipsToPlace = new ArrayList<>(buildFleetConfig());
         this.random = new Random();
-
         this.human = new Human(selectedCaptain);
         this.bot = new Bot(selectedBotStrategy);
         this.placeFleetRandomly(this.bot, new ArrayList<>(buildFleetConfig()));
