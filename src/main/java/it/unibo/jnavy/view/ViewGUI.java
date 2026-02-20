@@ -30,6 +30,7 @@ public class ViewGUI extends JFrame implements View {
 
     private final CardLayout cardLayout;
     private final JPanel mainPanel;
+    private StartView startView;
     private BotStrategy selectedBotStrategy;
     private Captain selectedCaptain;
     private boolean isSniperSelected = false;
@@ -54,13 +55,15 @@ public class ViewGUI extends JFrame implements View {
     @Override
     public void start() {
         this.setVisible(true);
+        this.startView.startMusic();
     }
 
     private void initStartPhase() {
-        StartView startView = new StartView(
+        this.startView = new StartView(
                 () -> {
                     SaveManager saveManager = new SaveManagerImpl();
                     saveManager.deleteSave();
+                    this.startView.stopMusic();
                     this.cardLayout.show(this.mainPanel, BOT_CARD);
                 },
                 this::loadGame
