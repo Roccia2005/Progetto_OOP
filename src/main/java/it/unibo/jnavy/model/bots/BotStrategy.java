@@ -4,10 +4,12 @@ import it.unibo.jnavy.model.utilities.HitType;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.grid.Grid;
 
+import java.io.Serializable;
+
 /**
  * Defines the contract for the Bot's decision-making algorithms.
  */
-public interface BotStrategy {
+public interface BotStrategy extends Serializable {
 
     /**
      * Analyzes the enemy grid and determines the coordinates for the next shot.

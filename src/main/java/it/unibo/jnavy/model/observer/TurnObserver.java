@@ -1,5 +1,7 @@
 package it.unibo.jnavy.model.observer;
 
+import java.io.Serializable;
+
 /**
  * An observer interface for handling turn-based events in the game.
  * Classes implementing this interface will be notified by the Game Controller
@@ -9,7 +11,7 @@ package it.unibo.jnavy.model.observer;
  *   - Updating the duration of Weather conditions (e.g., fog lifting after 3 turns)
  *   - Updating the UI timer or turn counter
  */
-public interface TurnObserver {
+public interface TurnObserver extends Serializable {
 
     /**
      * Called automatically by the Game Controller after each turn.

@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.grid;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,7 @@ import it.unibo.jnavy.model.utilities.ShotResult;
  * Represents the game board (10x10).
  * Manages the placement of ships and the processing of shots.
  */
-public interface Grid {
+public interface Grid extends Serializable {
 
     /**
      * Places a ship on the grid at the specified position and direction.

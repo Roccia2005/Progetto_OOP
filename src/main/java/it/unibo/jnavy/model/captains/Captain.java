@@ -4,12 +4,14 @@ import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.observer.TurnObserver;
 import it.unibo.jnavy.model.utilities.Position;
 
+import java.io.Serializable;
+
 /**
  * Represents a Captain in the game.
  * Each captain possesses a unique special ability that can be used on the grid
  * after a certain cooldown period.
  */
-public interface Captain extends TurnObserver{
+public interface Captain extends TurnObserver {
 
     /**
      * Checks if the captain's special ability is ready to be used.

@@ -18,6 +18,8 @@ import it.unibo.jnavy.view.selection.BotSelectionPanel.BotLevel;
 import it.unibo.jnavy.view.selection.CapSelectionPanel.CaptainAbility;
 import it.unibo.jnavy.view.setup.SetupView;
 import it.unibo.jnavy.view.start.StartView;
+import it.unibo.jnavy.model.serialization.SaveManager;
+import it.unibo.jnavy.model.serialization.SaveManagerImpl;
 
 public class ViewGUI extends JFrame implements View {
     private static final String START_CARD = "START";
@@ -55,7 +57,14 @@ public class ViewGUI extends JFrame implements View {
     }
 
     private void initStartPhase() {
-        StartView startView = new StartView(() -> this.cardLayout.show(this.mainPanel, BOT_CARD));
+        StartView startView = new StartView(
+                () -> {
+                    SaveManager saveManager = new SaveManagerImpl();
+                    saveManager.deleteSave();
+                    this.cardLayout.show(this.mainPanel, BOT_CARD);
+                },
+                this::loadGame
+        );
         this.mainPanel.add(startView, START_CARD);
     }
 
@@ -110,7 +119,26 @@ public class ViewGUI extends JFrame implements View {
         }
 
         GameController gameController = new GameControllerImpl(humanPlayer, botPlayer);
+        launchGameWithController(gameController);
+    }
 
+    private void loadGame() {
+        SaveManager saveManager = new SaveManagerImpl();
+
+        saveManager.load().ifPresentOrElse(
+                loadedState -> {
+                    GameController loadedController = new GameControllerImpl(loadedState);
+                    launchGameWithController(loadedController);
+                },
+                () -> {
+                    JOptionPane.showMessageDialog(this,
+                            "No valid save file found!", "Load Error", JOptionPane.ERROR_MESSAGE);
+                    initStartPhase();
+                }
+        );
+    }
+
+    private void launchGameWithController(GameController gameController) {
         GamePanel gamePanel = new GamePanel(gameController, () -> {
             this.selectedBotStrategy = null;
             this.selectedCaptain = null;

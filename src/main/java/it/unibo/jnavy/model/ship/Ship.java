@@ -1,10 +1,12 @@
 package it.unibo.jnavy.model.ship;
 
+import java.io.Serializable;
+
 /**
  * Represents a ship entity in the game.
  * It defines the basic behavior of a ship, such as taking damage and checking its status.
  */
-public interface Ship {
+public interface Ship extends Serializable {
 
     /**
      * Registers a hit on the ship, decreasing its health.

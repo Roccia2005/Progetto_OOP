@@ -14,9 +14,11 @@ public class StartView extends JPanel {
     private static final Color BACKGROUND_BUTTON = new Color(41, 86, 246);
 
     private final Runnable onStartAction;
+    private final Runnable onLoadAction;
 
-    public StartView(final Runnable onStartAction) {
+    public StartView(final Runnable onStartAction, final Runnable onLoadAction) {
         this.onStartAction = onStartAction;
+        this.onLoadAction = onLoadAction;
         this.initUI();
     }
 
@@ -38,14 +40,14 @@ public class StartView extends JPanel {
         titleLabel.setForeground(FOREGROUND_COLOR);
         this.add(titleLabel, gbc);
 
-        JLabel descLabel = new JLabel("Dominates the Ocean. Sink the Enemy.");
+        JLabel descLabel = new JLabel("Dominate the Ocean. Sink the Enemy.");
         descLabel.setFont(new Font(FONT_FAMILY, Font.PLAIN, 24));
         descLabel.setForeground(new Color(180, 180, 200));
         this.add(descLabel, gbc);
 
         gbc.insets = new Insets(50, 0, 0, 0);
 
-        JButton startButton = new JButton("START GAME");
+        JButton startButton = new JButton("NEW GAME");
         startButton.setFont(new Font("SansSerif", Font.BOLD, 28));
         startButton.setForeground(FOREGROUND_COLOR);
         startButton.setBackground(BACKGROUND_BUTTON);
@@ -64,5 +66,27 @@ public class StartView extends JPanel {
         });
 
         this.add(startButton, gbc);
+
+        gbc.insets = new Insets(20, 0, 0, 0);
+
+        JButton loadButton = new JButton("LOAD GAME");
+        loadButton.setFont(new Font("SansSerif", Font.BOLD, 22));
+        loadButton.setForeground(Color.WHITE);
+        loadButton.setBackground(new Color(60, 60, 80));
+        loadButton.setFocusPainted(false);
+        loadButton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY, 2),
+                BorderFactory.createEmptyBorder(10, 40, 10, 40)
+        ));
+        loadButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        loadButton.addActionListener(e -> {
+            if (onLoadAction != null) {
+                ambientSound.stop();
+                onLoadAction.run();
+            }
+        });
+
+        this.add(loadButton, gbc);
     }
 }

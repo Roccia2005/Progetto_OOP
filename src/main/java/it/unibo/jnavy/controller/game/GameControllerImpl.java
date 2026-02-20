@@ -6,6 +6,9 @@ import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.player.Bot;
 import it.unibo.jnavy.model.player.Human;
 import it.unibo.jnavy.model.player.Player;
+import it.unibo.jnavy.model.serialization.GameState;
+import it.unibo.jnavy.model.serialization.SaveManager;
+import it.unibo.jnavy.model.serialization.SaveManagerImpl;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.ShotResult;
 import it.unibo.jnavy.model.weather.WeatherCondition;
@@ -26,6 +29,14 @@ public class GameControllerImpl implements GameController {
         this.currentPlayer = this.human;
         this.weather = WeatherManagerImpl.getInstance();
         ((WeatherManagerImpl) this.weather).reset();
+    }
+
+    public GameControllerImpl(GameState loadedState) {
+        this.human = (Human) loadedState.getHuman();
+        this.bot = (Bot) loadedState.getBot();
+        this.turnCounter = loadedState.getTurnCounter();
+        this.currentPlayer = loadedState.isHumanTurn() ? this.human : this.bot;
+        this.weather = WeatherManagerImpl.getInstance();
     }
 
     @Override
@@ -156,5 +167,19 @@ public class GameControllerImpl implements GameController {
     @Override
     public boolean captainAbilityTargetsEnemyGrid() {
         return this.human.captainAbilityTargetsEnemyGrid();
+    }
+
+    @Override
+    public boolean saveGame() {
+        GameState currentState = new GameState(
+                this.human,
+                this.bot,
+                this.turnCounter,
+                this.getWeatherCondition(),
+                this.isHumanTurn()
+        );
+
+        SaveManager saveManager = new SaveManagerImpl();
+        return saveManager.save(currentState);
     }
 }

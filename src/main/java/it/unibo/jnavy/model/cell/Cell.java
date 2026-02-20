@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.cell;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import it.unibo.jnavy.model.ship.Ship;
@@ -10,7 +11,7 @@ import it.unibo.jnavy.model.utilities.Position;
  * Represents a single cell on the game grid.
  * A cell can be empty (water) or occupied by a ship.
  */
-public interface Cell {
+public interface Cell extends Serializable {
 
     /**
      * Handles a shot fired at this cell.
