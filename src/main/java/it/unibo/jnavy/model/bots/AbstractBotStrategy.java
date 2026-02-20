@@ -6,11 +6,11 @@ import java.util.Random;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 
-public abstract class AbstractBotStrategy implements BotStrategy{
+public abstract class AbstractBotStrategy implements BotStrategy {
     protected final Random random = new Random();
 
-    protected Position getRandomValidPosition(Grid enemyGrid) {
-        List<Position> cellsList = getValidCellsList(enemyGrid);
+    protected Position getRandomValidPosition(final Grid enemyGrid) {
+        final List<Position> cellsList = getValidCellsList(enemyGrid);
 
         if (cellsList.isEmpty()) {
             throw new IllegalStateException("The bot can't shoot, no valid cells in grid");
@@ -18,7 +18,7 @@ public abstract class AbstractBotStrategy implements BotStrategy{
         return cellsList.get(getRandomIndex(cellsList));
     }
 
-    protected List<Position> getValidCellsList(Grid grid) {
+    protected List<Position> getValidCellsList(final Grid grid) {
         return grid.getAvailableTargets();
     }
 

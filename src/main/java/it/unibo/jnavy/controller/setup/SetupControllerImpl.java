@@ -1,7 +1,5 @@
 package it.unibo.jnavy.controller.setup;
 
-import java.util.*;
-
 import it.unibo.jnavy.controller.utilities.CellState;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.fleet.Fleet;
@@ -15,6 +13,8 @@ import it.unibo.jnavy.model.ship.Ship;
 import it.unibo.jnavy.model.ship.ShipImpl;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
+
+import java.util.*;
 
 /**
  * Implementation of SetupController interface.
@@ -34,7 +34,6 @@ public class SetupControllerImpl implements SetupController {
     private Position currentShipPos;
     private CardinalDirection currentShipDir;
 
-
     public SetupControllerImpl(final Captain selectedCaptain, final BotStrategy selectedBotStrategy) {
         this.shipsToPlace = new ArrayList<>(buildFleetConfig());
         this.random = new Random();
@@ -51,9 +50,9 @@ public class SetupControllerImpl implements SetupController {
 
         final Grid grid = human.getGrid();
 
-        Ship oldShip = this.currentShipObject;
-        Position oldPos = this.currentShipPos;
-        CardinalDirection oldDir = this.currentShipDir;
+        final Ship oldShip = this.currentShipObject;
+        final Position oldPos = this.currentShipPos;
+        final CardinalDirection oldDir = this.currentShipDir;
 
         if (oldShip != null) {
             grid.removeShip(oldShip);
@@ -123,14 +122,14 @@ public class SetupControllerImpl implements SetupController {
     }
 
     @Override
-    public CellState getCellState(Position pos) {
-        Grid grid = human.getGrid();
-        var cellOpt = grid.getCell(pos);
+    public CellState getCellState(final Position pos) {
+        final Grid grid = human.getGrid();
+        final var cellOpt = grid.getCell(pos);
         if (cellOpt.isEmpty() || cellOpt.get().getShip().isEmpty()) {
             return CellState.water();
         }
-        Ship ship = cellOpt.get().getShip().get();
-        int shipId = ship.hashCode();
+        final Ship ship = cellOpt.get().getShip().get();
+        final int shipId = ship.hashCode();
         return new CellState(
                 true,
                 shipId,
@@ -147,7 +146,7 @@ public class SetupControllerImpl implements SetupController {
         this.unsetShip();
 
         List<Ship> placedShips = new ArrayList<>(this.human.getGrid().getFleet().getShips());
-        for (Ship s : placedShips) {
+        for (final Ship s : placedShips) {
             this.human.getGrid().removeShip(s);
         }
 
@@ -162,14 +161,13 @@ public class SetupControllerImpl implements SetupController {
                 .toList();
     }
 
-    private boolean hasSameShip(Grid grid, Ship ship, Position neighbor) {
-        if (!grid.isPositionValid(neighbor)) return false;
+    private boolean hasSameShip(final Grid grid, Ship ship, final Position neighbor) {
+        if (!grid.isPositionValid(neighbor)) { return false; }
         return grid.getCell(neighbor)
                 .flatMap(Cell::getShip)
                 .map(s -> s.equals(ship))
                 .orElse(false);
     }
-
 
     private void unsetShip() {
         if (this.currentShipObject != null) {
@@ -182,6 +180,7 @@ public class SetupControllerImpl implements SetupController {
 
     /**
      * Internal helper to place a list of ships randomly on a player's grid.
+     *
      * @param player The player target.
      * @param shipsToInsert The list of ship sizes to place.
      */

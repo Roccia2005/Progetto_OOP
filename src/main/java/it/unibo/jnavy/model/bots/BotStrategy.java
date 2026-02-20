@@ -24,9 +24,10 @@ public interface BotStrategy extends Serializable {
      * Used by simplified "Reinforced Learning" bot implementations.
      * For example: if the result is {@link HitType#HIT}, the bot will try adjacent cells next.
      * * @param target The position that was targeted.
+     *
      * @param result The outcome of the shot (HIT, MISS, SUNK, etc.).
      */
-    default void lastShotFeedback(Position target, HitType result) {}
+    default void lastShotFeedback(final Position target, HitType result) { };
 
     /**
      * Return the display name of this shooting strategy,

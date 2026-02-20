@@ -37,6 +37,7 @@ public interface GameController {
 
     /**
      * Salva lo stato attuale della partita su file.
+     *
      * @return true se il salvataggio va a buon fine, false altrimenti.
      */
     boolean saveGame();

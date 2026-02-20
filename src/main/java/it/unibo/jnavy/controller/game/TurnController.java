@@ -11,7 +11,8 @@ public class TurnController {
     private Player currentPlayer;
     private int turnCounter;
 
-    public TurnController(final Player human, final Player bot, final WeatherManager weather, int turnCounter, boolean isHumanTurn) {
+    public TurnController(final Player human, final Player bot, final WeatherManager weather,
+                          final int turnCounter, final boolean isHumanTurn) {
         this.human = human;
         this.bot = bot;
         this.weather = weather;
