@@ -7,7 +7,7 @@ import java.util.Random;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 
-public class SniperBot extends AbstractBotStrategy{
+public class SniperBot extends AbstractBotStrategy {
 
     private final List<Position> knownTargets;
     private static final double ERROR_PERCENTAGE = 0.18;
@@ -23,10 +23,10 @@ public class SniperBot extends AbstractBotStrategy{
     @Override
     public Position selectTarget(final Grid enemyGrid) {
         this.knownTargets.removeIf(p -> !enemyGrid.isTargetValid(p));
-        boolean miss = this.random.nextDouble() < ERROR_PERCENTAGE;
+        final boolean miss = this.random.nextDouble() < ERROR_PERCENTAGE;
 
         if (!miss && !this.knownTargets.isEmpty()) {
-            int randomIndex = this.random.nextInt(this.knownTargets.size());
+            final int randomIndex = this.random.nextInt(this.knownTargets.size());
             return this.knownTargets.get(randomIndex);
         } else {
             return super.getRandomValidPosition(enemyGrid);

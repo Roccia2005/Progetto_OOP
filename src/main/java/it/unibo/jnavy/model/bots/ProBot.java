@@ -9,9 +9,9 @@ import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.HitType;
 
-public class ProBot extends AbstractBotStrategy{
+public class ProBot extends AbstractBotStrategy {
 
-    public enum State{
+    public enum State {
         HUNTING,
         SEEKING,
         DESTROYING
@@ -24,7 +24,7 @@ public class ProBot extends AbstractBotStrategy{
     private Position firstHitPosition;
     private Position lastTargetPosition;
     private final List<CardinalDirection> availableDirections = new ArrayList<>();
-    private CardinalDirection currentDirection = null;
+    private CardinalDirection currentDirection;
 
     // uso questo metodo per calcolare le effettive posizioni ovvero i target da restituire e a cui sparare
     @Override
@@ -45,9 +45,9 @@ public class ProBot extends AbstractBotStrategy{
         if (this.availableDirections.isEmpty() && this.firstHitPosition != null) {
             resetAvailableDirections();
         }
-        while(!this.availableDirections.isEmpty()){
+        while (!this.availableDirections.isEmpty()) {
             currentDirection = availableDirections.getFirst();
-            Position target = targetCalc(firstHitPosition);
+            final Position target = targetCalc(firstHitPosition);
             if (enemyGrid.isTargetValid(target)) {
                 return target;
             }
@@ -60,10 +60,10 @@ public class ProBot extends AbstractBotStrategy{
     }
 
     private Position handleDestroying(final Grid enemyGrid) {
-        Position target = targetCalc(lastTargetPosition);
+        final Position target = targetCalc(lastTargetPosition);
         if (!enemyGrid.isTargetValid(target)) {
             this.currentDirection = this.currentDirection.opposite();
-            Position secondTarget = targetCalc(firstHitPosition);
+            final Position secondTarget = targetCalc(firstHitPosition);
 
             if (!enemyGrid.isTargetValid(secondTarget)) {
                 this.currentState = State.SEEKING;
@@ -142,9 +142,9 @@ public class ProBot extends AbstractBotStrategy{
 
     // metodo per capire la direzione tra due celle data la precedente(p1) e quella attuale(p2)uso per i test
     private CardinalDirection findDirection(final Position p1, final Position p2) {
-        for (CardinalDirection dir : CardinalDirection.values()) {
-            if (p1.x() + dir.getRowOffset() == p2.x() &&
-            p1.y() + dir.getColOffset() == p2.y()) {
+        for (final CardinalDirection dir : CardinalDirection.values()) {
+            if (p1.x() + dir.getRowOffset() == p2.x()
+                    && p1.y() + dir.getColOffset() == p2.y()) {
                 return dir;
             }
         }
@@ -162,12 +162,11 @@ public class ProBot extends AbstractBotStrategy{
         if (this.currentDirection == null) {
             return target;
         }
-        return new Position(target.x()+currentDirection.getRowOffset(), target.y()+currentDirection.getColOffset());
+        return new Position(target.x() + currentDirection.getRowOffset(), target.y() + currentDirection.getColOffset());
     }
 
     @Override
     protected String getStrategyName() {
         return "Pro";
     }
-
 }

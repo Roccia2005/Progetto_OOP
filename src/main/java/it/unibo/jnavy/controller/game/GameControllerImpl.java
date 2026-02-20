@@ -1,6 +1,5 @@
 package it.unibo.jnavy.controller.game;
 
-
 import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.player.Player;
 import it.unibo.jnavy.model.serialization.GameState;
@@ -53,7 +52,7 @@ public class GameControllerImpl implements GameController {
 
     @Override
     public boolean saveGame() {
-        GameState currentState = new GameState(
+        final GameState currentState = new GameState(
                 this.human,
                 this.bot,
                 this.turnController.getTurnCounter(),
@@ -61,7 +60,7 @@ public class GameControllerImpl implements GameController {
                 this.turnController.isHumanTurn()
         );
 
-        SaveManager saveManager = new SaveManagerImpl();
+        final SaveManager saveManager = new SaveManagerImpl();
         return saveManager.save(currentState);
     }
 
@@ -81,12 +80,12 @@ public class GameControllerImpl implements GameController {
     }
 
     @Override
-    public CellCondition getHumanCellState(Position p) {
+    public CellCondition getHumanCellState(final Position p) {
         return gameStateController.getHumanCellState(p);
     }
 
     @Override
-    public CellCondition getBotCellState(Position p) {
+    public CellCondition getBotCellState(final Position p) {
         return gameStateController.getBotCellState(p);
     }
 
@@ -111,12 +110,12 @@ public class GameControllerImpl implements GameController {
     }
 
     @Override
-    public void processShot(Position p) {
+    public void processShot(final Position p) {
         combatController.processShot(p);
     }
 
     @Override
-    public boolean processAbility(Position p) {
+    public boolean processAbility(final Position p) {
         return combatController.processAbility(p);
     }
 

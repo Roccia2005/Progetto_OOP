@@ -212,6 +212,15 @@ public class GamePanel extends JPanel {
         if (isAbility) {
             controller.processAbility(p);
             this.dashboardPanel.resetCaptainAbility();
+            if (controller.getPlayerCaptainName().equalsIgnoreCase("SonarOfficer")) {
+                this.updateDashboard();
+                if (!controller.isHumanTurn() && !controller.isGameOver()) {
+                    triggerBotTurn();
+                } else {
+                    this.inputBlocked = false;
+                }
+                return;
+            }
         } else {
             controller.processShot(p);
         }

@@ -46,22 +46,22 @@ public class GameStateController {
         return this.weather.getCurrentWeather();
     }
 
-    public CellCondition getHumanCellState(Position p) {
+    public CellCondition getHumanCellState(final Position p) {
         return this.human.getGrid().getCell(p)
                    .map(cell -> mapCellToCondition(cell, false))
                    .orElse(CellCondition.WATER);
     }
 
-    public CellCondition getBotCellState(Position p) {
+    public CellCondition getBotCellState(final Position p) {
         return this.bot.getGrid().getCell(p)
                    .map(cell -> mapCellToCondition(cell, true))
                    .orElse(CellCondition.FOG);
     }
 
-    private CellCondition mapCellToCondition(Cell cell, boolean isEnemyGrid) {
+    private CellCondition mapCellToCondition(final Cell cell, final boolean isEnemyGrid) {
         if (cell.isHit()) {
             if (cell.isOccupied()) {
-                boolean isSunk = cell.getShip().isPresent() && cell.getShip().get().isSunk();
+                final boolean isSunk = cell.getShip().isPresent() && cell.getShip().get().isSunk();
                 return isSunk ? CellCondition.SUNK_SHIP : CellCondition.HIT_SHIP;
             } else {
                 return CellCondition.HIT_WATER;

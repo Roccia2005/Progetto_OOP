@@ -56,7 +56,7 @@ class CaptainTest {
             }
 
             @Override
-            protected boolean executeEffect(Grid grid, Position p) {
+            protected boolean executeEffect(final Grid grid, final Position p) {
                 return true;
             }
         };
@@ -149,7 +149,7 @@ class CaptainTest {
         // Verify that the 3x3 area (from 0,0 to 2,2) correctly registered the ship's presence
         for (int x = 0; x <= 2; x++) {
             for (int y = 0; y <= 2; y++) {
-                Position p = new Position(x, y);
+                final Position p = new Position(x, y);
                 
                 assertTrue(grid.getCell(p).get().getScanResult().isPresent());
                 assertTrue(grid.getCell(p).get().getScanResult().get());
@@ -164,7 +164,7 @@ class CaptainTest {
 
         for (int x = 4; x <= 6; x++) {
             for (int y = 4; y <= 6; y++) {
-                Position p = new Position(x, y);
+                final Position p = new Position(x, y);
                 assertTrue(grid.getCell(p).get().getScanResult().isPresent());
                 assertFalse(grid.getCell(p).get().getScanResult().get());
             }
@@ -186,10 +186,11 @@ class CaptainTest {
      * Helper method to advance turns until the captain is fully charged.
      * Note that the cooldown counter does 
      * not increment during the same turn in which the ability is activated.
-     * * @param cooldown The number of turns to wait.
+     *
+     * @param cooldown The number of turns to wait.
      */
-    private void chargeAbility(int cooldown) {
-        for(int i = 0; i < cooldown + 1; i++) {
+    private void chargeAbility(final int cooldown) {
+        for (int i = 0; i < cooldown + 1; i++) {
             this.captain.processTurnEnd();
         }
     }
