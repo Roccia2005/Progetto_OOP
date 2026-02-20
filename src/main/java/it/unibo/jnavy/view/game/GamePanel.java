@@ -7,24 +7,15 @@ import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.view.components.EffectsPanel;
 import it.unibo.jnavy.view.components.GameOverPanel;
-import it.unibo.jnavy.view.components.bot.BotDifficultyPanel;
-import it.unibo.jnavy.view.components.captain.CaptainAbilityButton;
-import it.unibo.jnavy.view.components.captain.CaptainNamePanel;
 import it.unibo.jnavy.view.components.weather.WeatherNotificationOverlay;
-import it.unibo.jnavy.view.components.weather.WeatherWidget;
 import it.unibo.jnavy.view.utilities.SoundManager;
 import it.unibo.jnavy.view.components.grid.GridPanel;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import java.net.URL;
 import java.util.stream.Collectors;
 
 import static it.unibo.jnavy.view.utilities.ViewConstants.*;
@@ -36,15 +27,16 @@ public class GamePanel extends JPanel {
     private static final String SOUNDTRACK_PATH = "/sounds/game_soundtrack.wav";
     private static final String VICTORY_SOUND_PATH = "/sounds/win.wav";
     private static final String LOSE_SOUND_PATH = "/sounds/gameover.wav";
+    private static final String BOT_TURN_TEXT = "Bot is thinking...";
+    private static final String YOUR_TURN_TEXT = "Your turn";
+    private static final Color BOT_TURN_TEXT_COLOR = Color.RED;
+    private static final Color YOUR_TURN_TEXT_COLOR = Color.WHITE;
 
     private boolean inputBlocked = false;
-    private final JLabel statusLabel;
+    private final GameHeaderPanel headerPanel;
+    private final GameDashboardPanel dashboardPanel;
     private final GridPanel humanGridPanel;
     private GridPanel botGridPanel;
-    private final BotDifficultyPanel difficultyPanel;
-    private final WeatherWidget weatherWidget;
-    private final CaptainAbilityButton captainButton;
-    private final CaptainNamePanel captainNamePanel;
     private final GameController controller;
     private final SoundManager ambientSound;
     private boolean gameOverHandled = false;
@@ -77,62 +69,27 @@ public class GamePanel extends JPanel {
         gridsContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         gridsContainer.setOpaque(false);
 
-        JPanel dashboardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 10));
-        dashboardPanel.setOpaque(false);
+        this.dashboardPanel = new GameDashboardPanel(
+        this.controller.getBotDifficulty(),
+        this.controller.getCaptainCooldown(),
+        this.controller.getPlayerCaptainName());
 
-        this.weatherWidget = new WeatherWidget();
-        this.captainButton = new CaptainAbilityButton(this.controller.getCaptainCooldown());
-        this.difficultyPanel = new BotDifficultyPanel(this.controller.getBotDifficulty());
-        this.captainNamePanel = new CaptainNamePanel(this.controller.getPlayerCaptainName());
-
-        this.captainButton.addActionListener(e -> {
-            if (this.captainButton.isEnabled()) {
-                this.captainButton.select();
+        this.headerPanel = new GameHeaderPanel(() -> {
+            if (this.controller.saveGame()) {
+                showAutoClosingMessage("Game saved successfully!");
+            } else {
+                showAutoClosingMessage("Error saving the game.");
             }
         });
-
-        dashboardPanel.add(this.difficultyPanel);
-        dashboardPanel.add(this.weatherWidget);
-        dashboardPanel.add(this.captainButton);
-        dashboardPanel.add(this.captainNamePanel);
-        dashboardPanel.setBackground(BACKGROUND_COLOR);
-
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        headerPanel.setBackground(BACKGROUND_COLOR);
-
-        JPanel centerTitlePanel = new JPanel(new GridLayout(2, 1));
-        centerTitlePanel.setOpaque(false);
-
-        JLabel titleLabel = new JLabel("J-NAVY", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        titleLabel.setForeground(Color.WHITE);
-
-        this.statusLabel = new JLabel("Your Turn", SwingConstants.CENTER);
-        this.statusLabel.setFont(new Font("SansSerif", Font.ITALIC, 16));
-        this.statusLabel.setForeground(Color.WHITE);
-
-        centerTitlePanel.add(titleLabel);
-        centerTitlePanel.add(this.statusLabel);
-
-        JPanel savePanel = getSavePanel();
-
-        JPanel ghostPanel = new JPanel();
-        ghostPanel.setOpaque(false);
-        ghostPanel.setPreferredSize(savePanel.getPreferredSize());
-
-        headerPanel.add(ghostPanel, BorderLayout.WEST);
-        headerPanel.add(centerTitlePanel, BorderLayout.CENTER);
-        headerPanel.add(savePanel, BorderLayout.EAST);
 
         this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET,
                                 (Position p) -> {
                                     if (this.inputBlocked || !controller.isHumanTurn()) {
                                         return;
                                     }
-                                    if (captainButton.isActive() && !controller.captainAbilityTargetsEnemyGrid()) {
+                                    if (this.dashboardPanel.isCaptainAbilityActive() && !controller.captainAbilityTargetsEnemyGrid()) {
                                         controller.processAbility(p);
-                                        this.captainButton.reset();
+                                        this.dashboardPanel.resetCaptainAbility();;
                                         this.updateDashboard();
                                     }
                                 });
@@ -145,10 +102,10 @@ public class GamePanel extends JPanel {
                                                                  clickedState == CellCondition.SUNK_SHIP ||
                                                                  clickedState == CellCondition.HIT_WATER);
 
-                                    if (isAlreadyRevealed && !captainButton.isActive()) return;
+                                    if (isAlreadyRevealed && !this.dashboardPanel.isCaptainAbilityActive()) return;
 
                                     this.inputBlocked = true;
-                                    boolean isAbility = captainButton.isActive();
+                                    boolean isAbility = this.dashboardPanel.isCaptainAbilityActive();
                                     boolean isGunner = controller.getPlayerCaptainName().toLowerCase().contains("gunner");
 
                                     List<Position> previousHits = new ArrayList<>();
@@ -165,7 +122,7 @@ public class GamePanel extends JPanel {
 
                                     if (isAbility) {
                                         controller.processAbility(p);
-                                        captainButton.reset();
+                                        this.dashboardPanel.resetCaptainAbility();;
                                     } else {
                                         controller.processShot(p);
                                     }
@@ -191,7 +148,6 @@ public class GamePanel extends JPanel {
                                         }
                                     } else {
                                         if (isAbility && isGunner) {
-                                            // Find the 2x2 area that contains ALL new hits and is closest to the aimed point
                                             Position bestAnchor = newHits.get(0);
                                             int minDistance = Integer.MAX_VALUE;
 
@@ -253,9 +209,9 @@ public class GamePanel extends JPanel {
         gridsContainer.setBackground(BACKGROUND_COLOR);
 
         this.ambientSound.start();
-        this.mainContent.add(headerPanel, BorderLayout.NORTH);
+        this.mainContent.add(this.headerPanel, BorderLayout.NORTH);
         this.mainContent.add(gridsContainer, BorderLayout.CENTER);
-        this.mainContent.add(dashboardPanel, BorderLayout.SOUTH);
+        this.mainContent.add(this.dashboardPanel, BorderLayout.SOUTH);
 
         this.gameOverPanel = new GameOverPanel(
                 e -> onMenu.run(),
@@ -281,9 +237,30 @@ public class GamePanel extends JPanel {
         this.updateDashboard();
     }
 
+    private void updateDashboard() {
+        WeatherCondition currentCondition = this.controller.getWeatherCondition();
+        this.dashboardPanel.updateDashboard(controller.getCurrentCaptainCooldown(), currentCondition);
+        humanGridPanel.refresh(pos -> controller.getHumanCellState(pos));
+        botGridPanel.refresh(pos -> controller.getBotCellState(pos));
+
+        if (this.lastWeatherCondition != null && this.lastWeatherCondition != currentCondition) {
+            this.weatherOverlay.showWeatherAlert(currentCondition.toString());
+        }
+        this.lastWeatherCondition = currentCondition;
+
+        if (controller.isGameOver() && !this.gameOverHandled) {
+            this.gameOverHandled = true;
+
+            Timer delayTimer = new Timer(900, e -> {
+                this.showEndGameScreen(controller.isBotDefeated());
+            });
+            delayTimer.setRepeats(false);
+            delayTimer.start();
+        }
+    }
+
     private void triggerBotTurn() {
-        this.statusLabel.setText("Bot is thinking...");
-        this.statusLabel.setForeground(Color.RED);
+        this.headerPanel.setStatus(BOT_TURN_TEXT, BOT_TURN_TEXT_COLOR);
 
         Timer botTimer = new Timer(1000, e -> {
             Position target = controller.playBotTurn();
@@ -297,82 +274,11 @@ public class GamePanel extends JPanel {
                     () -> {
                 this.updateDashboard();
                 this.inputBlocked = false;
-                this.statusLabel.setText("Your Turn");
-                this.statusLabel.setForeground(Color.WHITE);
+                this.headerPanel.setStatus(YOUR_TURN_TEXT, YOUR_TURN_TEXT_COLOR);
             });
         });
         botTimer.setRepeats(false);
         botTimer.start();
-    }
-
-    @NonNull
-    private JPanel getSavePanel() {
-        JButton saveButton = new JButton("Save Game");
-        saveButton.setFocusPainted(false);
-        saveButton.setContentAreaFilled(false);
-        saveButton.setForeground(Color.WHITE);
-        saveButton.setFont(new Font(FONT_FAMILY, Font.BOLD, 14));
-        saveButton.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.WHITE, 2),
-                BorderFactory.createEmptyBorder(5, 15, 5, 15)
-        ));
-
-        saveButton.addActionListener(e -> {
-            if (this.controller.saveGame()) {
-                showAutoClosingMessage("Game saved successfully!");
-            } else {
-                showAutoClosingMessage("Error saving the game.");
-            }
-        });
-
-        JPanel savePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        savePanel.setOpaque(false);
-        savePanel.add(saveButton);
-        return savePanel;
-    }
-
-    private void updateDashboard() {
-        int currentCooldown = controller.getCurrentCaptainCooldown();
-        captainButton.updateState(currentCooldown);
-
-        humanGridPanel.refresh(pos -> controller.getHumanCellState(pos));
-        botGridPanel.refresh(pos -> controller.getBotCellState(pos));
-
-        WeatherCondition currentCondition = this.controller.getWeatherCondition();
-        if (this.lastWeatherCondition != null && this.lastWeatherCondition != currentCondition) {
-            this.weatherOverlay.showWeatherAlert(currentCondition.toString());
-        }
-        this.lastWeatherCondition = currentCondition;
-
-        this.weatherWidget.updateWeather(currentCondition);
-
-        if (controller.isGameOver() && !this.gameOverHandled) {
-            this.gameOverHandled = true;
-
-            Timer delayTimer = new Timer(900, e -> {
-                this.showEndGameScreen(controller.isBotDefeated());
-            });
-            delayTimer.setRepeats(false);
-            delayTimer.start();
-        }
-    }
-
-    private void playOneShotSound(String filePath) {
-        new Thread(() -> {
-            try {
-                URL soundUrl = getClass().getResource(filePath);
-                if (soundUrl != null) {
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundUrl);
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioIn);
-                    clip.start();
-                } else {
-                    System.err.println("SOUND ERROR: File not found -> " + filePath);
-                }
-            } catch (Exception e) {
-                System.err.println("SOUND ERROR: Format not supported -> " + e.getMessage());
-            }
-        }).start();
     }
 
     public void showEndGameScreen(boolean isVictory) {
@@ -406,7 +312,7 @@ public class GamePanel extends JPanel {
         final JWindow toast = new JWindow(SwingUtilities.getWindowAncestor(this));
 
         JLabel label = new JLabel(message, SwingConstants.CENTER);
-        label.setFont(new Font("SansSerif", Font.BOLD, 18));
+        label.setFont(new Font(FONT_FAMILY, Font.BOLD, 18));
         label.setForeground(Color.WHITE);
         label.setBackground(new Color(41, 86, 246));
         label.setOpaque(true);
