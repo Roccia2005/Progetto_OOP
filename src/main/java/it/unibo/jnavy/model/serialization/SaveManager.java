@@ -17,8 +17,7 @@ public interface SaveManager {
     /**
      * Loads the previously saved game state.
      *
-     * @return An Optional containing the loaded GameState if the file exists
-     * and is valid, otherwise an empty Optional.
+     * @return An Optional containing the loaded GameState if the file exists and is valid, otherwise an empty Optional.
      */
     Optional<GameState> load();
 

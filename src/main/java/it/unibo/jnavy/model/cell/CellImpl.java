@@ -9,15 +9,16 @@ import it.unibo.jnavy.model.utilities.Position;
 /**
  * Concrete implementation of the Cell interface.
  */
-public class CellImpl implements Cell{
+public class CellImpl implements Cell {
 
     private final Position position;
     private Ship ship;
     private HitType status;
-    private Boolean scanResult = null;
+    private Boolean scanResult;
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
+
     public CellImpl(final Position p) {
         this.position = p;
         this.ship = null;
@@ -40,7 +41,7 @@ public class CellImpl implements Cell{
     }
 
     @Override
-    public void setShip(Ship ship) {
+    public void setShip(final Ship ship) {
         this.ship = ship;
     }
 

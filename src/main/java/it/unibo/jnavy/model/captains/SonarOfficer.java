@@ -23,17 +23,17 @@ public class SonarOfficer extends AbstractCaptain {
         super(COOLDOWN);
     }
 
-    public boolean executeEffect(Grid grid, Position p) {
-        int effectiveX = Math.max(1, Math.min(p.x(), grid.getSize() - 2));
-        int effectiveY = Math.max(1, Math.min(p.y(), grid.getSize() - 2));
-        List<Cell> targetCells = new ArrayList<>();
+    public boolean executeEffect(final Grid grid, final Position p) {
+        final int effectiveX = Math.max(1, Math.min(p.x(), grid.getSize() - 2));
+        final int effectiveY = Math.max(1, Math.min(p.y(), grid.getSize() - 2));
+        final List<Cell> targetCells = new ArrayList<>();
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
-                Position candidate = new Position(effectiveX + dx, effectiveY + dy);
+                final Position candidate = new Position(effectiveX + dx, effectiveY + dy);
                 grid.getCell(candidate).ifPresent(targetCells::add);
             }
         }
-        boolean shipFound = targetCells.stream().anyMatch(Cell::hisDetectable);
+        final boolean shipFound = targetCells.stream().anyMatch(Cell::hisDetectable);
         targetCells.forEach(cell -> cell.setScanResult(shipFound));
         return true;
     }

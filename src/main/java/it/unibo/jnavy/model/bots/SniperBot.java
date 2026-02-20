@@ -10,7 +10,7 @@ import it.unibo.jnavy.model.utilities.Position;
 public class SniperBot extends AbstractBotStrategy {
 
     private final List<Position> knownTargets;
-    static private final double ERROR_PERCENTAGE = 0.18;
+    private static final double ERROR_PERCENTAGE = 0.18;
     private final Random random = new Random();
 
     @java.io.Serial

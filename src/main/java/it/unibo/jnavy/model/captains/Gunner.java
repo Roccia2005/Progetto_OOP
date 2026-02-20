@@ -21,8 +21,8 @@ public class Gunner extends AbstractCaptain {
         super(COOLDOWN);
     }
 
-    public boolean executeEffect(Grid grid, Position p) {
-        HitStrategy areaShot = new AreaShot(true);
+    public boolean executeEffect(final Grid grid, final Position p) {
+        final HitStrategy areaShot = new AreaShot(true);
         areaShot.execute(p, grid);
         return true;
     }

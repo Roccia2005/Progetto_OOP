@@ -46,7 +46,6 @@ class FleetTest {
     void testInvalidTopologyExcessShips() {
         // Add the single allowed ship of size 2
         fleet.addShip(new ShipImpl(2));
-        
         // Attempt to add a second ship of size 2 (NOT ALLOWED)
         // Should throw exception because the rule is "Max 1 ship of size 2"
         assertThrows(IllegalStateException.class, () -> {

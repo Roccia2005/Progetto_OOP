@@ -13,7 +13,8 @@ public interface BotStrategy extends Serializable {
 
     /**
      * Analyzes the enemy grid and determines the coordinates for the next shot.
-     * * @param enemyGrid The opponent's {@link Grid}, used to check valid moves.
+     *
+     * @param enemyGrid The opponent's {@link Grid}, used to check valid moves.
      * @return The selected target {@link Position}.
      */
     Position selectTarget(Grid enemyGrid);
@@ -27,7 +28,7 @@ public interface BotStrategy extends Serializable {
      *
      * @param result The outcome of the shot (HIT, MISS, SUNK, etc.).
      */
-    default void lastShotFeedback(final Position target, HitType result) { };
+    default void lastShotFeedback(final Position target, final HitType result) { };
 
     /**
      * Return the display name of this shooting strategy,

@@ -10,7 +10,7 @@ import it.unibo.jnavy.model.utilities.Position;
  * Represents the Engineer captain.
  * The Engineer's special ability allows the player to repair a damaged part of a ship.
  */
-public class Engineer extends AbstractCaptain{
+public class Engineer extends AbstractCaptain {
 
     public static final int COOLDOWN = 3;
 
@@ -21,8 +21,8 @@ public class Engineer extends AbstractCaptain{
         super(COOLDOWN);
     }
 
-    public boolean executeEffect(Grid grid, Position p) {
-        Optional<Cell> cell = grid.getCell(p);
+    public boolean executeEffect(final Grid grid, final Position p) {
+        final Optional<Cell> cell = grid.getCell(p);
         return cell.isPresent() && grid.repair(p);
     }
 
