@@ -39,7 +39,6 @@ public class SetupView extends JPanel {
     private static final String NULL_SHIP_ERROR = "Place a ship first!";
     private static final String PLACEMENT_ERROR = "Invalid placement!";
 
-    
     private final SetupController controller;
     private final Runnable gameStartCall;
     private final Runnable backCall;

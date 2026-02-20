@@ -68,6 +68,7 @@ public class CapSelectionPanel extends JPanel {
         public String getDescription() {
             return this.description;
         }
+        
         public String getImagePath() {
             return this.imagePath;
         }
@@ -100,16 +101,16 @@ public class CapSelectionPanel extends JPanel {
     private void initUI() {
         this.setPreferredSize(new Dimension(SETWIDTH, SETHEIGHT));
 
-        JPanel centerPanel = new JPanel(new GridBagLayout());
+        final JPanel centerPanel = new JPanel(new GridBagLayout());
         centerPanel.setBackground(BACKGROUND_COLOR);
 
-        GridBagConstraints gbc = new GridBagConstraints();
+        final GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, INSET_PADDING, INSET_PADDING);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        JLabel titleLabel = new JLabel("Choose the captain of your fleet");
+        final JLabel titleLabel = new JLabel("Choose the captain of your fleet");
         titleLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_TITLE));
         titleLabel.setForeground(FOREGROUND_COLOR);
         gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, 30, INSET_PADDING);
@@ -136,21 +137,21 @@ public class CapSelectionPanel extends JPanel {
         descriptionArea.setBorder(BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS));
         descriptionArea.setBackground(MENUBLUE);
 
-        StyledDocument doc = descriptionArea.getStyledDocument();
-        SimpleAttributeSet center = new SimpleAttributeSet();
+        final StyledDocument doc = descriptionArea.getStyledDocument();
+        final SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
         centerPanel.add(descriptionArea, gbc);
 
         gbc.gridy++;
-        JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, FLOW_HGAP, FLOW_VGAP));
+        final JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, FLOW_HGAP, FLOW_VGAP));
         controlsPanel.setBackground(BACKGROUND_COLOR);
 
         levelComboBox = new JComboBox<>(CaptainAbility.values());
         levelComboBox.setUI(new javax.swing.plaf.basic.BasicComboBoxUI() {
 
             @Override
-            public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus) {
+            public void paintCurrentValueBackground(final Graphics g, final Rectangle bounds, final boolean hasFocus) {
                 g.setColor(MENUBLUE);
                 g.fillRect(bounds.x, bounds.y, bounds.width + 10, bounds.height);
             }

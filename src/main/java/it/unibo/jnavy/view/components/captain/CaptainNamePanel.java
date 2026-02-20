@@ -2,10 +2,12 @@ package it.unibo.jnavy.view.components.captain;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
+
 import java.awt.FlowLayout;
 import java.awt.Font;
-
-import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
 public class CaptainNamePanel extends JPanel {
 

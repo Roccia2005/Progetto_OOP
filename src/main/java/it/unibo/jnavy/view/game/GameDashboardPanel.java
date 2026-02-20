@@ -1,14 +1,15 @@
 package it.unibo.jnavy.view.game;
 
-import javax.swing.*;
-import java.awt.*;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BACKGROUND_COLOR;
+
+import java.awt.FlowLayout;
+
+import javax.swing.JPanel;
 
 import it.unibo.jnavy.view.components.bot.BotDifficultyPanel;
 import it.unibo.jnavy.view.components.captain.CaptainAbilityButton;
 import it.unibo.jnavy.view.components.captain.CaptainNamePanel;
 import it.unibo.jnavy.view.components.weather.WeatherWidget;
-
-import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
 public class GameDashboardPanel extends JPanel {
 
@@ -17,7 +18,7 @@ public class GameDashboardPanel extends JPanel {
     private final BotDifficultyPanel difficultyPanel;
     private final CaptainNamePanel captainNamePanel;
 
-    public GameDashboardPanel(String difficulty, int initialCooldown, String captainName) {
+    public GameDashboardPanel(final String difficulty, final int initialCooldown, final String captainName) {
         super(new FlowLayout(FlowLayout.CENTER, 100, 10));
         this.setBackground(BACKGROUND_COLOR);
         this.setOpaque(true);
@@ -39,7 +40,7 @@ public class GameDashboardPanel extends JPanel {
         this.add(this.captainNamePanel);
     }
 
-    public void updateDashboard(int currentCooldown, String currentConditionName) {
+    public void updateDashboard(final int currentCooldown, final String currentConditionName) {
         this.captainButton.updateState(currentCooldown);
         this.weatherWidget.updateWeather(currentConditionName);
     }

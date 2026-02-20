@@ -12,13 +12,13 @@ public final class TargetCalculator {
     private TargetCalculator() {
     }
 
-    public static List<Position> getAllRevealedPositions(GameController controller) {
-        List<Position> hits = new ArrayList<>();
-        int size = controller.getGridSize();
+    public static List<Position> getAllRevealedPositions(final GameController controller) {
+        final List<Position> hits = new ArrayList<>();
+        final int size = controller.getGridSize();
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
-                Position pos = new Position(r, c);
-                CellCondition state = controller.getBotCellState(pos);
+                final Position pos = new Position(r, c);
+                final CellCondition state = controller.getBotCellState(pos);
                 if (state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP || state == CellCondition.HIT_WATER) {
                     hits.add(pos);
                 }
@@ -27,8 +27,8 @@ public final class TargetCalculator {
         return hits;
     }
 
-    public static List<Position> determineAnimationTargets(Position p, List<Position> newHits, boolean isAbility, String captainName, int gridSize) {
-        boolean isGunner = captainName.toLowerCase().contains("gunner");
+    public static List<Position> determineAnimationTargets(final Position p, final List<Position> newHits, final boolean isAbility, final String captainName, final int gridSize) {
+        final boolean isGunner = captainName.toLowerCase().contains("gunner");
         if (!isAbility || !isGunner) {
             return newHits.isEmpty() ? List.of(p) : List.of(newHits.get(0));
         }
@@ -49,7 +49,7 @@ public final class TargetCalculator {
                     }
                 }
                 if (containsAll) {
-                    int dist = Math.abs(r - p.x()) + Math.abs(c - p.y());
+                    final int dist = Math.abs(r - p.x()) + Math.abs(c - p.y());
                     if (dist < minDistance) {
                         minDistance = dist;
                         bestAnchor = new Position(r, c);
@@ -60,11 +60,11 @@ public final class TargetCalculator {
         return getAreaPositions(bestAnchor, gridSize);
     }
 
-    private static List<Position> getAreaPositions(Position p, int gridSize) {
-        List<Position> area = new ArrayList<>();
+    private static List<Position> getAreaPositions(final Position p, final int gridSize) {
+        final List<Position> area = new ArrayList<>();
         for (int r = 0; r < 2; r++) {
             for (int c = 0; c < 2; c++) {
-                Position pos = new Position(p.x() + r, p.y() + c);
+                final Position pos = new Position(p.x() + r, p.y() + c);
                 if (pos.x() < gridSize && pos.y() < gridSize) {
                     area.add(pos);
                 }
