@@ -73,9 +73,9 @@ public class WeatherManagerTest {
             if (sawSunny && sawFog) {
                 break;
             }
-            assertTrue(sawSunny, "Should have seen SUNNY weather");
-            assertTrue(sawFog, "Should have seen FOG weather after some transitions");
         }
+        assertTrue(sawSunny, "Should have seen SUNNY weather");
+        assertTrue(sawFog, "Should have seen FOG weather after some transitions");
     }
 
     /**
