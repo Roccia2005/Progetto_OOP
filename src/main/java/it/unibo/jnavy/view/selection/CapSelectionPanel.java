@@ -4,17 +4,19 @@ import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+
+import it.unibo.jnavy.view.utilities.ImageLoader;
+
 import java.awt.*;
-import java.net.URL;
 
 import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
 public class CapSelectionPanel extends JPanel {
 
     public enum CaptainAbility {
-        ENGINEER("Engineer", "He can repair a piece of any ship as long as a certain number of turns pass", "images/engineer.png"),
-        GUNNER("Gunner", "He can fire a multiple shot capable of hitting a 4-cell area of the opponent's grid", "images/gunner.png"),
-        SONAROFFICER("SonarOfficer", "He can reveal information about a specific cell on opponent's grid", "images/sonarofficer.png");
+        ENGINEER("Engineer", "He can repair a piece of any ship as long as a certain number of turns pass", "/images/engineer.png"),
+        GUNNER("Gunner", "He can fire a multiple shot capable of hitting a 4-cell area of the opponent's grid", "/images/gunner.png"),
+        SONAROFFICER("SonarOfficer", "He can reveal information about a specific cell on opponent's grid", "/images/sonarofficer.png");
 
         private final String label;
         private final String description;
@@ -185,7 +187,7 @@ public class CapSelectionPanel extends JPanel {
     private void updatePreview() {
         CaptainAbility selected = (CaptainAbility) levelComboBox.getSelectedItem();
         if (selected != null) {
-            ImageIcon icon = loadCapImage(selected.getImagePath());
+            ImageIcon icon = ImageLoader.getScaledIcon(selected.getImagePath(), IMAGE_SIZE, IMAGE_SIZE);
             imageLabel.setIcon(icon);
             if (icon == null) {
                 imageLabel.setText("image not found");
@@ -193,18 +195,6 @@ public class CapSelectionPanel extends JPanel {
                 imageLabel.setText("");
             }
             descriptionArea.setText(selected.getDescription());
-        }
-    }
-
-    private ImageIcon loadCapImage(String path) {
-        URL imgUrl = getClass().getClassLoader().getResource(path);
-        if (imgUrl != null) {
-            ImageIcon originalIcon = new ImageIcon(imgUrl);
-            Image scaledImage = originalIcon.getImage().getScaledInstance(IMAGE_SIZE, IMAGE_SIZE, Image.SCALE_SMOOTH);
-            return new ImageIcon(scaledImage);
-        } else {
-            System.err.println("image not found at path: " + path);
-            return null;
         }
     }
 

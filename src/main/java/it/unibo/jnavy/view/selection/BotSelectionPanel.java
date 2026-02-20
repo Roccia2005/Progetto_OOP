@@ -4,17 +4,19 @@ import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+
+import it.unibo.jnavy.view.utilities.ImageLoader;
+
 import java.awt.*;
-import java.net.URL;
 
 import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
 public class BotSelectionPanel extends JPanel {
 
     public enum BotLevel {
-        BEGINNER("Beginner", "He shoots randomly at your grid, as if blindfolded", "images/beginner.png"),
-        PRO("Pro", "He learns with every shot he throws, he can become very strong", "images/pro.png"),
-        SNIPER("Sniper", "He knows the position of your ships, be smart", "images/sniper.png");
+        BEGINNER("Beginner", "He shoots randomly at your grid, as if blindfolded", "/images/beginner.png"),
+        PRO("Pro", "He learns with every shot he throws, he can become very strong", "/images/pro.png"),
+        SNIPER("Sniper", "He knows the position of your ships, be smart", "/images/sniper.png");
 
         private final String label;
         private final String description;
@@ -132,7 +134,7 @@ public class BotSelectionPanel extends JPanel {
         });
         levelComboBox.setPreferredSize(new Dimension(SETWIDTH / CONTROL_WIDTH_DIVISOR, SETHEIGHT / CONTROL_HEIGHT_DIVISOR));
         levelComboBox.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_CTRL));
-        levelComboBox.setRenderer(new customRenderer());
+        levelComboBox.setRenderer(new CustomRenderer());
         levelComboBox.setFocusable(false);
         levelComboBox.setBackground(MENUBLUE);
         levelComboBox.setForeground(FOREGROUND_COLOR);
@@ -186,7 +188,7 @@ public class BotSelectionPanel extends JPanel {
     private void updatePreview() {
         BotLevel selected = (BotLevel) levelComboBox.getSelectedItem();
         if (selected != null) {
-            ImageIcon icon = loadBotImage(selected.getImagePath());
+            ImageIcon icon = ImageLoader.getScaledIcon(selected.getImagePath(), IMAGE_SIZE, IMAGE_SIZE);
             imageLabel.setIcon(icon);
             if (icon == null) {
                 imageLabel.setText("image not found");
@@ -197,19 +199,7 @@ public class BotSelectionPanel extends JPanel {
         }
     }
 
-    private ImageIcon loadBotImage(String path) {
-        URL imgUrl = getClass().getClassLoader().getResource(path);
-        if (imgUrl != null) {
-            ImageIcon originalIcon = new ImageIcon(imgUrl);
-            Image scaledImage = originalIcon.getImage().getScaledInstance(IMAGE_SIZE, IMAGE_SIZE, Image.SCALE_SMOOTH);
-            return new ImageIcon(scaledImage);
-        } else {
-            System.err.println("image not found at path: " + path);
-            return null;
-        }
-    }
-
-    private final class customRenderer extends DefaultListCellRenderer {
+    private final class CustomRenderer extends DefaultListCellRenderer {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, false);

@@ -3,16 +3,15 @@ package it.unibo.jnavy.view.start;
 import java.awt.*;
 import javax.swing.*;
 
-import it.unibo.jnavy.view.AmbientSoundManager;
+import it.unibo.jnavy.view.utilities.AmbientSoundManager;
+import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
 /**
  * Game start screen.
  */
 public class StartView extends JPanel {
 
-    private static final Color THEME_BACKGROUND = new Color(20, 20, 30);
-    private static final Color THEME_TEXT = new Color(240, 240, 255);
-    private static final Color COLOR_ACCENT = new Color(41, 86, 246);
+    private static final Color BACKGROUND_BUTTON = new Color(41, 86, 246);
 
     private final Runnable onStartAction;
 
@@ -23,7 +22,7 @@ public class StartView extends JPanel {
 
     private void initUI() {
         this.setLayout(new GridBagLayout());
-        this.setBackground(THEME_BACKGROUND);
+        this.setBackground(BACKGROUND_COLOR);
         AmbientSoundManager ambientSound = new AmbientSoundManager("/sounds/ship_horn.wav", 10000);
         ambientSound.start();
 
@@ -36,11 +35,11 @@ public class StartView extends JPanel {
 
         JLabel titleLabel = new JLabel("JNavy");
         titleLabel.setFont(new Font("Impact", Font.BOLD, 100));
-        titleLabel.setForeground(THEME_TEXT);
+        titleLabel.setForeground(FOREGROUND_COLOR);
         this.add(titleLabel, gbc);
 
         JLabel descLabel = new JLabel("Dominates the Ocean. Sink the Enemy.");
-        descLabel.setFont(new Font("SansSerif", Font.PLAIN, 24));
+        descLabel.setFont(new Font(FONT_FAMILY, Font.PLAIN, 24));
         descLabel.setForeground(new Color(180, 180, 200));
         this.add(descLabel, gbc);
 
@@ -48,8 +47,8 @@ public class StartView extends JPanel {
 
         JButton startButton = new JButton("START GAME");
         startButton.setFont(new Font("SansSerif", Font.BOLD, 28));
-        startButton.setForeground(Color.WHITE);
-        startButton.setBackground(COLOR_ACCENT);
+        startButton.setForeground(FOREGROUND_COLOR);
+        startButton.setBackground(BACKGROUND_BUTTON);
         startButton.setFocusPainted(false);
         startButton.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.WHITE, 2),

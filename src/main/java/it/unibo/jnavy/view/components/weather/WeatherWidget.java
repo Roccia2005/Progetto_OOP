@@ -1,10 +1,10 @@
 package it.unibo.jnavy.view.components.weather;
 
 import it.unibo.jnavy.model.weather.WeatherCondition;
+import it.unibo.jnavy.view.utilities.ImageLoader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.URL;
 
 /**
  * A circular widget that displays the current weather condition using a
@@ -45,29 +45,8 @@ public class WeatherWidget extends JPanel {
      */
     private void loadIcons() {
         int iconSize = 50;
-
-        this.sunIcon = loadResizedIcon("/images/sun.png", iconSize, iconSize);
-        this.fogIcon = loadResizedIcon("/images/fog.png", iconSize, iconSize);
-    }
-
-    /**
-     * Loads an image and scales it to the specified dimensions.
-     *
-     * @param path the resource path of the image.
-     * @param width the target width of the image.
-     * @param height the target height of the image.
-     * @return the resized image, or {@code null} if the image could not be loaded.
-     */
-    private ImageIcon loadResizedIcon(String path, int width, int height) {
-        URL imgUrl = getClass().getResource(path);
-        if (imgUrl != null) {
-            ImageIcon original = new ImageIcon(imgUrl);
-            Image scaled = original.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            return new ImageIcon(scaled);
-        } else {
-            System.err.println("ERROR. Can't find the image: " + path);
-            return null;
-        }
+        this.sunIcon = ImageLoader.getScaledIcon("/images/sun.png", iconSize, iconSize);
+        this.fogIcon = ImageLoader.getScaledIcon("/images/fog.png", iconSize, iconSize);
     }
 
     /**

@@ -2,11 +2,11 @@ package it.unibo.jnavy.view.components.captain;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+
+import it.unibo.jnavy.view.utilities.ImageLoader;
+import static it.unibo.jnavy.view.utilities.ViewConstants.*;
+
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.net.URL;
-import javax.imageio.ImageIO;
-import java.io.IOException;
 
 public class CaptainAbilityButton extends JButton {
 
@@ -16,11 +16,14 @@ public class CaptainAbilityButton extends JButton {
     private static final String BUTTON_TEXT = "Ability";
     private static final String CAPTAIN_IMAGE_PATH = "/images/captain.png"; 
     private static final String ALERT_IMAGE_PATH = "/images/alert.png";
+    private static final int IMAGE_DIMENSION = 64;
     private static final String READY = "READY";
     private static final String ACTIVE = "ACTIVE";
     private static final String POPUP_MESSAGE = "Ability activate! Choose the position.";
     private static final double MAX_PERCENTAGE = 1.0;
     private static final int DIMENSION = 100;
+    private static final int TEXT_GAP = 5;
+    private static final int TIMER_TIME = 1500;
 
     private final int maxCooldown;
     private double fillPercentage = 0.0;
@@ -30,7 +33,7 @@ public class CaptainAbilityButton extends JButton {
         super(BUTTON_TEXT);
         this.maxCooldown = maxCooldown;
         
-        setForeground(Color.WHITE);
+        setForeground(FOREGROUND_COLOR);
         setContentAreaFilled(false);
         setFocusPainted(false);
         setBorderPainted(false); 
@@ -38,14 +41,14 @@ public class CaptainAbilityButton extends JButton {
                 
         this.setPreferredSize(new Dimension(DIMENSION, DIMENSION));
 
-        Icon captainIcon = loadIcon(CAPTAIN_IMAGE_PATH, 64);
+        Icon captainIcon = ImageLoader.getScaledIcon(CAPTAIN_IMAGE_PATH, IMAGE_DIMENSION, IMAGE_DIMENSION);
         if (captainIcon != null) {
             this.setIcon(captainIcon);
         }
 
         this.setVerticalTextPosition(SwingConstants.BOTTOM);
         this.setHorizontalTextPosition(SwingConstants.CENTER);
-        this.setIconTextGap(5);
+        this.setIconTextGap(TEXT_GAP);
     }
 
     public void updateState(int currentCooldown) {
@@ -100,10 +103,10 @@ public class CaptainAbilityButton extends JButton {
         contentPanel.setBorder(new LineBorder(new Color(255, 140, 0), 3)); 
 
         JLabel messageLabel = new JLabel(POPUP_MESSAGE, SwingConstants.CENTER);
-        messageLabel.setForeground(Color.WHITE);
-        messageLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
+        messageLabel.setForeground(FOREGROUND_COLOR);
+        messageLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, 18));
         
-        Icon alertIcon = loadIcon(ALERT_IMAGE_PATH, 64);
+        Icon alertIcon = ImageLoader.getScaledIcon(ALERT_IMAGE_PATH, IMAGE_DIMENSION, IMAGE_DIMENSION);
         if (alertIcon != null) {
             messageLabel.setIcon(alertIcon);
         }
@@ -118,27 +121,11 @@ public class CaptainAbilityButton extends JButton {
         popup.pack();
         popup.setLocationRelativeTo(parentWindow);
 
-        Timer timer = new Timer(1500, e -> popup.dispose());
+        Timer timer = new Timer(TIMER_TIME, e -> popup.dispose());
         timer.setRepeats(false);
         timer.start();
 
         popup.setVisible(true);
-    }
-
-    private Icon loadIcon(String path, int size) {
-        try {
-            URL imageUrl = getClass().getResource(path);
-            if (imageUrl != null) {
-                BufferedImage localImg = ImageIO.read(imageUrl);
-                if (localImg != null) {
-                    Image scaledImg = localImg.getScaledInstance(size, size, Image.SCALE_SMOOTH);
-                    return new ImageIcon(scaledImg);
-                }
-            } 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Override

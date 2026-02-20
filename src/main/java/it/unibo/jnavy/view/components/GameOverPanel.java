@@ -1,11 +1,14 @@
 package it.unibo.jnavy.view.components;
 
+import it.unibo.jnavy.view.utilities.ImageLoader;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
+
+import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
 public class GameOverPanel extends JPanel {
 
@@ -26,8 +29,8 @@ public class GameOverPanel extends JPanel {
             public void mousePressed(MouseEvent e) { }
         });
 
-        this.winIcon = loadAndScaleIcon("winner.png", 400);
-        this.loseIcon = loadAndScaleIcon("loser.png", 400);
+        this.winIcon = createScaledIcon("/images/winner.png", 400);
+        this.loseIcon = createScaledIcon("/images/loser.png", 400);
 
         this.imageLabel = new JLabel();
 
@@ -73,13 +76,11 @@ public class GameOverPanel extends JPanel {
         g2.fillRect(0, 0, getWidth(), getHeight());
     }
 
-    private ImageIcon loadAndScaleIcon(final String filename, final int targetWidth) {
-        URL url = getClass().getResource("/images/" + filename);
-        if (url == null) {
-            System.err.println("Image not found: " + filename);
+    private ImageIcon createScaledIcon(final String path, final int targetWidth) {
+        Image img = ImageLoader.getImage(path);
+        if (img == null) {
             return null;
         }
-        Image img = new ImageIcon(url).getImage();
         int targetHeight = (int) ((double) img.getHeight(null) / img.getWidth(null) * targetWidth);
         Image scaledImg = img.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImg);
@@ -88,7 +89,7 @@ public class GameOverPanel extends JPanel {
     private JButton createStyledButton(final String label) {
         JButton button = new JButton(label);
         button.setFont(new Font("Sanserif", Font.BOLD, 18));
-        button.setForeground(Color.WHITE);
+        button.setForeground(FOREGROUND_COLOR);
         button.setBackground(new Color(30, 100, 255));
         button.setFocusPainted(false);
 
@@ -100,14 +101,12 @@ public class GameOverPanel extends JPanel {
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(60, 130, 255)); // Più chiaro
+                button.setBackground(new Color(60, 130, 255));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(30, 100, 255)); // Normale
+                button.setBackground(new Color(30, 100, 255));
             }
         });
-
         return button;
     }
-
 }
