@@ -122,7 +122,13 @@ public class GamePanel extends JPanel {
         this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET,
                                 (Position p) -> {
                                     if (this.inputBlocked || !controller.isHumanTurn() || controller.isGameOver()) return;
-                                    if (controller.getBotCellState(p).isAlreadyHit() && !captainButton.isActive()) return;
+
+                                    CellCondition clickedState = controller.getBotCellState(p);
+                                    boolean isAlreadyRevealed = (clickedState == CellCondition.HIT_SHIP ||
+                                                                 clickedState == CellCondition.SUNK_SHIP ||
+                                                                 clickedState == CellCondition.HIT_WATER);
+
+                                    if (isAlreadyRevealed && !captainButton.isActive()) return;
 
                                     this.inputBlocked = true;
                                     boolean isAbility = captainButton.isActive();
@@ -133,7 +139,8 @@ public class GamePanel extends JPanel {
                                     for (int r = 0; r < size; r++) {
                                         for (int c = 0; c < size; c++) {
                                             Position pos = new Position(r, c);
-                                            if (controller.getBotCellState(pos).isAlreadyHit()) {
+                                            CellCondition state = controller.getBotCellState(pos);
+                                            if (state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP || state == CellCondition.HIT_WATER) {
                                                 previousHits.add(pos);
                                             }
                                         }
@@ -150,7 +157,9 @@ public class GamePanel extends JPanel {
                                     for (int r = 0; r < size; r++) {
                                         for (int c = 0; c < size; c++) {
                                             Position pos = new Position(r, c);
-                                            if (controller.getBotCellState(pos).isAlreadyHit() && !previousHits.contains(pos)) {
+                                            CellCondition state = controller.getBotCellState(pos);
+                                            boolean isHitNow = (state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP || state == CellCondition.HIT_WATER);
+                                            if (isHitNow && !previousHits.contains(pos)) {
                                                 newHits.add(pos);
                                             }
                                         }
@@ -165,13 +174,29 @@ public class GamePanel extends JPanel {
                                         }
                                     } else {
                                         if (isAbility && isGunner) {
-                                            Position anchor = newHits.get(0);
-                                            for (Position n : newHits) {
-                                                if (n.x() <= anchor.x() && n.y() <= anchor.y()) {
-                                                    anchor = n;
+                                            // Find the 2x2 area that contains ALL new hits and is closest to the aimed point
+                                            Position bestAnchor = newHits.get(0);
+                                            int minDistance = Integer.MAX_VALUE;
+
+                                            for (int r = 0; r < size; r++) {
+                                                for (int c = 0; c < size; c++) {
+                                                    boolean containsAll = true;
+                                                    for (Position n : newHits) {
+                                                        if (n.x() < r || n.x() > r + 1 || n.y() < c || n.y() > c + 1) {
+                                                            containsAll = false;
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (containsAll) {
+                                                        int dist = Math.abs(r - p.x()) + Math.abs(c - p.y());
+                                                        if (dist < minDistance) {
+                                                            minDistance = dist;
+                                                            bestAnchor = new Position(r, c);
+                                                        }
+                                                    }
                                                 }
                                             }
-                                            tempTargets = getAreaPositions(anchor);
+                                            tempTargets = getAreaPositions(bestAnchor);
                                         } else {
                                             tempTargets.add(newHits.get(0));
                                         }
