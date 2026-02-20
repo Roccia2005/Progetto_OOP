@@ -53,7 +53,8 @@ public class WeatherManagerTest {
     }
 
     /**
-     *
+     * Verifies the probabilistic nature of weather transitions.
+     * After enough cycles, the weather should eventually switch to FOG.
      */
     @Test
     void testWeatherTransitions() {
@@ -137,7 +138,8 @@ public class WeatherManagerTest {
     }
 
     /**
-     *
+     * Verifies that the weather system does not redirect shots to cells that
+     * have already been hit if other valid options are available.
      */
     @Test
     void testFogAvoidHitCells() {
