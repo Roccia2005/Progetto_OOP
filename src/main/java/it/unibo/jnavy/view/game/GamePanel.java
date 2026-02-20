@@ -78,9 +78,9 @@ public class GamePanel extends JPanel {
 
         this.headerPanel = new GameHeaderPanel(() -> {
             if (this.controller.saveGame()) {
-                ToastNotification.show(this, GAME_SAVED);
+                ToastNotification.show(this, GAME_SAVED, MENUBLUE);
             } else {
-                ToastNotification.show(this, SAVE_ERROR);
+                ToastNotification.show(this, SAVE_ERROR, MENUBLUE);
             }
         });
 

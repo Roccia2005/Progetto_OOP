@@ -1,10 +1,11 @@
 package it.unibo.jnavy.view.setup;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import it.unibo.jnavy.controller.setup.SetupController;
 import it.unibo.jnavy.controller.utilities.CellState;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
+import it.unibo.jnavy.view.game.ToastNotification;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -19,12 +20,15 @@ public class SetupView extends JPanel {
     private static final Color THEME_BACKGROUND = new Color(20, 20, 30);
     private static final Color THEME_TEXT = new Color(240, 240, 255);
     private static final Color COLOR_WATER = new Color(41, 86, 246);
+    private static final Color COLOR_ERROR = new Color(200, 50, 50);
     private static final Color COLOR_SHIP = Color.BLACK;
     private static final Color COLOR_BORDER = Color.GRAY;
     private static final Color COLOR_BORDER_WATER = new Color(0, 80, 120);
     private static final int FONT_DEFAULT_SIZE = 22;
     private static final int FONT_ICON_SIZE = 120;
     private static final int BORDER_THICKNESS = 2;
+    private static final String NULL_SHIP_ERROR = "Place a ship first!";
+    private static final String PLACEMENT_ERROR = "Invalid placement!";
 
     private final Map<Position, JButton> gridButtons = new HashMap<>();
     private CardinalDirection currentDirection = CardinalDirection.RIGHT;
@@ -129,7 +133,7 @@ public class SetupView extends JPanel {
                     updateView();
                 } catch (IllegalStateException ex) {
                     Toolkit.getDefaultToolkit().beep();
-                    showAutoClosingMessage("Place a ship first!");
+                    ToastNotification.show(this, NULL_SHIP_ERROR, COLOR_ERROR);
                 }
             }
         });
@@ -141,10 +145,10 @@ public class SetupView extends JPanel {
         });
 
         clearButton = createBigButton("Clear Fleet", FONT_DEFAULT_SIZE);
-        clearButton.setForeground(THEME_TEXT); // Un colore rossastro per indicare "Reset"
+        clearButton.setForeground(THEME_TEXT);
         clearButton.addActionListener(e -> {
             controller.clearFleet();
-            updateView(); // Fondamentale: ridisegna la griglia vuota
+            updateView();
         });
 
         buttonsContainer.add(rotateButton);
@@ -188,7 +192,7 @@ public class SetupView extends JPanel {
             updateView();
         } else {
             Toolkit.getDefaultToolkit().beep();
-            showAutoClosingMessage("Invalid placement!");
+            ToastNotification.show(this, PLACEMENT_ERROR, COLOR_ERROR);
         }
     }
 
@@ -232,44 +236,5 @@ public class SetupView extends JPanel {
             clearButton.setEnabled(true);
         }
         this.repaint();
-    }
-
-    private void showAutoClosingMessage(String message) {
-        final JWindow toast = new JWindow(SwingUtilities.getWindowAncestor(this));
-
-        JLabel label = getJLabel(message);
-
-        toast.add(label);
-        toast.pack();
-
-        Point location = this.getLocationOnScreen();
-        int x = location.x + (this.getWidth() - toast.getWidth()) / 2;
-        int y = location.y + (this.getHeight() - toast.getHeight()) / 2;
-        toast.setLocation(x, y);
-
-        toast.setVisible(true);
-
-        Timer timer = new Timer(1000, e -> {
-            toast.setVisible(false);
-            toast.dispose();
-        });
-        timer.setRepeats(false);
-        timer.start();
-    }
-
-    @NonNull
-    private static JLabel getJLabel(String message) {
-        JLabel label = new JLabel(message, SwingConstants.CENTER);
-        label.setFont(new Font("SansSerif", Font.BOLD, 18));
-        label.setForeground(Color.WHITE);
-        label.setBackground(new Color(200, 50, 50));
-        label.setOpaque(true);
-        label.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-
-        label.setBorder(BorderFactory.createCompoundBorder(
-                label.getBorder(),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
-        ));
-        return label;
     }
 }
