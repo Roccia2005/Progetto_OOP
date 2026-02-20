@@ -154,4 +154,11 @@ public class WeatherManagerTest {
         ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
         assertEquals(new Position(1, 1), shotResult.position());
     }
+
+    @Test
+    void testReset() {
+        this.weatherManager.setCondition(WeatherCondition.FOG);
+        ((WeatherManagerImpl)this.weatherManager).reset();
+        assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
+    }
 }
