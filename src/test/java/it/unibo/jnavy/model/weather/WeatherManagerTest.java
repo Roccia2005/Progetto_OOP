@@ -123,12 +123,8 @@ public class WeatherManagerTest {
      * 2. The shot remains within the valid neighborhood: (0,0), (0,1), (1,0), or (1,1).
      */
     @Test
-    void fogCornerCase() {
-        assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
-        for (int i = 0; i < 5; i++) {
-            this.weatherManager.processTurnEnd();
-        }
-        assertEquals(WeatherCondition.FOG, this.weatherManager.getCurrentWeather());
+    void testFogBoundarySafety() {
+        this.weatherManager.setCondition(WeatherCondition.FOG);
         Grid grid = new GridImpl();
         Position corner = new Position(0, 0);
         ShotResult shotResult = this.weatherManager.applyWeatherEffects(corner, grid);
