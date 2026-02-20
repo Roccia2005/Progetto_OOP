@@ -26,8 +26,11 @@ public class EffectsPanel extends JPanel {
     private int targetY;
     private Image currentEffect = null;
 
-    private int targetSize = 0;
-    private Point targetTopLeft;
+    private int targetCenterX;
+    private int targetCenterY;
+    private int effectRenderSize;
+    private int currentBulletW;
+    private int currentBulletH;
 
     private Runnable onImpactCallback;
     private Runnable onCompleteCallback;
@@ -97,16 +100,20 @@ public class EffectsPanel extends JPanel {
             maxY = Math.max(maxY, ry + t.getHeight());
         }
 
-        this.targetTopLeft = new Point(minX, minY);
-        this.targetSize = Math.max(maxX - minX, maxY - minY);
+        this.targetCenterX = minX + (maxX - minX) / 2;
+        this.targetCenterY = minY + (maxY - minY) / 2;
 
-        int centerX = minX + (maxX - minX) / 2;
-        int centerY = minY + (maxY - minY) / 2;
+        int rawSize = Math.max(maxX - minX, maxY - minY);
+        boolean isAreaShot = targets.size() > 1;
 
-        int bulletW = (int) (targets.get(0).getWidth() * 0.4);
-        this.bulletX = centerX - (bulletW / 2);
-        this.bulletY = -bulletW * 2;
-        this.targetY = centerY - (bulletW / 2);
+        this.effectRenderSize = isAreaShot ? (int) (rawSize * 0.75) : rawSize;
+        int baseCellWidth = targets.get(0).getWidth();
+        this.currentBulletW = isAreaShot ? (int) (baseCellWidth * 0.6) : (int) (baseCellWidth * 0.4);
+        this.currentBulletH = (int) (this.currentBulletW * 1.5);
+
+        this.bulletX = targetCenterX - (currentBulletW / 2);
+        this.bulletY = -currentBulletH * 2;
+        this.targetY = targetCenterY - (currentBulletH / 2);
 
         this.currentEffect = isHit ? this.explosionGif : this.splashGif;
         this.bulletVisible = true;
@@ -165,7 +172,7 @@ public class EffectsPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if ((!isAnimating && currentEffect == null) || targetSize == 0) return;
+        if ((!isAnimating && currentEffect == null) || effectRenderSize == 0) return;
 
         final Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
@@ -173,25 +180,21 @@ public class EffectsPanel extends JPanel {
 
         // Phase 1: Draw a bullet if it's visible
         if (bulletVisible) {
-            int bulletW = (int) (targetSize * 0.6);
-            int bulletH = (int) (bulletW * 1.5);
-
             if (bulletImg != null) {
-                g2.drawImage(bulletImg, bulletX, bulletY, bulletW, bulletH, this);
+                g2.drawImage(bulletImg, bulletX, bulletY, currentBulletW, currentBulletH, this);
             } else {
                 // Fallback rendering if the image failed to load
                 g2.setColor(Color.RED);
-                g2.fillRect(bulletX, bulletY, bulletW, bulletH);
+                g2.fillRect(bulletX, bulletY, currentBulletW, currentBulletH);
                 g2.setColor(Color.WHITE);
-                g2.drawRect(bulletX, bulletY, bulletW, bulletH);
+                g2.drawRect(bulletX, bulletY, currentBulletW, currentBulletH);
             }
         } else if (currentEffect != null) {
             // Phase 2: Draw the impact effect
-            int gifSize = (int) (targetSize * 1.5);
-            int gifOffset = (targetSize - gifSize) / 2;
-            g2.drawImage(currentEffect,
-                    targetTopLeft.x + gifOffset, targetTopLeft.y + gifOffset,
-                    gifSize, gifSize, this);
+            int gifSize = (int) (effectRenderSize * 1.5);
+            int drawX = targetCenterX - (gifSize / 2);
+            int drawY = targetCenterY - (gifSize / 2);
+            g2.drawImage(currentEffect, drawX, drawY, gifSize, gifSize, this);
         }
     }
 }
