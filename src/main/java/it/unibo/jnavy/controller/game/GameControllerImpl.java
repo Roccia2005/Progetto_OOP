@@ -35,6 +35,14 @@ public class GameControllerImpl implements GameController {
         ((WeatherManagerImpl) this.weather).reset();
     }
 
+    public GameControllerImpl(final GameState state) {
+        this.human = state.getHuman();
+        this.bot = state.getBot();
+        this.turnCounter = state.getTurnCounter();
+        this.weather = WeatherManagerImpl.getInstance();
+        this.currentPlayer = state.isHumanTurn() ? this.human : this.bot;
+    }
+
     @Override
     public int getGridSize() {
         return this.human.getGrid().getSize();
