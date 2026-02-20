@@ -124,35 +124,34 @@ public class GamePanel extends JPanel {
                                     if (this.inputBlocked || !controller.isHumanTurn() || controller.isGameOver()) return;
                                     if (controller.getBotCellState(p).isAlreadyHit() && !captainButton.isActive()) return;
 
-                                    List<Position> targets;
-                                    if (captainButton.isActive() && controller.getPlayerCaptainName().equalsIgnoreCase("Gunner")) {
-                                        targets = getAreaPositions(p);
-                                    } else {
-                                        targets = List.of(p);
-                                    }
-
                                     this.inputBlocked = true;
                                     boolean isAbility = captainButton.isActive();
 
+                                    List<Position> actualTargets;
                                     if (isAbility) {
-                                        controller.processAbility(p);
+                                        actualTargets = controller.processAbility(p);
                                         captainButton.reset();
                                     } else {
-                                        controller.processShot(p);
+                                        actualTargets = controller.processShot(p);
                                     }
 
-                                    boolean anyHit = targets.stream().anyMatch(pos -> {
+                                    if (actualTargets.isEmpty()) {
+                                        this.inputBlocked = false;
+                                        return;
+                                    }
+
+                                    boolean anyHit = actualTargets.stream().anyMatch(pos -> {
                                         var state = controller.getBotCellState(pos);
                                         return state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
                                     });
 
-                                    List<Component> targetButtons = targets.stream()
+                                    List<Component> targetButtons = actualTargets.stream()
                                             .map(botGridPanel::getButtonAt)
                                             .collect(Collectors.toList());
 
                                     this.effectsPanel.startShot(targetButtons, anyHit,
                                             () -> {
-                                                targets.forEach(pos -> botGridPanel.refreshCell(pos, controller.getBotCellState(pos)));
+                                                actualTargets.forEach(pos -> botGridPanel.refreshCell(pos, controller.getBotCellState(pos)));
                                             },
                                             () -> {
                                                 this.updateDashboard();

@@ -4,15 +4,17 @@ import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherCondition;
 
+import java.util.List;
+
 public interface GameController {
 
     int getGridSize();
 
     int getCaptainCooldown();
 
-    void processShot(Position p);
+    List<Position> processShot(Position p);
 
-    boolean processAbility(Position p);
+    List<Position> processAbility(Position p);
 
     boolean isGameOver();
 

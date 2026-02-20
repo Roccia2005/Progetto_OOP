@@ -12,6 +12,8 @@ import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.model.weather.WeatherManager;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
+import java.util.List;
+
 public class GameControllerImpl implements GameController {
 
     private final Human human;
@@ -39,18 +41,21 @@ public class GameControllerImpl implements GameController {
     }
 
     @Override
-    public void processShot(Position p) {
+    public List<Position> processShot(Position p) {
         if (!isHumanTurn()) {
-            return;
+            return List.of();
         }
-        this.human.createShot(p, this.bot.getGrid());
+        var results = this.human.createShot(p, this.bot.getGrid());
         endTurn();
+        return results.stream()
+                .map(ShotResult::position)
+                .toList();
     }
 
     @Override
-    public boolean processAbility(Position p) {
+    public List<Position> processAbility(Position p) {
         if (!isHumanTurn()) {
-            return false;
+            return List.of();
         }
 
         Grid targetGrid = this.human.captainAbilityTargetsEnemyGrid() ? this.bot.getGrid() : this.human.getGrid();
@@ -59,9 +64,9 @@ public class GameControllerImpl implements GameController {
             if (this.human.doescaptainAbilityConsumeTurn()) {
                 endTurn();
             }
-            return true;
+            return List.of(p);
         }
-        return false;
+        return List.of();
     }
 
     @Override
