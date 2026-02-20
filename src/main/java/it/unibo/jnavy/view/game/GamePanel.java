@@ -197,6 +197,11 @@ public class GamePanel extends JPanel {
         botGridPanel.refresh(pos -> controller.getBotCellState(pos));
 
         WeatherCondition currentCondition = this.controller.getWeatherCondition();
+        if (this.lastWeatherCondition != null && this.lastWeatherCondition != currentCondition) {
+            this.weatherOverlay.showWeatherAlert(currentCondition.toString());
+        }
+        this.lastWeatherCondition = currentCondition;
+
         this.weatherWidget.updateWeather(currentCondition);
 
         if (controller.isGameOver() && !this.gameOverHandled) {
