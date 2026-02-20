@@ -106,4 +106,18 @@ public class StartView extends JPanel {
 
         this.add(loadButton, gbc);
     }
+
+    public void startMusic() {
+        if (ambientSound == null) {
+            ambientSound = new SoundManager(SOUND_PATH);
+        }
+        ambientSound.start();
+    }
+
+    public void stopMusic() {
+        if (ambientSound != null) {
+            ambientSound.close();
+            ambientSound = null;
+        }
+    }
 }

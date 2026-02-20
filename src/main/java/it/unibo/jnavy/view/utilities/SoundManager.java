@@ -7,7 +7,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.net.URL;
 
