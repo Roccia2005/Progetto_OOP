@@ -97,7 +97,7 @@ public class EffectsPanel extends JPanel {
             maxY = Math.max(maxY, ry + t.getHeight());
         }
 
-        this.targetTopLeft = new Point(minX, maxX);
+        this.targetTopLeft = new Point(minX, minY);
         this.targetSize = Math.max(maxX - minX, maxY - minY);
 
         int centerX = minX + (maxX - minX) / 2;

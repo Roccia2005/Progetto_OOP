@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unibo.jnavy.controller.game.GameController;
+import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.view.components.EffectsPanel;
@@ -23,6 +24,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.net.URL;
+import java.util.stream.Collectors;
 
 public class GamePanel extends JPanel {
 
@@ -34,7 +36,7 @@ public class GamePanel extends JPanel {
     private boolean inputBlocked = false;
     private final JLabel statusLabel;
     private final GridPanel humanGridPanel;
-    private final GridPanel botGridPanel;
+    private GridPanel botGridPanel;
     private final BotDifficultyPanel difficultyPanel;
     private final WeatherWidget weatherWidget;
     private final CaptainAbilityButton captainButton;
@@ -53,14 +55,18 @@ public class GamePanel extends JPanel {
     public GamePanel(GameController controller, Runnable onMenu) {
         this.controller = controller;
         this.lastWeatherCondition = controller.getWeatherCondition();
+        this.effectsPanel = new EffectsPanel();
+        this.weatherOverlay = new WeatherNotificationOverlay();
+        this.layeredPane = new JLayeredPane();
+        this.mainContent = new JPanel(new BorderLayout());
+        this.mainContent.setOpaque(false);
+
         this.setBackground(BACKGROUND_COLOR);
         this.setLayout(new BorderLayout());
 
         this.ambientSound = new AmbientSoundManager("/sounds/game_soundtrack.wav", 144000);
-        this.layeredPane = new JLayeredPane();
         this.add(layeredPane, BorderLayout.CENTER);
 
-        this.mainContent = new JPanel(new BorderLayout());
         this.mainContent.setOpaque(false);
 
         JPanel gridsContainer = new JPanel(new GridLayout(1, 2, 40, 0));
@@ -115,42 +121,48 @@ public class GamePanel extends JPanel {
                                 });
         this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET,
                                 (Position p) -> {
-                                    if (this.inputBlocked || !controller.isHumanTurn()) return;
+                                    if (this.inputBlocked || !controller.isHumanTurn() || controller.isGameOver()) return;
+                                    if (controller.getBotCellState(p).isAlreadyHit() && !captainButton.isActive()) return;
 
-                                    if (captainButton.isActive()) {
-                                        if (!controller.captainAbilityTargetsEnemyGrid()) return;
-                                        if (controller.getBotCellState(p).isAlreadyHit()) return;
-                                        controller.processAbility(p);
-                                        this.captainButton.reset();
+                                    List<Position> targets;
+                                    if (captainButton.isActive() && controller.getPlayerCaptainName().equalsIgnoreCase("Gunner")) {
+                                        targets = getAreaPositions(p);
                                     } else {
-                                        if (controller.getBotCellState(p).isAlreadyHit()) return;
+                                        targets = List.of(p);
+                                    }
+
+                                    this.inputBlocked = true;
+                                    boolean isAbility = captainButton.isActive();
+
+                                    if (isAbility) {
+                                        controller.processAbility(p);
+                                        captainButton.reset();
+                                    } else {
                                         controller.processShot(p);
                                     }
 
-                                    this.updateDashboard();
+                                    boolean anyHit = targets.stream().anyMatch(pos -> {
+                                        var state = controller.getBotCellState(pos);
+                                        return state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
+                                    });
 
-                                    if (!controller.isHumanTurn() && !controller.isGameOver()) {
+                                    List<Component> targetButtons = targets.stream()
+                                            .map(botGridPanel::getButtonAt)
+                                            .collect(Collectors.toList());
 
-                                        this.inputBlocked = true;
-                                        this.statusLabel.setText("Bot is thinking...");
-                                        this.statusLabel.setForeground(Color.RED);
-
-                                        Timer botTimer = new Timer(1000, e -> {
-                                            controller.playBotTurn();
-                                            this.updateDashboard();
-
-                                            this.inputBlocked = false;
-                                            this.statusLabel.setText("Your Turn");
-                                            this.statusLabel.setForeground(Color.WHITE);
-                                        });
-
-                                        botTimer.setRepeats(false);
-                                        botTimer.start();
-//                                    } else if (controller.isGameOver()) {
-//                                        if (this.ambientSound != null) {
-//                                            this.ambientSound.stop();
-//                                        }
-                                   }
+                                    this.effectsPanel.startShot(targetButtons, anyHit,
+                                            () -> {
+                                                targets.forEach(pos -> botGridPanel.refreshCell(pos, controller.getBotCellState(pos)));
+                                            },
+                                            () -> {
+                                                this.updateDashboard();
+                                                if (!controller.isHumanTurn() && !controller.isGameOver()) {
+                                                    triggerBotTurn();
+                                                } else {
+                                                    this.inputBlocked = false;
+                                                }
+                                            }
+                                    );
                                 });
 
         this.humanGridPanel.setBackground(BACKGROUND_COLOR);
@@ -165,8 +177,6 @@ public class GamePanel extends JPanel {
         this.mainContent.add(gridsContainer, BorderLayout.CENTER);
         this.mainContent.add(dashboardPanel, BorderLayout.SOUTH);
 
-        this.effectsPanel = new EffectsPanel();
-        this.weatherOverlay = new WeatherNotificationOverlay();
         this.gameOverPanel = new GameOverPanel(
                 e -> onMenu.run(),
                 e -> System.exit(0)
@@ -189,6 +199,30 @@ public class GamePanel extends JPanel {
             }
         });
         this.updateDashboard();
+    }
+
+    private void triggerBotTurn() {
+        this.statusLabel.setText("Bot is thinking...");
+        this.statusLabel.setForeground(Color.RED);
+
+        Timer botTimer = new Timer(1000, e -> {
+            Position target = controller.playBotTurn();
+            if (target == null) return;
+
+            JButton targetButton = humanGridPanel.getButtonAt(target);
+            var state = controller.getHumanCellState(target);
+            boolean isHit = state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
+            this.effectsPanel.startShot(List.of(targetButton), isHit,
+                    () -> humanGridPanel.refreshCell(target, state),
+                    () -> {
+                this.updateDashboard();
+                this.inputBlocked = false;
+                this.statusLabel.setText("Your Turn");
+                this.statusLabel.setForeground(Color.WHITE);
+            });
+        });
+        botTimer.setRepeats(false);
+        botTimer.start();
     }
 
     private void updateDashboard() {
