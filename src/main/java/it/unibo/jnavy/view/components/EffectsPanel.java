@@ -3,6 +3,7 @@ package it.unibo.jnavy.view.components;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.List;
 
 /**
  * A transparent panel that sits on top of the game view to draw animations
@@ -25,10 +26,14 @@ public class EffectsPanel extends JPanel {
     private int targetY;
     private Image currentEffect = null;
 
-    private int targetSize = 0;
-    private Point targetTopLeft;
+    private int targetCenterX;
+    private int targetCenterY;
+    private int effectRenderSize;
+    private int currentBulletW;
+    private int currentBulletH;
 
     private Runnable onImpactCallback;
+    private Runnable onCompleteCallback;
 
     private final Timer animationTimer;
 
@@ -68,28 +73,47 @@ public class EffectsPanel extends JPanel {
 
     /**
      * Starts the shot animation towards a target component.
+     * For multiple targets (AreaShot), the bullet will aim at the center of the bounding box.
      *
-     * @param targetBtn The component to target.
-     * @param isHit If true, an explosion effect is shown on impact; otherwise a splash effect.
-     * @param onImpact A callback to be executed at the moment of impact.
+     * @param targets The list of components to aim at.
+     * @param isHit If true, an explosion is shown; otherwise a splash
+     * @param onImpact The callback to be invoked when the bullet impacts a target.
+     * @param onComplete The callback to be invoked when the shot animation is completed.
      */
-    public void startShot(Component targetBtn, boolean isHit, Runnable onImpact) {
-        if (this.isAnimating) return;
+    public void startShot(List<Component> targets, boolean isHit, Runnable onImpact, Runnable onComplete) {
+        if (this.isAnimating || targets.isEmpty()) return;
+
         this.onImpactCallback = onImpact;
+        this.onCompleteCallback = onComplete;
 
-        Point btnLocationOnScreen   = targetBtn.getLocationOnScreen();
-        Point panelLocationOnScreen = this.getLocationOnScreen();
-        this.targetTopLeft = new Point(
-                btnLocationOnScreen.x - panelLocationOnScreen.x,
-                btnLocationOnScreen.y - panelLocationOnScreen.y
-        );
+        int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
+        Point panelLocation = this.getLocationOnScreen();
 
-        this.targetSize = targetBtn.getWidth();
-        int scaledBulletWidth = (int) (this.targetSize * 0.4);
+        for (Component t : targets) {
+            Point loc = t.getLocationOnScreen();
+            int rx = loc.x - panelLocation.x;
+            int ry = loc.y - panelLocation.y;
+            minX = Math.min(minX, rx);
+            minY = Math.min(minY, ry);
+            maxX = Math.max(maxX, rx + t.getWidth());
+            maxY = Math.max(maxY, ry + t.getHeight());
+        }
 
-        this.bulletX = this.targetTopLeft.x + (this.targetSize - scaledBulletWidth) / 2;
-        this.bulletY = -scaledBulletWidth * 2;   // parte da sopra la finestra
-        this.targetY = this.targetTopLeft.y + (this.targetSize / 2) - (scaledBulletWidth / 2);
+        this.targetCenterX = minX + (maxX - minX) / 2;
+        this.targetCenterY = minY + (maxY - minY) / 2;
+
+        int rawSize = Math.max(maxX - minX, maxY - minY);
+        boolean isAreaShot = targets.size() > 1;
+
+        this.effectRenderSize = isAreaShot ? rawSize : (int) (rawSize * 1.5);
+        int baseCellWidth = targets.get(0).getWidth();
+        this.currentBulletW = isAreaShot ? (int) (baseCellWidth * 0.8) : (int) (baseCellWidth * 0.4);
+        this.currentBulletH = (int) (this.currentBulletW * 1.5);
+
+        this.bulletX = targetCenterX - (currentBulletW / 2);
+        this.bulletY = -currentBulletH * 2;
+        this.targetY = targetCenterY - (currentBulletH / 2);
 
         this.currentEffect = isHit ? this.explosionGif : this.splashGif;
         this.bulletVisible = true;
@@ -124,11 +148,15 @@ public class EffectsPanel extends JPanel {
 
         repaint();
 
-        Timer effectDuration = new Timer(1000, e -> {
+        Timer effectDuration = new Timer(EFFECT_DURATION_MS, e -> {
             this.isAnimating   = false;
             this.currentEffect = null;
             repaint();
             ((Timer) e.getSource()).stop();
+
+            if (onCompleteCallback != null) {
+                onCompleteCallback.run();
+            }
         });
         effectDuration.setRepeats(false);
         effectDuration.start();
@@ -144,33 +172,29 @@ public class EffectsPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if ((!isAnimating && currentEffect == null) || targetSize == 0) return;
+        if ((!isAnimating && currentEffect == null) || effectRenderSize == 0) return;
 
         final Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-        // Phase 1: Draw bullet if it's visible
+        // Phase 1: Draw a bullet if it's visible
         if (bulletVisible) {
-            int bulletW = (int) (targetSize * 0.6);
-            int bulletH = (int) (bulletW * 1.5);
-
             if (bulletImg != null) {
-                g2.drawImage(bulletImg, bulletX, bulletY, bulletW, bulletH, this);
+                g2.drawImage(bulletImg, bulletX, bulletY, currentBulletW, currentBulletH, this);
             } else {
                 // Fallback rendering if the image failed to load
                 g2.setColor(Color.RED);
-                g2.fillRect(bulletX, bulletY, bulletW, bulletH);
+                g2.fillRect(bulletX, bulletY, currentBulletW, currentBulletH);
                 g2.setColor(Color.WHITE);
-                g2.drawRect(bulletX, bulletY, bulletW, bulletH);
+                g2.drawRect(bulletX, bulletY, currentBulletW, currentBulletH);
             }
         } else if (currentEffect != null) {
             // Phase 2: Draw the impact effect
-            int gifSize = (int) (targetSize * 1.5);
-            int gifOffset = (targetSize - gifSize) / 2;
-            g2.drawImage(currentEffect,
-                    targetTopLeft.x + gifOffset, targetTopLeft.y + gifOffset,
-                    gifSize, gifSize, this);
+            int gifSize = (int) (effectRenderSize * 1.5);
+            int drawX = targetCenterX - (gifSize / 2);
+            int drawY = targetCenterY - (gifSize / 2);
+            g2.drawImage(currentEffect, drawX, drawY, gifSize, gifSize, this);
         }
     }
 }

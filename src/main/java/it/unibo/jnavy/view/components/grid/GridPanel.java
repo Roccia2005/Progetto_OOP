@@ -101,4 +101,26 @@ public class GridPanel extends JPanel {
         }
         return grid;
     }
+
+    /**
+     * Returns the {@link JButton} associated with the given position.
+     * Useful for the EffectsPanel to know where to draw the animations.
+     */
+    public JButton getButtonAt(Position pos) {
+        return this.buttons.get(pos);
+    }
+
+    /**
+     * Refreshes the appearance of a single cell.
+     *
+     * @param pos The cell's position.
+     * @param state The cell's new condition.
+     */
+    public void refreshCell(Position pos, CellCondition state) {
+        JButton button = this.buttons.get(pos);
+        if (button != null) {
+            updateButtonAppearance(button, state);
+            button.repaint();
+        }
+    }
 }

@@ -17,6 +17,8 @@ import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.model.weather.WeatherManager;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
+import java.util.List;
+
 public class GameControllerImpl implements GameController {
 
     private final Player human;
@@ -31,14 +33,6 @@ public class GameControllerImpl implements GameController {
         this.currentPlayer = this.human;
         this.weather = WeatherManagerImpl.getInstance();
         ((WeatherManagerImpl) this.weather).reset();
-    }
-
-    public GameControllerImpl(GameState loadedState) {
-        this.human = (Human) loadedState.getHuman();
-        this.bot = (Bot) loadedState.getBot();
-        this.turnCounter = loadedState.getTurnCounter();
-        this.currentPlayer = loadedState.isHumanTurn() ? this.human : this.bot;
-        this.weather = WeatherManagerImpl.getInstance();
     }
 
     @Override
@@ -137,16 +131,20 @@ public class GameControllerImpl implements GameController {
     }
 
     @Override
-    public void playBotTurn() {
-        if (isGameOver()) return;
+    public Position playBotTurn() {
+        if (isGameOver()) return null;
 
         Optional<Position> optionalTarget = this.bot.generateTarget(this.human.getGrid());
         if (optionalTarget.isPresent()) {
             Position target = optionalTarget.get();
             ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
             this.bot.receiveFeedback(result.position(), result.hitType());
+            endTurn();
+            return result.position();
         }
+
         endTurn();
+        return null;
     }
 
     @Override
