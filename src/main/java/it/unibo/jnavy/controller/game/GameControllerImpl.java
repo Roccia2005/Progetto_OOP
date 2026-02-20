@@ -92,8 +92,8 @@ public class GameControllerImpl implements GameController {
     }
 
     @Override
-    public WeatherCondition getWeatherCondition() {
-        return gameStateController.getWeatherCondition();
+    public String getWeatherConditionName() {
+        return gameStateController.getWeatherCondition().name();
     }
 
     @Override

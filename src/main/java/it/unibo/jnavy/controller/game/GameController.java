@@ -22,7 +22,7 @@ public interface GameController {
 
     CellCondition getBotCellState(Position p);
 
-    WeatherCondition getWeatherCondition();
+    String getWeatherConditionName();
 
     boolean isHumanTurn();
 
