@@ -1,10 +1,10 @@
 package it.unibo.jnavy.controller.game;
 
+import java.util.Optional;
+
 import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
-import it.unibo.jnavy.model.player.Bot;
-import it.unibo.jnavy.model.player.Human;
 import it.unibo.jnavy.model.player.Player;
 import it.unibo.jnavy.model.serialization.GameState;
 import it.unibo.jnavy.model.serialization.SaveManager;
@@ -17,14 +17,14 @@ import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
 public class GameControllerImpl implements GameController {
 
-    private final Human human;
-    private final Bot bot;
+    private final Player human;
+    private final Player bot;
     private final WeatherManager weather;
     private Player currentPlayer;
     private int turnCounter = 0;
 
-    public GameControllerImpl(Human player, Bot bot) {
-        this.human = player;
+    public GameControllerImpl(final Player human, final Player bot) {
+        this.human = human;
         this.bot = bot;
         this.currentPlayer = this.human;
         this.weather = WeatherManagerImpl.getInstance();
@@ -46,28 +46,24 @@ public class GameControllerImpl implements GameController {
 
     @Override
     public int getCaptainCooldown() {
-        return this.human.getCaptainCooldown();
+        return this.human.getAbilityCooldown();
     }
 
     @Override
     public void processShot(Position p) {
-        if (!isHumanTurn()) {
-            return;
-        }
+        if (!isHumanTurn()) return;
         this.human.createShot(p, this.bot.getGrid());
         endTurn();
     }
 
     @Override
     public boolean processAbility(Position p) {
-        if (!isHumanTurn()) {
-            return false;
-        }
+        if (!isHumanTurn()) return false;
 
-        Grid targetGrid = this.human.captainAbilityTargetsEnemyGrid() ? this.bot.getGrid() : this.human.getGrid();
+        Grid targetGrid = this.human.abilityTargetsEnemyGrid() ? this.bot.getGrid() : this.human.getGrid();
 
         if (this.human.useAbility(p, targetGrid)) {
-            if (this.human.doescaptainAbilityConsumeTurn()) {
+            if (this.human.doesAbilityConsumeTurn()) {
                 endTurn();
             }
             return true;
@@ -82,7 +78,7 @@ public class GameControllerImpl implements GameController {
 
     @Override
     public int getCurrentCaptainCooldown() {
-        return this.human.getCaptainCurrentCooldown();
+        return this.human.getCurrentAbilityCooldown();
     }
 
     @Override
@@ -120,8 +116,8 @@ public class GameControllerImpl implements GameController {
             } else {
                 return CellCondition.HIT_WATER;
             }
-        } 
-        
+        }
+
         if (isEnemyGrid && cell.getScanResult().isPresent()) {
             return cell.getScanResult().get() ? CellCondition.REVEALED_SHIP : CellCondition.REVEALED_WATER;
         }
@@ -142,21 +138,24 @@ public class GameControllerImpl implements GameController {
     public void playBotTurn() {
         if (isGameOver()) return;
 
-        Position target = this.bot.decideTarget(this.human.getGrid());
-        ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
-        this.bot.receiveFeedback(result.position(), result.hitType());
+        Optional<Position> optionalTarget = this.bot.generateTarget(this.human.getGrid());
+        if (optionalTarget.isPresent()) {
+            Position target = optionalTarget.get();
+            ShotResult result = this.weather.applyWeatherEffects(target, this.human.getGrid());
+            this.bot.receiveFeedback(result.position(), result.hitType());
+        }
         endTurn();
     }
 
     @Override
     public String getBotDifficulty() {
-        return this.bot.getStrategyName();
+        return this.bot.getProfileName();
     }
 
 
     @Override
     public String getPlayerCaptainName() {
-        return this.human.getCaptainName();
+        return this.human.getProfileName();
     }
 
     @Override
@@ -166,7 +165,7 @@ public class GameControllerImpl implements GameController {
 
     @Override
     public boolean captainAbilityTargetsEnemyGrid() {
-        return this.human.captainAbilityTargetsEnemyGrid();
+        return this.human.abilityTargetsEnemyGrid();
     }
 
     @Override

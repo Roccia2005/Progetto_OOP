@@ -1,6 +1,7 @@
 package it.unibo.jnavy.model.player;
 
 import java.util.List;
+import java.util.Optional;
 
 import it.unibo.jnavy.model.bots.BotStrategy;
 import it.unibo.jnavy.model.fleet.Fleet;
@@ -45,7 +46,6 @@ public class Bot implements Player {
     @Override
     public List<ShotResult> createShot(final Position target, final Grid grid) {
         HitStrategy shot = new StandardShot();
-            //andrà sostituita la grid in WeatherGrid
         return shot.execute(target, grid);
     }
 
@@ -70,8 +70,9 @@ public class Bot implements Player {
      * @param enemyGrid The opponent's {@link Grid}, used to analyze potential targets.
      * @return The selected target {@link Position}.
      */
-    public Position decideTarget(Grid enemyGrid) {
-        return this.strategy.selectTarget(enemyGrid);
+    @Override
+    public Optional<Position> generateTarget(Grid enemyGrid) {
+        return Optional.ofNullable(this.strategy.selectTarget(enemyGrid));
     }
 
     /**
@@ -80,11 +81,13 @@ public class Bot implements Player {
      * @param target the position targeted
      * @param result the outcome of the shot
      */
+    @Override
     public void receiveFeedback(final Position target, final HitType result) {
         this.strategy.lastShotFeedback(target, result);
     }
 
-    public String getStrategyName() {
+    @Override
+    public String getProfileName() {
         return this.strategy.getStrategy();
     }
 }

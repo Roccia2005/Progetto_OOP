@@ -1,9 +1,12 @@
 package it.unibo.jnavy.view.start;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import javax.swing.*;
 
-import it.unibo.jnavy.view.utilities.AmbientSoundManager;
+import it.unibo.jnavy.view.utilities.SoundManager;
+
 import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
 /**
@@ -12,8 +15,12 @@ import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 public class StartView extends JPanel {
 
     private static final Color BACKGROUND_BUTTON = new Color(41, 86, 246);
+    private static final String SOUND_PATH = "/sounds/ship_horn.wav";
+    private static final String TITLE = "Dominate the Ocean. Sink the Enemy.";
+    private static final String START_GAME = "NEW GAME";
 
     private final Runnable onStartAction;
+    private SoundManager ambientSound;
     private final Runnable onLoadAction;
 
     public StartView(final Runnable onStartAction, final Runnable onLoadAction) {
@@ -25,8 +32,20 @@ public class StartView extends JPanel {
     private void initUI() {
         this.setLayout(new GridBagLayout());
         this.setBackground(BACKGROUND_COLOR);
-        AmbientSoundManager ambientSound = new AmbientSoundManager("/sounds/ship_horn.wav", 10000);
-        ambientSound.start();
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                ambientSound = new SoundManager(SOUND_PATH);
+                ambientSound.start();
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                if (ambientSound != null) {
+                    ambientSound.close();
+                }
+            }
+        });
 
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -40,15 +59,15 @@ public class StartView extends JPanel {
         titleLabel.setForeground(FOREGROUND_COLOR);
         this.add(titleLabel, gbc);
 
-        JLabel descLabel = new JLabel("Dominate the Ocean. Sink the Enemy.");
+        JLabel descLabel = new JLabel(TITLE);
         descLabel.setFont(new Font(FONT_FAMILY, Font.PLAIN, 24));
         descLabel.setForeground(new Color(180, 180, 200));
         this.add(descLabel, gbc);
 
         gbc.insets = new Insets(50, 0, 0, 0);
 
-        JButton startButton = new JButton("NEW GAME");
-        startButton.setFont(new Font("SansSerif", Font.BOLD, 28));
+        JButton startButton = new JButton(START_GAME);
+        startButton.setFont(new Font(FONT_FAMILY, Font.BOLD, 28));
         startButton.setForeground(FOREGROUND_COLOR);
         startButton.setBackground(BACKGROUND_BUTTON);
         startButton.setFocusPainted(false);

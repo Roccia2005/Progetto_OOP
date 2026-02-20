@@ -16,19 +16,18 @@ import it.unibo.jnavy.view.components.captain.CaptainAbilityButton;
 import it.unibo.jnavy.view.components.captain.CaptainNamePanel;
 import it.unibo.jnavy.view.components.weather.WeatherNotificationOverlay;
 import it.unibo.jnavy.view.components.weather.WeatherWidget;
-import it.unibo.jnavy.view.utilities.AmbientSoundManager;
+import it.unibo.jnavy.view.utilities.SoundManager;
 import it.unibo.jnavy.view.components.grid.GridPanel;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import java.net.URL;
+
+import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
 public class GamePanel extends JPanel {
 
     private static final String HUMAN_FLEET = "My Fleet";
     private static final String BOT_FLEET = "Enemy Fleet";
-
-    private static final Color BACKGROUND_COLOR = new Color(20, 20, 30);
+    private static final String SOUNDTRACK_PATH = "/sounds/game_soundtrack.wav";
+    private static final String VICTORY_SOUND_PATH = "/sounds/win.wav";
+    private static final String LOSE_SOUND_PATH = "/sounds/gameover.wav";
 
     private boolean inputBlocked = false;
     private final JLabel statusLabel;
@@ -39,7 +38,7 @@ public class GamePanel extends JPanel {
     private final CaptainAbilityButton captainButton;
     private final CaptainNamePanel captainNamePanel;
     private final GameController controller;
-    private final AmbientSoundManager ambientSound;
+    private final SoundManager ambientSound;
     private boolean gameOverHandled = false;
 
     private final JLayeredPane layeredPane;
@@ -55,128 +54,38 @@ public class GamePanel extends JPanel {
         this.setBackground(BACKGROUND_COLOR);
         this.setLayout(new BorderLayout());
 
-        this.ambientSound = new AmbientSoundManager("/sounds/game_soundtrack.wav", 144000);
+        this.ambientSound = new SoundManager(SOUNDTRACK_PATH);
         this.layeredPane = new JLayeredPane();
         this.add(layeredPane, BorderLayout.CENTER);
 
         this.mainContent = new JPanel(new BorderLayout());
         this.mainContent.setOpaque(false);
 
-        JPanel gridsContainer = new JPanel(new GridLayout(1, 2, 40, 0));
-        gridsContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        gridsContainer.setOpaque(false);
-
-        JPanel dashboardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 10));
-        dashboardPanel.setOpaque(false);
+        this.statusLabel = new JLabel("Your Turn", SwingConstants.CENTER);
+        this.statusLabel.setFont(new Font(FONT_FAMILY, Font.ITALIC, 16));
+        this.statusLabel.setForeground(FOREGROUND_COLOR);
 
         this.weatherWidget = new WeatherWidget();
         this.captainButton = new CaptainAbilityButton(this.controller.getCaptainCooldown());
         this.difficultyPanel = new BotDifficultyPanel(this.controller.getBotDifficulty());
         this.captainNamePanel = new CaptainNamePanel(this.controller.getPlayerCaptainName());
 
-        this.captainButton.addActionListener(e -> {
-            if (this.captainButton.isEnabled()) {
-                this.captainButton.select();
-            }
-        });
-
-        dashboardPanel.add(this.difficultyPanel);
-        dashboardPanel.add(this.weatherWidget);
-        dashboardPanel.add(this.captainButton);
-        dashboardPanel.add(this.captainNamePanel);
-        dashboardPanel.setBackground(BACKGROUND_COLOR);
-
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        headerPanel.setBackground(BACKGROUND_COLOR);
-
-        JPanel centerTitlePanel = new JPanel(new GridLayout(2, 1));
-        centerTitlePanel.setOpaque(false);
-
-        JLabel titleLabel = new JLabel("J-NAVY", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        titleLabel.setForeground(Color.WHITE);
-
-        this.statusLabel = new JLabel("Your Turn", SwingConstants.CENTER);
-        this.statusLabel.setFont(new Font("SansSerif", Font.ITALIC, 16));
-        this.statusLabel.setForeground(Color.WHITE);
-
-        centerTitlePanel.add(titleLabel);
-        centerTitlePanel.add(this.statusLabel);
-
-        JPanel savePanel = getSavePanel();
-
-        JPanel ghostPanel = new JPanel();
-        ghostPanel.setOpaque(false);
-        ghostPanel.setPreferredSize(savePanel.getPreferredSize());
-
-        headerPanel.add(ghostPanel, BorderLayout.WEST);
-        headerPanel.add(centerTitlePanel, BorderLayout.CENTER);
-        headerPanel.add(savePanel, BorderLayout.EAST);
-
-
-        this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET,
-                                (Position p) -> {
-                                    if (this.inputBlocked || !controller.isHumanTurn()) {
-                                        return;
-                                    }
-                                    if (captainButton.isActive() && !controller.captainAbilityTargetsEnemyGrid()) {
-                                        controller.processAbility(p);
-                                        this.captainButton.reset();
-                                        this.updateDashboard();
-                                    }
-                                });
-        this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET,
-                                (Position p) -> {
-                                    if (this.inputBlocked || !controller.isHumanTurn()) return;
-
-                                    if (captainButton.isActive()) {
-                                        if (!controller.captainAbilityTargetsEnemyGrid()) return;
-                                        if (controller.getBotCellState(p).isAlreadyHit()) return;
-                                        controller.processAbility(p);
-                                        this.captainButton.reset();
-                                    } else {
-                                        if (controller.getBotCellState(p).isAlreadyHit()) return;
-                                        controller.processShot(p);
-                                    }
-
-                                    this.updateDashboard();
-
-                                    if (!controller.isHumanTurn() && !controller.isGameOver()) {
-
-                                        this.inputBlocked = true;
-                                        this.statusLabel.setText("Bot is thinking...");
-                                        this.statusLabel.setForeground(Color.RED);
-
-                                        Timer botTimer = new Timer(1000, e -> {
-                                            controller.playBotTurn();
-                                            this.updateDashboard();
-
-                                            this.inputBlocked = false;
-                                            this.statusLabel.setText("Your Turn");
-                                            this.statusLabel.setForeground(Color.WHITE);
-                                        });
-
-                                        botTimer.setRepeats(false);
-                                        botTimer.start();
-//                                    } else if (controller.isGameOver()) {
-//                                        if (this.ambientSound != null) {
-//                                            this.ambientSound.stop();
-//                                        }
-                                   }
-                                });
-
+        this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET, this::handleHumanGridClick);
+        this.botGridPanel = new GridPanel(this.controller.getGridSize(), BOT_FLEET, this::handleBotGridClick);
         this.humanGridPanel.setBackground(BACKGROUND_COLOR);
         this.botGridPanel.setBackground(BACKGROUND_COLOR);
-        this.updateDashboard();
+
+        JPanel gridsContainer = new JPanel(new GridLayout(1, 2, 40, 0));
+        gridsContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        gridsContainer.setOpaque(false);
+        gridsContainer.setBackground(BACKGROUND_COLOR);
         gridsContainer.add(this.humanGridPanel);
         gridsContainer.add(this.botGridPanel);
-        gridsContainer.setBackground(BACKGROUND_COLOR);
 
         this.ambientSound.start();
-        this.mainContent.add(headerPanel, BorderLayout.NORTH);
+        this.mainContent.add(createHeaderPanel(), BorderLayout.NORTH);
         this.mainContent.add(gridsContainer, BorderLayout.CENTER);
-        this.mainContent.add(dashboardPanel, BorderLayout.SOUTH);
+        this.mainContent.add(createDashboardPanel(), BorderLayout.SOUTH);
 
         this.effectsPanel = new EffectsPanel();
         this.weatherOverlay = new WeatherNotificationOverlay();
@@ -246,27 +155,102 @@ public class GamePanel extends JPanel {
             Timer delayTimer = new Timer(900, e -> {
                 this.showEndGameScreen(controller.isBotDefeated());
             });
-            delayTimer.setRepeats(false); // Only trigger once!
+            delayTimer.setRepeats(false);
             delayTimer.start();
         }
     }
 
-    private void playOneShotSound(String filePath) {
-        new Thread(() -> {
-            try {
-                URL soundUrl = getClass().getResource(filePath);
-                if (soundUrl != null) {
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundUrl);
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioIn);
-                    clip.start();
-                } else {
-                    System.err.println("SOUND ERROR: File not found -> " + filePath);
-                }
-            } catch (Exception e) {
-                System.err.println("SOUND ERROR: Format not supported -> " + e.getMessage());
+    private void handleHumanGridClick(Position p) {
+        if (this.inputBlocked || !controller.isHumanTurn()) {
+            return;
+        }
+        if (captainButton.isActive() && !controller.captainAbilityTargetsEnemyGrid()) {
+            controller.processAbility(p);
+            this.captainButton.reset();
+            this.updateDashboard();
+        }
+    }
+
+    private void handleBotGridClick(Position p) {
+        if (this.inputBlocked || !controller.isHumanTurn()) return;
+
+        if (captainButton.isActive()) {
+            if (!controller.captainAbilityTargetsEnemyGrid() || controller.getBotCellState(p).isAlreadyHit()) return;
+            controller.processAbility(p);
+            this.captainButton.reset();
+        } else {
+            if (controller.getBotCellState(p).isAlreadyHit()) return;
+            controller.processShot(p);
+        }
+
+        this.updateDashboard();
+
+        if (!controller.isHumanTurn() && !controller.isGameOver()) {
+            startBotTurn();
+        }
+    }
+
+    private void startBotTurn() {
+        this.inputBlocked = true;
+        this.statusLabel.setText("Bot is thinking...");
+        this.statusLabel.setForeground(Color.RED);
+
+        Timer botTimer = new Timer(1000, e -> {
+            controller.playBotTurn();
+            this.updateDashboard();
+            this.inputBlocked = false;
+            this.statusLabel.setText("Your Turn");
+            this.statusLabel.setForeground(FOREGROUND_COLOR);
+        });
+        botTimer.setRepeats(false);
+        botTimer.start();
+    }
+
+    private JPanel createHeaderPanel() {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        headerPanel.setBackground(BACKGROUND_COLOR);
+
+        JPanel centerTitlePanel = new JPanel(new GridLayout(2, 1));
+        centerTitlePanel.setOpaque(false);
+
+        JLabel titleLabel = new JLabel("J-NAVY", SwingConstants.CENTER);
+        titleLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, 24));
+        titleLabel.setForeground(FOREGROUND_COLOR);
+
+        centerTitlePanel.add(titleLabel);
+        centerTitlePanel.add(this.statusLabel);
+
+        JPanel savePanel = getSavePanel();
+
+        JPanel ghostPanel = new JPanel();
+        ghostPanel.setOpaque(false);
+        ghostPanel.setPreferredSize(savePanel.getPreferredSize());
+
+        headerPanel.add(ghostPanel, BorderLayout.WEST);
+        headerPanel.add(centerTitlePanel, BorderLayout.CENTER);
+        headerPanel.add(savePanel, BorderLayout.EAST);
+
+        return headerPanel;
+    }
+
+    private JPanel createDashboardPanel() {
+        JPanel dashboardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 10));
+        dashboardPanel.setOpaque(false);
+        dashboardPanel.setBackground(BACKGROUND_COLOR);
+
+        this.captainButton.addActionListener(e -> {
+            if (this.captainButton.isEnabled()) {
+                this.captainButton.select();
             }
-        }).start();
+        });
+
+        dashboardPanel.add(this.difficultyPanel);
+        dashboardPanel.add(this.weatherWidget);
+        dashboardPanel.add(this.captainButton);
+        dashboardPanel.add(this.captainNamePanel);
+
+        return dashboardPanel;
     }
 
     public void showEndGameScreen(boolean isVictory) {
@@ -275,9 +259,9 @@ public class GamePanel extends JPanel {
         }
 
         if (isVictory) {
-            playOneShotSound("/sounds/win.wav");
+            SoundManager.playOneShotSound(VICTORY_SOUND_PATH);
         } else {
-            playOneShotSound("/sounds/gameover.wav");
+            SoundManager.playOneShotSound(LOSE_SOUND_PATH);
         }
 
         this.gameOverPanel.showResult(isVictory);

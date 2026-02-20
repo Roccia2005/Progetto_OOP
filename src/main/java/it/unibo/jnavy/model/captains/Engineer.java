@@ -19,16 +19,9 @@ public class Engineer extends AbstractCaptain{
         super(COOLDOWN);
     }
 
-    @Override
-    public boolean useAbility(Grid grid, Position p) {
-        if (this.isAbilityRecharged() && grid.isPositionValid(p)) {
-            Optional<Cell> cell = grid.getCell(p);
-            if (cell.isPresent() && grid.repair(p)) {
-                this.resetCooldown();
-                return true;
-            }
-        }
-        return false;
+    public boolean executeEffect(Grid grid, Position p) {
+        Optional<Cell> cell = grid.getCell(p);
+        return cell.isPresent() && grid.repair(p);
     }
 
     @Override
