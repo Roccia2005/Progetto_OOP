@@ -11,7 +11,6 @@ import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
 /**
  * Represents a human player in the game.
- *
  * The Human player controls a {@link Grid}, possesses a specific {@link Captain},
  * and participates in the turn-based mechanics.
  */
@@ -19,6 +18,9 @@ public class Human implements Player {
 
     private final Captain captain;
     private final Grid grid;
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a new Human player with the selected captain.
@@ -48,7 +50,6 @@ public class Human implements Player {
 
     /**
      * Attempts to activate the Captain's special ability.
-     *
      * This method acts as a bridge between the User Interface and the Captain's internal logic.
      *
      * @param target The target {@link Position} for the ability.

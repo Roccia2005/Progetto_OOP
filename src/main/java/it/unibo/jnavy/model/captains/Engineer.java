@@ -8,12 +8,14 @@ import it.unibo.jnavy.model.utilities.Position;
 
 /**
  * Represents the Engineer captain.
- * 
  * The Engineer's special ability allows the player to repair a damaged part of a ship.
  */
 public class Engineer extends AbstractCaptain{
 
     public static final int COOLDOWN = 3;
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
 
     public Engineer() {
         super(COOLDOWN);

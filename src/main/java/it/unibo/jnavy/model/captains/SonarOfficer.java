@@ -9,13 +9,15 @@ import it.unibo.jnavy.model.utilities.Position;
 
 /**
  * Represents the Sonar Officer captain.
- * 
  * The Sonar Officer's special ability is to reveal information about a specific cell
  * on the grid without firing a shot. This makes the target cell visible to the player.
  */
 public class SonarOfficer extends AbstractCaptain {
 
     public static final int COOLDOWN = 3;
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
 
     public SonarOfficer() {
         super(COOLDOWN);

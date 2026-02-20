@@ -16,6 +16,8 @@ public class CellImpl implements Cell{
     private HitType status;
     private Boolean scanResult = null;
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
     public CellImpl(final Position p) {
         this.position = p;
         this.ship = null;

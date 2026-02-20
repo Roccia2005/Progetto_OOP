@@ -25,6 +25,9 @@ public class Bot implements Player {
     private final Grid grid;
     private BotStrategy strategy;
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     /**
      * Constructs a new Bot with a specific strategy.
      * <p>

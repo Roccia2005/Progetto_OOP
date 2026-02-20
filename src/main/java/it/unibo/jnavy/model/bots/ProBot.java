@@ -17,27 +17,24 @@ public class ProBot extends AbstractBotStrategy{
         DESTROYING
     }
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private State currentState = State.HUNTING;
     private Position firstHitPosition;
     private Position lastTargetPosition;
-    private List<CardinalDirection> availableDirections = new ArrayList<>();
+    private final List<CardinalDirection> availableDirections = new ArrayList<>();
     private CardinalDirection currentDirection = null;
 
     // uso questo metodo per calcolare le effettive posizioni ovvero i target da restituire e a cui sparare
     @Override
     public Position selectTarget(final Grid enemyGrid) {
 
-        switch (currentState) {
-            case SEEKING:
-                return handleSeeking(enemyGrid);
-
-            case DESTROYING:
-                return handleDestroying(enemyGrid);
-
-            case HUNTING:
-                default:
-                    return handleHunting(enemyGrid);
-        }
+        return switch (currentState) {
+            case SEEKING -> handleSeeking(enemyGrid);
+            case DESTROYING -> handleDestroying(enemyGrid);
+            default -> handleHunting(enemyGrid);
+        };
     }
 
     private Position handleHunting(final Grid enemyGrid) {

@@ -10,6 +10,9 @@ public class ShipImpl implements Ship {
 
     private static final int MIN_SIZE = 2;
     private static final int MAX_SIZE = 5;
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
     /**
      * Creates a new Ship with the specified size.
      * @param size the length of the ship. Must be at least 2.

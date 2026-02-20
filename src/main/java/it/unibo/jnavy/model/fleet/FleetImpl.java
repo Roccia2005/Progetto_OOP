@@ -12,6 +12,9 @@ public class FleetImpl implements Fleet {
 
     private final List<Ship> ships;
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     public FleetImpl() {
         this.ships = new ArrayList<>();
     }

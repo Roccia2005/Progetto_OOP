@@ -13,6 +13,9 @@ public class SniperBot extends AbstractBotStrategy{
     private static final double ERROR_PERCENTAGE = 0.18;
     private final Random random = new Random();
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     public SniperBot(final List<Position> targetPositions) {
         this.knownTargets = new ArrayList<>(targetPositions);
     }

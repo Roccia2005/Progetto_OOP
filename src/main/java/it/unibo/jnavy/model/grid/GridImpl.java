@@ -25,6 +25,9 @@ public class GridImpl implements Grid {
     private final Cell[][] cells;
     private final Fleet fleet;
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     public GridImpl() {
         this.cells = new Cell[SIZE][SIZE];
         this.fleet = new FleetImpl();

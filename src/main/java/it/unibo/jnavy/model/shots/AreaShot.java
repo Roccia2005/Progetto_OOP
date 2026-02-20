@@ -16,7 +16,7 @@ import java.util.Random;
  */
 public class AreaShot implements HitStrategy {
 
-    private final boolean ignoreWeather; 
+    private final boolean ignoreWeather;
 
     public AreaShot (boolean ignoreWeather) {
         this.ignoreWeather = ignoreWeather;
