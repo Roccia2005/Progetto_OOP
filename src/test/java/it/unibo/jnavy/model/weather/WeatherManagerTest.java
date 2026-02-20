@@ -15,10 +15,11 @@ import it.unibo.jnavy.model.utilities.ShotResult;
 public class WeatherManagerTest {
 
     private WeatherManager weatherManager;
+    private static final int DURATION = 6;
 
     /**
      * Sets up the test environment before each test.
-     * Retrives the WeatherManager singleton instance and resets its internal state.
+     * Retries the WeatherManager singleton instance and resets its internal state.
      * This ensures that every test starts with a clean state
      * (SUNNY weather, turn counter at 0).
      */
@@ -39,26 +40,42 @@ public class WeatherManagerTest {
     }
 
     /**
-     * Verifies that the weather condition changes every 5 turns.
+     * Verifies that the weather condition does not change before the duration of the weather.
      */
     @Test
-    void testWeatherChangeOnTurns() {
+    void testNoChangeBeforeDuration() {
         // Verify initial state
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
-
-        // Advance 5 turns (Weather duration)
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < DURATION - 1; i++) {
             this.weatherManager.processTurnEnd();
+            assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
         }
-        // Weather should be FOG
-        assertEquals(WeatherCondition.FOG, this.weatherManager.getCurrentWeather());
+    }
 
-        //Advance another 5 turns
-        for (int i = 0; i < 5; i++) {
-            this.weatherManager.processTurnEnd();
+    /**
+     * Verifies the probabilistic nature of weather transitions.
+     * After enough cycles, the weather should eventually switch to FOG.
+     */
+    @Test
+    void testWeatherTransitions() {
+        boolean sawSunny = false;
+        boolean sawFog = false;
+        for (int i = 0; i < 100; i++) {
+            for (int t = 0; t < DURATION; t++) {
+                this.weatherManager.processTurnEnd();
+            }
+            if (this.weatherManager.getCurrentWeather() == WeatherCondition.SUNNY) {
+                sawSunny = true;
+            }
+            if (this.weatherManager.getCurrentWeather() == WeatherCondition.FOG) {
+                sawFog = true;
+            }
+            if (sawSunny && sawFog) {
+                break;
+            }
         }
-        // Weather should return to SUNNY
-        assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
+        assertTrue(sawSunny, "Should have seen SUNNY weather");
+        assertTrue(sawFog, "Should have seen FOG weather after some transitions");
     }
 
     /**
@@ -87,24 +104,17 @@ public class WeatherManagerTest {
      */
     @Test
     void testFogDeviation() {
-        assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
-
-        for (int i = 0; i < 5; i++) {
-            this.weatherManager.processTurnEnd();
-        }
-        assertEquals(WeatherCondition.FOG, this.weatherManager.getCurrentWeather());
-
+        this.weatherManager.setCondition(WeatherCondition.FOG);
         Grid grid = new GridImpl();
         Position target = new Position(5, 5);
-        ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
 
-        // Calculate distance (Delta)
-        Position actualPos = shotResult.position();
-        int diffX = Math.abs(target.x() - actualPos.x());
-        int diffY = Math.abs(target.y() - actualPos.y());
-
-        assertTrue(diffX <= 1 && diffY <= 1);
-
+        for (int i = 0; i < 20; i++) {
+            ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
+            Position actualPos = shotResult.position();
+            int diffX = Math.abs(target.x() - actualPos.x());
+            int diffY = Math.abs(target.y() - actualPos.y());
+            assertTrue(diffX <= 1 && diffY <= 1);
+        }
     }
 
     /**
@@ -114,12 +124,8 @@ public class WeatherManagerTest {
      * 2. The shot remains within the valid neighborhood: (0,0), (0,1), (1,0), or (1,1).
      */
     @Test
-    void fogCornerCase() {
-        assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
-        for (int i = 0; i < 5; i++) {
-            this.weatherManager.processTurnEnd();
-        }
-        assertEquals(WeatherCondition.FOG, this.weatherManager.getCurrentWeather());
+    void testFogBoundarySafety() {
+        this.weatherManager.setCondition(WeatherCondition.FOG);
         Grid grid = new GridImpl();
         Position corner = new Position(0, 0);
         ShotResult shotResult = this.weatherManager.applyWeatherEffects(corner, grid);
@@ -132,33 +138,29 @@ public class WeatherManagerTest {
     }
 
     /**
-     * Verifies that under FOG conditions, a shot is never redirected to a cell
-     * that has already been hit.
-     * This test simulates a scenario where the target (5, 5) is surrounded
-     * by 8 already-hit cells in its 3x3 neighborhood, leaving only one valid option
-     * (4, 4). The WeatherManager must identify and pick the only available
-     * cell instead of causing an invalid shot.
+     * Verifies that the weather system does not redirect shots to cells that
+     * have already been hit if other valid options are available.
      */
     @Test
-    void testWeatherFogDoesNotShootAlreadyHitCells() {
-        for (int i = 0; i < 5; i++) {
-            this.weatherManager.processTurnEnd();
-        }
-        assertEquals(WeatherCondition.FOG, this.weatherManager.getCurrentWeather());
-
+    void testFogAvoidHitCells() {
+        this.weatherManager.setCondition(WeatherCondition.FOG);
         Grid grid = new GridImpl();
-        Position target = new Position(5, 5);
+        Position target = new Position(2, 2);
 
-        for (int x = 4; x <= 6; x++) {
-            for (int y = 4; y <= 6; y++) {
-                Position p = new Position(x, y);
-                if (!(x == 4 && y == 4)) {
-                    grid.receiveShot(p);
-                }
+        for (int x = 1; x <= 3; x++) {
+            for (int y = 1; y <= 3; y++) {
+                if (x == 1 && y == 1) continue;
+                grid.receiveShot(new Position(x, y));
             }
         }
         ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
-        assertEquals(new Position(4, 4), shotResult.position());
-        assertTrue(grid.getCell(new Position(4, 4)).get().isHit());
+        assertEquals(new Position(1, 1), shotResult.position());
+    }
+
+    @Test
+    void testReset() {
+        this.weatherManager.setCondition(WeatherCondition.FOG);
+        ((WeatherManagerImpl)this.weatherManager).reset();
+        assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
     }
 }

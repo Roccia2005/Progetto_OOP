@@ -32,4 +32,12 @@ public interface WeatherManager extends TurnObserver {
      * @return The result of the shot
      */
     ShotResult applyWeatherEffects(Position target, Grid grid);
+
+    /**
+     * Forces a specific weather condition.
+     * Useful for testing and for loading saved games.
+     *
+     * @param condition The new weather condition.
+     */
+    void setCondition(final WeatherCondition condition);
 }
