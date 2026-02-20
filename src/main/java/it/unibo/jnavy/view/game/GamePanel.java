@@ -97,8 +97,12 @@ public class GamePanel extends JPanel {
         dashboardPanel.add(this.captainNamePanel);
         dashboardPanel.setBackground(BACKGROUND_COLOR);
 
-        JPanel headerPanel = new JPanel(new GridLayout(2, 1));
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        headerPanel.setBackground(BACKGROUND_COLOR);
+
+        JPanel centerTitlePanel = new JPanel(new GridLayout(2, 1));
+        centerTitlePanel.setOpaque(false);
 
         JLabel titleLabel = new JLabel("J-NAVY", SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
@@ -108,9 +112,18 @@ public class GamePanel extends JPanel {
         this.statusLabel.setFont(new Font("SansSerif", Font.ITALIC, 16));
         this.statusLabel.setForeground(Color.WHITE);
 
-        headerPanel.add(titleLabel);
-        headerPanel.add(this.statusLabel);
-        headerPanel.setBackground(BACKGROUND_COLOR);
+        centerTitlePanel.add(titleLabel);
+        centerTitlePanel.add(this.statusLabel);
+
+        JPanel savePanel = getSavePanel();
+
+        JPanel ghostPanel = new JPanel();
+        ghostPanel.setOpaque(false);
+        ghostPanel.setPreferredSize(savePanel.getPreferredSize());
+
+        headerPanel.add(ghostPanel, BorderLayout.WEST);
+        headerPanel.add(centerTitlePanel, BorderLayout.CENTER);
+        headerPanel.add(savePanel, BorderLayout.EAST);
 
         this.humanGridPanel = new GridPanel(this.controller.getGridSize(), HUMAN_FLEET,
                                 (Position p) -> {
@@ -296,10 +309,14 @@ public class GamePanel extends JPanel {
     private JPanel getSavePanel() {
         JButton saveButton = new JButton("Save Game");
         saveButton.setFocusPainted(false);
-        saveButton.setBackground(Color.WHITE);
-        saveButton.setForeground(Color.BLACK);
-        saveButton.setBorderPainted(false);
+        saveButton.setContentAreaFilled(false);
+        saveButton.setForeground(Color.WHITE);
         saveButton.setFont(new Font(FONT_FAMILY, Font.BOLD, 14));
+        saveButton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.WHITE, 2),
+                BorderFactory.createEmptyBorder(5, 15, 5, 15)
+        ));
+
         saveButton.addActionListener(e -> {
             if (this.controller.saveGame()) {
                 showAutoClosingMessage("Game saved successfully!");
