@@ -126,32 +126,71 @@ public class GamePanel extends JPanel {
 
                                     this.inputBlocked = true;
                                     boolean isAbility = captainButton.isActive();
+                                    boolean isGunner = controller.getPlayerCaptainName().toLowerCase().contains("gunner");
 
-                                    List<Position> actualTargets;
+                                    List<Position> previousHits = new ArrayList<>();
+                                    int size = controller.getGridSize();
+                                    for (int r = 0; r < size; r++) {
+                                        for (int c = 0; c < size; c++) {
+                                            Position pos = new Position(r, c);
+                                            if (controller.getBotCellState(pos).isAlreadyHit()) {
+                                                previousHits.add(pos);
+                                            }
+                                        }
+                                    }
+
                                     if (isAbility) {
-                                        actualTargets = controller.processAbility(p);
+                                        controller.processAbility(p);
                                         captainButton.reset();
                                     } else {
-                                        actualTargets = controller.processShot(p);
+                                        controller.processShot(p);
                                     }
 
-                                    if (actualTargets.isEmpty()) {
-                                        this.inputBlocked = false;
-                                        return;
+                                    List<Position> newHits = new ArrayList<>();
+                                    for (int r = 0; r < size; r++) {
+                                        for (int c = 0; c < size; c++) {
+                                            Position pos = new Position(r, c);
+                                            if (controller.getBotCellState(pos).isAlreadyHit() && !previousHits.contains(pos)) {
+                                                newHits.add(pos);
+                                            }
+                                        }
                                     }
 
-                                    boolean anyHit = actualTargets.stream().anyMatch(pos -> {
+                                    List<Position> tempTargets = new ArrayList<>();
+                                    if (newHits.isEmpty()) {
+                                        if (isAbility && isGunner) {
+                                            tempTargets = getAreaPositions(p);
+                                        } else {
+                                            tempTargets.add(p);
+                                        }
+                                    } else {
+                                        if (isAbility && isGunner) {
+                                            Position anchor = newHits.get(0);
+                                            for (Position n : newHits) {
+                                                if (n.x() <= anchor.x() && n.y() <= anchor.y()) {
+                                                    anchor = n;
+                                                }
+                                            }
+                                            tempTargets = getAreaPositions(anchor);
+                                        } else {
+                                            tempTargets.add(newHits.get(0));
+                                        }
+                                    }
+
+                                    final List<Position> targets = tempTargets;
+
+                                    boolean anyHit = targets.stream().anyMatch(pos -> {
                                         var state = controller.getBotCellState(pos);
                                         return state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
                                     });
 
-                                    List<Component> targetButtons = actualTargets.stream()
+                                    List<Component> targetButtons = targets.stream()
                                             .map(botGridPanel::getButtonAt)
                                             .collect(Collectors.toList());
 
                                     this.effectsPanel.startShot(targetButtons, anyHit,
                                             () -> {
-                                                actualTargets.forEach(pos -> botGridPanel.refreshCell(pos, controller.getBotCellState(pos)));
+                                                targets.forEach(pos -> botGridPanel.refreshCell(pos, controller.getBotCellState(pos)));
                                             },
                                             () -> {
                                                 this.updateDashboard();

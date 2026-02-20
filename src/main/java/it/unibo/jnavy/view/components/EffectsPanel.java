@@ -106,9 +106,9 @@ public class EffectsPanel extends JPanel {
         int rawSize = Math.max(maxX - minX, maxY - minY);
         boolean isAreaShot = targets.size() > 1;
 
-        this.effectRenderSize = isAreaShot ? (int) (rawSize * 0.75) : rawSize;
+        this.effectRenderSize = isAreaShot ? rawSize : (int) (rawSize * 1.5);
         int baseCellWidth = targets.get(0).getWidth();
-        this.currentBulletW = isAreaShot ? (int) (baseCellWidth * 0.6) : (int) (baseCellWidth * 0.4);
+        this.currentBulletW = isAreaShot ? (int) (baseCellWidth * 0.8) : (int) (baseCellWidth * 0.4);
         this.currentBulletH = (int) (this.currentBulletW * 1.5);
 
         this.bulletX = targetCenterX - (currentBulletW / 2);
