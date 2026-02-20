@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 import it.unibo.jnavy.controller.game.GameController;
@@ -178,19 +177,6 @@ public class GamePanel extends JPanel {
         this.gameOverPanel.showResult(isVictory);
     }
 
-    private List<Position> getAreaPositions(Position p) {
-        List<Position> area = new ArrayList<>();
-        for (int r = 0; r < 2; r++) {
-            for (int c = 0; c < 2; c++) {
-                Position pos = new Position(p.x() + r, p.y() + c);
-                if (pos.x() < controller.getGridSize() && pos.y() < controller.getGridSize()) {
-                    area.add(pos);
-                }
-            }
-        }
-        return area;
-    }
-
     private void handleHumanGridClick(Position p) {
         if (this.inputBlocked || !controller.isHumanTurn()) return;
         
@@ -211,10 +197,8 @@ public class GamePanel extends JPanel {
 
         this.inputBlocked = true;
         boolean isAbility = this.dashboardPanel.isCaptainAbilityActive();
-        boolean isGunner = controller.getPlayerCaptainName().toLowerCase().contains("gunner");
 
-        // Ottimizzazione: salviamo i colpi prima dell'attacco
-        List<Position> previousHits = getAllRevealedPositions();
+        List<Position> previousHits = TargetCalculator.getAllRevealedPositions(controller);
 
         if (isAbility) {
             controller.processAbility(p);
@@ -223,11 +207,13 @@ public class GamePanel extends JPanel {
             controller.processShot(p);
         }
 
-        // Recuperiamo i nuovi colpi sottraendo quelli vecchi (molto più pulito!)
-        List<Position> newHits = getAllRevealedPositions();
+        List<Position> newHits = TargetCalculator.getAllRevealedPositions(controller);
         newHits.removeAll(previousHits);
 
-        List<Position> targets = determineAnimationTargets(p, newHits, isAbility, isGunner);
+        List<Position> targets = TargetCalculator.determineAnimationTargets(
+        p, newHits, isAbility, controller.getPlayerCaptainName(), controller.getGridSize()
+        );
+        
         boolean anyHit = targets.stream().anyMatch(pos -> {
             var state = controller.getBotCellState(pos);
             return state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
@@ -246,53 +232,5 @@ public class GamePanel extends JPanel {
                     }
                 }
         );
-    }
-
-    private List<Position> getAllRevealedPositions() {
-        List<Position> hits = new ArrayList<>();
-        int size = controller.getGridSize();
-        for (int r = 0; r < size; r++) {
-            for (int c = 0; c < size; c++) {
-                Position pos = new Position(r, c);
-                CellCondition state = controller.getBotCellState(pos);
-                if (state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP || state == CellCondition.HIT_WATER) {
-                    hits.add(pos);
-                }
-            }
-        }
-        return hits;
-    }
-
-    private List<Position> determineAnimationTargets(Position p, List<Position> newHits, boolean isAbility, boolean isGunner) {
-        if (!isAbility || !isGunner) {
-            return newHits.isEmpty() ? List.of(p) : List.of(newHits.get(0));
-        }
-        if (newHits.isEmpty()) {
-            return getAreaPositions(p);
-        }
-
-        Position bestAnchor = newHits.get(0);
-        int minDistance = Integer.MAX_VALUE;
-        int size = controller.getGridSize();
-
-        for (int r = 0; r < size; r++) {
-            for (int c = 0; c < size; c++) {
-                boolean containsAll = true;
-                for (Position n : newHits) {
-                    if (n.x() < r || n.x() > r + 1 || n.y() < c || n.y() > c + 1) {
-                        containsAll = false;
-                        break;
-                    }
-                }
-                if (containsAll) {
-                    int dist = Math.abs(r - p.x()) + Math.abs(c - p.y());
-                    if (dist < minDistance) {
-                        minDistance = dist;
-                        bestAnchor = new Position(r, c);
-                    }
-                }
-            }
-        }
-        return getAreaPositions(bestAnchor);
     }
 }
