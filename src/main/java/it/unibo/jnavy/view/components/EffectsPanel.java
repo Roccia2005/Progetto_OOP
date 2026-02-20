@@ -141,11 +141,15 @@ public class EffectsPanel extends JPanel {
 
         repaint();
 
-        Timer effectDuration = new Timer(1000, e -> {
+        Timer effectDuration = new Timer(EFFECT_DURATION_MS, e -> {
             this.isAnimating   = false;
             this.currentEffect = null;
             repaint();
             ((Timer) e.getSource()).stop();
+
+            if (onCompleteCallback != null) {
+                onCompleteCallback.run();
+            }
         });
         effectDuration.setRepeats(false);
         effectDuration.start();
