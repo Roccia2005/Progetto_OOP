@@ -3,6 +3,7 @@ package it.unibo.jnavy.view.components;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.List;
 
 /**
  * A transparent panel that sits on top of the game view to draw animations
@@ -29,6 +30,7 @@ public class EffectsPanel extends JPanel {
     private Point targetTopLeft;
 
     private Runnable onImpactCallback;
+    private Runnable onCompleteCallback;
 
     private final Timer animationTimer;
 
@@ -68,28 +70,43 @@ public class EffectsPanel extends JPanel {
 
     /**
      * Starts the shot animation towards a target component.
+     * For multiple targets (AreaShot), the bullet will aim at the center of the bounding box.
      *
-     * @param targetBtn The component to target.
-     * @param isHit If true, an explosion effect is shown on impact; otherwise a splash effect.
-     * @param onImpact A callback to be executed at the moment of impact.
+     * @param targets The list of components to aim at.
+     * @param isHit If true, an explosion is shown; otherwise a splash
+     * @param onImpact The callback to be invoked when the bullet impacts a target.
+     * @param onComplete The callback to be invoked when the shot animation is completed.
      */
-    public void startShot(Component targetBtn, boolean isHit, Runnable onImpact) {
-        if (this.isAnimating) return;
+    public void startShot(List<Component> targets, boolean isHit, Runnable onImpact, Runnable onComplete) {
+        if (this.isAnimating || targets.isEmpty()) return;
+
         this.onImpactCallback = onImpact;
+        this.onCompleteCallback = onComplete;
 
-        Point btnLocationOnScreen   = targetBtn.getLocationOnScreen();
-        Point panelLocationOnScreen = this.getLocationOnScreen();
-        this.targetTopLeft = new Point(
-                btnLocationOnScreen.x - panelLocationOnScreen.x,
-                btnLocationOnScreen.y - panelLocationOnScreen.y
-        );
+        int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
+        Point panelLocation = this.getLocationOnScreen();
 
-        this.targetSize = targetBtn.getWidth();
-        int scaledBulletWidth = (int) (this.targetSize * 0.4);
+        for (Component t : targets) {
+            Point loc = t.getLocationOnScreen();
+            int rx = loc.x - panelLocation.x;
+            int ry = loc.y - panelLocation.y;
+            minX = Math.min(minX, rx);
+            minY = Math.min(minY, ry);
+            maxX = Math.max(maxX, rx + t.getWidth());
+            maxY = Math.max(maxY, ry + t.getHeight());
+        }
 
-        this.bulletX = this.targetTopLeft.x + (this.targetSize - scaledBulletWidth) / 2;
-        this.bulletY = -scaledBulletWidth * 2;   // parte da sopra la finestra
-        this.targetY = this.targetTopLeft.y + (this.targetSize / 2) - (scaledBulletWidth / 2);
+        this.targetTopLeft = new Point(minX, maxX);
+        this.targetSize = Math.max(maxX - minX, maxY - minY);
+
+        int centerX = minX + (maxX - minX) / 2;
+        int centerY = minY + (maxY - minY) / 2;
+
+        int bulletW = (int) (targets.get(0).getWidth() * 0.4);
+        this.bulletX = centerX - (bulletW / 2);
+        this.bulletY = -bulletW * 2;
+        this.targetY = centerY - (bulletW / 2);
 
         this.currentEffect = isHit ? this.explosionGif : this.splashGif;
         this.bulletVisible = true;
