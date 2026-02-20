@@ -79,7 +79,6 @@ public class StartView extends JPanel {
 
         startButton.addActionListener(e -> {
             if (onStartAction != null) {
-                ambientSound.stop();
                 onStartAction.run();
             }
         });
@@ -101,7 +100,6 @@ public class StartView extends JPanel {
 
         loadButton.addActionListener(e -> {
             if (onLoadAction != null) {
-                ambientSound.stop();
                 onLoadAction.run();
             }
         });
