@@ -19,15 +19,10 @@ public class Gunner extends AbstractCaptain{
         super(COOLDOWN);
     }
 
-    @Override
-    public boolean useAbility(Grid grid, Position p) {
-        if (this.isAbilityRecharged() && grid.isPositionValid(p)) {
-            HitStrategy areaShot = new AreaShot(true);
-            areaShot.execute(p, grid);
-            this.resetCooldown();
-            return true;
-        }
-        return false;
+    public boolean executeEffect(Grid grid, Position p) {
+        HitStrategy areaShot = new AreaShot(true);
+        areaShot.execute(p, grid);
+        return true;
     }
 
     @Override

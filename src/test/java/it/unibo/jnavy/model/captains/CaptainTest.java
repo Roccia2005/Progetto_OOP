@@ -46,15 +46,6 @@ class CaptainTest {
         this.captain = new AbstractCaptain(TEST_COOLDOWN) {
 
             @Override
-            public boolean useAbility(final Grid grid, final Position p) {
-                if (this.isAbilityRecharged()) {
-                    this.resetCooldown();
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
             public boolean doesAbilityConsumeTurn() {
                 return false;
             }
@@ -63,13 +54,19 @@ class CaptainTest {
             public boolean targetsEnemyGrid() {
                 return false;
             }
+
+            @Override
+            protected boolean executeEffect(Grid grid, Position p) {
+                return true;
+            }
         };
         this.assertAbilityIsNotCharged();
 
         this.chargeAbility(TEST_COOLDOWN);
 
         assertTrue(this.captain.isAbilityRecharged());
-        assertTrue(this.captain.useAbility(null, null));
+        assertFalse(this.captain.useAbility(this.grid, this.invalidPosition));
+        assertTrue(this.captain.useAbility(this.grid, this.position));
 
         this.assertAbilityIsNotCharged();
     }

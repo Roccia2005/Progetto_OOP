@@ -21,26 +21,19 @@ public class SonarOfficer extends AbstractCaptain {
         super(COOLDOWN);
     }
 
-    @Override
-    public boolean useAbility(Grid grid, Position p) {
-        if (this.isAbilityRecharged() && grid.isPositionValid(p)) {
-            int effectiveX = Math.max(1, Math.min(p.x(), grid.getSize() - 2));
-            int effectiveY = Math.max(1, Math.min(p.y(), grid.getSize() - 2));
-            List<Cell> targetCells = new ArrayList<>();
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dy = -1; dy <= 1; dy++) {
-                    Position candidate = new Position(effectiveX + dx, effectiveY + dy);
-                    if (grid.isPositionValid(candidate)) {
-                        grid.getCell(candidate).ifPresent(targetCells::add);
-                    }
-                }
+    public boolean executeEffect(Grid grid, Position p) {
+        int effectiveX = Math.max(1, Math.min(p.x(), grid.getSize() - 2));
+        int effectiveY = Math.max(1, Math.min(p.y(), grid.getSize() - 2));
+        List<Cell> targetCells = new ArrayList<>();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                Position candidate = new Position(effectiveX + dx, effectiveY + dy);
+                grid.getCell(candidate).ifPresent(targetCells::add);
             }
-            boolean shipFound = targetCells.stream().anyMatch(Cell::hisDetectable);
-            targetCells.forEach(cell -> cell.setScanResult(shipFound));
-            this.resetCooldown();
-            return true;
         }
-        return false;
+        boolean shipFound = targetCells.stream().anyMatch(Cell::hisDetectable);
+        targetCells.forEach(cell -> cell.setScanResult(shipFound));
+        return true;
     }
 
     @Override
