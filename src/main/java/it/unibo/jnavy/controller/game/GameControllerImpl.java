@@ -7,7 +7,6 @@ import it.unibo.jnavy.model.serialization.GameState;
 import it.unibo.jnavy.model.serialization.SaveManager;
 import it.unibo.jnavy.model.serialization.SaveManagerImpl;
 import it.unibo.jnavy.model.utilities.Position;
-import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.model.weather.WeatherManager;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
