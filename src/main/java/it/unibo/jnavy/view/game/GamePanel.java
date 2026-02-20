@@ -46,9 +46,11 @@ public class GamePanel extends JPanel {
     private final EffectsPanel effectsPanel;
     private final WeatherNotificationOverlay weatherOverlay;
     private final GameOverPanel gameOverPanel;
+    private WeatherCondition lastWeatherCondition;
 
     public GamePanel(GameController controller, Runnable onMenu) {
         this.controller = controller;
+        this.lastWeatherCondition = controller.getWeatherCondition();
         this.setBackground(BACKGROUND_COLOR);
         this.setLayout(new BorderLayout());
 
