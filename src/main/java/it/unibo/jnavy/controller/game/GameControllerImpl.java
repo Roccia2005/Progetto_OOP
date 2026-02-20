@@ -5,6 +5,8 @@ import java.util.Optional;
 import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.grid.Grid;
+import it.unibo.jnavy.model.player.Bot;
+import it.unibo.jnavy.model.player.Human;
 import it.unibo.jnavy.model.player.Player;
 import it.unibo.jnavy.model.serialization.GameState;
 import it.unibo.jnavy.model.serialization.SaveManager;
