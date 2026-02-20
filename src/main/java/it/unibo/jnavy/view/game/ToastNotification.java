@@ -10,13 +10,13 @@ public final class ToastNotification {
     private ToastNotification() {
     }
 
-    public static void show(Component parent, String message) {
+    public static void show(Component parent, String message, Color color) {
         final JWindow toast = new JWindow(SwingUtilities.getWindowAncestor(parent));
 
         JLabel label = new JLabel(message, SwingConstants.CENTER);
         label.setFont(new Font(FONT_FAMILY, Font.BOLD, 18));
         label.setForeground(Color.WHITE);
-        label.setBackground(MENUBLUE);
+        label.setBackground(color);
         label.setOpaque(true);
         label.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.WHITE, 2),

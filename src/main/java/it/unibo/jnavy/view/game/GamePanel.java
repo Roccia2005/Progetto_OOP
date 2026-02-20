@@ -78,9 +78,9 @@ public class GamePanel extends JPanel {
 
         this.headerPanel = new GameHeaderPanel(() -> {
             if (this.controller.saveGame()) {
-                ToastNotification.show(this, GAME_SAVED);
+                ToastNotification.show(this, GAME_SAVED, MENUBLUE);
             } else {
-                ToastNotification.show(this, SAVE_ERROR);
+                ToastNotification.show(this, SAVE_ERROR, MENUBLUE);
             }
         });
 
@@ -91,7 +91,7 @@ public class GamePanel extends JPanel {
                                     }
                                     if (this.dashboardPanel.isCaptainAbilityActive() && !controller.captainAbilityTargetsEnemyGrid()) {
                                         controller.processAbility(p);
-                                        this.dashboardPanel.resetCaptainAbility();;
+                                        this.dashboardPanel.resetCaptainAbility();
                                         this.updateDashboard();
                                     }
                                 });
@@ -124,7 +124,7 @@ public class GamePanel extends JPanel {
 
                                     if (isAbility) {
                                         controller.processAbility(p);
-                                        this.dashboardPanel.resetCaptainAbility();;
+                                        this.dashboardPanel.resetCaptainAbility();
                                     } else {
                                         controller.processShot(p);
                                     }
@@ -150,7 +150,7 @@ public class GamePanel extends JPanel {
                                         }
                                     } else {
                                         if (isAbility && isGunner) {
-                                            Position bestAnchor = newHits.get(0);
+                                            Position bestAnchor = newHits.getFirst();
                                             int minDistance = Integer.MAX_VALUE;
 
                                             for (int r = 0; r < size; r++) {
@@ -173,7 +173,7 @@ public class GamePanel extends JPanel {
                                             }
                                             tempTargets = getAreaPositions(bestAnchor);
                                         } else {
-                                            tempTargets.add(newHits.get(0));
+                                            tempTargets.add(newHits.getFirst());
                                         }
                                     }
 
