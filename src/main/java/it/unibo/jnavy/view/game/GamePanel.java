@@ -206,6 +206,8 @@ public class GamePanel extends JPanel {
                 this.updateDashboard();
                 if (!controller.isHumanTurn() && !controller.isGameOver()) {
                     triggerBotTurn();
+                } else {
+                    this.inputBlocked = false;
                 }
                 return;
             }
