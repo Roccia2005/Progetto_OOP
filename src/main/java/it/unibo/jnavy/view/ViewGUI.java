@@ -136,6 +136,7 @@ public class ViewGUI extends JFrame implements View {
                     launchGameWithController(loadedController);
                 },
                 () -> {
+                    Toolkit.getDefaultToolkit().beep();
                     ToastNotification.show(this, ERROR_MESSAGE, ERROR_COLOR);
                     initStartPhase();
                 }
