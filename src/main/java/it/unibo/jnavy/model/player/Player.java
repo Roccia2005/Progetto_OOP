@@ -1,6 +1,5 @@
 package it.unibo.jnavy.model.player;
 
-import java.io.Serializable;
 import java.util.List;
 
 import it.unibo.jnavy.model.fleet.Fleet;

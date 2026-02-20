@@ -20,7 +20,6 @@ public interface BotStrategy extends Serializable {
 
     /**
      * Receives feedback on the outcome of the last shot.
-     *
      * This allows smart strategies (like Pro) to "learn" from the result.
      * Used by simplified "Reinforced Learning" bot implementations.
      * For example: if the result is {@link HitType#HIT}, the bot will try adjacent cells next.

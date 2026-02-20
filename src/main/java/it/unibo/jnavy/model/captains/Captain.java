@@ -4,8 +4,6 @@ import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.observer.TurnObserver;
 import it.unibo.jnavy.model.utilities.Position;
 
-import java.io.Serializable;
-
 /**
  * Represents a Captain in the game.
  * Each captain possesses a unique special ability that can be used on the grid
