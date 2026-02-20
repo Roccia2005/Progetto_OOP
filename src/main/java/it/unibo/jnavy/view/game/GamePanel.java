@@ -9,7 +9,6 @@ import java.util.List;
 import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.utilities.Position;
-import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.view.components.EffectsPanel;
 import it.unibo.jnavy.view.components.GameOverPanel;
 import it.unibo.jnavy.view.components.weather.WeatherNotificationOverlay;
@@ -47,11 +46,11 @@ public class GamePanel extends JPanel {
     private final EffectsPanel effectsPanel;
     private final WeatherNotificationOverlay weatherOverlay;
     private final GameOverPanel gameOverPanel;
-    private WeatherCondition lastWeatherCondition;
+    private String lastWeatherCondition;
 
     public GamePanel(GameController controller, Runnable onMenu) {
         this.controller = controller;
-        this.lastWeatherCondition = controller.getWeatherCondition();
+        this.lastWeatherCondition = controller.getWeatherConditionName();
         this.effectsPanel = new EffectsPanel();
         this.weatherOverlay = new WeatherNotificationOverlay();
         this.layeredPane = new JLayeredPane();
@@ -120,13 +119,13 @@ public class GamePanel extends JPanel {
     }
 
     private void updateDashboard() {
-        WeatherCondition currentCondition = this.controller.getWeatherCondition();
+        String currentCondition = this.controller.getWeatherConditionName();
         this.dashboardPanel.updateDashboard(controller.getCurrentCaptainCooldown(), currentCondition);
         humanGridPanel.refresh(pos -> controller.getHumanCellState(pos));
         botGridPanel.refresh(pos -> controller.getBotCellState(pos));
 
-        if (this.lastWeatherCondition != null && this.lastWeatherCondition != currentCondition) {
-            this.weatherOverlay.showWeatherAlert(currentCondition.toString());
+        if (!this.lastWeatherCondition.isEmpty() && !this.lastWeatherCondition.equals(currentCondition)) {
+            this.weatherOverlay.showWeatherAlert(currentCondition);
         }
         this.lastWeatherCondition = currentCondition;
 

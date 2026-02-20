@@ -3,7 +3,6 @@ package it.unibo.jnavy.view.game;
 import javax.swing.*;
 import java.awt.*;
 
-import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.view.components.bot.BotDifficultyPanel;
 import it.unibo.jnavy.view.components.captain.CaptainAbilityButton;
 import it.unibo.jnavy.view.components.captain.CaptainNamePanel;
@@ -40,9 +39,9 @@ public class GameDashboardPanel extends JPanel {
         this.add(this.captainNamePanel);
     }
 
-    public void updateDashboard(int currentCooldown, WeatherCondition currentCondition) {
+    public void updateDashboard(int currentCooldown, String currentConditionName) {
         this.captainButton.updateState(currentCooldown);
-        this.weatherWidget.updateWeather(currentCondition);
+        this.weatherWidget.updateWeather(currentConditionName);
     }
 
     public boolean isCaptainAbilityActive() {

@@ -1,6 +1,5 @@
 package it.unibo.jnavy.view.components.weather;
 
-import it.unibo.jnavy.model.weather.WeatherCondition;
 import it.unibo.jnavy.view.utilities.ImageLoader;
 
 import javax.swing.*;
@@ -37,7 +36,7 @@ public class WeatherWidget extends JPanel {
 
         this.add(iconLabel);
 
-        updateWeather(WeatherCondition.SUNNY);
+        updateWeather("SUNNY");
     }
 
     /**
@@ -80,13 +79,13 @@ public class WeatherWidget extends JPanel {
     }
 
     /**
-     * Updates the widget's icon based on the provided weather condition.
+     * Updates the widget's icon based on the provided weather condition name.
      *
-     * @param condition the new {@link WeatherCondition} to display.
+     * @param condition the the name of the weather condition to display.
      */
-    public void updateWeather(WeatherCondition condition) {
-        switch (condition) {
-            case SUNNY -> {
+    public void updateWeather(String conditionName) {
+        switch (conditionName) {
+            case "SUNNY" -> {
                 this.iconLabel.setIcon(sunIcon);
                 this.iconLabel.setText("");
 
@@ -95,7 +94,7 @@ public class WeatherWidget extends JPanel {
                 this.setToolTipText("Weather: sunny");
                 break;
             }
-            case FOG -> {
+            case "FOG" -> {
                 this.iconLabel.setIcon(fogIcon);
                 this.iconLabel.setText("");
                 this.borderColor = new Color(100, 120, 140);

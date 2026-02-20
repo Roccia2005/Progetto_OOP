@@ -4,9 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
-/**
- * Gestisce l'intestazione della schermata di gioco: Titolo, Stato del turno e Salvataggio.
- */
 public class GameHeaderPanel extends JPanel {
 
     private final JLabel statusLabel;
