@@ -37,7 +37,7 @@ public class Human implements Player {
     }
 
     @Override
-    public List<ShotResult> createShot(Position target, Grid grid) {
+    public List<ShotResult> createShot(final Position target, final Grid grid) {
         return List.of(WeatherManagerImpl.getInstance().applyWeatherEffects(target, grid));
     }
 
@@ -57,7 +57,7 @@ public class Human implements Player {
      * false if it was not ready or the target was invalid.
      */
     @Override
-    public boolean useAbility(Position target, Grid grid) {
+    public boolean useAbility(final Position target, final Grid grid) {
         return this.captain.useAbility(grid, target);
     }
 

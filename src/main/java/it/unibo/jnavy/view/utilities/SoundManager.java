@@ -1,6 +1,13 @@
 package it.unibo.jnavy.view.utilities;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+
+import java.io.IOError;
 import java.io.IOException;
 import java.net.URL;
 
@@ -13,21 +20,26 @@ public class SoundManager {
 
     /**
      * Constructs a new manager for a specific continuous background sound.
+     *
      * @param soundFile the relative path to the audio resource file.
      */
-    public SoundManager(String soundFile) {
+    public SoundManager(final String soundFile) {
         try {
-            URL url = getClass().getResource(soundFile);
+            final URL url = getClass().getResource(soundFile);
             if (url == null) {
                 System.err.println("Sound file not found: " + soundFile);
                 return;
             }
-            
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+
+            final AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
             this.ambientClip = AudioSystem.getClip();
             this.ambientClip.open(audioIn);
 
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+        } catch (final UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        } catch (final LineUnavailableException e) {
             e.printStackTrace();
         }
     }
@@ -37,7 +49,7 @@ public class SoundManager {
      */
     public void start() {
         if (ambientClip != null) {
-            ambientClip.setFramePosition(0); 
+            ambientClip.setFramePosition(0);
             ambientClip.loop(Clip.LOOP_CONTINUOUSLY);
         }
     }
@@ -64,15 +76,16 @@ public class SoundManager {
 
     /**
      * Plays a sound effect once and automatically releases the memory when finished.
+     *
      * @param filePath the relative path to the audio resource file.
      */
-    public static void playOneShotSound(String filePath) {
+    public static void playOneShotSound(final String filePath) {
         new Thread(() -> {
             try {
-                URL soundUrl = SoundManager.class.getResource(filePath);
+                final URL soundUrl = SoundManager.class.getResource(filePath);
                 if (soundUrl != null) {
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundUrl);
-                    Clip clip = AudioSystem.getClip();
+                    final AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundUrl);
+                    final Clip clip = AudioSystem.getClip();
                     clip.open(audioIn);
                     clip.start();
                     clip.addLineListener(event -> {
@@ -81,7 +94,11 @@ public class SoundManager {
                         }
                     });
                 }
-            } catch (Exception e) {
+            } catch (final UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (final IOException e) {
+                e.printStackTrace();
+            } catch (final LineUnavailableException e) {
                 e.printStackTrace();
             }
         }).start();

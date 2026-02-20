@@ -22,7 +22,7 @@ import it.unibo.jnavy.model.utilities.ShotResult;
  */
 public class Bot implements Player {
 
-    private Grid grid;
+    private final Grid grid;
     private BotStrategy strategy;
 
     /**
@@ -45,7 +45,7 @@ public class Bot implements Player {
 
     @Override
     public List<ShotResult> createShot(final Position target, final Grid grid) {
-        HitStrategy shot = new StandardShot();
+        final HitStrategy shot = new StandardShot();
         return shot.execute(target, grid);
     }
 
@@ -71,7 +71,7 @@ public class Bot implements Player {
      * @return The selected target {@link Position}.
      */
     @Override
-    public Optional<Position> generateTarget(Grid enemyGrid) {
+    public Optional<Position> generateTarget(final Grid enemyGrid) {
         return Optional.ofNullable(this.strategy.selectTarget(enemyGrid));
     }
 

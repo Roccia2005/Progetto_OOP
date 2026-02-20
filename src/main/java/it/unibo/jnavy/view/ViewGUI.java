@@ -30,7 +30,7 @@ public class ViewGUI extends JFrame implements View {
     private final JPanel mainPanel;
     private BotStrategy selectedBotStrategy;
     private Captain selectedCaptain;
-    private boolean isSniperSelected = false;
+    private boolean isSniperSelected;
 
     public ViewGUI() {
         this.setTitle("J-Navy");
@@ -55,12 +55,12 @@ public class ViewGUI extends JFrame implements View {
     }
 
     private void initStartPhase() {
-        StartView startView = new StartView(() -> this.cardLayout.show(this.mainPanel, BOT_CARD));
+        final StartView startView = new StartView(() -> this.cardLayout.show(this.mainPanel, BOT_CARD));
         this.mainPanel.add(startView, START_CARD);
     }
 
     private void initSelectionPhase() {
-        BotSelectionPanel botPanel = new BotSelectionPanel((BotLevel level) -> {
+        final BotSelectionPanel botPanel = new BotSelectionPanel((BotLevel level) -> {
             switch(level) {
                 case BEGINNER -> this.selectedBotStrategy = new BeginnerBot();
                 case PRO -> this.selectedBotStrategy = new ProBot();
@@ -73,7 +73,7 @@ public class ViewGUI extends JFrame implements View {
             this.cardLayout.show(this.mainPanel, CAPTAIN_CARD);
         }, () -> this.cardLayout.show(this.mainPanel, START_CARD));
 
-        CapSelectionPanel capPanel = new CapSelectionPanel((CaptainAbility ability) -> {
+        final CapSelectionPanel capPanel = new CapSelectionPanel((CaptainAbility ability) -> {
             switch(ability) {
                 case ENGINEER -> this.selectedCaptain = new Engineer();
                 case GUNNER -> this.selectedCaptain = new Gunner();
@@ -87,8 +87,8 @@ public class ViewGUI extends JFrame implements View {
     }
 
     private void startSetupPhase() {
-        SetupController setupController = new SetupControllerImpl(this.selectedCaptain, this.selectedBotStrategy);
-        SetupView setupView = new SetupView(
+        final SetupController setupController = new SetupControllerImpl(this.selectedCaptain, this.selectedBotStrategy);
+        final SetupView setupView = new SetupView(
                 setupController,
                 () -> startGamePhase(setupController),
                 () -> {
@@ -102,16 +102,15 @@ public class ViewGUI extends JFrame implements View {
     }
 
     private void startGamePhase(final SetupController completedSetup) {
-        var humanPlayer = (Human) completedSetup.getHumanPlayer();
-        var botPlayer = (Bot) completedSetup.getBotPlayer();
+        final var humanPlayer = (Human) completedSetup.getHumanPlayer();
+        final var botPlayer = (Bot) completedSetup.getBotPlayer();
 
         if (isSniperSelected) {
             botPlayer.setStrategy(new SniperBot(humanPlayer.getGrid().getOccupiedPositions()));
         }
 
-        GameController gameController = new GameControllerImpl(humanPlayer, botPlayer);
-
-        GamePanel gamePanel = new GamePanel(gameController, () -> {
+        final GameController gameController = new GameControllerImpl(humanPlayer, botPlayer);
+        final GamePanel gamePanel = new GamePanel(gameController, () -> {
             this.selectedBotStrategy = null;
             this.selectedCaptain = null;
             this.isSniperSelected = false;
