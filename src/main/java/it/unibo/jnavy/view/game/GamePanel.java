@@ -202,6 +202,13 @@ public class GamePanel extends JPanel {
         if (isAbility) {
             controller.processAbility(p);
             this.dashboardPanel.resetCaptainAbility();
+            if (controller.getPlayerCaptainName().equalsIgnoreCase("SonarOfficer")) {
+                this.updateDashboard();
+                if (!controller.isHumanTurn() && !controller.isGameOver()) {
+                    triggerBotTurn();
+                }
+                return;
+            }
         } else {
             controller.processShot(p);
         }
@@ -210,7 +217,7 @@ public class GamePanel extends JPanel {
         newHits.removeAll(previousHits);
 
         List<Position> targets = TargetCalculator.determineAnimationTargets(
-        p, newHits, isAbility, controller.getPlayerCaptainName(), controller.getGridSize()
+            p, newHits, isAbility, controller.getPlayerCaptainName(), controller.getGridSize()
         );
         
         boolean anyHit = targets.stream().anyMatch(pos -> {
