@@ -29,6 +29,7 @@ public final class BeginnerBot extends AbstractBotStrategy {
 
     /**
      * {@inheritDoc}
+     *
      * @return the string "Beginner"
      */
     @Override

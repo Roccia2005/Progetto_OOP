@@ -24,7 +24,6 @@ public final class SniperBot extends AbstractBotStrategy {
     private final List<Position> knownTargets;
     private final Random random = new Random();
 
-
     /**
      * Constructs a SniperBot with a list of known ship positions.
      *

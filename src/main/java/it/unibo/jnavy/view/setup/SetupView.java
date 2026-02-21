@@ -206,7 +206,7 @@ public class SetupView extends JPanel {
         if (controller.isSetupFinished()) {
             return;
         }
-        if (controller.setShip(pos, currentDirection)) {
+        if (controller.tryPlaceShip(pos, currentDirection)) {
             updateView();
         } else {
             Toolkit.getDefaultToolkit().beep();
