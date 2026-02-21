@@ -53,6 +53,6 @@ public final class SaveManagerImpl implements SaveManager {
     @Override
     public boolean deleteSave() {
         final File file = new File(FILE_NAME);
-        return !(file.exists()) || file.delete();
+        return !file.exists() || file.delete();
     }
 }

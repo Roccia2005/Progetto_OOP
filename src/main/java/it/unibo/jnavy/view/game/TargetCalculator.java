@@ -3,6 +3,7 @@ package it.unibo.jnavy.view.game;
 import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.utilities.Position;
+import java.util.Locale;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public final class TargetCalculator {
                                                            final boolean isAbility,
                                                            final String captainName,
                                                            final int gridSize) {
-        final boolean isGunner = captainName.toLowerCase().contains("gunner");
+        final boolean isGunner = captainName.toLowerCase(Locale.ROOT).contains("gunner");
         if (!isAbility || !isGunner) {
             return newHits.isEmpty() ? List.of(p) : List.of(newHits.get(0));
         }
