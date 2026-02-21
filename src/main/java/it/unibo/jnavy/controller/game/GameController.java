@@ -39,15 +39,17 @@ public interface GameController {
     boolean processAbility(Position p);
 
     /**
+     * Checks whether the game has reached a terminal state.
      *
-     * @return
+     * @return true if the game is over, false otherwise.
      */
     boolean isGameOver();
 
     /**
-     * Checks whether the game has reached a terminal state.
+     * Retrieves the current remaining cooldown for the player's captain ability.
+     * A value of zero indicates that the ability is ready to be used.
      *
-     * @return true if the game is over, false otherwise.
+     * @return the number of turns remaining before the ability can be activated again.
      */
     int getCurrentCaptainCooldown();
 
