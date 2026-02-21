@@ -2,8 +2,17 @@ package it.unibo.jnavy.view.components.weather;
 
 import it.unibo.jnavy.view.utilities.ImageLoader;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
+import java.awt.RenderingHints;
 
 /**
  * A circular widget that displays the current weather condition using a
