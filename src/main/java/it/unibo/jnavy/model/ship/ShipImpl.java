@@ -17,10 +17,9 @@ public class ShipImpl implements Ship {
     /**
      * Creates a new Ship with the specified size.
      *
-     * @param size the length of the ship. Must be at least 2.
-     * @throws IllegalArgumentException if size is less than 2.
+     * @param size the length of the ship (must be between MIN_SIZE and MAX_SIZE).
+     * @throws IllegalArgumentException if the size is outside the allowed range.
      */
-
     public ShipImpl(final int size) {
         if (size < MIN_SIZE || size > MAX_SIZE) {
             throw new IllegalArgumentException("Ship size must be between " + MIN_SIZE + " and " + MAX_SIZE);

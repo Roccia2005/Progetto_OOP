@@ -87,7 +87,7 @@ public class CellImpl implements Cell {
     }
 
     @Override
-    public boolean hisDetectable() {
+    public boolean isDetectable() {
         return getShip().map(ship -> !ship.isSunk() && !isHit()).orElse(false);
     }
 }

@@ -13,7 +13,7 @@ import it.unibo.jnavy.model.ship.Ship;
 public interface Fleet extends Serializable {
 
     /**
-     * The standard fleet composition: ship size -> allowed count.
+     * The standard fleet composition mapping ship sizes to their allowed counts.
      */
     Map<Integer, Integer> FLEET_COMPOSITION = Map.of(
             5, 1,
@@ -52,9 +52,9 @@ public interface Fleet extends Serializable {
     boolean isTopologyValid();
 
     /**
-     * remove the given ship.
+     * Removes the specified ship from the fleet.
      *
-     * @param ship to remove.
+     * @param ship the ship to remove.
      */
     void removeShip(Ship ship);
 }

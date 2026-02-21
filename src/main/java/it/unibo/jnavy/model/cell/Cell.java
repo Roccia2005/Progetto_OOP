@@ -50,7 +50,9 @@ public interface Cell extends Serializable {
     Position getPosition();
 
     /**
-     * @return if the cell has been hit or no.
+     * Checks if the cell has already been hit.
+     *
+     * @return true if the cell has been hit, false otherwise.
      */
     boolean isHit();
 
@@ -64,8 +66,7 @@ public interface Cell extends Serializable {
 
     /**
      * Sets the result of a scan for this cell.
-     * This represents whether a ship was detected in the area during a reconnaissance action,
-     * without physically hitting the cell.
+     * This represents whether a ship was detected in the area during a reconnaissance action, without physically hitting the cell.
      *
      * @param shipFound true if a ship was detected in the scanned area, false otherwise.
      */
@@ -74,16 +75,15 @@ public interface Cell extends Serializable {
     /**
      * Retrieves the result of the last sonar scan performed on this cell.
      *
-     * @return an {@link Optional} containing true if a ship was found, 
+     * @return an {@link Optional} containing true if a ship was found,
      * false if only water was found, or an empty Optional if this cell has never been scanned.
      */
     Optional<Boolean> getScanResult();
 
     /**
-     * Determines whether the cell contains an active and hidden entity 
-     * that can be detected by sensors.
+     * Determines whether the cell contains an active and hidden entity that can be detected by sensors.
      * 
      * @return true if the cell represents an undiscovered cell, false otherwise.
      */
-    boolean hisDetectable();
+    boolean isDetectable();
 }

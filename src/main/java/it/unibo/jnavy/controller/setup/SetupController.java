@@ -40,9 +40,9 @@ public interface SetupController {
 
     /**
      * Returns the size of the next ship to be placed.
-     * Useful for the View to render the correct ship preview.
+     * This is useful for the View to render the correct ship preview.
      *
-     * @return int size, or 0 if there are no more ships to place.
+     * @return the size of the next ship, or 0 if all ships have been placed.
      */
     int getNextShipSize();
 
@@ -67,6 +67,12 @@ public interface SetupController {
      */
     Player getBotPlayer();
 
+    /**
+     * Retrieves the visual state of a specific cell during the setup phase.
+     *
+     * @param pos the position of the cell.
+     * @return the {@link CellState} representing the cell's appearance and connections.
+     */
     CellState getCellState(Position pos);
 
     /**

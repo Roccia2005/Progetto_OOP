@@ -34,7 +34,7 @@ public class SonarOfficer extends AbstractCaptain {
                 grid.getCell(candidate).ifPresent(targetCells::add);
             }
         }
-        final boolean shipFound = targetCells.stream().anyMatch(Cell::hisDetectable);
+        final boolean shipFound = targetCells.stream().anyMatch(Cell::isDetectable);
         targetCells.forEach(cell -> cell.setScanResult(shipFound));
         return true;
     }

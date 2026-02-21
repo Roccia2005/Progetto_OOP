@@ -23,6 +23,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+/**
+ * Represents the graphical user interface for the fleet setup phase.
+ * It allows the user to manually place, rotate, randomize, or clear their fleet before starting the game.
+ */
 public class SetupView extends JPanel {
 
     private static final int GRID_SIZE = 10;

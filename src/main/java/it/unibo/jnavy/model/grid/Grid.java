@@ -72,22 +72,39 @@ public interface Grid extends Serializable {
     Optional<Cell> getCell(Position p);
 
     /**
-     * @return The size of the grid.
+     * Retrieves the size of the grid.
+     *
+     * @return the size of the grid.
      */
     int getSize();
 
     /**
-     * @return The fleet of the grid.
+     * Retrieves the fleet placed on this grid.
+     *
+     * @return the fleet of the grid.
      */
     Fleet getFleet();
 
+    /**
+     * Retrieves a list of all positions on the grid that have not been hit yet.
+     *
+     * @return a list of available target positions.
+     */
     List<Position> getAvailableTargets();
 
+    /**
+     * Checks if a specific position is a valid target (within bounds and not already hit).
+     *
+     * @param target the position to check.
+     * @return true if the target is valid and hasn't been hit, false otherwise.
+     */
     boolean isTargetValid(Position target);
 
     /**
-     * @param p position to verify
-     * @return true if the position is within grid's bounds
+     * Checks if a given position is within the grid's boundaries.
+     *
+     * @param p the position to verify.
+     * @return true if the position is within bounds, false otherwise.
      */
     boolean isPositionValid(Position p);
 
@@ -99,7 +116,9 @@ public interface Grid extends Serializable {
     void removeShip(Ship ship);
 
     /**
-     * @return the positions occupied by the fleet.
+     * Retrieves all positions on the grid currently occupied by a ship.
+     *
+     * @return a list of occupied positions.
      */
     List<Position> getOccupiedPositions();
 }
