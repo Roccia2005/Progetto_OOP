@@ -52,7 +52,6 @@ public interface Captain extends TurnObserver {
     int getCooldown();
 
     /**
-     *
      * @return the current progress of the ability's cooldown.
      */
     int getCurrentCooldown();

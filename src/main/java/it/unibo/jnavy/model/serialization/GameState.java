@@ -14,7 +14,8 @@ public class GameState implements Serializable {
     private final int turnCounter;
     private final boolean isHumanTurn;
     private final WeatherCondition weatherCondition;
-    public GameState(final Player human, final Player bot, final int turnCounter, final WeatherCondition weatherCondition, final boolean isHumanTurn) {
+    public GameState(final Player human, final Player bot, final int turnCounter,
+                     final WeatherCondition weatherCondition, final boolean isHumanTurn) {
         this.human = human;
         this.bot = bot;
         this.turnCounter = turnCounter;

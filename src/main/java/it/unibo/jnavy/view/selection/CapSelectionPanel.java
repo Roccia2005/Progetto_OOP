@@ -237,6 +237,10 @@ public class CapSelectionPanel extends JPanel {
     }
 
     private final class CustomRenderer extends DefaultListCellRenderer {
+
+        @java.io.Serial
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
             final JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, false);

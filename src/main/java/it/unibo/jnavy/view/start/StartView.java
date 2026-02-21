@@ -35,6 +35,9 @@ public final class StartView extends JPanel {
     private static final int EMPY_BORDER_RIGHT = 40;
     private static final int EMPY_BORDER_BOTTOM = 10;
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private final Runnable onStartAction;
     private SoundManager ambientSound;
     private final Runnable onLoadAction;

@@ -14,7 +14,7 @@ public abstract class AbstractCaptain implements Captain {
 
     private final int cooldown;
     private int currentCooldown;
-    private boolean usedThisTurn = false;
+    private boolean usedThisTurn;
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public abstract class AbstractCaptain implements Captain {
     protected abstract boolean executeEffect(Grid grid, Position p);
 
     @Override
-    public final boolean useAbility(final Grid grid,final Position p) {
+    public final boolean useAbility(final Grid grid, final Position p) {
         if (this.isAbilityRecharged() && grid.isPositionValid(p)) {
             if (this.executeEffect(grid, p)) {
                 this.resetCooldown();

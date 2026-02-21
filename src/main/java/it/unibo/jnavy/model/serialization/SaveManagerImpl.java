@@ -8,8 +8,6 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.util.Optional;
 
-
-
 public class SaveManagerImpl implements SaveManager {
 
     private static final String FILE_NAME = "game_state.dat";

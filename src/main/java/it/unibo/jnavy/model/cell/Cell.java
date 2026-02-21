@@ -64,7 +64,8 @@ public interface Cell extends Serializable {
 
     /**
      * Sets the result of a scan for this cell.
-     * This represents whether a ship was detected in the area during a reconnaissance action, without physically hitting the cell.
+     * This represents whether a ship was detected in the area during a reconnaissance action,
+     * without physically hitting the cell.
      *
      * @param shipFound true if a ship was detected in the scanned area, false otherwise.
      */
