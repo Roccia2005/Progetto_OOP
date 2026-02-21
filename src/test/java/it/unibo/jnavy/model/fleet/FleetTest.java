@@ -1,14 +1,11 @@
 package it.unibo.jnavy.model.fleet;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.jnavy.model.ship.ShipImpl;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class for {@link FleetImpl}.
@@ -74,5 +71,64 @@ class FleetTest {
         // The topology should be invalid because ships are missing
         assertFalse(fleet.isTopologyValid(),
             "A partial fleet should not be considered valid");
+    }
+
+    @Test
+    void testAddInvalidShipSize() {
+        // Attempt to add a ship with a size not defined in FLEET_COMPOSITION
+        // Should throw IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> fleet.addShip(new ShipImpl(6)),
+                "Adding a ship with an invalid size (e.g., 6) should throw an IllegalArgumentException");
+    }
+
+    @Test
+    void testIsDefeated() {
+        // An empty fleet is not defeated by definition
+        assertFalse(fleet.isDefeated(), "An empty fleet should not be considered defeated");
+
+        final ShipImpl ship1 = new ShipImpl(2);
+        fleet.addShip(ship1);
+
+        // Fleet has an intact ship, so it's not defeated
+        assertFalse(fleet.isDefeated(), "A fleet with an intact ship should not be defeated");
+
+        // Sink the ship
+        ship1.hit();
+        ship1.hit();
+
+        // Now the fleet should be defeated
+        assertTrue(fleet.isDefeated(), "The fleet should be defeated when all its ships are sunk");
+    }
+
+    @Test
+    void testGetShipsReturnsCopy() {
+        final ShipImpl ship = new ShipImpl(3);
+        fleet.addShip(ship);
+
+        // Retrieve the list of ships
+        final var ships = fleet.getShips();
+        assertEquals(1, ships.size(), "Fleet should contain exactly 1 ship");
+
+        // Try to maliciously modify the returned list
+        ships.clear();
+
+        // Check that the original fleet was NOT modified (Encapsulation check)
+        assertEquals(1, fleet.getShips().size(), "Modifying the returned list should not affect the actual fleet");
+    }
+
+    @Test
+    void testRemoveShip() {
+        final ShipImpl ship = new ShipImpl(4);
+        fleet.addShip(ship);
+
+        // Ensure it was added
+        assertTrue(fleet.getShips().contains(ship), "Fleet should contain the added ship");
+
+        // Remove the ship
+        fleet.removeShip(ship);
+
+        // Ensure it was properly removed
+        assertFalse(fleet.getShips().contains(ship), "Fleet should not contain the ship after removal");
+        assertEquals(0, fleet.getShips().size(), "Fleet should be empty after removing the only ship");
     }
 }
