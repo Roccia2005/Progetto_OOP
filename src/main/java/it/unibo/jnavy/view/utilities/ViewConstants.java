@@ -34,15 +34,21 @@ public final class ViewConstants {
     /** Off-white color used for subtitles and secondary text. */
     public static final Color LIGHT_TEXT_COLOR = new Color(240, 240, 255);
 
-    /** Alpha value for semi-transparent overlays. */
-    public static final int OVERLAY_ALPHA = 120;
+    /** Background color for sunny weather (semi-transparent yellowish). */
+    public static final Color SUNNY_BG_COLOR = new Color(255, 250, 200, 150);
+
+    /** Border color for fog weather (grayish). */
+    public static final Color FOG_BORDER_COLOR = new Color(100, 120, 140);
+
+    /** Background color for fog weather (semi-transparent grayish). */
+    public static final Color FOG_BG_COLOR = new Color(200, 210, 220, 150);
 
     // --- Layout and Window ---
 
-    /** Fixed width of the main application window. */
+    /** Fixed the width of the main application window. */
     public static final int SETWIDTH = 1000;
 
-    /** Fixed height of the main application window. */
+    /** Fixed the height of the main application window. */
     public static final int SETHEIGHT = 700;
 
     /** Standard inset padding used in layouts (e.g., GridBagLayout). */
@@ -82,6 +88,9 @@ public final class ViewConstants {
 
     /** Horizontal inner padding for standard buttons. */
     public static final int BTN_PADDING_H = 40;
+
+    /** Alpha value for semi-transparent overlays. */
+    public static final int OVERLAY_ALPHA = 120;
 
     // --- Proportions (Divisors for scaling based on window size) ---
 
