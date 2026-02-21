@@ -73,11 +73,9 @@ public final class CellImpl implements Cell {
 
     @Override
     public boolean repair() {
-        if (this.ship != null && !this.ship.isSunk()) {
-            if (this.ship.repair()) {
-                this.status = HitType.NONE;
-                return true;
-            }
+        if (this.ship != null && !this.ship.isSunk() && this.ship.repair()) {
+            this.status = HitType.NONE;
+            return true;
         }
         return false;
     }

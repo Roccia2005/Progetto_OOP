@@ -40,8 +40,7 @@ public final class GameHeaderPanel extends JPanel {
     /**
      * Constructs a new {@code GameHeaderPanel}.
      *
-     * @param onSaveAction a callback function executed when the "Save Game" button is clicked.
-     * If {@code null}, the button will have no effect.
+     * @param onSaveAction action on "Save Game" click; does nothing if {@code null}.
      */
     public GameHeaderPanel(final Runnable onSaveAction) {
         super(new BorderLayout());

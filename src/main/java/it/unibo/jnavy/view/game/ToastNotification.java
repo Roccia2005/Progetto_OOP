@@ -1,6 +1,9 @@
 package it.unibo.jnavy.view.game;
 
+import static it.unibo.jnavy.view.utilities.ViewConstants.BORDER_THICKNESS;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.INSET_PADDING;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -21,16 +24,19 @@ import javax.swing.Timer;
  */
 public final class ToastNotification {
 
+    private static final int FONT_SIZE = 18;
+    private static final int PADDING_H = 20;
+    private static final int DISPLAY_DURATION_MS = 1500;
+
     private ToastNotification() {
         // Utility classes should not be instantiated.
     }
 
     /**
      * Creates and displays a temporary toast notification centered over the given parent component.
-     * The notification is displayed asynchronously and automatically disposes itself after 1.5 seconds.
+     * The notification is displayed asynchronously and automatically disposes itself.
      *
-     * @param parent  the {@link Component} over which the notification should be centered.
-     * If {@code null} or not currently showing, the positioning may default to screen coordinates.
+     * @param parent  the {@link Component} to center over (defaults to screen if {@code null} or hidden).
      * @param message passed string representing the text to be displayed inside the popup.
      * @param color the background {@link Color} of the notification box.
      */
@@ -42,13 +48,13 @@ public final class ToastNotification {
         toast.setType(java.awt.Window.Type.POPUP);
 
         final JLabel label = new JLabel(message, SwingConstants.CENTER);
-        label.setFont(new Font(FONT_FAMILY, Font.BOLD, 18));
-        label.setForeground(Color.WHITE);
+        label.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE));
+        label.setForeground(FOREGROUND_COLOR);
         label.setBackground(color);
         label.setOpaque(true);
         label.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.WHITE, 2),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+                BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS),
+                BorderFactory.createEmptyBorder(INSET_PADDING, PADDING_H, INSET_PADDING, PADDING_H)
         ));
 
         toast.add(label);
@@ -63,7 +69,7 @@ public final class ToastNotification {
 
         toast.setVisible(true);
 
-        final Timer timer = new Timer(1500, e -> {
+        final Timer timer = new Timer(DISPLAY_DURATION_MS, e -> {
             toast.setVisible(false);
             toast.dispose();
         });
