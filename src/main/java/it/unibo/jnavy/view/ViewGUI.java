@@ -7,6 +7,7 @@ import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.controller.selection.SelectionController;
 import it.unibo.jnavy.controller.setup.SetupController;
 import it.unibo.jnavy.view.game.GamePanel;
+import it.unibo.jnavy.view.game.ToastNotification;
 import it.unibo.jnavy.view.selection.BotSelectionPanel;
 import it.unibo.jnavy.view.selection.CapSelectionPanel;
 import it.unibo.jnavy.view.selection.BotSelectionPanel.BotLevel;
@@ -20,8 +21,10 @@ public class ViewGUI extends JFrame implements View {
     private static final String CAPTAIN_CARD = "CAPTAIN_SELECTION";
     private static final String SETUP_CARD = "SETUP";
     private static final String GAME_CARD = "GAME";
+    private static final String LOAD_ERROR = "No valid save file found!";
     private static final int SIZE_HEIGHT = 700;
     private static final int SIZE_WIDTH = 1000;
+    private static final Color ERROR_COLOR = Color.RED;
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
@@ -116,6 +119,6 @@ public class ViewGUI extends JFrame implements View {
     @Override
     public void showError(final String message) {
         Toolkit.getDefaultToolkit().beep();
-        JOptionPane.showMessageDialog(this, message,"Error",JOptionPane.ERROR_MESSAGE);
+        ToastNotification.show(this, LOAD_ERROR, ERROR_COLOR);
     }
 }
