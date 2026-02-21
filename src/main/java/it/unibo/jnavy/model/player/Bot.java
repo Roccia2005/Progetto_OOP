@@ -56,7 +56,7 @@ public final class Bot implements Player {
      * For a Bot, this typically creates a standard shot at the specified target.
      */
     @Override
-    public List<ShotResult> createShot(final Position target, final Grid grid) {
+    public List<ShotResult> createShot(final Position target, final Grid targetGrid) {
         final HitStrategy shot = new StandardShot();
         return shot.execute(target, grid);
     }

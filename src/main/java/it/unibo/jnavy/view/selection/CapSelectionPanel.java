@@ -53,7 +53,7 @@ import it.unibo.jnavy.view.utilities.ImageLoader;
  * A panel that allows the user to select a Captain, each offering a unique
  * special ability to be used during the game.
  */
-public class CapSelectionPanel extends JPanel {
+public final class CapSelectionPanel extends JPanel {
 
     /**
      * Serial version UID for serialization.
@@ -293,7 +293,7 @@ public class CapSelectionPanel extends JPanel {
             final JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
                 index, isSelected, false);
 
-            label.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+            label.setHorizontalAlignment(SwingConstants.CENTER);
 
             if (index == -1) {
                 label.setBackground(MENUBLUE);

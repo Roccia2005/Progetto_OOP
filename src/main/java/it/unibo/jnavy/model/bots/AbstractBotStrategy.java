@@ -23,6 +23,7 @@ public abstract class AbstractBotStrategy implements BotStrategy {
 
     /**
      * Selects a random valid position from the available targets on the enemy grid.
+     *
      * @param enemyGrid the grid representing the opponent's territory
      * @return a randomly selected {@link Position} that is valid for a shot
      * @throws IllegalStateException if there are no valid cells left to target in the grid
@@ -38,6 +39,7 @@ public abstract class AbstractBotStrategy implements BotStrategy {
 
     /**
      * Retrieves the list of positions that are currently valid targets on the given grid.
+     *
      * @param grid the grid to analyze
      * @return a list of {@link Position} objects representing available targets
      */
@@ -47,6 +49,7 @@ public abstract class AbstractBotStrategy implements BotStrategy {
 
     /**
      * Generates a random index based on the size of the provided list.
+     *
      * @param cellsList the list of positions
      * @return a random integer between 0 (inclusive) and the size of the list (exclusive)
      */
@@ -56,6 +59,7 @@ public abstract class AbstractBotStrategy implements BotStrategy {
 
     /**
      * Gets the specific name of the strategy implemented by the subclass.
+     *
      * @return the name of the strategy as a String
      */
     protected abstract String getStrategyName();

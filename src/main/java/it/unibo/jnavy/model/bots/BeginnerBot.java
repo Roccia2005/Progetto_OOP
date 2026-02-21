@@ -18,6 +18,7 @@ public final class BeginnerBot extends AbstractBotStrategy {
 
     /**
      * Selects a target by picking a random valid position from the enemy grid.
+     *
      * @param enemyGrid the grid representing the opponent's territory
      * @return a randomly selected valid {@link Position}
      */
