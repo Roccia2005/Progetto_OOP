@@ -74,7 +74,7 @@ public interface Grid extends Serializable {
      *
      * @param p the coordinates of the cell to retrieve.
      * @return an {@link Optional} containing the {@link Cell} if the position is within grid bounds,
-     * or {@link Optional#empty()} if the position is invalid.
+     *      or {@link Optional#empty()} if the position is invalid.
      */
     Optional<Cell> getCell(Position p);
 
