@@ -35,6 +35,8 @@ public final class ToastNotification {
         toast.add(label);
         toast.pack();
 
+        toast.setAlwaysOnTop(true);
+
         if (parent != null && parent.isShowing()) {
             final Point location = parent.getLocationOnScreen();
             final int x = location.x + (parent.getWidth() - toast.getWidth()) / 2;
