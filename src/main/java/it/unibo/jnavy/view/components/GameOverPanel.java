@@ -37,7 +37,7 @@ import static it.unibo.jnavy.view.utilities.ViewConstants.OVERLAY_COLOR;
  * It provides a semi-transparent overlay covering the game area and features
  * themed icons and navigation buttons to return to the menu or exit the application.
  */
-public class GameOverPanel extends JPanel {
+public final class GameOverPanel extends JPanel {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
@@ -151,10 +151,12 @@ public class GameOverPanel extends JPanel {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(final MouseEvent evt) {
                 button.setBackground(BUTTON_HOVER_BLUE);
             }
 
+            @Override
             public void mouseExited(final MouseEvent evt) {
                 button.setBackground(BUTTON_BLUE);
             }

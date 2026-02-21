@@ -12,12 +12,14 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A transparent panel that sits on top of the game view to draw animations
  * like cannonball shots and impact effects.
  */
-public class EffectsPanel extends JPanel {
+public final class EffectsPanel extends JPanel {
 
     private static final int ANIMATION_DELAY_MS = 15;
     private static final int EFFECT_DURATION_MS = 1000;
@@ -31,6 +33,7 @@ public class EffectsPanel extends JPanel {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(EffectsPanel.class.getName());
 
     private Image bulletImg;
     private Image explosionGif;
@@ -81,9 +84,10 @@ public class EffectsPanel extends JPanel {
      * @return The loaded image, or null if the resource was not found.
      */
     private Image tryLoad(final String filename) {
-        final URL url = getClass().getResource("/images/" + filename);
+        final String fullPath = "/images/" + filename;
+        final URL url = getClass().getResource(fullPath);
         if (url == null) {
-            System.err.println("Critical error: image not found: /images/" + filename + "");
+            LOGGER.log(Level.SEVERE, "Critical error: image not found: {0}", fullPath);
             return null;
         }
         return new ImageIcon(url).getImage();

@@ -13,6 +13,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
 import java.awt.RenderingHints;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static it.unibo.jnavy.view.utilities.ViewConstants.ACCENT_YELLOW;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FOG_BG_COLOR;
@@ -23,10 +25,11 @@ import static it.unibo.jnavy.view.utilities.ViewConstants.SUNNY_BG_COLOR;
  * A circular widget that displays the current weather condition using a
  * distinct icon and a colored border.
  */
-public class WeatherWidget extends JPanel {
+public final class WeatherWidget extends JPanel {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = Logger.getLogger(WeatherWidget.class.getName());
 
     private static final int WIDGET_SIZE = 80;
     private static final int ICON_SIZE = 50;
@@ -117,6 +120,10 @@ public class WeatherWidget extends JPanel {
                 this.borderColor = FOG_BORDER_COLOR;
                 this.backgroundColor = FOG_BG_COLOR;
                 this.setToolTipText("Weather: fog");
+                break;
+            }
+            default -> {
+                LOGGER.log(Level.WARNING, "Unknown weather condition: {0}", conditionName);
                 break;
             }
         }

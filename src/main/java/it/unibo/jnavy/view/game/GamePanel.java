@@ -32,7 +32,7 @@ import javax.swing.Timer;
  * It integrates the player and bot grids, the dashboard, the header, 
  * and handles the visual animations and sound effects during the battle.
  */
-public class GamePanel extends JPanel {
+public final class GamePanel extends JPanel {
 
     private static final String HUMAN_FLEET = "My Fleet";
     private static final String BOT_FLEET = "Enemy Fleet";
@@ -231,7 +231,7 @@ public class GamePanel extends JPanel {
         if (isAbility) {
             controller.processAbility(p);
             this.dashboardPanel.resetCaptainAbility();
-            if (controller.getPlayerCaptainName().equalsIgnoreCase("SonarOfficer")) {
+            if ("SonarOfficer".equalsIgnoreCase(controller.getPlayerCaptainName())) {
                 this.updateDashboard();
                 if (!controller.isHumanTurn() && !controller.isGameOver()) {
                     triggerBotTurn();

@@ -47,18 +47,12 @@ public enum CardinalDirection {
      * @throws IllegalStateException if an invalid direction is encountered
      */
     public CardinalDirection opposite() {
-        switch (this) {
-            case UP:
-                return DOWN;
-            case RIGHT:
-                return LEFT;
-            case DOWN:
-                return UP;
-            case LEFT:
-                return RIGHT;
-            default:
-                throw new IllegalStateException("Invalid corresponding enum(opposite) value: " + this);
-        }
+        return switch (this) {
+            case UP -> DOWN;
+            case RIGHT -> LEFT;
+            case DOWN -> UP;
+            case LEFT -> RIGHT;
+        };
     }
 
     /**

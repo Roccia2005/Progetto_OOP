@@ -125,6 +125,9 @@ public final class StartView extends JPanel {
         this.add(loadButton, gbc);
     }
 
+    /**
+     * Initializes and starts the background ambient sound for the start screen.
+     */
     public void startMusic() {
         if (ambientSound == null) {
             ambientSound = new SoundManager(SOUND_PATH);
@@ -132,6 +135,9 @@ public final class StartView extends JPanel {
         ambientSound.start();
     }
 
+    /**
+     * Stops the background ambient sound and releases its resources.
+     */
     public void stopMusic() {
         if (ambientSound != null) {
             ambientSound.close();

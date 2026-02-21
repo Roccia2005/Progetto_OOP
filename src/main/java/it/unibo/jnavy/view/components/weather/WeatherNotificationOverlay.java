@@ -21,7 +21,7 @@ import static it.unibo.jnavy.view.utilities.ViewConstants.OVERLAY_ALPHA;
  * This component appears when the weather changes and disappears automatically
  * after a few seconds.
  */
-public class WeatherNotificationOverlay extends JComponent {
+public final class WeatherNotificationOverlay extends JComponent {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;

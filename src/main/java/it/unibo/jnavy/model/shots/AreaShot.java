@@ -18,6 +18,10 @@ public final class AreaShot implements HitStrategy {
 
     private final boolean ignoreWeather;
 
+    /**
+     * Constructs an AreaShot hit.
+     * * @param ignoreWeather if true, weather conditions won't affect the shot's precision.
+     */
     public AreaShot(final boolean ignoreWeather) {
         this.ignoreWeather = ignoreWeather;
     }
@@ -26,15 +30,13 @@ public final class AreaShot implements HitStrategy {
     public List<ShotResult> execute(final Position target, final Grid grid) {
         final List<ShotResult> results = new ArrayList<>();
         Position effectiveTarget = target;
-        if (!ignoreWeather) {
-            if (WeatherManagerImpl.getInstance().getCurrentWeather() == WeatherCondition.FOG) {
-                final int offsetX = new Random().nextInt(3) - 1;
-                final int offsetY = new Random().nextInt(3) - 1;
-                final Position candidate = new Position(target.x() + offsetX, target.y() + offsetY);
+        if (!ignoreWeather && WeatherManagerImpl.getInstance().getCurrentWeather() == WeatherCondition.FOG) {
+            final int offsetX = new Random().nextInt(3) - 1;
+            final int offsetY = new Random().nextInt(3) - 1;
+            final Position candidate = new Position(target.x() + offsetX, target.y() + offsetY);
 
-                if (grid.isPositionValid(candidate)) {
-                    effectiveTarget = candidate;
-                }
+            if (grid.isPositionValid(candidate)) {
+                effectiveTarget = candidate;
             }
         }
 
