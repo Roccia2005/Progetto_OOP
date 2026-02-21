@@ -13,3 +13,4 @@ bin/
 .project
 .settings/
 .classpath
+game_state.dat
