@@ -50,6 +50,9 @@ import it.unibo.jnavy.view.utilities.ImageLoader;
 
 public class CapSelectionPanel extends JPanel {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     public enum CaptainAbility {
         ENGINEER("Engineer", "He can repair a piece of any ship as long as a certain number of turns pass", "/images/engineer.png"),
         GUNNER("Gunner", "He can fire a multiple shot capable of hitting a 4-cell area of the opponent's grid", "/images/gunner.png"),

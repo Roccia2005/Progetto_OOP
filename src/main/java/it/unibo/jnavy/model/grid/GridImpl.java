@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * Concrete implementation of the Grid interface.
  */
-public class GridImpl implements Grid {
+public final class GridImpl implements Grid {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;

@@ -8,7 +8,7 @@ import it.unibo.jnavy.model.ship.Ship;
 /**
  * Concrete implementation of the Fleet interface.
  */
-public class FleetImpl implements Fleet {
+public final class FleetImpl implements Fleet {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;

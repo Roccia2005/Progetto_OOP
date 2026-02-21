@@ -14,7 +14,7 @@ import java.util.Random;
  * Represents an area attack strategy.
  * This strategy hits a 2x2 square area starting from the target position.
  */
-public class AreaShot implements HitStrategy {
+public final class AreaShot implements HitStrategy {
 
     private final boolean ignoreWeather;
 

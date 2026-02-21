@@ -7,7 +7,7 @@ import java.util.Random;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 
-public class SniperBot extends AbstractBotStrategy {
+public final class SniperBot extends AbstractBotStrategy {
 
     private final List<Position> knownTargets;
     private static final double ERROR_PERCENTAGE = 0.18;

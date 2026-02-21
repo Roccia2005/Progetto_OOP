@@ -14,7 +14,7 @@ import it.unibo.jnavy.model.weather.WeatherManagerImpl;
  * The Human player controls a {@link Grid}, possesses a specific {@link Captain},
  * and participates in the turn-based mechanics.
  */
-public class Human implements Player {
+public final class Human implements Player {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
