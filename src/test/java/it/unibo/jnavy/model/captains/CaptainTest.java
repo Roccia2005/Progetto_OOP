@@ -44,6 +44,7 @@ class CaptainTest {
         this.grid = new GridImpl();
         this.grid.placeShip(new ShipImpl(SHIP_SIZE), position, CardinalDirection.DOWN);
         WeatherManagerImpl.getInstance().reset();
+        this.captain = new Engineer();
     }
 
     /**
