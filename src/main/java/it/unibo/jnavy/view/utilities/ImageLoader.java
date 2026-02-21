@@ -7,12 +7,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility class for loading, caching, and scaling images and icons.
  */
 public final class ImageLoader {
 
+    private static final Logger LOGGER = Logger.getLogger(ImageLoader.class.getName());
     private static final Map<String, Image> IMAGE_CACHE = new HashMap<>();
 
     private ImageLoader() {
@@ -32,12 +35,14 @@ public final class ImageLoader {
         try {
             final URL resourceUrl = ImageLoader.class.getResource(path);
             if (resourceUrl == null) {
+                LOGGER.log(Level.WARNING, "Image resource not found: {0}", path);
                 return null;
             }
             final Image loadedImage = ImageIO.read(resourceUrl);
             IMAGE_CACHE.put(path, loadedImage);
             return loadedImage;
         } catch (final IOException e) {
+            LOGGER.log(Level.SEVERE, "Error reading image: " + path, e);
             return null;
         }
     }

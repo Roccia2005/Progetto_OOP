@@ -9,12 +9,15 @@ import javax.sound.sampled.AudioSystem;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Manages audio playback for both continuous background music and one-shot sound effects.
  */
 public class SoundManager {
 
+    private static final Logger LOGGER = Logger.getLogger(SoundManager.class.getName());
     private Clip ambientClip;
 
     /**
@@ -34,12 +37,8 @@ public class SoundManager {
             this.ambientClip = AudioSystem.getClip();
             this.ambientClip.open(audioIn);
 
-        } catch (final UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        } catch (final IOException e) {
-            e.printStackTrace();
-        } catch (final LineUnavailableException e) {
-            e.printStackTrace();
+        } catch (final UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            LOGGER.log(Level.SEVERE, "Error initializing background sound: " + soundFile, e);
         }
     }
 
@@ -93,12 +92,8 @@ public class SoundManager {
                         }
                     });
                 }
-            } catch (final UnsupportedAudioFileException e) {
-                e.printStackTrace();
-            } catch (final IOException e) {
-                e.printStackTrace();
-            } catch (final LineUnavailableException e) {
-                e.printStackTrace();
+            } catch (final UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                LOGGER.log(Level.SEVERE, "Error playing one-shot sound: " + filePath, e);
             }
         }).start();
     }
