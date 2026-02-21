@@ -84,7 +84,7 @@ public interface Cell extends Serializable {
      * Retrieves the result of the last sonar scan performed on this cell.
      *
      * @return an {@link Optional} containing true if a ship was found.
-     * false if only water was found, or an empty Optional if this cell has never been scanned.
+     *      false if only water was found, or an empty Optional if this cell has never been scanned.
      */
     Optional<Boolean> getScanResult();
 
