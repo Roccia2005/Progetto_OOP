@@ -50,7 +50,8 @@ public final class TargetCalculator {
      * @param gridSize the dimension of the board, used to prevent animations from exceeding the boundaries.
      * @return a {@link List} of {@link Position}s representing the tiles to animate.
      */
-    public static List<Position> determineAnimationTargets(final Position p, final List<Position> newHits, final boolean isAbility, final String captainName, final int gridSize) {
+    public static List<Position> determineAnimationTargets(final Position p, final List<Position> newHits,
+                                                           final boolean isAbility, final String captainName, final int gridSize) {
         final boolean isGunner = captainName.toLowerCase().contains("gunner");
         if (!isAbility || !isGunner) {
             return newHits.isEmpty() ? List.of(p) : List.of(newHits.get(0));
