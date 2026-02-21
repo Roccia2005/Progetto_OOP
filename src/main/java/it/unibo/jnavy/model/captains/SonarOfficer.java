@@ -19,6 +19,9 @@ public final class SonarOfficer extends AbstractCaptain {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a Sonar Officer with a cooldown of 3 turns.
+     */
     public SonarOfficer() {
         super(COOLDOWN);
     }
