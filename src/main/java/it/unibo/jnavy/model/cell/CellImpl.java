@@ -19,6 +19,11 @@ public final class CellImpl implements Cell {
     private HitType status;
     private Boolean scanResult;
 
+    /**
+     * Constructor for the CellImpl class.
+     *
+     * @param p the position of the cell.
+     */
     public CellImpl(final Position p) {
         this.position = p;
         this.ship = null;
@@ -36,7 +41,8 @@ public final class CellImpl implements Cell {
             return HitType.MISS;
         } else {
             this.ship.hit();
-            return this.status = this.ship.isSunk() ? HitType.SUNK : HitType.HIT;
+            this.status = this.ship.isSunk() ? HitType.SUNK : HitType.HIT;
+            return this.status;
         }
     }
 
@@ -88,6 +94,6 @@ public final class CellImpl implements Cell {
 
     @Override
     public boolean isDetectable() {
-        return getShip().map(ship -> !ship.isSunk() && !isHit()).orElse(false);
+        return getShip().map(s -> !s.isSunk() && !isHit()).orElse(false);
     }
 }
