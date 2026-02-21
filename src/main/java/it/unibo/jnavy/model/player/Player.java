@@ -57,13 +57,13 @@ public interface Player extends TurnObserver {
      * @param grid The grid {@link Grid}.
      * @return The {@link ShotResult} representing the list of generated shot outcomes.
      */
-    List<ShotResult> createShot(final Position target, final Grid grid);
+    List<ShotResult> createShot(Position target, Grid grid);
 
     @Override
     default void processTurnEnd() {
     }
 
-    default boolean useAbility(Position target, Grid grid) {
+    default boolean useAbility(final Position target, final Grid grid) {
         return false;
     }
 
@@ -95,9 +95,9 @@ public interface Player extends TurnObserver {
      * Invia un feedback al giocatore sul colpo appena effettuato.
      * Implementazione di default vuota.
      */
-    default void receiveFeedback(final Position target, final HitType result) {  }
+    default void receiveFeedback(final Position target, final HitType result) { }
 
-     /**
+    /**
      * Restituisce il nome identificativo del "profilo" del giocatore.
      * (Es: Nome del Capitano per l'Umano, Difficoltà per il Bot).
      */

@@ -10,31 +10,36 @@ public interface Ship extends Serializable {
 
     /**
      * Registers a hit on the ship, decreasing its health.
-     * * @return true if the ship is sunk after this hit.
+     *
+     * @return true if the ship is sunk after this hit.
      * @throws IllegalStateException if the ship is already sunk.
      */
     boolean hit();
 
     /**
      * Checks if the ship is destroyed.
+     *
      * @return true if the ship's health is less than or equal to 0.
      */
     boolean isSunk();
 
     /**
      * Gets the original size of the ship.
+     *
      * @return the size of the ship (e.g., length in cells).
      */
     int getSize();
 
     /**
      * Gets the current health of the ship.
+     *
      * @return the remaining health points.
      */
     int getHealth();
 
     /**
      * Repairs the ship by increasing its health by 1, up to its maximum size.
+     *
      * @return true if the ship was actually repaired.
      */
     boolean repair();

@@ -15,18 +15,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 /**
  * Concrete implementation of the Grid interface.
  */
 public class GridImpl implements Grid {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private static final int SIZE = 10;
     private final Cell[][] cells;
     private final Fleet fleet;
-
-    @java.io.Serial
-    private static final long serialVersionUID = 1L;
 
     public GridImpl() {
         this.cells = new Cell[SIZE][SIZE];
@@ -82,7 +81,9 @@ public class GridImpl implements Grid {
         }
         final var targetCell = cells[p.x()][p.y()];
 
-        if (targetCell.isHit()) { return ShotResult.failure(p, HitType.INVALID); }
+        if (targetCell.isHit()) {
+            return ShotResult.failure(p, HitType.INVALID);
+        }
 
         final HitType cellResult = targetCell.receiveShot();
         final Ship ship = targetCell.getShip().orElse(null);
@@ -113,7 +114,7 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public Optional<Cell> getCell(Position p) {
+    public Optional<Cell> getCell(final Position p) {
         if (!isPositionValid(p)) {
             return Optional.empty();
         }
@@ -148,11 +149,10 @@ public class GridImpl implements Grid {
                 && x < matrix.length
                 && y >= 0
                 && y < matrix[0].length
-                && this.getCell(target)  //metto il controllo sulla cell in fondo così non rischio che venga controllato un index non valido sulla grid
+                && this.getCell(target)
                 .map(c -> !c.isHit())
                 .orElse(false);
     }
-
 
     @Override
     public boolean isPositionValid(final Position p) {

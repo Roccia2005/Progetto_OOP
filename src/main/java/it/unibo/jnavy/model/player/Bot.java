@@ -56,6 +56,7 @@ public class Bot implements Player {
 
     /**
      * Updates the Bot's current strategy.
+     *
      * <p>
      * This allows changing the difficulty level or behavior of the Bot dynamically
      * (e.g., from a settings menu).
@@ -68,6 +69,7 @@ public class Bot implements Player {
 
     /**
      * Determines the next target position to attack.
+     *
      * <p>
      * This method delegates the decision-making process to the current {@link BotStrategy},
      * which analyzes the enemy's grid to select the best coordinate.
@@ -83,6 +85,7 @@ public class Bot implements Player {
     /**
      * Passes the result of the shot to the strategy so it can learn/update its state.
      * Crucial for advanced bots like ProBot and SniperBot.
+     *
      * @param target the position targeted
      * @param result the outcome of the shot
      */

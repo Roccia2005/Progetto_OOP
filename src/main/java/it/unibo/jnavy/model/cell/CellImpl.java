@@ -11,13 +11,13 @@ import it.unibo.jnavy.model.utilities.Position;
  */
 public class CellImpl implements Cell {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private final Position position;
     private Ship ship;
     private HitType status;
     private Boolean scanResult;
-
-    @java.io.Serial
-    private static final long serialVersionUID = 1L;
 
     public CellImpl(final Position p) {
         this.position = p;
@@ -68,7 +68,7 @@ public class CellImpl implements Cell {
     @Override
     public boolean repair() {
         if (this.ship != null && !this.ship.isSunk()) {
-            if ( this.ship.repair()) {
+            if (this.ship.repair()) {
                 this.status = null;
                 return true;
             }
@@ -86,7 +86,6 @@ public class CellImpl implements Cell {
         return Optional.ofNullable(this.scanResult);
     }
 
-    
     @Override
     public boolean hisDetectable() {
         return getShip().map(ship -> !ship.isSunk() && !isHit()).orElse(false);

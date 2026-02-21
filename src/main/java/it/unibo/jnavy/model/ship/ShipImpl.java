@@ -5,19 +5,22 @@ package it.unibo.jnavy.model.ship;
  */
 public class ShipImpl implements Ship {
 
-    private final int size;
-    private int health;
-
     private static final int MIN_SIZE = 2;
     private static final int MAX_SIZE = 5;
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
+
+    private final int size;
+    private int health;
+
     /**
      * Creates a new Ship with the specified size.
+     *
      * @param size the length of the ship. Must be at least 2.
      * @throws IllegalArgumentException if size is less than 2.
      */
+
     public ShipImpl(final int size) {
         if (size < MIN_SIZE || size > MAX_SIZE) {
             throw new IllegalArgumentException("Ship size must be between " + MIN_SIZE + " and " + MAX_SIZE);
