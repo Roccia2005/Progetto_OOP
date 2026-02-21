@@ -150,6 +150,7 @@ final class WeatherManagerTest {
 
         for (int x = 1; x <= 3; x++) {
             for (int y = 1; y <= 3; y++) {
+
                 if (x == 1 && y == 1) { continue; }
 
                 grid.receiveShot(new Position(x, y));

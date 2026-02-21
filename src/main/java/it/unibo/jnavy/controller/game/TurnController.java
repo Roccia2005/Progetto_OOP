@@ -79,6 +79,6 @@ public class TurnController {
         this.currentPlayer.processTurnEnd();
         this.weather.processTurnEnd();
 
-        this.currentPlayer = (this.currentPlayer.equals(this.human)) ? this.bot : this.human;
+        this.currentPlayer = this.currentPlayer.equals(this.human) ? this.bot : this.human;
     }
 }

@@ -7,10 +7,13 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class SaveManagerImpl implements SaveManager {
 
     private static final String FILE_NAME = "game_state.dat";
+    private static final Logger LOGGER = Logger.getLogger(SaveManagerImpl.class.getName());;
 
     @Override
     public boolean save(final GameState state) {
@@ -19,8 +22,7 @@ public final class SaveManagerImpl implements SaveManager {
             oos.writeObject(state);
             result = true;
         } catch (final IOException e) {
-            System.err.println("Critical error while saving the game: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Critical error while saving the game", e);
             result = false;
         }
         return result;
@@ -38,8 +40,7 @@ public final class SaveManagerImpl implements SaveManager {
             final GameState loadedState = (GameState) ois.readObject();
             return Optional.of(loadedState);
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error while loading the game (corrupted file or incompatible version): " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while loading the game (corrupted file or incompatible version)", e);
             return Optional.empty();
         }
     }

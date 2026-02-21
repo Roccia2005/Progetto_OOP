@@ -12,7 +12,7 @@ import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 /**
  * Concrete implementation of the {@link GameController} interface.
  */
-public class GameControllerImpl implements GameController {
+public final class GameControllerImpl implements GameController {
 
     private final TurnController turnController;
     private final CombatController combatController;
