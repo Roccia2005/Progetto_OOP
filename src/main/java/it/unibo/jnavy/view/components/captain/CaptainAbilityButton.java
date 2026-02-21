@@ -19,7 +19,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
@@ -32,7 +31,7 @@ public class CaptainAbilityButton extends JButton {
     private static final Color BUTTON_CHARGED = Color.BLUE;
     private static final Color BUTTON_RECHARGING = Color.CYAN;
     private static final String BUTTON_TEXT = "Ability";
-    private static final String CAPTAIN_IMAGE_PATH = "/images/captain.png"; 
+    private static final String CAPTAIN_IMAGE_PATH = "/images/captain.png";
     private static final String ALERT_IMAGE_PATH = "/images/alert.png";
     private static final int IMAGE_DIMENSION = 64;
     private static final String READY = "READY";
@@ -53,13 +52,13 @@ public class CaptainAbilityButton extends JButton {
     public CaptainAbilityButton(final int maxCooldown) {
         super(BUTTON_TEXT);
         this.maxCooldown = maxCooldown;
-        
+
         setForeground(FOREGROUND_COLOR);
         setContentAreaFilled(false);
         setFocusPainted(false);
-        setBorderPainted(false); 
-        setOpaque(false);  
-                
+        setBorderPainted(false);
+        setOpaque(false);
+
         this.setPreferredSize(new Dimension(DIMENSION, DIMENSION));
 
         final Icon captainIcon = ImageLoader.getScaledIcon(CAPTAIN_IMAGE_PATH, IMAGE_DIMENSION, IMAGE_DIMENSION);
@@ -79,14 +78,14 @@ public class CaptainAbilityButton extends JButton {
         } else {
             this.fillPercentage = MAX_PERCENTAGE;
         }
-        
+
         setEnabled(this.fillPercentage >= MAX_PERCENTAGE);
 
         if (this.fillPercentage >= MAX_PERCENTAGE) {
             setText(isActive ? ACTIVE : READY);
         } else {
             setText("(" + currentCooldown + "/" + this.maxCooldown + ")");
-            this.isActive = false; 
+            this.isActive = false;
         }
         repaint();
     }
@@ -120,13 +119,13 @@ public class CaptainAbilityButton extends JButton {
         popup.setUndecorated(true);
 
         final JPanel contentPanel = new JPanel(new BorderLayout(20, 20));
-        contentPanel.setBackground(new Color(40, 40, 40)); 
-        contentPanel.setBorder(new LineBorder(new Color(255, 140, 0), 3)); 
+        contentPanel.setBackground(new Color(40, 40, 40));
+        contentPanel.setBorder(new LineBorder(new Color(255, 140, 0), 3));
 
         final JLabel messageLabel = new JLabel(POPUP_MESSAGE, CENTER);
         messageLabel.setForeground(FOREGROUND_COLOR);
         messageLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, 18));
-        
+
         final Icon alertIcon = ImageLoader.getScaledIcon(ALERT_IMAGE_PATH, IMAGE_DIMENSION, IMAGE_DIMENSION);
         if (alertIcon != null) {
             messageLabel.setIcon(alertIcon);
