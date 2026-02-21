@@ -226,9 +226,9 @@ public final class GamePanel extends JPanel {
         }
 
         final CellCondition clickedState = controller.getBotCellState(p);
-        final boolean isAlreadyRevealed = clickedState == CellCondition.HIT_SHIP ||
-                                          clickedState == CellCondition.SUNK_SHIP ||
-                                          clickedState == CellCondition.HIT_WATER;
+        final boolean isAlreadyRevealed = clickedState == CellCondition.HIT_SHIP
+                                        || clickedState == CellCondition.SUNK_SHIP
+                                        || clickedState == CellCondition.HIT_WATER;
 
         if (isAlreadyRevealed && !this.dashboardPanel.isCaptainAbilityActive()) {
             return;
