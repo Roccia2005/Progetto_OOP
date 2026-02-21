@@ -1,7 +1,10 @@
 package it.unibo.jnavy.view;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Toolkit;
 
 import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.controller.selection.SelectionController;
@@ -20,7 +23,7 @@ import it.unibo.jnavy.view.start.StartView;
  * It manages a {@link CardLayout} to switch between different game panels
  * such as the menu, selection screens, and the game board.
  */
-public class ViewGUI extends JFrame implements View {
+public final class ViewGUI extends JFrame implements View {
     private static final String START_CARD = "START";
     private static final String BOT_CARD = "BOT_SELECTION";
     private static final String CAPTAIN_CARD = "CAPTAIN_SELECTION";
@@ -44,11 +47,12 @@ public class ViewGUI extends JFrame implements View {
 
     /**
      * Constructs the main GUI window.
+     *
      * @param selectionController the controller responsible for menu and selection transitions
      */
     public ViewGUI(final SelectionController selectionController) {
         this.setTitle("J-Navy");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(SIZE_WIDTH, SIZE_HEIGHT);
         this.setLocationRelativeTo(null);
         this.setResizable(true);
@@ -82,7 +86,7 @@ public class ViewGUI extends JFrame implements View {
                     this.startView.stopMusic();
                     this.selectionController.newGame();
                 },
-                () -> this.selectionController.loadGame()
+                this.selectionController::loadGame
         );
         this.mainPanel.add(startView, START_CARD);
     }
@@ -93,10 +97,10 @@ public class ViewGUI extends JFrame implements View {
     private void initSelectionPhase() {
         final BotSelectionPanel botPanel = new BotSelectionPanel((BotLevel level) -> {
             this.selectionController.botSelection(level);
-        }, () -> this.selectionController.showStartScreen());
+        }, this.selectionController::showStartScreen);
         final CapSelectionPanel capPanel = new CapSelectionPanel((CaptainAbility ability) -> {
             this.selectionController.capSelection(ability);
-        }, () -> this.selectionController.showBotSelection());
+        }, this.selectionController::showBotSelection);
 
         this.mainPanel.add(botPanel, BOT_CARD);
         this.mainPanel.add(capPanel, CAPTAIN_CARD);
@@ -134,7 +138,7 @@ public class ViewGUI extends JFrame implements View {
         final SetupView setupView = new SetupView(
                 setupController,
                 () -> this.selectionController.setupComplete(setupController),
-                () -> this.selectionController.showCaptainSelection()
+                this.selectionController::showCaptainSelection
         );
         this.mainPanel.add(setupView, SETUP_CARD);
         this.cardLayout.show(this.mainPanel, SETUP_CARD);
@@ -145,9 +149,8 @@ public class ViewGUI extends JFrame implements View {
      */
     @Override
     public void showGamePhase(final GameController gameController) {
-        final GamePanel gamePanel = new GamePanel(gameController, () -> {
-            this.selectionController.backToMenu();
-        });
+        final GamePanel gamePanel = new GamePanel(gameController,
+        this.selectionController::backToMenu);
         this.mainPanel.add(gamePanel, GAME_CARD);
         this.cardLayout.show(this.mainPanel, GAME_CARD);
     }

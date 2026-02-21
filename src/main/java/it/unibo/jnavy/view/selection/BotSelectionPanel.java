@@ -2,6 +2,8 @@ package it.unibo.jnavy.view.selection;
 
 import static it.unibo.jnavy.view.utilities.ViewConstants.BACKGROUND_COLOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.BORDER_THICKNESS;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BOTTOM_PANEL_HGAP;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BOTTOM_PANEL_VGAP;
 import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_HEIGHT_DIVISOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_WIDTH_DIVISOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.DESC_HEIGHT_DIVISOR;
@@ -58,56 +60,6 @@ public class BotSelectionPanel extends JPanel {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Represents the available bot difficulty levels with associated metadata.
-     */
-    public enum BotLevel {
-        BEGINNER("Beginner", "He shoots randomly at your grid, as if blindfolded", "/images/beginner.png"),
-        PRO("Pro", "He learns with every shot he throws, he can become very strong", "/images/pro.png"),
-        SNIPER("Sniper", "He knows the position of your ships, be smart", "/images/sniper.png");
-
-        private final String label;
-        private final String description;
-        private final String imagePath;
-
-        BotLevel(final String label, final String description, final String imagePath) {
-            this.label = label;
-            this.description = description;
-            this.imagePath = imagePath;
-        }
-
-        /**
-         * @return the description of the bot level
-         */
-        public String getDescription() {
-            return this.description;
-        }
-
-        /**
-         * @return the path to the image representing the bot
-         */
-        public String getImagePath() {
-            return this.imagePath;
-        }
-
-        @Override
-        public String toString() {
-            return this.label;
-        }
-    }
-
-    /**
-     * Functional interface for handling bot difficulty selection events.
-     */
-    @FunctionalInterface
-    public interface DifficultySelectionListener {
-        /**
-         * Called when a bot difficulty level is selected.
-         * * @param level the selected {@link BotLevel}
-         */
-        void difficultySelected(BotLevel level);
-    }
-
     private final DifficultySelectionListener listener;
     private final Runnable backAction;
     private JLabel imageLabel;
@@ -116,6 +68,7 @@ public class BotSelectionPanel extends JPanel {
 
     /**
      * Constructs the bot selection panel.
+     *
      * @param listener callback triggered when a bot is selected
      * @param backAction callback triggered when the back button is pressed
      */
@@ -145,7 +98,7 @@ public class BotSelectionPanel extends JPanel {
         final JLabel title = new JLabel("Choose your opponent");
         title.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_TITLE));
         title.setForeground(FOREGROUND_COLOR);
-        gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, 30, INSET_PADDING);
+        gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, BOTTOM_PANEL_VGAP, INSET_PADDING);
         centerPanel.add(title, gbc);
 
         gbc.gridy++;
@@ -231,7 +184,7 @@ public class BotSelectionPanel extends JPanel {
         controlsPanel.add(confirmButton);
         centerPanel.add(controlsPanel, gbc);
 
-        final JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 30));
+        final JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, BOTTOM_PANEL_HGAP, BOTTOM_PANEL_VGAP));
         bottomPanel.setBackground(BACKGROUND_COLOR);
 
         final JButton backButton = new JButton("Back");
@@ -273,19 +226,72 @@ public class BotSelectionPanel extends JPanel {
     }
 
     /**
+     * Represents the available bot difficulty levels with associated metadata.
+     */
+    public enum BotLevel {
+        BEGINNER("Beginner", "He shoots randomly at your grid, as if blindfolded", "/images/beginner.png"),
+        PRO("Pro", "He learns with every shot he throws, he can become very strong", "/images/pro.png"),
+        SNIPER("Sniper", "He knows the position of your ships, be smart", "/images/sniper.png");
+
+        private final String label;
+        private final String description;
+        private final String imagePath;
+
+        BotLevel(final String label, final String description, final String imagePath) {
+            this.label = label;
+            this.description = description;
+            this.imagePath = imagePath;
+        }
+
+        /**
+         * @return the description of the bot level
+         */
+        public String getDescription() {
+            return this.description;
+        }
+
+        /**
+         * @return the path to the image representing the bot
+         */
+        public String getImagePath() {
+            return this.imagePath;
+        }
+
+        @Override
+        public String toString() {
+            return this.label;
+        }
+    }
+
+    /**
+     * Functional interface for handling bot difficulty selection events.
+     */
+    @FunctionalInterface
+    public interface DifficultySelectionListener {
+        /**
+         * Called when a bot difficulty level is selected.
+         *
+         * @param level the selected {@link BotLevel}
+         */
+        void difficultySelected(BotLevel level);
+    }
+
+    /**
      * Custom renderer for the ComboBox to match the game's UI theme.
      */
     private final class CustomRenderer extends DefaultListCellRenderer {
 
         /**
-        * Serial version UID for serialization.
-        */
+         * Serial version UID for serialization.
+         */
         @java.io.Serial
         private static final long serialVersionUID = 1L;
 
         @Override
-        public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
-            final JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, false);
+        public Component getListCellRendererComponent(final JList<?> list, final Object value,
+            final int index, final boolean isSelected, final boolean cellHasFocus) {
+            final JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
+                index, isSelected, false);
 
             label.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
 

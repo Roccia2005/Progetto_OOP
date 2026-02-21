@@ -2,6 +2,7 @@ package it.unibo.jnavy.view.selection;
 
 import static it.unibo.jnavy.view.utilities.ViewConstants.BACKGROUND_COLOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.BORDER_THICKNESS;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BOTTOM_PANEL_VGAP;
 import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_HEIGHT_DIVISOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_WIDTH_DIVISOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.DESC_HEIGHT_DIVISOR;
@@ -60,56 +61,6 @@ public class CapSelectionPanel extends JPanel {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Represents the available Captains and their unique abilities.
-     */
-    public enum CaptainAbility {
-        ENGINEER("Engineer", "He can repair a piece of any ship as long as a certain number of turns pass", "/images/engineer.png"),
-        GUNNER("Gunner", "He can fire a multiple shot capable of hitting a 4-cell area of the opponent's grid", "/images/gunner.png"),
-        SONAROFFICER("SonarOfficer", "He can reveal information about a specific cell on opponent's grid", "/images/sonarofficer.png");
-
-        private final String label;
-        private final String description;
-        private final String imagePath;
-
-        CaptainAbility(final String label, final String description, final String imagePath) {
-            this.label = label;
-            this.description = description;
-            this.imagePath = imagePath;
-        }
-
-        /**
-         * @return the description of the captain's ability
-         */
-        public String getDescription() {
-            return this.description;
-        }
-
-        /**
-         * @return the path to the image representing the captain
-         */
-        public String getImagePath() {
-            return this.imagePath;
-        }
-
-        @Override
-        public String toString() {
-            return this.label;
-        }
-    }
-
-    /**
-     * Functional interface for handling captain ability selection events.
-     */
-    @FunctionalInterface
-    public interface AbilitySelectionListener {
-        /**
-         * Called when a captain ability is selected.
-         * @param level the selected {@link CaptainAbility}
-         */
-        void abilitySelected(CaptainAbility level);
-    }
-
     private final AbilitySelectionListener listener;
     private final Runnable backAction;
     private JLabel imageLabel;
@@ -118,6 +69,7 @@ public class CapSelectionPanel extends JPanel {
 
     /**
      * Constructs the captain selection panel.
+     *
      * @param listener callback triggered when a captain is selected
      * @param backAction callback triggered when the back button is pressed
      */
@@ -147,7 +99,7 @@ public class CapSelectionPanel extends JPanel {
         final JLabel titleLabel = new JLabel("Choose the captain of your fleet");
         titleLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_TITLE));
         titleLabel.setForeground(FOREGROUND_COLOR);
-        gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, 30, INSET_PADDING);
+        gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, BOTTOM_PANEL_VGAP, INSET_PADDING);
         centerPanel.add(titleLabel, gbc);
 
         gbc.gridy++;
@@ -274,19 +226,72 @@ public class CapSelectionPanel extends JPanel {
     }
 
     /**
+     * Represents the available Captains and their unique abilities.
+     */
+    public enum CaptainAbility {
+        ENGINEER("Engineer", "He can repair a piece of any ship as long as a certain number of turns pass", "/images/engineer.png"),
+        GUNNER("Gunner", "He can fire a multiple shot capable of hitting a 4-cell area of the opponent's grid", "/images/gunner.png"),
+        SONAROFFICER("SonarOfficer", "He can reveal information about a specific cell on opponent's grid", "/images/sonarofficer.png");
+
+        private final String label;
+        private final String description;
+        private final String imagePath;
+
+        CaptainAbility(final String label, final String description, final String imagePath) {
+            this.label = label;
+            this.description = description;
+            this.imagePath = imagePath;
+        }
+
+        /**
+         * @return the description of the captain's ability
+         */
+        public String getDescription() {
+            return this.description;
+        }
+
+        /**
+         * @return the path to the image representing the captain
+         */
+        public String getImagePath() {
+            return this.imagePath;
+        }
+
+        @Override
+        public String toString() {
+            return this.label;
+        }
+    }
+
+    /**
+     * Functional interface for handling captain ability selection events.
+     */
+    @FunctionalInterface
+    public interface AbilitySelectionListener {
+        /**
+         * Called when a captain ability is selected.
+         *
+         * @param level the selected {@link CaptainAbility}
+         */
+        void abilitySelected(CaptainAbility level);
+    }
+
+    /**
      * Custom renderer for the Captain selection ComboBox.
      */
     private final class CustomRenderer extends DefaultListCellRenderer {
 
         /**
-        * Serial version UID for serialization.
-        */
+         * Serial version UID for serialization.
+         */
         @java.io.Serial
         private static final long serialVersionUID = 1L;
 
         @Override
-        public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
-            final JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, false);
+        public Component getListCellRendererComponent(final JList<?> list, final Object value,
+            final int index, final boolean isSelected, final boolean cellHasFocus) {
+            final JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
+                index, isSelected, false);
 
             label.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
 

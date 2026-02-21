@@ -14,6 +14,8 @@ public final class ViewConstants {
     public static final int INSET_PADDING = 10;
     public static final int FLOW_HGAP = 10;
     public static final int FLOW_VGAP = 0;
+    public static final int BOTTOM_PANEL_VGAP = 30;
+    public static final int BOTTOM_PANEL_HGAP = 20;
 
     //ui
     public static final int BORDER_THICKNESS = 2;
@@ -32,6 +34,7 @@ public final class ViewConstants {
     public static final int FONT_SIZE_TITLE = 36;
     public static final int FONT_SIZE_DESC = 18;
     public static final int FONT_SIZE_CTRL = 14;
+    public static final int TITLE_BOTTOM_MARGIN = 30;
 
     //privato così impediamo di istanziarla
     private ViewConstants() {

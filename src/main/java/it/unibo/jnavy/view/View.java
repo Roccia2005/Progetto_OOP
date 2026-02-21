@@ -32,18 +32,21 @@ public interface View {
 
     /**
      * Displays the ship placement phase.
+     *
      * @param setupController the controller handling the setup logic
      */
     void showSetupPhase(SetupController setupController);
 
     /**
      * Displays the main game interface where the battle takes place.
+     *
      * @param gameController the controller handling the match logic
      */
     void showGamePhase(GameController gameController);
 
     /**
      * Shows an error message to the user, typically via a dialog or notification.
+     *
      * @param message the error message to be displayed
      */
     void showError(String message);
