@@ -22,6 +22,10 @@ public final class ToastNotification {
     public static void show(final Component parent, final String message, final Color color) {
         final JWindow toast = new JWindow(SwingUtilities.getWindowAncestor(parent));
 
+        toast.setAlwaysOnTop(true);
+        toast.setFocusableWindowState(false);
+        toast.setType(java.awt.Window.Type.POPUP);
+
         final JLabel label = new JLabel(message, SwingConstants.CENTER);
         label.setFont(new Font(FONT_FAMILY, Font.BOLD, 18));
         label.setForeground(Color.WHITE);
@@ -34,8 +38,6 @@ public final class ToastNotification {
 
         toast.add(label);
         toast.pack();
-
-        toast.setAlwaysOnTop(true);
 
         if (parent != null && parent.isShowing()) {
             final Point location = parent.getLocationOnScreen();
