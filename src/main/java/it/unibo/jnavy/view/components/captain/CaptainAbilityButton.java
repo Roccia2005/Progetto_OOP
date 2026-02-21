@@ -5,7 +5,6 @@ import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.CAPTAIN_POPUP_BACKGROUND;
 import static it.unibo.jnavy.view.utilities.ViewConstants.CAPTAIN_POPUP_BORDER;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_SIZE_DESC;
-import static it.unibo.jnavy.view.utilities.ViewConstants.IMAGE_SIZE;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -178,7 +177,8 @@ public final class CaptainAbilityButton extends JButton {
 
         messageLabel.setVerticalTextPosition(BOTTOM);
         messageLabel.setHorizontalTextPosition(CENTER);
-        messageLabel.setBorder(BorderFactory.createEmptyBorder(POPUP_INSET_TOP, POPUP_INSET_LEFT, POPUP_INSET_BOTTOM, POPUP_INSET_RIGHT));
+        messageLabel.setBorder(BorderFactory.createEmptyBorder(POPUP_INSET_TOP, POPUP_INSET_LEFT,
+                                                                POPUP_INSET_BOTTOM, POPUP_INSET_RIGHT));
 
         contentPanel.add(messageLabel, BorderLayout.CENTER);
         popup.add(contentPanel);
