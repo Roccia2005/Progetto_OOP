@@ -7,6 +7,11 @@ package it.unibo.jnavy.model.utilities;
 public enum HitType {
 
     /**
+     * The cell has not been hit yet.
+     */
+    NONE("Not hit yet"),
+
+    /**
      * The shot landed in water; no ship was hit.
      */
     MISS("Missed, just water!"),
