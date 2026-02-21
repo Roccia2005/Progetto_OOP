@@ -48,11 +48,21 @@ import javax.swing.text.StyledDocument;
 
 import it.unibo.jnavy.view.utilities.ImageLoader;
 
+/**
+ * A panel that allows the user to select a Captain, each offering a unique
+ * special ability to be used during the game.
+ */
 public class CapSelectionPanel extends JPanel {
 
+    /**
+     * Serial version UID for serialization.
+     */
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Represents the available Captains and their unique abilities.
+     */
     public enum CaptainAbility {
         ENGINEER("Engineer", "He can repair a piece of any ship as long as a certain number of turns pass", "/images/engineer.png"),
         GUNNER("Gunner", "He can fire a multiple shot capable of hitting a 4-cell area of the opponent's grid", "/images/gunner.png"),
@@ -68,10 +78,16 @@ public class CapSelectionPanel extends JPanel {
             this.imagePath = imagePath;
         }
 
+        /**
+         * @return the description of the captain's ability
+         */
         public String getDescription() {
             return this.description;
         }
-        
+
+        /**
+         * @return the path to the image representing the captain
+         */
         public String getImagePath() {
             return this.imagePath;
         }
@@ -82,8 +98,15 @@ public class CapSelectionPanel extends JPanel {
         }
     }
 
+    /**
+     * Functional interface for handling captain ability selection events.
+     */
     @FunctionalInterface
     public interface AbilitySelectionListener {
+        /**
+         * Called when a captain ability is selected.
+         * @param level the selected {@link CaptainAbility}
+         */
         void abilitySelected(CaptainAbility level);
     }
 
@@ -93,6 +116,11 @@ public class CapSelectionPanel extends JPanel {
     private JComboBox<CaptainAbility> levelComboBox;
     private JTextPane descriptionArea;
 
+    /**
+     * Constructs the captain selection panel.
+     * @param listener callback triggered when a captain is selected
+     * @param backAction callback triggered when the back button is pressed
+     */
     public CapSelectionPanel(final AbilitySelectionListener listener, final Runnable backAction) {
         this.listener = listener;
         this.backAction = backAction;
@@ -101,6 +129,9 @@ public class CapSelectionPanel extends JPanel {
         initUI();
     }
 
+    /**
+     * Initializes the user interface components of the panel.
+     */
     private void initUI() {
         this.setPreferredSize(new Dimension(SETWIDTH, SETHEIGHT));
 
@@ -163,10 +194,10 @@ public class CapSelectionPanel extends JPanel {
             protected JButton createArrowButton() {
                 final JButton btn = new javax.swing.plaf.basic.BasicArrowButton(
                     javax.swing.plaf.basic.BasicArrowButton.SOUTH,
-                    MENUBLUE,       // botton background color
-                    MENUBLUE,       // shadow color, the same to uniform that to the background
-                    FOREGROUND_COLOR, // arrow color
-                    MENUBLUE        // highlight color
+                    MENUBLUE,
+                    MENUBLUE,
+                    FOREGROUND_COLOR,
+                    MENUBLUE
                 );
                 btn.setBorder(BorderFactory.createEmptyBorder());
                 btn.setContentAreaFilled(false);
@@ -225,6 +256,9 @@ public class CapSelectionPanel extends JPanel {
         updatePreview();
     }
 
+    /**
+     * Updates the visual details when a different captain is selected.
+     */
     private void updatePreview() {
         final CaptainAbility selected = (CaptainAbility) levelComboBox.getSelectedItem();
         if (selected != null) {
@@ -239,8 +273,14 @@ public class CapSelectionPanel extends JPanel {
         }
     }
 
+    /**
+     * Custom renderer for the Captain selection ComboBox.
+     */
     private final class CustomRenderer extends DefaultListCellRenderer {
 
+        /**
+        * Serial version UID for serialization.
+        */
         @java.io.Serial
         private static final long serialVersionUID = 1L;
 

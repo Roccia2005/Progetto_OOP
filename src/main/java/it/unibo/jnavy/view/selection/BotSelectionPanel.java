@@ -46,11 +46,21 @@ import javax.swing.text.StyledDocument;
 
 import it.unibo.jnavy.view.utilities.ImageLoader;
 
+/**
+ * A panel that allows the user to select the bot difficulty level.
+ * It displays a list of available bots, their descriptions, and related images.
+ */
 public class BotSelectionPanel extends JPanel {
 
+    /**
+     * Serial version UID for serialization.
+     */
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Represents the available bot difficulty levels with associated metadata.
+     */
     public enum BotLevel {
         BEGINNER("Beginner", "He shoots randomly at your grid, as if blindfolded", "/images/beginner.png"),
         PRO("Pro", "He learns with every shot he throws, he can become very strong", "/images/pro.png"),
@@ -66,9 +76,16 @@ public class BotSelectionPanel extends JPanel {
             this.imagePath = imagePath;
         }
 
+        /**
+         * @return the description of the bot level
+         */
         public String getDescription() {
             return this.description;
         }
+
+        /**
+         * @return the path to the image representing the bot
+         */
         public String getImagePath() {
             return this.imagePath;
         }
@@ -79,8 +96,15 @@ public class BotSelectionPanel extends JPanel {
         }
     }
 
+    /**
+     * Functional interface for handling bot difficulty selection events.
+     */
     @FunctionalInterface
     public interface DifficultySelectionListener {
+        /**
+         * Called when a bot difficulty level is selected.
+         * * @param level the selected {@link BotLevel}
+         */
         void difficultySelected(BotLevel level);
     }
 
@@ -90,6 +114,11 @@ public class BotSelectionPanel extends JPanel {
     private JComboBox<BotLevel> levelComboBox;
     private JTextPane descriptionArea;
 
+    /**
+     * Constructs the bot selection panel.
+     * @param listener callback triggered when a bot is selected
+     * @param backAction callback triggered when the back button is pressed
+     */
     public BotSelectionPanel(final DifficultySelectionListener listener, final Runnable backAction) {
         this.listener = listener;
         this.backAction = backAction;
@@ -98,6 +127,9 @@ public class BotSelectionPanel extends JPanel {
         initUI();
     }
 
+    /**
+     * Initializes the user interface components of the panel.
+     */
     private void initUI() {
         this.setPreferredSize(new Dimension(SETWIDTH, SETHEIGHT));
 
@@ -160,10 +192,10 @@ public class BotSelectionPanel extends JPanel {
             protected JButton createArrowButton() {
                 final JButton btn = new javax.swing.plaf.basic.BasicArrowButton(
                     javax.swing.plaf.basic.BasicArrowButton.SOUTH,
-                    MENUBLUE,       // botton background color
-                    MENUBLUE,       // shadow color, the same to uniform that to the background
-                    FOREGROUND_COLOR, // arrow color
-                    MENUBLUE        // highlight color
+                    MENUBLUE,
+                    MENUBLUE,
+                    FOREGROUND_COLOR,
+                    MENUBLUE
                 );
                 btn.setBorder(BorderFactory.createEmptyBorder());
                 btn.setContentAreaFilled(false);
@@ -223,6 +255,9 @@ public class BotSelectionPanel extends JPanel {
         updatePreview();
     }
 
+    /**
+     * Updates the image and description based on the currently selected bot level.
+     */
     private void updatePreview() {
         final BotLevel selected = (BotLevel) levelComboBox.getSelectedItem();
         if (selected != null) {
@@ -237,8 +272,14 @@ public class BotSelectionPanel extends JPanel {
         }
     }
 
+    /**
+     * Custom renderer for the ComboBox to match the game's UI theme.
+     */
     private final class CustomRenderer extends DefaultListCellRenderer {
 
+        /**
+        * Serial version UID for serialization.
+        */
         @java.io.Serial
         private static final long serialVersionUID = 1L;
 
