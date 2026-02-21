@@ -56,7 +56,7 @@ public final class SetupControllerImpl implements SetupController {
     }
 
     @Override
-    public boolean setShip(final Position pos, final CardinalDirection dir) {
+    public boolean tryPlaceShip(final Position pos, final CardinalDirection dir) {
         if (shipsToPlace.isEmpty()) {
             return false;
         }
@@ -175,11 +175,7 @@ public final class SetupControllerImpl implements SetupController {
     }
 
     private boolean hasSameShip(final Grid grid, final Ship ship, final Position neighbor) {
-        if (!grid.isPositionValid(neighbor)) {
-            return false;
-        }
-
-        return grid.getCell(neighbor)
+        return grid.isPositionValid(neighbor) && grid.getCell(neighbor)
                 .flatMap(Cell::getShip)
                 .map(s -> s.equals(ship))
                 .orElse(false);

@@ -28,6 +28,15 @@ public final class ViewConstants {
     /** Lighter blue color used when hovering over buttons. */
     public static final Color BUTTON_HOVER_BLUE = new Color(60, 130, 255);
 
+    /** Accent yellow color used for weather alerts and borders. */
+    public static final Color ACCENT_YELLOW = new Color(255, 200, 50);
+
+    /** Off-white color used for subtitles and secondary text. */
+    public static final Color LIGHT_TEXT_COLOR = new Color(240, 240, 255);
+
+    /** Alpha value for semi-transparent overlays. */
+    public static final int OVERLAY_ALPHA = 120;
+
     // --- Layout and Window ---
 
     /** Fixed width of the main application window. */

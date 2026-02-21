@@ -22,7 +22,7 @@ public interface SetupController {
      * @param dir The direction of the ship.
      * @return true if the placement is valid and successful, false otherwise.
      */
-    boolean setShip(Position pos, CardinalDirection dir);
+    boolean tryPlaceShip(Position pos, CardinalDirection dir);
 
     /**
      * Confirms the position of the currently placed ship.

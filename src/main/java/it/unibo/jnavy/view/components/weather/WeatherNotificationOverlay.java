@@ -1,7 +1,16 @@
 package it.unibo.jnavy.view.components.weather;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.Timer;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
+import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
 /**
  * A transient, semi-transparent overlay that displays weather changes.
@@ -13,19 +22,27 @@ public class WeatherNotificationOverlay extends JComponent {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    private static final int DISPLAY_DURATION_MS = 3000;
+    private static final int PADDING = 40;
+    private static final int CORNER_RADIUS = 30;
+    private static final int BOX_HEIGHT = 120;
+    private static final float BORDER_STOKE = 3.0f;
+
+    private static final int TITLE_FONT_SIZE = 28;
+    private static final int SUBTITLE_FONT_SIZE = 22;
+    private static final int TITLE_Y_OFFSET = 50;
+    private static final int SUBTITLE_Y_OFFSET = 90;
+
     private String title = "";
     private String subtitle = "";
     private final Timer timer;
-
-    private static final int PADDING = 40;
-    private static final int CORNER_RADIUS = 30;
 
     /**
      * Constructs a new WeatherNotificationOverlay.
      * Initializing the timer to automatically hide the overlay after 3 seconds.
      */
     public WeatherNotificationOverlay() {
-        this.timer = new Timer(3000, e -> {
+        this.timer = new Timer(DISPLAY_DURATION_MS, e -> {
             title = "";
             subtitle = "";
             repaint();
@@ -56,7 +73,9 @@ public class WeatherNotificationOverlay extends JComponent {
      */
     @Override
     protected void paintComponent(final Graphics g) {
-        if (title.isEmpty()) return;
+        if (title.isEmpty()) {
+            return;
+        }
 
         final Graphics2D g2 = (Graphics2D) g;
 
@@ -64,8 +83,8 @@ public class WeatherNotificationOverlay extends JComponent {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        final Font titleFont = new Font("SansSerif", Font.BOLD, 28);
-        final Font subFont = new Font("SansSerif", Font.PLAIN, 22);
+        final Font titleFont = new Font(FONT_FAMILY, Font.BOLD, TITLE_FONT_SIZE);
+        final Font subFont = new Font(FONT_FAMILY, Font.PLAIN, SUBTITLE_FONT_SIZE);
 
         final FontMetrics fmTitle = g2.getFontMetrics(titleFont);
         final FontMetrics fmSub = g2.getFontMetrics(subFont);
@@ -73,30 +92,29 @@ public class WeatherNotificationOverlay extends JComponent {
         // Calculate dimensions of the overlay box
         final int textWidth = Math.max(fmTitle.stringWidth(title), fmSub.stringWidth(subtitle));
         final int boxWidth = textWidth + (PADDING * 2);
-        final int boxHeight = 120;
 
         final int boxX = (getWidth() - boxWidth) / 2;
-        final int boxY = (getHeight() - boxHeight) / 2;
+        final int boxY = (getHeight() - BOX_HEIGHT) / 2;
 
         // Draw the semi-transparent background
-        g2.setColor(new Color(20, 20, 30, 220));
-        g2.fillRoundRect(boxX, boxY, boxWidth, boxHeight, CORNER_RADIUS, CORNER_RADIUS);
+        g2.setColor(new Color(BACKGROUND_COLOR.getRed(), BACKGROUND_COLOR.getGreen(), BACKGROUND_COLOR.getBlue(), OVERLAY_ALPHA));
+        g2.fillRoundRect(boxX, boxY, boxWidth, BOX_HEIGHT, CORNER_RADIUS, CORNER_RADIUS);
 
         // Draw the border
-        g2.setColor(new Color(255, 200, 50));
-        g2.setStroke(new BasicStroke(3f));
-        g2.drawRoundRect(boxX, boxY, boxWidth, boxHeight, CORNER_RADIUS, CORNER_RADIUS);
+        g2.setColor(ACCENT_YELLOW);
+        g2.setStroke(new BasicStroke(BORDER_STOKE));
+        g2.drawRoundRect(boxX, boxY, boxWidth, BOX_HEIGHT, CORNER_RADIUS, CORNER_RADIUS);
 
         // Draw the title text
         g2.setFont(titleFont);
-        g2.setColor(new Color(255, 200, 50));
+        g2.setColor(LIGHT_TEXT_COLOR);
         final int titleX = boxX + (boxWidth - fmTitle.stringWidth(title)) / 2;
-        g2.drawString(title, titleX, boxY + 50);
+        g2.drawString(title, titleX, boxY + TITLE_Y_OFFSET);
 
         // Draw the subtitle text
         g2.setFont(subFont);
-        g2.setColor(new Color(240, 240, 255));
+        g2.setColor(LIGHT_TEXT_COLOR);
         final int subX = boxX + (boxWidth - fmSub.stringWidth(subtitle)) / 2;
-        g2.drawString(subtitle, subX, boxY + 90);
+        g2.drawString(subtitle, subX, boxY + SUBTITLE_Y_OFFSET);
     }
 }
