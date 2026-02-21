@@ -45,6 +45,7 @@ public final class GamePanel extends JPanel {
     private static final Color YOUR_TURN_TEXT_COLOR = Color.WHITE;
     private static final String GAME_SAVED = "Game saved successfully!";
     private static final String SAVE_ERROR = "Error saving the game.";
+    private static final int PADDING = 20;
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
@@ -70,7 +71,7 @@ public final class GamePanel extends JPanel {
      *
      * @param controller the active {@link GameController} governing the game logic.
      * @param onMenu a callback function executed when the player navigates back 
-     * to the main menu from the game over screen.
+     *      to the main menu from the game over screen.
      */
     public GamePanel(final GameController controller, final Runnable onMenu) {
         this.controller = controller;
@@ -90,7 +91,7 @@ public final class GamePanel extends JPanel {
         this.mainContent.setOpaque(false);
 
         final JPanel gridsContainer = new JPanel(new GridLayout(1, 2, 40, 0));
-        gridsContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        gridsContainer.setBorder(BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING));
         gridsContainer.setOpaque(false);
 
         this.dashboardPanel = new GameDashboardPanel(
@@ -167,7 +168,9 @@ public final class GamePanel extends JPanel {
 
         final Timer botTimer = new Timer(1000, e -> {
             final Position target = controller.playBotTurn();
-            if (target == null) { return; }
+            if (target == null) {
+                return;
+            }
 
             final Component targetButton = humanGridPanel.getButtonAt(target);
             final CellCondition state = controller.getHumanCellState(target);
@@ -206,8 +209,10 @@ public final class GamePanel extends JPanel {
     }
 
     private void handleHumanGridClick(final Position p) {
-        if (this.inputBlocked || !controller.isHumanTurn()) { return; }
-        
+        if (this.inputBlocked || !controller.isHumanTurn()) {
+            return;
+        }
+
         if (this.dashboardPanel.isCaptainAbilityActive() && !controller.captainAbilityTargetsEnemyGrid()) {
             controller.processAbility(p);
             this.dashboardPanel.resetCaptainAbility();
@@ -216,12 +221,18 @@ public final class GamePanel extends JPanel {
     }
 
     private void handleBotGridClick(final Position p) {
-        if (this.inputBlocked || !controller.isHumanTurn() || controller.isGameOver()) { return; }
+        if (this.inputBlocked || !controller.isHumanTurn() || controller.isGameOver()) {
+            return;
+        }
 
         final CellCondition clickedState = controller.getBotCellState(p);
-        final boolean isAlreadyRevealed = clickedState == CellCondition.HIT_SHIP || clickedState == CellCondition.SUNK_SHIP || clickedState == CellCondition.HIT_WATER;
+        final boolean isAlreadyRevealed = clickedState == CellCondition.HIT_SHIP
+                                        || clickedState == CellCondition.SUNK_SHIP
+                                        || clickedState == CellCondition.HIT_WATER;
 
-        if (isAlreadyRevealed && !this.dashboardPanel.isCaptainAbilityActive()) { return; }
+        if (isAlreadyRevealed && !this.dashboardPanel.isCaptainAbilityActive()) {
+            return;
+        }
 
         this.inputBlocked = true;
         final boolean isAbility = this.dashboardPanel.isCaptainAbilityActive();
@@ -250,7 +261,7 @@ public final class GamePanel extends JPanel {
         final List<Position> targets = TargetCalculator.determineAnimationTargets(
         p, newHits, isAbility, controller.getPlayerCaptainName(), controller.getGridSize()
         );
-        
+
         final boolean anyHit = targets.stream().anyMatch(pos -> {
             final var state = controller.getBotCellState(pos);
             return state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;

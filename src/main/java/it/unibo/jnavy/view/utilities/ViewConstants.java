@@ -70,6 +70,9 @@ public final class ViewConstants {
     /** Horizontal gap specifically used for bottom control panels. */
     public static final int BOTTOM_PANEL_HGAP = 20;
 
+    /** Width of the panels containing row or column labels for the grid. */
+    public static final int GRID_LABEL_WIDTH = 30;
+
     // --- UI Elements ---
 
     /** Standard thickness for borders. */
