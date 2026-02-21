@@ -10,7 +10,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-import static it.unibo.jnavy.view.utilities.ViewConstants.*;
+import static it.unibo.jnavy.view.utilities.ViewConstants.ACCENT_YELLOW;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BACKGROUND_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
+import static it.unibo.jnavy.view.utilities.ViewConstants.LIGHT_TEXT_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.OVERLAY_ALPHA;
 
 /**
  * A transient, semi-transparent overlay that displays weather changes.
