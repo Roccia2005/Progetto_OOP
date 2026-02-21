@@ -51,6 +51,14 @@ public final class WeatherManagerImpl implements WeatherManager {
         return instance;
     }
 
+    /**
+     * Ensures the Singleton property is maintained during object deserialization.
+     * This method is invoked automatically by the serialization mechanism, replacing
+     * the newly deserialized instance with the canonical singleton instance.
+     *
+     * @return The single, active instance of {@link WeatherManagerImpl}.
+     * @throws ObjectStreamException if an error occurs during the resolution process.
+     */
     @java.io.Serial
     protected Object readResolve() throws ObjectStreamException {
         return getInstance();
