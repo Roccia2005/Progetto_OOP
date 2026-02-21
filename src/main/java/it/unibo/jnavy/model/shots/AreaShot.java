@@ -20,7 +20,7 @@ public final class AreaShot implements HitStrategy {
 
     /**
      * Constructs an AreaShot hit.
-     * * @param ignoreWeather if true, weather conditions won't affect the shot's precision.
+     * @param ignoreWeather if true, weather conditions won't affect the shot's precision.
      */
     public AreaShot(final boolean ignoreWeather) {
         this.ignoreWeather = ignoreWeather;
