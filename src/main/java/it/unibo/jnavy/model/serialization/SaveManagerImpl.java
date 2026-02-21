@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public final class SaveManagerImpl implements SaveManager {
 
     private static final String FILE_NAME = "game_state.dat";
-    private static final Logger LOGGER = Logger.getLogger(SaveManagerImpl.class.getName());;
+    private static final Logger LOGGER = Logger.getLogger(SaveManagerImpl.class.getName());
 
     @Override
     public boolean save(final GameState state) {

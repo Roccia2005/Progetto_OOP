@@ -12,12 +12,12 @@ import it.unibo.jnavy.model.utilities.Position;
  */
 public abstract class AbstractCaptain implements Captain {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private final int cooldown;
     private int currentCooldown;
     private boolean usedThisTurn;
-
-    @java.io.Serial
-    private static final long serialVersionUID = 1L;
 
     protected AbstractCaptain(final int cooldown) {
         this.cooldown = cooldown;
