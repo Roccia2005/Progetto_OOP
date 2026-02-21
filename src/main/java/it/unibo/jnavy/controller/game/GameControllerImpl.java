@@ -9,6 +9,9 @@ import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.weather.WeatherManager;
 import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
+/**
+ * Concrete implementation of the {@link GameController} interface.
+ */
 public class GameControllerImpl implements GameController {
 
     private final TurnController turnController;
@@ -21,8 +24,8 @@ public class GameControllerImpl implements GameController {
     /**
      * Constructor for a new game.
      *
-     * @param human
-     * @param bot
+     * @param human the human player.
+     * @param bot the bot player.
      */
     public GameControllerImpl(final Player human, final Player bot) {
         this.human = human;
@@ -38,12 +41,12 @@ public class GameControllerImpl implements GameController {
     /**
      * Constructor for loading a previous game, initializing it with the saved state.
      *
-     * @param state
+     * @param state the saved game state.
      */
     public GameControllerImpl(final GameState state) {
         this.human = state.getHuman();
         this.bot = state.getBot();
-        WeatherManager weather = WeatherManagerImpl.getInstance();
+        final WeatherManager weather = WeatherManagerImpl.getInstance();
 
         this.turnController = new TurnController(this.human, this.bot, weather, state.getTurnCounter(), state.isHumanTurn());
         this.combatController = new CombatController(this.human, this.bot, weather, this.turnController);

@@ -14,10 +14,16 @@ import it.unibo.jnavy.model.ship.ShipImpl;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
- * Implementation of SetupController interface.
+ * Implementation of the {@link SetupController} interface.
+ * This class manages the ship placement phase for both the human player and the bot,
+ * ensuring that all game rules regarding ship positioning are respected.
  */
 public class SetupControllerImpl implements SetupController {
 
@@ -34,6 +40,13 @@ public class SetupControllerImpl implements SetupController {
     private Position currentShipPos;
     private CardinalDirection currentShipDir;
 
+    /**
+     * Constructs a new SetupControllerImpl with the chosen captain and bot strategy.
+     * It initializes the human and bot players and automatically places the bot's fleet.
+     *
+     * @param selectedCaptain the captain selected by the human player.
+     * @param selectedBotStrategy the difficulty strategy for the bot.
+     */
     public SetupControllerImpl(final Captain selectedCaptain, final BotStrategy selectedBotStrategy) {
         this.shipsToPlace = new ArrayList<>(buildFleetConfig());
         this.random = new Random();
@@ -162,7 +175,9 @@ public class SetupControllerImpl implements SetupController {
     }
 
     private boolean hasSameShip(final Grid grid, final Ship ship, final Position neighbor) {
-        if (!grid.isPositionValid(neighbor)) { return false; }
+        if (!grid.isPositionValid(neighbor)) {
+            return false;
+        }
 
         return grid.getCell(neighbor)
                 .flatMap(Cell::getShip)
