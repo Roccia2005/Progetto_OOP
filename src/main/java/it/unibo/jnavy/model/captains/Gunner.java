@@ -17,6 +17,9 @@ public final class Gunner extends AbstractCaptain {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a Gunner with a cooldown of 3 turns.
+     */
     public Gunner() {
         super(COOLDOWN);
     }
