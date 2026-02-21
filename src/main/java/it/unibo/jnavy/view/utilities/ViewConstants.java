@@ -7,6 +7,9 @@ public final class ViewConstants {
     public static final Color MENUBLUE = new Color(41, 86, 246);
     public static final Color BACKGROUND_COLOR = new Color(20, 20, 30);
     public static final Color FOREGROUND_COLOR = Color.WHITE;
+    public static final Color OVERLAY_COLOR = new Color(0, 0, 0, 230);
+    public static final Color BUTTON_BLUE = new Color(30, 100, 255);
+    public static final Color BUTTON_HOVER_BLUE = new Color(60, 130, 255);
 
     //layout e finestra
     public static final int SETWIDTH = 1000;
@@ -18,6 +21,11 @@ public final class ViewConstants {
     //ui
     public static final int BORDER_THICKNESS = 2;
     public static final int IMAGE_SIZE = 140;
+    public static final int GAMEOVER_IMG_WIDTH = 400;
+    public static final int GAMEOVER_INSET_L = 40;
+    public static final int GAMEOVER_INSET_S = 15;
+    public static final int BTN_PADDING_V = 10;
+    public static final int BTN_PADDING_H = 40;
 
     //proporzioni
     public static final int DESC_WIDTH_DIVISOR = 3;
