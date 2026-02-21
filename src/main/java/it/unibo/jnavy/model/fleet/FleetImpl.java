@@ -10,10 +10,10 @@ import it.unibo.jnavy.model.ship.Ship;
  */
 public class FleetImpl implements Fleet {
 
-    private final List<Ship> ships;
-
     @java.io.Serial
     private static final long serialVersionUID = 1L;
+
+    private final List<Ship> ships;
 
     public FleetImpl() {
         this.ships = new ArrayList<>();

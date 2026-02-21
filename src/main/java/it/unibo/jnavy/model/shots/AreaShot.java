@@ -18,7 +18,7 @@ public class AreaShot implements HitStrategy {
 
     private final boolean ignoreWeather;
 
-    public AreaShot (final boolean ignoreWeather) {
+    public AreaShot(final boolean ignoreWeather) {
         this.ignoreWeather = ignoreWeather;
     }
 
@@ -37,7 +37,7 @@ public class AreaShot implements HitStrategy {
                 }
             }
         }
-        
+
         final int vetX = (effectiveTarget.x() == grid.getSize() - 1) ? -1 : 1;
         final int vetY = (effectiveTarget.y() == grid.getSize() - 1) ? -1 : 1;
 

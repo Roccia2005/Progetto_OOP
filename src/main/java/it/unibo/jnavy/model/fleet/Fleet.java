@@ -21,21 +21,24 @@ public interface Fleet extends Serializable {
             3, 2,
             2, 1
     );
-    
+
     /**
      * Adds a ship to the fleet.
+     *
      * @param s the ship to add.
      */
     void addShip(Ship s);
 
     /**
      * Checks if all ships in the fleet are destroyed.
+     *
      * @return true if all ships are sunk, false otherwise.
      */
     boolean isDefeated();
 
     /**
      * Returns a copy of the list of ships.
+     *
      * @return a new list containing the ships.
      */
     List<Ship> getShips();
@@ -43,13 +46,15 @@ public interface Fleet extends Serializable {
     /**
      * Checks if the fleet composition matches the game rules:
      * 1x size 2, 2x size 3, 1x size 4, 1x size 5.
+     *
      * @return true if the fleet is complete and valid.
      */
     boolean isTopologyValid();
 
     /**
      * remove the given ship.
+     *
      * @param ship to remove.
      */
     void removeShip(Ship ship);
-} 
+}
