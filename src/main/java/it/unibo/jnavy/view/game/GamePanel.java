@@ -144,9 +144,7 @@ public class GamePanel extends JPanel {
         if (controller.isGameOver() && !this.gameOverHandled) {
             this.gameOverHandled = true;
 
-            final Timer delayTimer = new Timer(900, e -> {
-                this.showEndGameScreen(controller.isBotDefeated());
-            });
+            final Timer delayTimer = new Timer(900, e -> this.showEndGameScreen(controller.isBotDefeated()));
             delayTimer.setRepeats(false);
             delayTimer.start();
         }
@@ -243,7 +241,7 @@ public class GamePanel extends JPanel {
         final List<Component> targetButtons = targets.stream().map(botGridPanel::getButtonAt).collect(Collectors.toList());
 
         this.effectsPanel.startShot(targetButtons, anyHit,
-                () -> botGridPanel.refresh(pos -> controller.getBotCellState(pos)),
+                () -> botGridPanel.refresh(controller::getBotCellState),
                 () -> {
                     this.updateDashboard();
                     if (!controller.isHumanTurn() && !controller.isGameOver()) {
