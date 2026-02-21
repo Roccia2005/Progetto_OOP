@@ -90,8 +90,7 @@ final class GridTest {
 
     @Test
     void testShootingMechanics() {
-        final Ship ship = new ShipImpl(2); // Small ship (life 2)
-        // Place in (5,5) and (5,6)
+        final Ship ship = new ShipImpl(2);
         grid.placeShip(ship, new Position(5, 5), CardinalDirection.RIGHT);
 
         // 1. I shoot at the water (MISS)
@@ -102,8 +101,9 @@ final class GridTest {
         final ShotResult resultHit = grid.receiveShot(new Position(5, 5));
         assertEquals(HitType.HIT, resultHit.hitType());
 
-        // 3. I hit the same spot (Exception)
-        assertThrows(IllegalStateException.class, () -> grid.receiveShot(new Position(5, 5)), "It should throw an exception if I shoot a cell that has already been hit");
+        // 3. I hit the same spot
+        final ShotResult resultInvalid = grid.receiveShot(new Position(5, 5));
+        assertEquals(HitType.INVALID, resultInvalid.hitType(), "Shooting an already hit cell should return INVALID");
 
         // 4. I'm sinking the ship (SUNK)
         final ShotResult resultSunk = grid.receiveShot(new Position(5, 6));
@@ -129,5 +129,72 @@ final class GridTest {
 
         assertTrue(repaired, "Repair should return true on damaged ship cell");
         assertEquals(healthAfterHit + 1, ship.getHealth(), "Ship health should increase by 1");
+    }
+
+    @Test
+    void testIsDefeated() {
+        final Ship ship = new ShipImpl(2);
+        grid.placeShip(ship, new Position(0, 0), CardinalDirection.RIGHT);
+
+        assertFalse(grid.isDefeated(), "Grid should not be defeated initially");
+
+        // Sink the only ship
+        grid.receiveShot(new Position(0, 0));
+        grid.receiveShot(new Position(0, 1));
+
+        assertTrue(grid.isDefeated(), "Grid should be defeated when all ships are sunk");
+    }
+
+    @Test
+    void testRemoveShip() {
+        final Ship ship = new ShipImpl(3);
+        final Position pos = new Position(2, 2);
+        grid.placeShip(ship, pos, CardinalDirection.RIGHT);
+
+        // Check that the cell is occupied
+        assertTrue(grid.getCell(pos).get().isOccupied());
+
+        // Remove the ship
+        grid.removeShip(ship);
+
+        // Check that the cell is free again
+        assertFalse(grid.getCell(pos).get().isOccupied(), "Cell should be empty after ship removal");
+        assertFalse(grid.getFleet().getShips().contains(ship), "Ship should be removed from the fleet");
+    }
+
+    @Test
+    void testTargetAndPositionValidity() {
+        // Test isPositionValid
+        assertTrue(grid.isPositionValid(new Position(0, 0)));
+        assertTrue(grid.isPositionValid(new Position(9, 9)));
+        assertFalse(grid.isPositionValid(new Position(-1, 0)));
+        assertFalse(grid.isPositionValid(new Position(0, 10)));
+
+        // Test isTargetValid
+        final Position pos = new Position(5, 5);
+        assertTrue(grid.isTargetValid(pos));
+
+        // Shoot the cell, so it should no longer be a valid target
+        grid.receiveShot(pos);
+        assertFalse(grid.isTargetValid(pos), "Already hit cell should not be a valid target");
+    }
+
+    @Test
+    void testAvailableAndOccupiedPositions() {
+        final Ship ship = new ShipImpl(2);
+        grid.placeShip(ship, new Position(0, 0), CardinalDirection.RIGHT);
+
+        // Occupied positions (should be 2)
+        assertEquals(2, grid.getOccupiedPositions().size());
+        assertTrue(grid.getOccupiedPositions().contains(new Position(0, 0)));
+        assertTrue(grid.getOccupiedPositions().contains(new Position(0, 1)));
+
+        // Available targets at the beginning are 100
+        assertEquals(100, grid.getAvailableTargets().size());
+
+        // After a hit at (0,0), available targets drop to 99
+        grid.receiveShot(new Position(0, 0));
+        assertEquals(99, grid.getAvailableTargets().size());
+        assertFalse(grid.getAvailableTargets().contains(new Position(0, 0)));
     }
 }
