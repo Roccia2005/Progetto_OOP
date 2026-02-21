@@ -58,13 +58,13 @@ public final class TargetCalculator {
                                                            final int gridSize) {
         final boolean isGunner = captainName.toLowerCase(Locale.ROOT).contains("gunner");
         if (!isAbility || !isGunner) {
-            return newHits.isEmpty() ? List.of(p) : List.of(newHits.get(0));
+            return newHits.isEmpty() ? List.of(p) : List.of(newHits.getFirst());
         }
         if (newHits.isEmpty()) {
             return getAreaPositions(p, gridSize);
         }
 
-        Position bestAnchor = newHits.get(0);
+        Position bestAnchor = newHits.getFirst();
         int minDistance = Integer.MAX_VALUE;
 
         for (int r = 0; r < gridSize; r++) {
