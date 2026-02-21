@@ -2,6 +2,10 @@ package it.unibo.jnavy.view.components.captain;
 
 import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.CAPTAIN_POPUP_BACKGROUND;
+import static it.unibo.jnavy.view.utilities.ViewConstants.CAPTAIN_POPUP_BORDER;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_SIZE_DESC;
+import static it.unibo.jnavy.view.utilities.ViewConstants.IMAGE_SIZE;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -35,10 +39,13 @@ public final class CaptainAbilityButton extends JButton {
     private static final Color BUTTON_ACTIVE = Color.GREEN;
     private static final Color BUTTON_CHARGED = Color.BLUE;
     private static final Color BUTTON_RECHARGING = Color.CYAN;
+    private static final Color BUTTON_BACKGROUND_DEFAULT = Color.LIGHT_GRAY;
+
     private static final String BUTTON_TEXT = "Ability";
     private static final String CAPTAIN_IMAGE_PATH = "/images/captain.png";
     private static final String ALERT_IMAGE_PATH = "/images/alert.png";
     private static final int IMAGE_DIMENSION = 64;
+
     private static final String READY = "READY";
     private static final String ACTIVE = "ACTIVE";
     private static final String POPUP_MESSAGE = "Ability activate! Choose the position.";
@@ -46,6 +53,14 @@ public final class CaptainAbilityButton extends JButton {
     private static final int DIMENSION = 100;
     private static final int TEXT_GAP = 5;
     private static final int TIMER_TIME = 1500;
+
+    private static final int POPUP_HGAP = 20;
+    private static final int POPUP_VGAP = 20;
+    private static final int POPUP_BORDER_THICKNESS = 3;
+    private static final int POPUP_INSET_TOP = 30;
+    private static final int POPUP_INSET_LEFT = 40;
+    private static final int POPUP_INSET_BOTTOM = 30;
+    private static final int POPUP_INSET_RIGHT = 40;
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
@@ -148,13 +163,13 @@ public final class CaptainAbilityButton extends JButton {
         final JDialog popup = new JDialog(parentWindow, Dialog.ModalityType.MODELESS);
         popup.setUndecorated(true);
 
-        final JPanel contentPanel = new JPanel(new BorderLayout(20, 20));
-        contentPanel.setBackground(new Color(40, 40, 40));
-        contentPanel.setBorder(new LineBorder(new Color(255, 140, 0), 3));
+        final JPanel contentPanel = new JPanel(new BorderLayout(POPUP_HGAP, POPUP_VGAP));
+        contentPanel.setBackground(CAPTAIN_POPUP_BACKGROUND);
+        contentPanel.setBorder(new LineBorder(CAPTAIN_POPUP_BORDER, POPUP_BORDER_THICKNESS));
 
         final JLabel messageLabel = new JLabel(POPUP_MESSAGE, CENTER);
         messageLabel.setForeground(FOREGROUND_COLOR);
-        messageLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, 18));
+        messageLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_DESC));
 
         final Icon alertIcon = ImageLoader.getScaledIcon(ALERT_IMAGE_PATH, IMAGE_DIMENSION, IMAGE_DIMENSION);
         if (alertIcon != null) {
@@ -163,7 +178,7 @@ public final class CaptainAbilityButton extends JButton {
 
         messageLabel.setVerticalTextPosition(BOTTOM);
         messageLabel.setHorizontalTextPosition(CENTER);
-        messageLabel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
+        messageLabel.setBorder(BorderFactory.createEmptyBorder(POPUP_INSET_TOP, POPUP_INSET_LEFT, POPUP_INSET_BOTTOM, POPUP_INSET_RIGHT));
 
         contentPanel.add(messageLabel, BorderLayout.CENTER);
         popup.add(contentPanel);

@@ -43,6 +43,12 @@ public final class ViewConstants {
     /** Background color for fog weather (semi-transparent grayish). */
     public static final Color FOG_BG_COLOR = new Color(200, 210, 220, 150);
 
+    /** Background color for the captain ability feedback popup. */
+    public static final Color CAPTAIN_POPUP_BACKGROUND = new Color(40, 40, 40);
+
+    /** Border color for the captain ability feedback popup. */
+    public static final Color CAPTAIN_POPUP_BORDER = new Color(255, 140, 0);
+
     // --- Layout and Window ---
 
     /** Fixed the width of the main application window. */
