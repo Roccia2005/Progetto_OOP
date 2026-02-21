@@ -7,6 +7,8 @@ import it.unibo.jnavy.model.utilities.ShotResult;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.io.ObjectStreamException;
 
 /**
  * Concrete implementation of the {@link WeatherManager} using the Singleton Pattern.
@@ -25,7 +27,7 @@ public final class WeatherManagerImpl implements WeatherManager {
     private static final long serialVersionUID = 1L;
 
     private WeatherCondition condition;
-    private int turnCounter;
+    private final AtomicInteger turnCounter = new AtomicInteger(0);
     private Random random;
 
     /**
@@ -49,12 +51,17 @@ public final class WeatherManagerImpl implements WeatherManager {
         return instance;
     }
 
+    @java.io.Serial
+    protected Object readResolve() throws ObjectStreamException {
+        return getInstance();
+    }
+
     /**
      * Resets the weather manager to its initial state.
      */
     public void reset() {
         this.condition = WeatherCondition.SUNNY;
-        this.turnCounter = 0;
+        this.turnCounter.set(0);
         this.random = new Random();
     }
 
@@ -87,21 +94,21 @@ public final class WeatherManagerImpl implements WeatherManager {
 
     @Override
     public void processTurnEnd() {
-        this.turnCounter++;
-        if (this.turnCounter >= WEATHER_DURATION) {
+        final int currentTurn = this.turnCounter.incrementAndGet();
+        if (currentTurn >= WEATHER_DURATION) {
             final int chance = this.random.nextInt(3);
             if (chance < 2) {
                 this.condition = WeatherCondition.SUNNY;
             } else {
                 this.condition = WeatherCondition.FOG;
             }
-            this.turnCounter = 0;
+            this.turnCounter.set(0);
         }
     }
 
     @Override
     public void setCondition(final WeatherCondition condition) {
         this.condition = condition;
-        this.turnCounter = 0;
+        this.turnCounter.set(0);
     }
 }
