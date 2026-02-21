@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.io.ObjectStreamException;
 
 /**
  * Concrete implementation of the {@link WeatherManager} using the Singleton Pattern.
@@ -48,6 +49,11 @@ public final class WeatherManagerImpl implements WeatherManager {
             instance = new WeatherManagerImpl();
         }
         return instance;
+    }
+
+    @java.io.Serial
+    protected Object readResolve() throws ObjectStreamException {
+        return getInstance();
     }
 
     /**
