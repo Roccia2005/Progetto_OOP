@@ -58,6 +58,7 @@ public interface Captain extends TurnObserver {
 
     /**
      * Returns the name of the captain.
+     * 
      * @return the simple class name representing the captain type.
      */
     String getName();
