@@ -1,5 +1,8 @@
 package it.unibo.jnavy.model.ship;
 
+import java.util.Objects;
+import java.util.UUID;
+
 /**
  * Concrete implementation of the Ship interface.
  */
@@ -11,6 +14,7 @@ public class ShipImpl implements Ship {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    private final UUID id;
     private final int size;
     private int health;
 
@@ -24,6 +28,7 @@ public class ShipImpl implements Ship {
         if (size < MIN_SIZE || size > MAX_SIZE) {
             throw new IllegalArgumentException("Ship size must be between " + MIN_SIZE + " and " + MAX_SIZE);
         }
+        this.id = UUID.randomUUID();
         this.size = size;
         this.health = size;
     }
@@ -59,5 +64,22 @@ public class ShipImpl implements Ship {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final ShipImpl ship = (ShipImpl) o;
+        return id.equals(ship.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
