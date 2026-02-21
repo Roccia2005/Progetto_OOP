@@ -3,10 +3,12 @@ package it.unibo.jnavy.view.selection;
 import static it.unibo.jnavy.view.utilities.ViewConstants.BACKGROUND_COLOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.BORDER_THICKNESS;
 import static it.unibo.jnavy.view.utilities.ViewConstants.BOTTOM_PANEL_VGAP;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BOTTOM_PANEL_HGAP;
 import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_HEIGHT_DIVISOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_WIDTH_DIVISOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.DESC_HEIGHT_DIVISOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.DESC_WIDTH_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BG_WIDTH_OFFSET;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FLOW_HGAP;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FLOW_VGAP;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
@@ -61,8 +63,9 @@ public final class CapSelectionPanel extends JPanel {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
-    private final AbilitySelectionListener listener;
-    private final Runnable backAction;
+    private final transient AbilitySelectionListener listener;
+    private final transient Runnable backAction;
+
     private JLabel imageLabel;
     private JComboBox<CaptainAbility> levelComboBox;
     private JTextPane descriptionArea;
@@ -139,7 +142,7 @@ public final class CapSelectionPanel extends JPanel {
             @Override
             public void paintCurrentValueBackground(final Graphics g, final Rectangle bounds, final boolean hasFocus) {
                 g.setColor(MENUBLUE);
-                g.fillRect(bounds.x, bounds.y, bounds.width + 10, bounds.height);
+                g.fillRect(bounds.x, bounds.y, bounds.width + BG_WIDTH_OFFSET, bounds.height);
             }
 
             @Override
@@ -184,7 +187,7 @@ public final class CapSelectionPanel extends JPanel {
         controlsPanel.add(confirmButton);
         centerPanel.add(controlsPanel, gbc);
 
-        final JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 30));
+        final JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, BOTTOM_PANEL_HGAP, BOTTOM_PANEL_VGAP));
         bottomPanel.setBackground(BACKGROUND_COLOR);
 
         final JButton backButton = new JButton("Back");
