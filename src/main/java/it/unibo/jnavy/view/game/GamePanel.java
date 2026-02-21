@@ -22,10 +22,7 @@ import it.unibo.jnavy.view.utilities.SoundManager;
 import it.unibo.jnavy.view.components.grid.GridPanel;
 import java.util.stream.Collectors;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.Timer;
+import javax.swing.*;
 
 /**
  * The core UI container for the active gameplay phase.
@@ -55,7 +52,7 @@ public final class GamePanel extends JPanel {
     private final GameDashboardPanel dashboardPanel;
     private final GridPanel humanGridPanel;
     private final GridPanel botGridPanel;
-    private final GameController controller;
+    private final transient GameController controller;
     private final SoundManager ambientSound;
     private boolean gameOverHandled;
 
@@ -121,7 +118,7 @@ public final class GamePanel extends JPanel {
         this.mainContent.add(gridsContainer, BorderLayout.CENTER);
         this.mainContent.add(this.dashboardPanel, BorderLayout.SOUTH);
 
-        this.gameOverPanel = new GameOverPanel(e -> onMenu.run(), e -> System.exit(0));
+        this.gameOverPanel = new GameOverPanel(e -> onMenu.run(), e -> SwingUtilities.getWindowAncestor(this).dispose());
 
         layeredPane.add(this.mainContent, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(this.effectsPanel, JLayeredPane.PALETTE_LAYER);

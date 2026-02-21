@@ -16,6 +16,8 @@ import java.util.Random;
  */
 public final class AreaShot implements HitStrategy {
 
+    private static final Random RANDOM = new Random();
+
     private final boolean ignoreWeather;
 
     /**
@@ -32,8 +34,8 @@ public final class AreaShot implements HitStrategy {
         final List<ShotResult> results = new ArrayList<>();
         Position effectiveTarget = target;
         if (!ignoreWeather && WeatherManagerImpl.getInstance().getCurrentWeather() == WeatherCondition.FOG) {
-            final int offsetX = new Random().nextInt(3) - 1;
-            final int offsetY = new Random().nextInt(3) - 1;
+            final int offsetX = RANDOM.nextInt(3) - 1;
+            final int offsetY = RANDOM.nextInt(3) - 1;
             final Position candidate = new Position(target.x() + offsetX, target.y() + offsetY);
 
             if (grid.isPositionValid(candidate)) {

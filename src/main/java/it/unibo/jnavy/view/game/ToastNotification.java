@@ -60,7 +60,7 @@ public final class ToastNotification {
         toast.add(label);
         toast.pack();
 
-        if (parent != null && parent.isShowing()) {
+        if (parent.isShowing()) {
             final Point location = parent.getLocationOnScreen();
             final int x = location.x + (parent.getWidth() - toast.getWidth()) / 2;
             final int y = location.y + (parent.getHeight() - toast.getHeight()) / 2;

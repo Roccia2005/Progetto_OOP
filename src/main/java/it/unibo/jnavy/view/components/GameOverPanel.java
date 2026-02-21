@@ -121,10 +121,12 @@ public final class GameOverPanel extends JPanel {
      */
     @Override
     public void paintComponent(final Graphics g) {
-        super.paintComponent(g);
-        final Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(OVERLAY_COLOR);
-        g2.fillRect(0, 0, getWidth(), getHeight());
+        if (g instanceof Graphics2D) {
+            super.paintComponent(g);
+            final Graphics2D g2 = (Graphics2D) g;
+            g2.setColor(OVERLAY_COLOR);
+            g2.fillRect(0, 0, getWidth(), getHeight());
+        }
     }
 
     private ImageIcon createScaledIcon(final String path, final int targetWidth) {

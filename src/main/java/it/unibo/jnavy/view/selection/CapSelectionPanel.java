@@ -288,7 +288,7 @@ public final class CapSelectionPanel extends JPanel {
     /**
      * Custom renderer for the Captain selection ComboBox.
      */
-    private final class CustomRenderer extends DefaultListCellRenderer {
+    private static class CustomRenderer extends DefaultListCellRenderer {
 
         /**
          * Serial version UID for serialization.
