@@ -32,8 +32,8 @@ public class GameOverPanel extends JPanel {
             public void mousePressed(MouseEvent e) { }
         });
 
-        this.winIcon = createScaledIcon("/images/winner.png", 400);
-        this.loseIcon = createScaledIcon("/images/loser.png", 400);
+        this.winIcon = createScaledIcon("/images/winner.png", GAMEOVER_IMG_WIDTH);
+        this.loseIcon = createScaledIcon("/images/loser.png", GAMEOVER_IMG_WIDTH);
 
         this.imageLabel = new JLabel();
 
@@ -52,14 +52,14 @@ public class GameOverPanel extends JPanel {
         gbc.gridx = 0;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        final int bottomMargin = victory ? 40 : 15;
+        final int bottomMargin = victory ? GAMEOVER_INSET_L : GAMEOVER_INSET_S;
 
         gbc.gridy = 0;
         gbc.insets = new Insets(0, 0, bottomMargin, 0);
         add(imageLabel, gbc);
 
         gbc.gridy = 1;
-        gbc.insets = new Insets(0, 0, 15, 0);
+        gbc.insets = new Insets(0, 0, GAMEOVER_INSET_S, 0);
         add(menuButton, gbc);
 
         gbc.gridy = 2;
@@ -75,7 +75,7 @@ public class GameOverPanel extends JPanel {
     public void paintComponent(final Graphics g) {
         super.paintComponent(g);
         final Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(new Color(0, 0, 0, 230));
+        g2.setColor(OVERLAY_COLOR);
         g2.fillRect(0, 0, getWidth(), getHeight());
     }
 
@@ -91,23 +91,23 @@ public class GameOverPanel extends JPanel {
 
     private JButton createStyledButton(final String label) {
         final JButton button = new JButton(label);
-        button.setFont(new Font("Sanserif", Font.BOLD, 18));
+        button.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_DESC));
         button.setForeground(FOREGROUND_COLOR);
-        button.setBackground(new Color(30, 100, 255));
+        button.setBackground(BUTTON_BLUE);
         button.setFocusPainted(false);
 
         button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.WHITE, 2),
-                BorderFactory.createEmptyBorder(10, 40, 10, 40)
+                BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS),
+                BorderFactory.createEmptyBorder(BTN_PADDING_V, BTN_PADDING_H, BTN_PADDING_V, BTN_PADDING_H)
         ));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
-                button.setBackground(new Color(60, 130, 255));
+                button.setBackground(BUTTON_HOVER_BLUE);
             }
             public void mouseExited(MouseEvent evt) {
-                button.setBackground(new Color(30, 100, 255));
+                button.setBackground(BUTTON_BLUE);
             }
         });
         return button;
