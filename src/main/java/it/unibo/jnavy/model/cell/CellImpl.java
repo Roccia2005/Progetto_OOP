@@ -22,7 +22,7 @@ public class CellImpl implements Cell {
     public CellImpl(final Position p) {
         this.position = p;
         this.ship = null;
-        this.status = null;
+        this.status = HitType.NONE;
     }
 
     @Override
@@ -62,14 +62,14 @@ public class CellImpl implements Cell {
 
     @Override
     public boolean isHit() {
-        return this.status != null;
+        return this.status != HitType.NONE;
     }
 
     @Override
     public boolean repair() {
         if (this.ship != null && !this.ship.isSunk()) {
             if (this.ship.repair()) {
-                this.status = null;
+                this.status = HitType.NONE;
                 return true;
             }
         }
