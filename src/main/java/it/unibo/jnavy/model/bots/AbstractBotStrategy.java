@@ -7,7 +7,11 @@ import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.utilities.Position;
 
 public abstract class AbstractBotStrategy implements BotStrategy {
+
     protected final Random random = new Random();
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
 
     protected Position getRandomValidPosition(final Grid enemyGrid) {
         final List<Position> cellsList = getValidCellsList(enemyGrid);

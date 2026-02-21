@@ -41,11 +41,14 @@ public class GamePanel extends JPanel {
     private static final String GAME_SAVED = "Game saved successfully!";
     private static final String SAVE_ERROR = "Error saving the game.";
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private boolean inputBlocked = false;
     private final GameHeaderPanel headerPanel;
     private final GameDashboardPanel dashboardPanel;
     private final GridPanel humanGridPanel;
-    private GridPanel botGridPanel;
+    private final GridPanel botGridPanel;
     private final GameController controller;
     private final SoundManager ambientSound;
     private boolean gameOverHandled = false;
@@ -130,8 +133,8 @@ public class GamePanel extends JPanel {
     private void updateDashboard() {
         final String currentCondition = this.controller.getWeatherConditionName();
         this.dashboardPanel.updateDashboard(controller.getCurrentCaptainCooldown(), currentCondition);
-        humanGridPanel.refresh(pos -> controller.getHumanCellState(pos));
-        botGridPanel.refresh(pos -> controller.getBotCellState(pos));
+        humanGridPanel.refresh(controller::getHumanCellState);
+        botGridPanel.refresh(controller::getBotCellState);
 
         if (!this.lastWeatherCondition.isEmpty() && !this.lastWeatherCondition.equals(currentCondition)) {
             this.weatherOverlay.showWeatherAlert(currentCondition);
@@ -161,7 +164,7 @@ public class GamePanel extends JPanel {
             final boolean isHit = state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
 
             this.effectsPanel.startShot(List.of(targetButton), isHit,
-                    () -> humanGridPanel.refresh(pos -> controller.getHumanCellState(pos)),
+                    () -> humanGridPanel.refresh(controller::getHumanCellState),
                     () -> {
                 this.updateDashboard();
                 this.inputBlocked = false;
@@ -196,11 +199,11 @@ public class GamePanel extends JPanel {
         }
     }
 
-    private void handleBotGridClick(Position p) {
-        if (this.inputBlocked || !controller.isHumanTurn() || controller.isGameOver()) return;
+    private void handleBotGridClick(final Position p) {
+        if (this.inputBlocked || !controller.isHumanTurn() || controller.isGameOver()) { return; }
 
         final CellCondition clickedState = controller.getBotCellState(p);
-        final boolean isAlreadyRevealed = (clickedState == CellCondition.HIT_SHIP || clickedState == CellCondition.SUNK_SHIP || clickedState == CellCondition.HIT_WATER);
+        final boolean isAlreadyRevealed = clickedState == CellCondition.HIT_SHIP || clickedState == CellCondition.SUNK_SHIP || clickedState == CellCondition.HIT_WATER;
 
         if (isAlreadyRevealed && !this.dashboardPanel.isCaptainAbilityActive()) return;
 

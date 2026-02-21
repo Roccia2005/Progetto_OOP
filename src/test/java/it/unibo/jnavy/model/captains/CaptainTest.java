@@ -26,8 +26,8 @@ class CaptainTest {
 
     private Grid grid;
     private Captain captain;
-    private Position position = new Position(0, 0);
-    private Position invalidPosition = new Position(-1, -1);
+    private final Position position = new Position(0, 0);
+    private final Position invalidPosition = new Position(-1, -1);
 
     @BeforeEach
     void setUp() {
@@ -150,14 +150,12 @@ class CaptainTest {
         for (int x = 0; x <= 2; x++) {
             for (int y = 0; y <= 2; y++) {
                 final Position p = new Position(x, y);
-                
                 assertTrue(grid.getCell(p).get().getScanResult().isPresent());
                 assertTrue(grid.getCell(p).get().getScanResult().get());
             }
         }
 
         this.chargeAbility(SonarOfficer.COOLDOWN + 1);
-        
         // Verify that the scanned 3x3 area (from 4,4 to 6,6) correctly registered no ships
         final Position emptyPosition = new Position(5, 5);
         assertTrue(this.captain.useAbility(grid, emptyPosition));

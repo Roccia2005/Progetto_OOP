@@ -15,6 +15,9 @@ public class EffectsPanel extends JPanel {
     private static final int EFFECT_DURATION_MS = 1000;
     private static final int BULLET_SPEED = 10;
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private Image bulletImg;
     private Image explosionGif;
     private Image splashGif;
@@ -80,7 +83,7 @@ public class EffectsPanel extends JPanel {
      * @param onImpact The callback to be invoked when the bullet impacts a target.
      * @param onComplete The callback to be invoked when the shot animation is completed.
      */
-    public void startShot(List<Component> targets, boolean isHit, Runnable onImpact, Runnable onComplete) {
+    public void startShot(final List<Component> targets, final boolean isHit, final Runnable onImpact, final Runnable onComplete) {
         if (this.isAnimating || targets.isEmpty()) return;
 
         this.onImpactCallback = onImpact;
@@ -88,12 +91,12 @@ public class EffectsPanel extends JPanel {
 
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
-        Point panelLocation = this.getLocationOnScreen();
+        final Point panelLocation = this.getLocationOnScreen();
 
-        for (Component t : targets) {
-            Point loc = t.getLocationOnScreen();
-            int rx = loc.x - panelLocation.x;
-            int ry = loc.y - panelLocation.y;
+        for (final Component t : targets) {
+            final Point loc = t.getLocationOnScreen();
+            final int rx = loc.x - panelLocation.x;
+            final int ry = loc.y - panelLocation.y;
             minX = Math.min(minX, rx);
             minY = Math.min(minY, ry);
             maxX = Math.max(maxX, rx + t.getWidth());
@@ -103,11 +106,11 @@ public class EffectsPanel extends JPanel {
         this.targetCenterX = minX + (maxX - minX) / 2;
         this.targetCenterY = minY + (maxY - minY) / 2;
 
-        int rawSize = Math.max(maxX - minX, maxY - minY);
-        boolean isAreaShot = targets.size() > 1;
+        final int rawSize = Math.max(maxX - minX, maxY - minY);
+        final boolean isAreaShot = targets.size() > 1;
 
         this.effectRenderSize = isAreaShot ? rawSize : (int) (rawSize * 1.5);
-        int baseCellWidth = targets.get(0).getWidth();
+        final int baseCellWidth = targets.get(0).getWidth();
         this.currentBulletW = isAreaShot ? (int) (baseCellWidth * 0.8) : (int) (baseCellWidth * 0.4);
         this.currentBulletH = (int) (this.currentBulletW * 1.5);
 
@@ -148,7 +151,7 @@ public class EffectsPanel extends JPanel {
 
         repaint();
 
-        Timer effectDuration = new Timer(EFFECT_DURATION_MS, e -> {
+        final Timer effectDuration = new Timer(EFFECT_DURATION_MS, e -> {
             this.isAnimating   = false;
             this.currentEffect = null;
             repaint();
@@ -169,7 +172,7 @@ public class EffectsPanel extends JPanel {
      * @param g The Graphics context to paint on.
      */
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(final Graphics g) {
         super.paintComponent(g);
 
         if ((!isAnimating && currentEffect == null) || effectRenderSize == 0) return;
@@ -191,9 +194,9 @@ public class EffectsPanel extends JPanel {
             }
         } else if (currentEffect != null) {
             // Phase 2: Draw the impact effect
-            int gifSize = (int) (effectRenderSize * 1.5);
-            int drawX = targetCenterX - (gifSize / 2);
-            int drawY = targetCenterY - (gifSize / 2);
+            final int gifSize = (int) (effectRenderSize * 1.5);
+            final int drawX = targetCenterX - (gifSize / 2);
+            final int drawY = targetCenterY - (gifSize / 2);
             g2.drawImage(currentEffect, drawX, drawY, gifSize, gifSize, this);
         }
     }

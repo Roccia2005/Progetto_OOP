@@ -11,6 +11,9 @@ import java.awt.Font;
 
 public class BotDifficultyPanel extends JPanel {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     public BotDifficultyPanel(final String difficultyName) {
         super(new FlowLayout(FlowLayout.CENTER, 15, 0));
         this.setOpaque(false);

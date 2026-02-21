@@ -39,6 +39,9 @@ public class ViewGUI extends JFrame implements View {
     private static final int SIZE_HEIGHT = 700;
     private static final int SIZE_WIDTH = 1000;
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private final CardLayout cardLayout;
     private final JPanel mainPanel;
     private StartView startView;

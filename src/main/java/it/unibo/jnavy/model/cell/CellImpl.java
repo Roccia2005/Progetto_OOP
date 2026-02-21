@@ -77,7 +77,7 @@ public class CellImpl implements Cell {
     }
 
     @Override
-    public void setScanResult(boolean shipFound) {
+    public void setScanResult(final boolean shipFound) {
         this.scanResult = shipFound;
     }
 

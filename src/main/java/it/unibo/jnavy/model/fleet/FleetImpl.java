@@ -20,13 +20,13 @@ public class FleetImpl implements Fleet {
     }
 
     @Override
-    public void addShip(Ship s) {
-        int allowedMax = Fleet.FLEET_COMPOSITION.getOrDefault(s.getSize(), 0);
+    public void addShip(final Ship s) {
+        final int allowedMax = FLEET_COMPOSITION.getOrDefault(s.getSize(), 0);
         if (allowedMax == 0) {
             throw new IllegalArgumentException("Ship of size " + s.getSize() + " is not allowed.");
         }
 
-        long currentCount = ships.stream()
+        final long currentCount = ships.stream()
                 .filter(ship -> ship.getSize() == s.getSize())
                 .count();
         if (currentCount >= allowedMax) {
@@ -47,14 +47,14 @@ public class FleetImpl implements Fleet {
 
     @Override
     public boolean isTopologyValid() {
-        return Fleet.FLEET_COMPOSITION.entrySet().stream().allMatch(entry -> {
-            long actual = ships.stream().filter(s -> s.getSize() == entry.getKey()).count();
+        return FLEET_COMPOSITION.entrySet().stream().allMatch(entry -> {
+            final long actual = ships.stream().filter(s -> s.getSize() == entry.getKey()).count();
             return actual == entry.getValue();
         });
     }
 
     @Override
-    public void removeShip(Ship ship) {
+    public void removeShip(final Ship ship) {
         this.ships.remove(ship);
     }
 

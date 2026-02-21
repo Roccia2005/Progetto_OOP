@@ -16,6 +16,9 @@ import javax.swing.SwingConstants;
  */
 public class RowLabelsPanel extends JPanel {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     public RowLabelsPanel(final int size) {
         super(new GridLayout(size, 1, 2, 2)); 
         this.setOpaque(false);

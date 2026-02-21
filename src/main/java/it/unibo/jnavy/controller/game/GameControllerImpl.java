@@ -27,7 +27,7 @@ public class GameControllerImpl implements GameController {
     public GameControllerImpl(final Player human, final Player bot) {
         this.human = human;
         this.bot = bot;
-        WeatherManager weather = WeatherManagerImpl.getInstance();
+        final WeatherManager weather = WeatherManagerImpl.getInstance();
         ((WeatherManagerImpl) weather).reset();
 
         this.turnController = new TurnController(human, bot, weather, 0, true);

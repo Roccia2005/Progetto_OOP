@@ -11,11 +11,14 @@ import java.awt.Font;
 
 public class CaptainNamePanel extends JPanel {
 
-    public CaptainNamePanel(String captainName) {
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
+    public CaptainNamePanel(final String captainName) {
         super(new FlowLayout(FlowLayout.CENTER, 15, 0));
         this.setOpaque(false);
 
-        JLabel nameLabel = new JLabel("Captain: " + captainName);
+        final JLabel nameLabel = new JLabel("Captain: " + captainName);
         nameLabel.setForeground(FOREGROUND_COLOR);
         nameLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, 14));
 

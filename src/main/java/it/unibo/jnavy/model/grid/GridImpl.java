@@ -43,14 +43,14 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public void placeShip(Ship ship, Position startPos, CardinalDirection dir) {
+    public void placeShip(final Ship ship, final Position startPos, final CardinalDirection dir) {
         if (!isPlacementValid(ship, startPos, dir)) {
             throw new IllegalArgumentException("Invalid ship placement!");
         }
 
         for (int i = 0; i < ship.getSize(); i++) {
-            int x = startPos.x() + (i * dir.getRowOffset());
-            int y = startPos.y() + (i * dir.getColOffset());
+            final int x = startPos.x() + (i * dir.getRowOffset());
+            final int y = startPos.y() + (i * dir.getColOffset());
 
             cells[x][y].setShip(ship);
         }
@@ -59,10 +59,10 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public boolean isPlacementValid(Ship ship, Position startPos, CardinalDirection dir) {
+    public boolean isPlacementValid(final Ship ship, final Position startPos, final CardinalDirection dir) {
         for (int i = 0; i < ship.getSize(); i++) {
-            int x = startPos.x() + (i * dir.getRowOffset());
-            int y = startPos.y() + (i * dir.getColOffset());
+            final int x = startPos.x() + (i * dir.getRowOffset());
+            final int y = startPos.y() + (i * dir.getColOffset());
 
             if (!isPositionValid(new Position(x, y))) {
                 return false;
@@ -76,16 +76,16 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public ShotResult receiveShot(Position p) {
+    public ShotResult receiveShot(final Position p) {
         if (!isPositionValid(p)) {
             return ShotResult.failure(p, HitType.INVALID);
         }
-        var targetCell = cells[p.x()][p.y()];
+        final var targetCell = cells[p.x()][p.y()];
 
-        if (targetCell.isHit()) return ShotResult.failure(p, HitType.INVALID);
+        if (targetCell.isHit()) { return ShotResult.failure(p, HitType.INVALID); }
 
-        HitType cellResult = targetCell.receiveShot();
-        Ship ship = targetCell.getShip().orElse(null);
+        final HitType cellResult = targetCell.receiveShot();
+        final Ship ship = targetCell.getShip().orElse(null);
 
         if (cellResult == HitType.SUNK) {
             if (ship == null) {
@@ -103,7 +103,7 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public boolean repair(Position p) {
+    public boolean repair(final Position p) {
         return getCell(p).map(c -> {
             if (c.isOccupied() && c.isHit()) {
                     return c.repair();
@@ -140,10 +140,10 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public boolean isTargetValid(Position target) {
-        Cell[][] matrix = this.cells;
-        int x = target.x();
-        int y = target.y();
+    public boolean isTargetValid(final Position target) {
+        final Cell[][] matrix = this.cells;
+        final int x = target.x();
+        final int y = target.y();
         return x >= 0
                 && x < matrix.length
                 && y >= 0
@@ -155,12 +155,12 @@ public class GridImpl implements Grid {
 
 
     @Override
-    public boolean isPositionValid(Position p) {
+    public boolean isPositionValid(final Position p) {
         return p.x() >= 0 && p.x() < SIZE && p.y() >= 0 && p.y() < SIZE;
     }
 
     @Override
-    public void removeShip(Ship ship) {
+    public void removeShip(final Ship ship) {
         Arrays.stream(this.cells)
           .flatMap(Arrays::stream)
           .filter(c -> c.isOccupied() && c.getShip().map(s -> s.equals(ship)).orElse(false))

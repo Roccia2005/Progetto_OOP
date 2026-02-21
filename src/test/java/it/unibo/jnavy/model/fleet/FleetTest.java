@@ -68,15 +68,15 @@ class FleetTest {
             fleet.addShip(new ShipImpl(4));
         }, "Adding a ship to a full fleet (5 ships) must throw IllegalStateException");
     }
-    
+
     @Test
     void testIncompleteFleet() {
         // Add only a partial fleet
         fleet.addShip(new ShipImpl(5));
         fleet.addShip(new ShipImpl(4));
-        
+
         // The topology should be invalid because ships are missing
-        assertFalse(fleet.isTopologyValid(), 
+        assertFalse(fleet.isTopologyValid(),
             "A partial fleet should not be considered valid");
     }
 }

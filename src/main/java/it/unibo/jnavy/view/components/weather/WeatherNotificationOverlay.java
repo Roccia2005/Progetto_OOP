@@ -10,6 +10,9 @@ import java.awt.*;
  */
 public class WeatherNotificationOverlay extends JComponent {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private String title = "";
     private String subtitle = "";
     private final Timer timer;
@@ -37,7 +40,7 @@ public class WeatherNotificationOverlay extends JComponent {
      *
      * @param weatherName the name of the current weather condition to display in the subtitle.
      */
-    public void showWeatherAlert(String weatherName) {
+    public void showWeatherAlert(final String weatherName) {
         this.title = "Attention! Weather changed.";
         this.subtitle = "Current weather: " + weatherName;
 
@@ -52,28 +55,28 @@ public class WeatherNotificationOverlay extends JComponent {
      * @param g the Graphics object used for drawing.
      */
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(final Graphics g) {
         if (title.isEmpty()) return;
 
-        Graphics2D g2 = (Graphics2D) g;
+        final Graphics2D g2 = (Graphics2D) g;
 
         // Enable anti-aliasing for smoother rendering
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        Font titleFont = new Font("SansSerif", Font.BOLD, 28);
-        Font subFont = new Font("SansSerif", Font.PLAIN, 22);
+        final Font titleFont = new Font("SansSerif", Font.BOLD, 28);
+        final Font subFont = new Font("SansSerif", Font.PLAIN, 22);
 
-        FontMetrics fmTitle = g2.getFontMetrics(titleFont);
-        FontMetrics fmSub = g2.getFontMetrics(subFont);
+        final FontMetrics fmTitle = g2.getFontMetrics(titleFont);
+        final FontMetrics fmSub = g2.getFontMetrics(subFont);
 
         // Calculate dimensions of the overlay box
-        int textWidth = Math.max(fmTitle.stringWidth(title), fmSub.stringWidth(subtitle));
-        int boxWidth = textWidth + (PADDING * 2);
-        int boxHeight = 120;
+        final int textWidth = Math.max(fmTitle.stringWidth(title), fmSub.stringWidth(subtitle));
+        final int boxWidth = textWidth + (PADDING * 2);
+        final int boxHeight = 120;
 
-        int boxX = (getWidth() - boxWidth) / 2;
-        int boxY = (getHeight() - boxHeight) / 2;
+        final int boxX = (getWidth() - boxWidth) / 2;
+        final int boxY = (getHeight() - boxHeight) / 2;
 
         // Draw the semi-transparent background
         g2.setColor(new Color(20, 20, 30, 220));
@@ -87,13 +90,13 @@ public class WeatherNotificationOverlay extends JComponent {
         // Draw the title text
         g2.setFont(titleFont);
         g2.setColor(new Color(255, 200, 50));
-        int titleX = boxX + (boxWidth - fmTitle.stringWidth(title)) / 2;
+        final int titleX = boxX + (boxWidth - fmTitle.stringWidth(title)) / 2;
         g2.drawString(title, titleX, boxY + 50);
 
         // Draw the subtitle text
         g2.setFont(subFont);
         g2.setColor(new Color(240, 240, 255));
-        int subX = boxX + (boxWidth - fmSub.stringWidth(subtitle)) / 2;
+        final int subX = boxX + (boxWidth - fmSub.stringWidth(subtitle)) / 2;
         g2.drawString(subtitle, subX, boxY + 90);
     }
 }

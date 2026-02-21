@@ -11,6 +11,9 @@ import java.awt.*;
  */
 public class WeatherWidget extends JPanel {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private final JLabel iconLabel;
 
     private ImageIcon sunIcon;
@@ -43,7 +46,7 @@ public class WeatherWidget extends JPanel {
      * Loads the weather icons from application resources.
      */
     private void loadIcons() {
-        int iconSize = 50;
+        final int iconSize = 50;
         this.sunIcon = ImageLoader.getScaledIcon("/images/sun.png", iconSize, iconSize);
         this.fogIcon = ImageLoader.getScaledIcon("/images/fog.png", iconSize, iconSize);
     }
@@ -56,14 +59,14 @@ public class WeatherWidget extends JPanel {
      * @param g the Graphics object used for drawing.
      */
     @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g.create();
+    protected void paintComponent(final Graphics g) {
+        final Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int strokeWidth = 4;
-        int diameter = Math.min(getWidth(), getHeight()) - (strokeWidth * 2);
-        int x = (getWidth() - diameter) / 2;
-        int y = (getHeight() - diameter) / 2;
+        final int strokeWidth = 4;
+        final int diameter = Math.min(getWidth(), getHeight()) - (strokeWidth * 2);
+        final int x = (getWidth() - diameter) / 2;
+        final int y = (getHeight() - diameter) / 2;
 
         // Draw the semi-transparent background circle
         g2.setColor(this.backgroundColor);
@@ -81,9 +84,9 @@ public class WeatherWidget extends JPanel {
     /**
      * Updates the widget's icon based on the provided weather condition name.
      *
-     * @param condition the the name of the weather condition to display.
+     * @param conditionName the name of the weather condition to display.
      */
-    public void updateWeather(String conditionName) {
+    public void updateWeather(final String conditionName) {
         switch (conditionName) {
             case "SUNNY" -> {
                 this.iconLabel.setIcon(sunIcon);

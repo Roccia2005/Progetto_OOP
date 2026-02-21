@@ -9,7 +9,7 @@ public final class JNavyApp {
     private JNavyApp() {}
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            View view = new ViewGUI();
+            final View view = new ViewGUI();
             view.start();
         });
     }

@@ -17,6 +17,9 @@ import javax.swing.SwingConstants;
 
 public class GameHeaderPanel extends JPanel {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private final JLabel statusLabel;
 
     public GameHeaderPanel(final Runnable onSaveAction) {

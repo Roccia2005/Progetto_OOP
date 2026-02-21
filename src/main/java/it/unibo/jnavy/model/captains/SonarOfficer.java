@@ -23,6 +23,7 @@ public class SonarOfficer extends AbstractCaptain {
         super(COOLDOWN);
     }
 
+    @Override
     public boolean executeEffect(final Grid grid, final Position p) {
         final int effectiveX = Math.max(1, Math.min(p.x(), grid.getSize() - 2));
         final int effectiveY = Math.max(1, Math.min(p.y(), grid.getSize() - 2));

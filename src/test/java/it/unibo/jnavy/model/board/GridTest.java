@@ -20,7 +20,7 @@ import it.unibo.jnavy.model.utilities.ShotResult;
 /**
  * Test class for {@link GridImpl}.
  */
-public class GridTest {
+final class GridTest {
 
     private static final int SHIP_SIZE = 3;
     private Grid grid;

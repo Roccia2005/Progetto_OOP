@@ -16,6 +16,9 @@ public abstract class AbstractCaptain implements Captain {
     private int currentCooldown;
     private boolean usedThisTurn = false;
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     protected AbstractCaptain(final int cooldown) {
         this.cooldown = cooldown;
         this.currentCooldown = 0;

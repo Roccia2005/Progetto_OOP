@@ -39,5 +39,5 @@ public interface WeatherManager extends TurnObserver {
      *
      * @param condition The new weather condition.
      */
-    void setCondition(final WeatherCondition condition);
+    void setCondition(WeatherCondition condition);
 }

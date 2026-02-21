@@ -43,6 +43,9 @@ public class CaptainAbilityButton extends JButton {
     private static final int TEXT_GAP = 5;
     private static final int TIMER_TIME = 1500;
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private final int maxCooldown;
     private double fillPercentage = 0.0;
     private boolean isActive = false;
@@ -64,8 +67,8 @@ public class CaptainAbilityButton extends JButton {
             this.setIcon(captainIcon);
         }
 
-        this.setVerticalTextPosition(SwingConstants.BOTTOM);
-        this.setHorizontalTextPosition(SwingConstants.CENTER);
+        this.setVerticalTextPosition(BOTTOM);
+        this.setHorizontalTextPosition(CENTER);
         this.setIconTextGap(TEXT_GAP);
     }
 
@@ -120,7 +123,7 @@ public class CaptainAbilityButton extends JButton {
         contentPanel.setBackground(new Color(40, 40, 40)); 
         contentPanel.setBorder(new LineBorder(new Color(255, 140, 0), 3)); 
 
-        final JLabel messageLabel = new JLabel(POPUP_MESSAGE, SwingConstants.CENTER);
+        final JLabel messageLabel = new JLabel(POPUP_MESSAGE, CENTER);
         messageLabel.setForeground(FOREGROUND_COLOR);
         messageLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, 18));
         
@@ -129,8 +132,8 @@ public class CaptainAbilityButton extends JButton {
             messageLabel.setIcon(alertIcon);
         }
 
-        messageLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        messageLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+        messageLabel.setVerticalTextPosition(BOTTOM);
+        messageLabel.setHorizontalTextPosition(CENTER);
         messageLabel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
         contentPanel.add(messageLabel, BorderLayout.CENTER);
@@ -147,7 +150,7 @@ public class CaptainAbilityButton extends JButton {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(final Graphics g) {
         final Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 

@@ -27,6 +27,9 @@ import it.unibo.jnavy.model.utilities.Position;
 
 public class GridPanel extends JPanel {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private final int size;
     private final Map<Position, JButton> buttons = new HashMap<>();
 

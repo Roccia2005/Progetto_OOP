@@ -13,6 +13,9 @@ import it.unibo.jnavy.view.components.weather.WeatherWidget;
 
 public class GameDashboardPanel extends JPanel {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private final WeatherWidget weatherWidget;
     private final CaptainAbilityButton captainButton;
     private final BotDifficultyPanel difficultyPanel;

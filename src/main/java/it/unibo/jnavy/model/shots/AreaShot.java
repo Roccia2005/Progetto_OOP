@@ -18,7 +18,7 @@ public class AreaShot implements HitStrategy {
 
     private final boolean ignoreWeather;
 
-    public AreaShot (boolean ignoreWeather) {
+    public AreaShot (final boolean ignoreWeather) {
         this.ignoreWeather = ignoreWeather;
     }
 
@@ -30,7 +30,7 @@ public class AreaShot implements HitStrategy {
             if (WeatherManagerImpl.getInstance().getCurrentWeather() == WeatherCondition.FOG) {
                 final int offsetX = new Random().nextInt(3) - 1;
                 final int offsetY = new Random().nextInt(3) - 1;
-                Position candidate = new Position(target.x() + offsetX, target.y() + offsetY);
+                final Position candidate = new Position(target.x() + offsetX, target.y() + offsetY);
 
                 if (grid.isPositionValid(candidate)) {
                     effectiveTarget = candidate;
