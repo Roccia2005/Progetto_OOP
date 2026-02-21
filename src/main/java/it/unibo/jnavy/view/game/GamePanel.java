@@ -22,7 +22,11 @@ import it.unibo.jnavy.view.utilities.SoundManager;
 import it.unibo.jnavy.view.components.grid.GridPanel;
 import java.util.stream.Collectors;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 /**
  * The core UI container for the active gameplay phase.
