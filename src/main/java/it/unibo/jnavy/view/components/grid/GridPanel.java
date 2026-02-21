@@ -4,6 +4,7 @@ import static it.unibo.jnavy.view.utilities.ViewConstants.BACKGROUND_COLOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.MENUBLUE;
+import static it.unibo.jnavy.view.utilities.ViewConstants.GRID_LABEL_WIDTH;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -43,7 +44,7 @@ public final class GridPanel extends JPanel {
      * @param size the dimension of the grid (e.g., 10 for a 10x10 board).
      * @param title the title displayed above the grid.
      * @param onClick a callback function executed when a cell in the grid is clicked,
-     * receiving the clicked logical {@link Position} as an argument.
+     *      receiving the clicked logical {@link Position} as an argument.
      */
     public GridPanel(final int size, final String title, final Consumer<Position> onClick) {
         super(new BorderLayout(0, 10));
@@ -59,16 +60,16 @@ public final class GridPanel extends JPanel {
         boardContainer.setOpaque(false);
 
         final RowLabelsPanel rowLabels = new RowLabelsPanel(this.size);
-        rowLabels.setPreferredSize(new Dimension(30, 0));
+        rowLabels.setPreferredSize(new Dimension(GRID_LABEL_WIDTH, 0));
         boardContainer.add(rowLabels, BorderLayout.WEST);
 
         boardContainer.add(createGridButtons(onClick), BorderLayout.CENTER);
 
         final JPanel bottomWrapper = new JPanel(new BorderLayout());
         bottomWrapper.setOpaque(false);
-        
+
         final JLabel cornerSpacer = new JLabel(""); 
-        cornerSpacer.setPreferredSize(new Dimension(30, 0));
+        cornerSpacer.setPreferredSize(new Dimension(GRID_LABEL_WIDTH, 0));
         bottomWrapper.add(cornerSpacer, BorderLayout.WEST);
         bottomWrapper.add(new ColumnLabelsPanel(this.size), BorderLayout.CENTER);
 
@@ -83,7 +84,7 @@ public final class GridPanel extends JPanel {
      * appearance based on the provided state-mapping function.
      *
      * @param positionToCondition a function that takes a {@link Position} and 
-     * returns its current {@link CellCondition}.
+     *      returns its current {@link CellCondition}.
      */
     public void refresh(final Function<Position, CellCondition> positionToCondition) {
         buttons.forEach((pos, button) -> {
@@ -125,7 +126,7 @@ public final class GridPanel extends JPanel {
                 if (onClick != null) {
                     cellButton.addActionListener(e -> onClick.accept(pos));
                 }
-                
+
                 cellButton.setMargin(new Insets(0, 0, 0, 0));
                 cellButton.setFocusPainted(false);
                 cellButton.setBorderPainted(false);
@@ -141,6 +142,9 @@ public final class GridPanel extends JPanel {
     /**
      * Returns the {@link JButton} associated with the given position.
      * Useful for the EffectsPanel to know where to draw the animations.
+     *
+     * @param pos the cell's position.
+     * @return the corresponding button, or {@code null} if the position is invalid.
      */
     public JButton getButtonAt(final Position pos) {
         return this.buttons.get(pos);
