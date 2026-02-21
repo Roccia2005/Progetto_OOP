@@ -14,7 +14,10 @@ import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
 import java.awt.RenderingHints;
 
-import static it.unibo.jnavy.view.utilities.ViewConstants.*;
+import static it.unibo.jnavy.view.utilities.ViewConstants.ACCENT_YELLOW;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FOG_BG_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FOG_BORDER_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.SUNNY_BG_COLOR;
 
 /**
  * A circular widget that displays the current weather condition using a
