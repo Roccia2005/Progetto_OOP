@@ -24,15 +24,25 @@ class CaptainTest {
 
     private static final int TEST_COOLDOWN = 2;
 
+    private static final int SHIP_SIZE = 2;
+    private static final int COORD_MINUS_ONE = -1;
+    private static final int COORD_ZERO = 0;
+    private static final int COORD_ONE = 1;
+    private static final int COORD_TWO = 2;
+    private static final int COORD_FOUR = 4;
+    private static final int COORD_FIVE = 5;
+    private static final int COORD_SIX = 6;
+    private static final int OFFSET_ONE = 1;
+
     private Grid grid;
     private Captain captain;
-    private final Position position = new Position(0, 0);
-    private final Position invalidPosition = new Position(-1, -1);
+    private final Position position = new Position(COORD_ZERO, COORD_ZERO);
+    private final Position invalidPosition = new Position(COORD_MINUS_ONE, COORD_MINUS_ONE);
 
     @BeforeEach
     void setUp() {
         this.grid = new GridImpl();
-        this.grid.placeShip(new ShipImpl(2), position, CardinalDirection.DOWN);
+        this.grid.placeShip(new ShipImpl(SHIP_SIZE), position, CardinalDirection.DOWN);
         WeatherManagerImpl.getInstance().reset();
     }
 
@@ -56,7 +66,7 @@ class CaptainTest {
             }
 
             @Override
-            protected boolean executeEffect(final Grid grid, final Position p) {
+            protected boolean executeEffect(final Grid targetGrid, final Position p) {
                 return true;
             }
         };
@@ -87,7 +97,7 @@ class CaptainTest {
         assertFalse(this.captain.useAbility(grid, position));
 
         // The ability should not repair a cell hit with water
-        final Position waterPosition = new Position(5, 5);
+        final Position waterPosition = new Position(COORD_FIVE, COORD_FIVE);
         this.grid.receiveShot(waterPosition);
         assertFalse(this.captain.useAbility(grid, waterPosition));
 
@@ -100,7 +110,7 @@ class CaptainTest {
         this.chargeAbility(Engineer.COOLDOWN);
 
         // The ability should not repair a sunk ship
-        this.grid.receiveShot(new Position(0, 1));
+        this.grid.receiveShot(new Position(COORD_ZERO, COORD_ONE));
         assertFalse(this.captain.useAbility(grid, position));
     }
 
@@ -119,10 +129,10 @@ class CaptainTest {
         assertTrue(this.captain.useAbility(grid, position));
 
         final List<Position> areaShot = List.of(
-            position,
-            new Position(position.x(), position.y() + 1),
-            new Position(position.x() + 1, position.y()),
-            new Position(position.x() + 1, position.y() + 1)
+                position,
+                new Position(position.x(), position.y() + OFFSET_ONE),
+                new Position(position.x() + OFFSET_ONE, position.y()),
+                new Position(position.x() + OFFSET_ONE, position.y() + OFFSET_ONE)
         );
 
         // Verify that every cell in the expected area has been hit
@@ -147,21 +157,21 @@ class CaptainTest {
         assertTrue(this.captain.useAbility(grid, position));
 
         // Verify that the 3x3 area (from 0,0 to 2,2) correctly registered the ship's presence
-        for (int x = 0; x <= 2; x++) {
-            for (int y = 0; y <= 2; y++) {
+        for (int x = COORD_ZERO; x <= COORD_TWO; x++) {
+            for (int y = COORD_ZERO; y <= COORD_TWO; y++) {
                 final Position p = new Position(x, y);
                 assertTrue(grid.getCell(p).get().getScanResult().isPresent());
                 assertTrue(grid.getCell(p).get().getScanResult().get());
             }
         }
 
-        this.chargeAbility(SonarOfficer.COOLDOWN + 1);
+        this.chargeAbility(SonarOfficer.COOLDOWN + OFFSET_ONE);
         // Verify that the scanned 3x3 area (from 4,4 to 6,6) correctly registered no ships
-        final Position emptyPosition = new Position(5, 5);
+        final Position emptyPosition = new Position(COORD_FIVE, COORD_FIVE);
         assertTrue(this.captain.useAbility(grid, emptyPosition));
 
-        for (int x = 4; x <= 6; x++) {
-            for (int y = 4; y <= 6; y++) {
+        for (int x = COORD_FOUR; x <= COORD_SIX; x++) {
+            for (int y = COORD_FOUR; y <= COORD_SIX; y++) {
                 final Position p = new Position(x, y);
                 assertTrue(grid.getCell(p).get().getScanResult().isPresent());
                 assertFalse(grid.getCell(p).get().getScanResult().get());
@@ -182,13 +192,13 @@ class CaptainTest {
 
     /**
      * Helper method to advance turns until the captain is fully charged.
-     * Note that the cooldown counter does 
+     * Note that the cooldown counter does
      * not increment during the same turn in which the ability is activated.
      *
      * @param cooldown The number of turns to wait.
      */
     private void chargeAbility(final int cooldown) {
-        for (int i = 0; i < cooldown + 1; i++) {
+        for (int i = 0; i < cooldown + OFFSET_ONE; i++) {
             this.captain.processTurnEnd();
         }
     }

@@ -8,7 +8,9 @@ import it.unibo.jnavy.model.grid.GridImpl;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.ShotResult;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Test class for {@link WeatherManagerImpl}.
@@ -16,6 +18,17 @@ import static org.junit.jupiter.api.Assertions.*;
 final class WeatherManagerTest {
 
     private static final int DURATION = 6;
+    private static final int TRANSITION_CYCLES = 100;
+    private static final int DEVIATION_ITERATIONS = 20;
+
+    private static final int MAX_DEVIATION = 1;
+
+    private static final int COORD_ZERO = 0;
+    private static final int COORD_ONE = 1;
+    private static final int COORD_TWO = 2;
+    private static final int COORD_THREE = 3;
+    private static final int COORD_FIVE = 5;
+
     private WeatherManager weatherManager;
 
     /**
@@ -27,7 +40,6 @@ final class WeatherManagerTest {
     @BeforeEach
     void setUp() {
         this.weatherManager = WeatherManagerImpl.getInstance();
-        // Manual reset is necessary because the instance is static (Singleton)
         ((WeatherManagerImpl) this.weatherManager).reset();
     }
 
@@ -45,7 +57,6 @@ final class WeatherManagerTest {
      */
     @Test
     void testNoChangeBeforeDuration() {
-        // Verify initial state
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
         for (int i = 0; i < DURATION - 1; i++) {
             this.weatherManager.processTurnEnd();
@@ -61,7 +72,7 @@ final class WeatherManagerTest {
     void testWeatherTransitions() {
         boolean sawSunny = false;
         boolean sawFog = false;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < TRANSITION_CYCLES; i++) {
             for (int t = 0; t < DURATION; t++) {
                 this.weatherManager.processTurnEnd();
             }
@@ -89,7 +100,7 @@ final class WeatherManagerTest {
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
 
         final Grid grid = new GridImpl();
-        final Position target = new Position(0, 0);
+        final Position target = new Position(COORD_ZERO, COORD_ZERO);
 
         final ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
 
@@ -107,14 +118,14 @@ final class WeatherManagerTest {
     void testFogDeviation() {
         this.weatherManager.setCondition(WeatherCondition.FOG);
         final Grid grid = new GridImpl();
-        final Position target = new Position(5, 5);
+        final Position target = new Position(COORD_FIVE, COORD_FIVE);
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < DEVIATION_ITERATIONS; i++) {
             final ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
             final Position actualPos = shotResult.position();
             final int diffX = Math.abs(target.x() - actualPos.x());
             final int diffY = Math.abs(target.y() - actualPos.y());
-            assertTrue(diffX <= 1 && diffY <= 1);
+            assertTrue(diffX <= MAX_DEVIATION && diffY <= MAX_DEVIATION);
         }
     }
 
@@ -128,14 +139,13 @@ final class WeatherManagerTest {
     void testFogBoundarySafety() {
         this.weatherManager.setCondition(WeatherCondition.FOG);
         final Grid grid = new GridImpl();
-        final Position corner = new Position(0, 0);
+        final Position corner = new Position(COORD_ZERO, COORD_ZERO);
         final ShotResult shotResult = this.weatherManager.applyWeatherEffects(corner, grid);
         final Position hitPosition = shotResult.position();
-        assertNotNull(hitPosition);
 
-        // Check that the shot is within the valid neighborhood (0,0), (0,1), (1,0), or (1,1)
-        assertTrue(hitPosition.x() >= 0 && hitPosition.x() <= 1);
-        assertTrue(hitPosition.y() >= 0 && hitPosition.y() <= 1);
+        assertNotNull(hitPosition);
+        assertTrue(hitPosition.x() >= COORD_ZERO && hitPosition.x() <= COORD_ONE);
+        assertTrue(hitPosition.y() >= COORD_ZERO && hitPosition.y() <= COORD_ONE);
     }
 
     /**
@@ -146,20 +156,18 @@ final class WeatherManagerTest {
     void testFogAvoidHitCells() {
         this.weatherManager.setCondition(WeatherCondition.FOG);
         final Grid grid = new GridImpl();
-        final Position target = new Position(2, 2);
+        final Position target = new Position(COORD_TWO, COORD_TWO);
 
-        for (int x = 1; x <= 3; x++) {
-            for (int y = 1; y <= 3; y++) {
-
-                if (x == 1 && y == 1) {
+        for (int x = COORD_ONE; x <= COORD_THREE; x++) {
+            for (int y = COORD_ONE; y <= COORD_THREE; y++) {
+                if (x == COORD_ONE && y == COORD_ONE) {
                     continue;
                 }
-
                 grid.receiveShot(new Position(x, y));
             }
         }
         final ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
-        assertEquals(new Position(1, 1), shotResult.position());
+        assertEquals(new Position(COORD_ONE, COORD_ONE), shotResult.position());
     }
 
     @Test

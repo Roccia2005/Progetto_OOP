@@ -5,104 +5,107 @@ import org.junit.jupiter.api.Test;
 import it.unibo.jnavy.model.ship.ShipImpl;
 import it.unibo.jnavy.model.ship.Ship;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /**
  * Test class for {@link ShipImpl}.
- * It verifies initialization constraints (valid sizes) and damage/sinking mechanics.
+ * It verifies initialization constraints and damage/sinking mechanics.
  */
 class ShipTest {
 
+    private static final int MIN_VALID_SIZE = 2;
+    private static final int MID_VALID_SIZE_3 = 3;
+    private static final int MID_VALID_SIZE_4 = 4;
+    private static final int MAX_VALID_SIZE = 5;
+    private static final int INVALID_TOO_SMALL_SIZE = 1;
+    private static final int INVALID_TOO_LARGE_SIZE = 6;
+    private static final int HEALTH_ZERO = 0;
+    private static final int HEALTH_ONE = 1;
+    private static final int HEALTH_TWO = 2;
+    private static final String CREATE_SHIP = "Creating a ship of size ";
+
     @Test
     void testValidShipCreation() {
-        // Verifies that ships can be created with valid sizes (between 2 and 5)
-        new ShipImpl(2);
-        new ShipImpl(3);
-        new ShipImpl(5);
+        assertDoesNotThrow(() -> new ShipImpl(MIN_VALID_SIZE));
+        assertDoesNotThrow(() -> new ShipImpl(MID_VALID_SIZE_3));
+        assertDoesNotThrow(() -> new ShipImpl(MAX_VALID_SIZE));
     }
 
     @Test
     void testInvalidShipCreation() {
-        // Verifies that creating a ship smaller than the minimum size (2) throws an exception
-        assertThrows(IllegalArgumentException.class, () -> new ShipImpl(1),
-            "Creating a ship of size 1 should throw an IllegalArgumentException");
-        // Verifies that creating a ship larger than the maximum size (5) throws an exception
-        assertThrows(IllegalArgumentException.class, () -> new ShipImpl(6),
-            "Creating a ship of size 6 should throw an IllegalArgumentException");
+        assertThrows(IllegalArgumentException.class, () -> new ShipImpl(INVALID_TOO_SMALL_SIZE),
+                CREATE_SHIP + INVALID_TOO_SMALL_SIZE + " should throw an IllegalArgumentException");
+
+        assertThrows(IllegalArgumentException.class, () -> new ShipImpl(INVALID_TOO_LARGE_SIZE),
+                CREATE_SHIP + INVALID_TOO_LARGE_SIZE + " should throw an IllegalArgumentException");
     }
 
     @Test
     void testDamageAndSinking() {
-        // Initialize a ship of size 2
-        final Ship ship = new ShipImpl(2);
+        final Ship ship = new ShipImpl(MIN_VALID_SIZE);
 
-        // Check initial state
-        assertEquals(2, ship.getHealth(), "Initial health should match ship size");
+        assertEquals(MIN_VALID_SIZE, ship.getHealth(), "Initial health should match ship size");
         assertFalse(ship.isSunk(), "Ship should not be sunk initially");
 
-        // 1. First Hit
         boolean sunk = ship.hit();
-        assertFalse(sunk, "Ship should not sink after receiving only one hit (remaining health: 1)");
-        assertEquals(1, ship.getHealth(), "Health should decrease by 1");
+        assertFalse(sunk, "Ship should not sink after receiving only one hit");
+        assertEquals(HEALTH_ONE, ship.getHealth(), "Health should decrease by 1");
 
-        // 2. Second Hit (Fatal)
         sunk = ship.hit();
         assertTrue(sunk, "Ship should sink when health reaches 0");
-        assertEquals(0, ship.getHealth(), "Health should be 0");
+        assertEquals(HEALTH_ZERO, ship.getHealth(), "Health should be 0");
         assertTrue(ship.isSunk(), "Ship status should be sunk");
 
-        // 3. Hit on an already sunk ship
-        // We now expect an IllegalStateException because the ship is already sunk
         assertThrows(IllegalStateException.class, ship::hit,
                 "Hitting a ship that is already sunk should throw an IllegalStateException");
     }
 
     @Test
     void testConstructorValidation() {
-        // Valid sizes (2 to 5)
-        assertDoesNotThrow(() -> new ShipImpl(2), "Creating a ship of size 2 should be valid");
-        assertDoesNotThrow(() -> new ShipImpl(5), "Creating a ship of size 5 should be valid");
 
-        // Invalid sizes (too small)
-        assertThrows(IllegalArgumentException.class, () -> new ShipImpl(1),
-                "Creating a ship smaller than MIN_SIZE (2) should throw IllegalArgumentException");
+        assertDoesNotThrow(() -> new ShipImpl(MIN_VALID_SIZE),
+                CREATE_SHIP + MIN_VALID_SIZE + " should be valid");
+        assertDoesNotThrow(() -> new ShipImpl(MAX_VALID_SIZE),
+                CREATE_SHIP + MAX_VALID_SIZE + " should be valid");
 
-        // Invalid sizes (too large)
-        assertThrows(IllegalArgumentException.class, () -> new ShipImpl(6),
-                "Creating a ship larger than MAX_SIZE (5) should throw IllegalArgumentException");
+        assertThrows(IllegalArgumentException.class, () -> new ShipImpl(INVALID_TOO_SMALL_SIZE),
+                "Creating a ship smaller than MIN_SIZE should throw IllegalArgumentException");
+
+        assertThrows(IllegalArgumentException.class, () -> new ShipImpl(INVALID_TOO_LARGE_SIZE),
+                "Creating a ship larger than MAX_SIZE should throw IllegalArgumentException");
     }
 
     @Test
     void testGetSize() {
-        final Ship ship = new ShipImpl(4);
-        assertEquals(4, ship.getSize(), "Ship size should match the one provided in constructor");
+        final Ship ship = new ShipImpl(MID_VALID_SIZE_4);
+        assertEquals(MID_VALID_SIZE_4, ship.getSize(), "Ship size should match the one provided in constructor");
     }
 
     @Test
     void testRepairLogic() {
-        final Ship ship = new ShipImpl(3);
+        final Ship ship = new ShipImpl(MID_VALID_SIZE_3);
 
-        // 1. Cannot repair a fully healthy ship
         assertFalse(ship.repair(), "Should not be able to repair a ship at full health");
-        assertEquals(3, ship.getHealth(), "Health should remain at max");
+        assertEquals(MID_VALID_SIZE_3, ship.getHealth(), "Health should remain at max");
 
-        // 2. Successful repair after a hit
         ship.hit();
-        assertEquals(2, ship.getHealth(), "Health should drop to 2 after hit");
+        assertEquals(HEALTH_TWO, ship.getHealth(), "Health should drop after hit");
 
         assertTrue(ship.repair(), "Should be able to repair a damaged ship");
-        assertEquals(3, ship.getHealth(), "Health should be restored to max (3)");
+        assertEquals(MID_VALID_SIZE_3, ship.getHealth(), "Health should be restored to max");
 
-        // 3. Cannot repair beyond max health
         assertFalse(ship.repair(), "Should not repair beyond maximum size");
 
-        // 4. Cannot repair a sunk ship
         ship.hit();
         ship.hit();
-        ship.hit(); // Health is now 0, sunk
+        ship.hit();
 
         assertTrue(ship.isSunk(), "Ship should be sunk");
         assertFalse(ship.repair(), "Should not be able to repair a completely sunk ship");
-        assertEquals(0, ship.getHealth(), "Health should remain at 0");
+        assertEquals(HEALTH_ZERO, ship.getHealth(), "Health should remain at 0");
     }
 }
