@@ -27,6 +27,20 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 class BotTest {
 
+    private static final int COORD_ZERO = 0;
+    private static final int COORD_ONE = 1;
+    private static final int COORD_TWO = 2;
+    private static final int COORD_THREE = 3;
+    private static final int COORD_FOUR = 4;
+    private static final int COORD_FIVE = 5;
+    private static final int COORD_SIX = 6;
+    private static final int COORD_SEVEN = 7;
+
+    private static final int SHIP_SIZE = 3;
+    private static final int MAX_ITERATIONS = 100;
+    private static final int MIN_HITS = 50;
+    private static final int ADJACENT_DISTANCE = 1;
+
     private Grid grid;
 
     @BeforeEach
@@ -70,7 +84,7 @@ class BotTest {
     void testProBotSeeking() {
         final BotStrategy bot = new ProBot();
 
-        final Position firstHit = new Position(5, 5);
+        final Position firstHit = new Position(COORD_FIVE, COORD_FIVE);
         this.grid.receiveShot(firstHit);
         bot.lastShotFeedback(firstHit, HitType.HIT);
 
@@ -86,16 +100,16 @@ class BotTest {
     void testProBotDestroying() {
         final BotStrategy bot = new ProBot();
 
-        final Position firstHit = new Position(5, 5);
+        final Position firstHit = new Position(COORD_FIVE, COORD_FIVE);
         this.grid.receiveShot(firstHit);
         bot.lastShotFeedback(firstHit, HitType.HIT);
 
-        final Position secondHit = new Position(5, 6);
+        final Position secondHit = new Position(COORD_FIVE, COORD_SIX);
         this.grid.receiveShot(secondHit);
         bot.lastShotFeedback(secondHit, HitType.HIT);
 
         final Position thirdHit = bot.selectTarget(this.grid);
-        assertEquals(new Position(5, 7), thirdHit);
+        assertEquals(new Position(COORD_FIVE, COORD_SEVEN), thirdHit);
     }
 
     /**
@@ -106,8 +120,8 @@ class BotTest {
     void testProBotReturnToHuntingAfterSunk() {
         final BotStrategy bot = new ProBot();
 
-        bot.lastShotFeedback(new Position(3, 3), HitType.HIT);
-        bot.lastShotFeedback(new Position(3, 4), HitType.SUNK);
+        bot.lastShotFeedback(new Position(COORD_THREE, COORD_THREE), HitType.HIT);
+        bot.lastShotFeedback(new Position(COORD_THREE, COORD_FOUR), HitType.SUNK);
 
         final Position randomTarget = bot.selectTarget(this.grid);
         assertTrue(this.grid.isPositionValid(randomTarget)); // da capire come valutare lo sparo random
@@ -121,20 +135,20 @@ class BotTest {
     void testProBotReverseDirection() {
         final BotStrategy bot = new ProBot();
 
-        final Position firstHit = new Position(5, 5);
+        final Position firstHit = new Position(COORD_FIVE, COORD_FIVE);
         this.grid.receiveShot(firstHit);
         bot.lastShotFeedback(firstHit, HitType.HIT);
 
-        final Position secondHit = new Position(5, 6);
+        final Position secondHit = new Position(COORD_FIVE, COORD_SIX);
         this.grid.receiveShot(secondHit);
         bot.lastShotFeedback(secondHit, HitType.HIT);
 
-        final Position firstMiss = new Position(5, 7);
+        final Position firstMiss = new Position(COORD_FIVE, COORD_SEVEN);
         this.grid.receiveShot(firstMiss);
         bot.lastShotFeedback(firstMiss, HitType.MISS);
 
         final Position reverseTarget = bot.selectTarget(this.grid);
-        assertEquals(new Position(5, 4), reverseTarget);
+        assertEquals(new Position(COORD_FIVE, COORD_FOUR), reverseTarget);
     }
 
     /**
@@ -144,25 +158,24 @@ class BotTest {
      */
     @Test
     void testSniperBotCheatingLogic() {
-        final Ship ship = new ShipImpl(3);
-        final Position p = new Position(0, 0);
+        final Ship ship = new ShipImpl(SHIP_SIZE);
+        final Position p = new Position(COORD_ZERO, COORD_ZERO);
         this.grid.placeShip(ship, p, CardinalDirection.DOWN);
         final List<Position> ships = Arrays.asList(
-            new Position(0, 0),
-            new Position(1, 0),
-            new Position(2, 0)
+                new Position(COORD_ZERO, COORD_ZERO),
+                new Position(COORD_ONE, COORD_ZERO),
+                new Position(COORD_TWO, COORD_ZERO)
         );
 
         int hits = 0;
-        final int max = 100;
-        for (int i = 0; i < max; i++) {
+        for (int i = 0; i < MAX_ITERATIONS; i++) {
             final BotStrategy bot = new SniperBot(ships);
             final Position target = bot.selectTarget(this.grid);
             if (ships.contains(target)) {
                 hits++;
             }
         }
-        assertTrue(hits > 50);
+        assertTrue(hits > MIN_HITS);
     }
 
     /**
@@ -175,6 +188,6 @@ class BotTest {
     private boolean isNear(final Position first, final Position second) {
         final int distanceX = Math.abs(first.x() - second.x());
         final int distanceY = Math.abs(first.y() - second.y());
-        return (distanceX + distanceY) == 1;
+        return (distanceX + distanceY) == ADJACENT_DISTANCE;
     }
 }

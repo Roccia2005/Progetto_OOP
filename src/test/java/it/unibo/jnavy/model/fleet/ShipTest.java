@@ -5,7 +5,11 @@ import org.junit.jupiter.api.Test;
 import it.unibo.jnavy.model.ship.ShipImpl;
 import it.unibo.jnavy.model.ship.Ship;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /**
  * Test class for {@link ShipImpl}.
@@ -22,6 +26,7 @@ class ShipTest {
     private static final int HEALTH_ZERO = 0;
     private static final int HEALTH_ONE = 1;
     private static final int HEALTH_TWO = 2;
+    private static final String CREATE_SHIP = "Creating a ship of size ";
 
     @Test
     void testValidShipCreation() {
@@ -33,10 +38,10 @@ class ShipTest {
     @Test
     void testInvalidShipCreation() {
         assertThrows(IllegalArgumentException.class, () -> new ShipImpl(INVALID_TOO_SMALL_SIZE),
-                "Creating a ship of size " + INVALID_TOO_SMALL_SIZE + " should throw an IllegalArgumentException");
+                CREATE_SHIP + INVALID_TOO_SMALL_SIZE + " should throw an IllegalArgumentException");
 
         assertThrows(IllegalArgumentException.class, () -> new ShipImpl(INVALID_TOO_LARGE_SIZE),
-                "Creating a ship of size " + INVALID_TOO_LARGE_SIZE + " should throw an IllegalArgumentException");
+                CREATE_SHIP + INVALID_TOO_LARGE_SIZE + " should throw an IllegalArgumentException");
     }
 
     @Test
@@ -63,9 +68,9 @@ class ShipTest {
     void testConstructorValidation() {
 
         assertDoesNotThrow(() -> new ShipImpl(MIN_VALID_SIZE),
-                "Creating a ship of size " + MIN_VALID_SIZE + " should be valid");
+                CREATE_SHIP + MIN_VALID_SIZE + " should be valid");
         assertDoesNotThrow(() -> new ShipImpl(MAX_VALID_SIZE),
-                "Creating a ship of size " + MAX_VALID_SIZE + " should be valid");
+                CREATE_SHIP + MAX_VALID_SIZE + " should be valid");
 
         assertThrows(IllegalArgumentException.class, () -> new ShipImpl(INVALID_TOO_SMALL_SIZE),
                 "Creating a ship smaller than MIN_SIZE should throw IllegalArgumentException");
