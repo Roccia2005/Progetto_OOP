@@ -166,7 +166,7 @@ public class EffectsPanel extends JPanel {
     }
 
     /**
-     * Overridden methos to handle custom painting for the component.
+     * Overridden method to handle custom painting for the component.
      * It draws either the moving bullet or the impact effect.
      *
      * @param g The Graphics context to paint on.
