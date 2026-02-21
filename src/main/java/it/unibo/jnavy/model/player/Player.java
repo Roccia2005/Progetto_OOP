@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.player;
 
+import java.io.Serial;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,12 @@ import it.unibo.jnavy.model.utilities.HitType;
  * and provides a mechanism to generate offensive moves (shots).
  */
 public interface Player extends TurnObserver {
+
+    /**
+     * Serial version ID for backward compatibility in serialization.
+     */
+    @Serial
+    long serialVersionUID = 1L;
 
     /**
      * Retrieves the game grid associated with this player.

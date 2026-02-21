@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.cell;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Optional;
 
@@ -12,6 +13,12 @@ import it.unibo.jnavy.model.utilities.Position;
  * A cell can be empty (water) or occupied by a ship.
  */
 public interface Cell extends Serializable {
+
+    /**
+     * Serial version ID for backward compatibility in serialization.
+     */
+    @Serial
+    long serialVersionUID = 1L;
 
     /**
      * Handles a shot fired at this cell.

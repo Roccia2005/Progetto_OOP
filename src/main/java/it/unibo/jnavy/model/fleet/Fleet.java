@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.fleet;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,12 @@ import it.unibo.jnavy.model.ship.Ship;
  * It provides methods to check the overall status of the players' fleet.
  */
 public interface Fleet extends Serializable {
+
+    /**
+     * Serial version ID for backward compatibility in serialization.
+     */
+    @Serial
+    long serialVersionUID = 1L;
 
     /**
      * The standard fleet composition mapping ship sizes to their allowed counts.

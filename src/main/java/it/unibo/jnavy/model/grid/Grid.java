@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.grid;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,12 @@ import it.unibo.jnavy.model.utilities.ShotResult;
  * Manages the placement of ships and the processing of shots.
  */
 public interface Grid extends Serializable {
+
+    /**
+     * Serial version ID for backward compatibility in serialization.
+     */
+    @Serial
+    long serialVersionUID = 1L;
 
     /**
      * Places a ship on the grid at the specified position and direction.

@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.ship;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -7,6 +8,12 @@ import java.io.Serializable;
  * It defines the basic behavior of a ship, such as taking damage and checking its status.
  */
 public interface Ship extends Serializable {
+
+    /**
+     * Serial version ID for backward compatibility in serialization.
+     */
+    @Serial
+    long serialVersionUID = 1L;
 
     /**
      * Registers a hit on the ship, decreasing its health.
