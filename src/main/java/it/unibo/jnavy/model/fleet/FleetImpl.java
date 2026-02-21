@@ -15,6 +15,9 @@ public final class FleetImpl implements Fleet {
 
     private final List<Ship> ships;
 
+    /**
+     * Constructs a new FleetImpl with an empty list of ships.
+     */
     public FleetImpl() {
         this.ships = new ArrayList<>();
     }
