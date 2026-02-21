@@ -27,6 +27,9 @@ public final class GridImpl implements Grid {
     private final Cell[][] cells;
     private final Fleet fleet;
 
+    /**
+     * Constructs a new Grid with a 10x10 grid.
+     */
     public GridImpl() {
         this.cells = new Cell[SIZE][SIZE];
         this.fleet = new FleetImpl();
