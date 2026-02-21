@@ -27,6 +27,11 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+/**
+ * The core UI container for the active gameplay phase.
+ * It integrates the player and bot grids, the dashboard, the header, 
+ * and handles the visual animations and sound effects during the battle.
+ */
 public class GamePanel extends JPanel {
 
     private static final String HUMAN_FLEET = "My Fleet";
@@ -60,6 +65,13 @@ public class GamePanel extends JPanel {
     private final GameOverPanel gameOverPanel;
     private String lastWeatherCondition;
 
+    /**
+     * Constructs a new {@code GamePanel}.
+     *
+     * @param controller the active {@link GameController} governing the game logic.
+     * @param onMenu a callback function executed when the player navigates back 
+     * to the main menu from the game over screen.
+     */
     public GamePanel(final GameController controller, final Runnable onMenu) {
         this.controller = controller;
         this.lastWeatherCondition = controller.getWeatherConditionName();
@@ -173,6 +185,12 @@ public class GamePanel extends JPanel {
         botTimer.start();
     }
 
+    /**
+     * Halts the game interactions, stops ambient sounds, plays the outcome audio, 
+     * and displays the final result overlay.
+     *
+     * @param isVictory {@code true} if the player won, {@code false} if the bot won.
+     */
     public void showEndGameScreen(final boolean isVictory) {
         if (this.ambientSound != null) {
             this.ambientSound.stop();

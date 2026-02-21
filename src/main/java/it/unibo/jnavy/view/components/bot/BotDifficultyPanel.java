@@ -9,11 +9,21 @@ import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
+/**
+ * A UI component that displays the selected difficulty level of the opponent bot.
+ * This panel contains a formatted label indicating the current difficulty to the player.
+ */
 public class BotDifficultyPanel extends JPanel {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a new {@code BotDifficultyPanel} with the specified difficulty name.
+     *
+     * @param difficultyName the string representing the bot's
+     * difficulty level to be displayed.
+     */
     public BotDifficultyPanel(final String difficultyName) {
         super(new FlowLayout(FlowLayout.CENTER, 15, 0));
         this.setOpaque(false);

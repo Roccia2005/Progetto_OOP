@@ -25,6 +25,11 @@ import javax.swing.border.LineBorder;
 
 import it.unibo.jnavy.view.utilities.ImageLoader;
 
+/** 
+ * A custom interactive button representing the captain's special ability. 
+ * It visually displays the cooldown progress through a dynamic background fill
+ * and handles the activation state, providing visual feedback to the player.
+ */
 public class CaptainAbilityButton extends JButton {
 
     private static final Color BUTTON_ACTIVE = Color.GREEN;
@@ -49,6 +54,11 @@ public class CaptainAbilityButton extends JButton {
     private double fillPercentage = 0.0;
     private boolean isActive = false;
 
+    /**
+     * Constructs a new {@code CaptainAbilityButton}.
+     * 
+     * @param maxCooldown the maximum number of turns required to fully recharge the ability.
+     */
     public CaptainAbilityButton(final int maxCooldown) {
         super(BUTTON_TEXT);
         this.maxCooldown = maxCooldown;
@@ -71,6 +81,13 @@ public class CaptainAbilityButton extends JButton {
         this.setIconTextGap(TEXT_GAP);
     }
 
+    /**
+     * Updates the button's visual state based on the current cooldown.
+     * The method calculates the fill percentage and updates the text to display either
+     * the remaining turns or the "READY" status.
+     *
+     * @param currentCooldown the current cooldown value.
+     */
     public void updateState(final int currentCooldown) {
         if (maxCooldown > 0) {
             this.fillPercentage = (double) currentCooldown / this.maxCooldown;
@@ -90,6 +107,10 @@ public class CaptainAbilityButton extends JButton {
         repaint();
     }
 
+    /**
+     * Toggles the active state of the ability.
+     * If activated, it triggers a temporary visual feedback popup to notify the user.
+     */
     public void select() {
         this.isActive = !this.isActive;
         if (this.isActive) {
@@ -98,6 +119,10 @@ public class CaptainAbilityButton extends JButton {
         repaint();
     }
 
+    /**
+     * Resets the button's state to inactive.
+     * Typically used after an ability has been successfully deployed on the grid or canceled.
+     */
     public void reset() {
         if (this.isActive) {
             this.isActive = false;
@@ -105,6 +130,11 @@ public class CaptainAbilityButton extends JButton {
         }
     }
 
+    /**
+     * Checks if the captain's ability is currently selected and ready to be deployed.
+     *
+     * @return {@code true} if the ability is active, {@code false} otherwise.
+     */
     public boolean isActive() {
         return this.isActive;
     }
@@ -148,6 +178,12 @@ public class CaptainAbilityButton extends JButton {
         popup.setVisible(true);
     }
 
+    /**
+     * Overrides the default painting behavior to draw a custom dynamic background fill
+     * based on the current cooldown percentage.
+     *
+     * @param g the Graphics context used for painting.
+     */
     @Override
     protected void paintComponent(final Graphics g) {
         final Graphics2D g2d = (Graphics2D) g;

@@ -25,6 +25,10 @@ import javax.swing.SwingConstants;
 import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.utilities.Position;
 
+/**
+ * A UI component that visually represents a player's game board.
+ * It aggregates the main grid, coordinate labels, and title into a single panel.
+ */
 public class GridPanel extends JPanel {
 
     @java.io.Serial
@@ -33,6 +37,14 @@ public class GridPanel extends JPanel {
     private final int size;
     private final Map<Position, JButton> buttons = new HashMap<>();
 
+    /**
+     * Constructs a new {@code GridPanel}.
+     *
+     * @param size the dimension of the grid (e.g., 10 for a 10x10 board).
+     * @param title the title displayed above the grid.
+     * @param onClick a callback function executed when a cell in the grid is clicked,
+     * receiving the clicked logical {@link Position} as an argument.
+     */
     public GridPanel(final int size, final String title, final Consumer<Position> onClick) {
         super(new BorderLayout(0, 10));
         this.size = size;
@@ -65,6 +77,14 @@ public class GridPanel extends JPanel {
         this.add(boardContainer, BorderLayout.CENTER);
     }
 
+    /**
+     * Refreshes the visual state of the entire grid.
+     * Iterates through all positions and updates the corresponding button's 
+     * appearance based on the provided state-mapping function.
+     *
+     * @param positionToCondition a function that takes a {@link Position} and 
+     * returns its current {@link CellCondition}.
+     */
     public void refresh(final Function<Position, CellCondition> positionToCondition) {
         buttons.forEach((pos, button) -> {
             final CellCondition state = positionToCondition.apply(pos);

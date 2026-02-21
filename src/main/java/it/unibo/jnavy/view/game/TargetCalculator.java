@@ -7,11 +7,22 @@ import it.unibo.jnavy.model.utilities.Position;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility class designed to calculate the target positions for visual animations.
+ */
 public final class TargetCalculator {
 
     private TargetCalculator() {
+        // Utility classes should not be instantiated.
     }
 
+    /**
+     * Scans the opponent's grid and retrieves all positions that have already been revealed.
+     * This includes cells where water was hit, a ship was hit, or a ship was completely sunk.
+     *
+     * @param controller the active {@link GameController} used to query the board state.
+     * @return a {@link List} of all {@link Position}s currently revealed on the bot's grid.
+     */
     public static List<Position> getAllRevealedPositions(final GameController controller) {
         final List<Position> hits = new ArrayList<>();
         final int size = controller.getGridSize();
@@ -27,6 +38,18 @@ public final class TargetCalculator {
         return hits;
     }
 
+    /**
+     * Determines the exact coordinates that should be targeted by the shot animation.
+     * It handles the logic for standard single-cell shots as well as area-of-effect 
+     * abilities, calculating the best visual anchor point.
+     *
+     * @param p the primary logical {@link Position} clicked by the player.
+     * @param newHits a list of positions that were newly affected by this specific turn.
+     * @param isAbility {@code true} if the current attack was triggered by a captain's ability.
+     * @param captainName the name of the player's captain, used to identify specific attack patterns.
+     * @param gridSize the dimension of the board, used to prevent animations from exceeding the boundaries.
+     * @return a {@link List} of {@link Position}s representing the tiles to animate.
+     */
     public static List<Position> determineAnimationTargets(final Position p, final List<Position> newHits, final boolean isAbility, final String captainName, final int gridSize) {
         final boolean isGunner = captainName.toLowerCase().contains("gunner");
         if (!isAbility || !isGunner) {

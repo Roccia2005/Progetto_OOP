@@ -14,11 +14,26 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+/**
+ * Utility class responsible for displaying temporary, non-blocking popup messages.
+ * These notifications appear over a designated parent component and automatically
+ * close after a brief duration, making them ideal for quick user feedback.
+ */
 public final class ToastNotification {
 
     private ToastNotification() {
+        // Utility classes should not be instantiated.
     }
 
+    /**
+     * Creates and displays a temporary toast notification centered over the given parent component.
+     * The notification is displayed asynchronously and automatically disposes itself after 1.5 seconds.
+     *
+     * @param parent  the {@link Component} over which the notification should be centered.
+     * If {@code null} or not currently showing, the positioning may default to screen coordinates.
+     * @param message passed string representing the text to be displayed inside the popup.
+     * @param color the background {@link Color} of the notification box.
+     */
     public static void show(final Component parent, final String message, final Color color) {
         final JWindow toast = new JWindow(SwingUtilities.getWindowAncestor(parent));
 

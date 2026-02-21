@@ -9,11 +9,21 @@ import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
+/**
+ * A UI component that displays the name of the player's selected captain.
+ * This panel contains a formatted label indicating the current captain to the player.
+ */
 public class CaptainNamePanel extends JPanel {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a new {@code CaptainNamePanel} with the specified captain name.
+     *
+     * @param captainName the string representing the name of 
+     * the selected captain to be displayed.
+     */
     public CaptainNamePanel(final String captainName) {
         super(new FlowLayout(FlowLayout.CENTER, 15, 0));
         this.setOpaque(false);

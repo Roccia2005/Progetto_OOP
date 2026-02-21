@@ -12,13 +12,20 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 /**
- * Component that displays the column coordinates (1, 2, 3...) for the grid.
+ * A UI component that displays the column coordinates
+ * above the game grids. It automatically generates labels based on the grid size.
  */
 public class ColumnLabelsPanel extends JPanel {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a new {@code ColumnLabelsPanel} with the specified number of columns.
+     *
+     * @param size the total number of columns in the grid, which 
+     * determines the range of numerical labels generated.
+     */
     public ColumnLabelsPanel(final int size) {
         super(new GridLayout(1, size, 2, 2));
         this.setOpaque(false);

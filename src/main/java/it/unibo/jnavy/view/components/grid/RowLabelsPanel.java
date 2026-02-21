@@ -12,13 +12,20 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 /**
- * Component that displays the row coordinates (A, B, C...) for the grid.
+ * A UI component that displays the vertical row coordinates
+ * alongside the game grid.
  */
 public class RowLabelsPanel extends JPanel {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a new {@code RowLabelsPanel} generating alphabetical labels.
+     *
+     * @param size the total number of rows in the grid, which determines 
+     * how many alphabetical labels are created.
+     */
     public RowLabelsPanel(final int size) {
         super(new GridLayout(size, 1, 2, 2)); 
         this.setOpaque(false);
