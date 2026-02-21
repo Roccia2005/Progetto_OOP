@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 /**
  * Manages audio playback for both continuous background music and one-shot sound effects.
  */
-public class SoundManager {
+public final class SoundManager {
 
     private static final Logger LOGGER = Logger.getLogger(SoundManager.class.getName());
     private Clip ambientClip;

@@ -58,7 +58,7 @@ public final class SetupView extends JPanel {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
-    private final SetupController controller;
+    private final transient SetupController controller;
     private final Runnable gameStartCall;
     private final Runnable backCall;
     private final Map<Position, JButton> gridButtons = new HashMap<>();

@@ -35,9 +35,9 @@ public final class EffectsPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger(EffectsPanel.class.getName());
 
-    private Image bulletImg;
-    private Image explosionGif;
-    private Image splashGif;
+    private transient Image bulletImg;
+    private transient Image explosionGif;
+    private transient Image splashGif;
 
     private boolean isAnimating;
     private boolean bulletVisible;
@@ -45,7 +45,7 @@ public final class EffectsPanel extends JPanel {
     private int bulletX;
     private int bulletY;
     private int targetY;
-    private Image currentEffect;
+    private transient Image currentEffect;
 
     private int targetCenterX;
     private int targetCenterY;
@@ -53,8 +53,8 @@ public final class EffectsPanel extends JPanel {
     private int currentBulletW;
     private int currentBulletH;
 
-    private Runnable onImpactCallback;
-    private Runnable onCompleteCallback;
+    private transient Runnable onImpactCallback;
+    private transient Runnable onCompleteCallback;
 
     private final Timer animationTimer;
 

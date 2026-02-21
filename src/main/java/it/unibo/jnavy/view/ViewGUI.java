@@ -43,7 +43,7 @@ public final class ViewGUI extends JFrame implements View {
     private final CardLayout cardLayout;
     private final JPanel mainPanel;
     private StartView startView;
-    private final SelectionController selectionController;
+    private final transient SelectionController selectionController;
 
     /**
      * Constructs the main GUI window.
