@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
  * Represents the graphical user interface for the fleet setup phase.
  * It allows the user to manually place, rotate, randomize, or clear their fleet before starting the game.
  */
-public class SetupView extends JPanel {
+public final class SetupView extends JPanel {
 
     private static final int GRID_SIZE = 10;
     private static final Color THEME_BACKGROUND = new Color(20, 20, 30);

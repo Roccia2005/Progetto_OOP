@@ -299,7 +299,7 @@ public final class CapSelectionPanel extends JPanel {
             final JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
                 index, isSelected, false);
 
-            label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setHorizontalAlignment(CENTER);
 
             if (index == -1) {
                 label.setBackground(MENUBLUE);

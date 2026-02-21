@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
  * A UI component that displays the column coordinates
  * above the game grids. It automatically generates labels based on the grid size.
  */
-public class ColumnLabelsPanel extends JPanel {
+public final class ColumnLabelsPanel extends JPanel {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;

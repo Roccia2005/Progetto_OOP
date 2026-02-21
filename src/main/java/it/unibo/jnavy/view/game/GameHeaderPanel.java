@@ -20,7 +20,7 @@ import javax.swing.SwingConstants;
  * It displays the main game title, dynamically indicates the current turn status,
  * and provides a button to save the game.
  */
-public class GameHeaderPanel extends JPanel {
+public final class GameHeaderPanel extends JPanel {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;

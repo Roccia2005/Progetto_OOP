@@ -29,7 +29,7 @@ public class SoundManager {
         try {
             final URL url = getClass().getResource(soundFile);
             if (url == null) {
-                System.err.println("Sound file not found: " + soundFile);
+                LOGGER.log(Level.WARNING, "Sound file not found: {0}", soundFile);
                 return;
             }
 

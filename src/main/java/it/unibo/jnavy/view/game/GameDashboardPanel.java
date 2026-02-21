@@ -16,7 +16,7 @@ import it.unibo.jnavy.view.components.weather.WeatherWidget;
  * It aggregates status indicators and controls, like the bot's difficulty,
  * the current weather condition, the captain's name, and the interactive ability button.
  */
-public class GameDashboardPanel extends JPanel {
+public final class GameDashboardPanel extends JPanel {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;

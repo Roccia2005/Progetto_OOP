@@ -30,7 +30,7 @@ import it.unibo.jnavy.view.utilities.ImageLoader;
  * It visually displays the cooldown progress through a dynamic background fill
  * and handles the activation state, providing visual feedback to the player.
  */
-public class CaptainAbilityButton extends JButton {
+public final class CaptainAbilityButton extends JButton {
 
     private static final Color BUTTON_ACTIVE = Color.GREEN;
     private static final Color BUTTON_CHARGED = Color.BLUE;
@@ -51,8 +51,8 @@ public class CaptainAbilityButton extends JButton {
     private static final long serialVersionUID = 1L;
 
     private final int maxCooldown;
-    private double fillPercentage = 0.0;
-    private boolean isActive = false;
+    private double fillPercentage;
+    private boolean isActive;
 
     /**
      * Constructs a new {@code CaptainAbilityButton}.

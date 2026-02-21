@@ -29,7 +29,7 @@ import it.unibo.jnavy.model.utilities.Position;
  * A UI component that visually represents a player's game board.
  * It aggregates the main grid, coordinate labels, and title into a single panel.
  */
-public class GridPanel extends JPanel {
+public final class GridPanel extends JPanel {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
