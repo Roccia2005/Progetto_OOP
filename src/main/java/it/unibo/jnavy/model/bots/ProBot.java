@@ -9,14 +9,27 @@ import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.HitType;
 
+/**
+ * An advanced bot strategy that uses a state machine to hunt, seek, and destroy enemy ships.
+ * It adapts its behavior based on the feedback received from previous shots.
+ */
 public final class ProBot extends AbstractBotStrategy {
 
+    /**
+     * Represents the possible states of the ProBot's targeting logic.
+     */
     public enum State {
+        /** Searching for a ship by shooting randomly. */
         HUNTING,
+        /** Finding the orientation of a ship after an initial hit. */
         SEEKING,
+        /** Systematically destroying a ship once its orientation is known. */
         DESTROYING
     }
 
+    /**
+     * Serial version UID for serialization.
+     */
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
@@ -26,7 +39,11 @@ public final class ProBot extends AbstractBotStrategy {
     private final List<CardinalDirection> availableDirections = new ArrayList<>();
     private CardinalDirection currentDirection;
 
-    // uso questo metodo per calcolare le effettive posizioni ovvero i target da restituire e a cui sparare
+    /**
+     * Selects the next target based on the current state of the bot.
+     * @param enemyGrid the grid representing the opponent's territory
+     * @return the calculated {@link Position} to target
+     */
     @Override
     public Position selectTarget(final Grid enemyGrid) {
 
@@ -37,10 +54,16 @@ public final class ProBot extends AbstractBotStrategy {
         };
     }
 
+    /**
+     * Handles the hunting state by selecting a random valid position.
+     */
     private Position handleHunting(final Grid enemyGrid) {
         return getRandomValidPosition(enemyGrid);
     }
 
+    /**
+     * Handles the seeking state to determine the direction of a hit ship.
+     */
     private Position handleSeeking(final Grid enemyGrid) {
         if (this.availableDirections.isEmpty() && this.firstHitPosition != null) {
             resetAvailableDirections();
@@ -59,6 +82,9 @@ public final class ProBot extends AbstractBotStrategy {
         return getRandomValidPosition(enemyGrid);
     }
 
+    /**
+     * Handles the destroying state by continuing to shoot in a specific direction.
+     */
     private Position handleDestroying(final Grid enemyGrid) {
         final Position target = targetCalc(lastTargetPosition);
         if (!enemyGrid.isTargetValid(target)) {
@@ -77,7 +103,11 @@ public final class ProBot extends AbstractBotStrategy {
         return target;
     }
 
-    //uso questo metodo per far imparare al bot, viene chiamato dopo che si conosce il risultato del colpo sulla grid dell'enemy
+    /**
+     * Updates the bot's internal state based on the result of the last shot.
+     * @param target the position that was shot at
+     * @param result the result of the shot (HIT, MISS, SUNK, etc.)
+     */
     @Override
     public void lastShotFeedback(final Position target, final HitType result) {
 
@@ -99,13 +129,17 @@ public final class ProBot extends AbstractBotStrategy {
             break;
 
             case INVALID:
+
+            case NONE:
             default:
-                // uso default vuoto per non far imparare nulla al bot in questi casi che non mi servono a molto
             break;
         }
 
     }
 
+    /**
+     * Updates logic when a shot results in a HIT.
+     */
     private void handleHit(final Position target) {
         switch (this.currentState) {
             case HUNTING:
@@ -127,6 +161,9 @@ public final class ProBot extends AbstractBotStrategy {
         }
     }
 
+    /**
+     * Updates logic when a shot results in a MISS.
+     */
     private void handleMiss() {
         if (this.currentState == State.DESTROYING) {
             if (this.currentDirection != null) {
@@ -141,7 +178,9 @@ public final class ProBot extends AbstractBotStrategy {
         }
     }
 
-    // metodo per capire la direzione tra due celle data la precedente(p1) e quella attuale(p2)uso per i test
+    /**
+     * Calculates the cardinal direction between two positions.
+     */
     private CardinalDirection findDirection(final Position p1, final Position p2) {
         for (final CardinalDirection dir : CardinalDirection.values()) {
             if (p1.x() + dir.getRowOffset() == p2.x()
@@ -152,13 +191,19 @@ public final class ProBot extends AbstractBotStrategy {
         return null;
     }
 
-    // funzione per resettare l'array delle direzioni possibili
+    /**
+     * Resets the list of available cardinal directions to explore.
+     */
     private void resetAvailableDirections() {
         this.availableDirections.clear();
         this.availableDirections.addAll(Arrays.asList(CardinalDirection.values()));
     }
 
-    // posizione calcolata aggiungendo alla x e alla y gli offset della direzione corrispondente
+    /**
+     * Calculates a new position based on an initial target and the current direction.
+     * @param target the starting position
+     * @return the new {@link Position} shifted by the direction offsets
+     */
     public Position targetCalc(final Position target) {
         if (this.currentDirection == null) {
             return target;
@@ -166,6 +211,10 @@ public final class ProBot extends AbstractBotStrategy {
         return new Position(target.x() + currentDirection.getRowOffset(), target.y() + currentDirection.getColOffset());
     }
 
+    /**
+     * {@inheritDoc}
+     * @return the string "Pro"
+     */
     @Override
     protected String getStrategyName() {
         return "Pro";

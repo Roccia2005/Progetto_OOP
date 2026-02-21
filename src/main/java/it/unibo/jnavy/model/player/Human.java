@@ -33,16 +33,26 @@ public final class Human implements Player {
         this.captain = captain;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Grid getGrid() {
         return this.grid;
     }
 
+    /**
+     * {@inheritDoc}
+     * Applies weather effects to the shot before returning the result.
+     */
     @Override
     public List<ShotResult> createShot(final Position target, final Grid grid) {
         return List.of(WeatherManagerImpl.getInstance().applyWeatherEffects(target, grid));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void processTurnEnd() {
         this.captain.processTurnEnd();
@@ -98,7 +108,7 @@ public final class Human implements Player {
     }
 
     /**
-     * @return a String representing the name of the captain.
+     * {@inheritDoc}
      */
     @Override
     public String getProfileName() {

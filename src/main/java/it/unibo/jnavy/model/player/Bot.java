@@ -43,11 +43,18 @@ public final class Bot implements Player {
         this.strategy = strategy;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Grid getGrid() {
         return this.grid;
     }
 
+    /**
+     * {@inheritDoc}
+     * For a Bot, this typically creates a standard shot at the specified target.
+     */
     @Override
     public List<ShotResult> createShot(final Position target, final Grid grid) {
         final HitStrategy shot = new StandardShot();
@@ -94,6 +101,9 @@ public final class Bot implements Player {
         this.strategy.lastShotFeedback(target, result);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getProfileName() {
         return this.strategy.getStrategy();

@@ -66,47 +66,76 @@ public interface Player extends TurnObserver {
      */
     List<ShotResult> createShot(Position target, Grid grid);
 
+    /**
+     * {@inheritDoc}
+     * Default implementation does nothing.
+     */
     @Override
     default void processTurnEnd() {
     }
 
+    /**
+     * Attempts to use a special ability.
+     * @param target The target {@link Position} for the ability.
+     * @param grid The {@link Grid} on which to apply the ability.
+     * @return true if the ability was successfully activated, false otherwise.
+     */
     default boolean useAbility(final Position target, final Grid grid) {
         return false;
     }
 
+    /**
+     * Gets the maximum cooldown of the player's ability.
+     * @return the total cooldown turns.
+     */
     default int getAbilityCooldown() {
         return 0;
     }
 
+    /**
+     * Gets the current remaining turns for the ability cooldown.
+     * @return the current cooldown progress.
+     */
     default int getCurrentAbilityCooldown() {
         return 0;
     }
 
+    /**
+     * Determines if the ability is designed to be used on the opponent's grid.
+     * @return true if it targets the enemy grid, false otherwise.
+     */
     default boolean abilityTargetsEnemyGrid() {
         return false;
     }
 
+    /**
+     * Determines if using the special ability ends the player's current turn.
+     * @return true if the turn is consumed, false otherwise.
+     */
     default boolean doesAbilityConsumeTurn() {
         return false;
     }
 
     /**
-     * Chiede al giocatore di generare autonomamente una mossa.
-     * Utilizza Optional: se il giocatore è Umano, ritorna Optional.empty().
+     * Asks the player to autonomously generate a move.
+     * @param enemyGrid The opponent's {@link Grid} used for targeting logic.
+     * @return an {@link Optional} containing the {@link Position} if the player is a Bot,
+     * otherwise {@link Optional#empty()}.
      */
     default Optional<Position> generateTarget(final Grid enemyGrid) {
         return Optional.empty();
     }
 
     /**
-     * Invia un feedback al giocatore sul colpo appena effettuato.
-     * Implementazione di default vuota.
+     * Sends feedback to the player about the result of the last shot.
+     * @param target the {@link Position} that was attacked.
+     * @param result the {@link HitType} outcome of the attack.
      */
     default void receiveFeedback(final Position target, final HitType result) { }
 
     /**
-     * Restituisce il nome identificativo del "profilo" del giocatore.
-     * (Es: Nome del Capitano per l'Umano, Difficoltà per il Bot).
+     * Retrieves the identification name of the player's profile.
+     * @return the name of the Captain (Human) or the Difficulty (Bot).
      */
     String getProfileName();
 }
