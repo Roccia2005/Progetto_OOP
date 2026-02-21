@@ -17,6 +17,9 @@ public final class Engineer extends AbstractCaptain {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs an Engineer with a cooldown of 3 turns.
+     */
     public Engineer() {
         super(COOLDOWN);
     }
