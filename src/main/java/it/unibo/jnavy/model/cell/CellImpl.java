@@ -9,7 +9,7 @@ import it.unibo.jnavy.model.utilities.Position;
 /**
  * Concrete implementation of the Cell interface.
  */
-public class CellImpl implements Cell {
+public final class CellImpl implements Cell {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;

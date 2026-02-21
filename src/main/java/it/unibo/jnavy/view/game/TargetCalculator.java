@@ -42,7 +42,7 @@ public final class TargetCalculator {
         for (int r = 0; r < gridSize; r++) {
             for (int c = 0; c < gridSize; c++) {
                 boolean containsAll = true;
-                for (Position n : newHits) {
+                for (final Position n : newHits) {
                     if (n.x() < r || n.x() > r + 1 || n.y() < c || n.y() > c + 1) {
                         containsAll = false;
                         break;

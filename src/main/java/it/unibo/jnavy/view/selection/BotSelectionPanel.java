@@ -48,6 +48,9 @@ import it.unibo.jnavy.view.utilities.ImageLoader;
 
 public class BotSelectionPanel extends JPanel {
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     public enum BotLevel {
         BEGINNER("Beginner", "He shoots randomly at your grid, as if blindfolded", "/images/beginner.png"),
         PRO("Pro", "He learns with every shot he throws, he can become very strong", "/images/pro.png"),
@@ -235,6 +238,10 @@ public class BotSelectionPanel extends JPanel {
     }
 
     private final class CustomRenderer extends DefaultListCellRenderer {
+
+        @java.io.Serial
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
             final JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, false);

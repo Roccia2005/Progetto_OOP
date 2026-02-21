@@ -5,7 +5,7 @@ import it.unibo.jnavy.model.weather.WeatherCondition;
 
 import java.io.Serializable;
 
-public class GameState implements Serializable {
+public final class GameState implements Serializable {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 

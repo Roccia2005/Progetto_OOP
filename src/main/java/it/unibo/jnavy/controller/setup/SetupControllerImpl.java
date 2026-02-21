@@ -25,7 +25,7 @@ import java.util.Random;
  * This class manages the ship placement phase for both the human player and the bot,
  * ensuring that all game rules regarding ship positioning are respected.
  */
-public class SetupControllerImpl implements SetupController {
+public final class SetupControllerImpl implements SetupController {
 
     private final List<Integer> shipsToPlace;
     private final Random random;

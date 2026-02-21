@@ -45,7 +45,8 @@ class FleetTest {
         fleet.addShip(new ShipImpl(2));
         // Attempt to add a second ship of size 2 (NOT ALLOWED)
         // Should throw exception because the rule is "Max 1 ship of size 2"
-        assertThrows(IllegalStateException.class, () -> fleet.addShip(new ShipImpl(2)), "Adding more ships of a specific type than allowed should throw IllegalStateException");
+        assertThrows(IllegalStateException.class, () -> fleet.addShip(new ShipImpl(2)),
+                "Adding more ships of a specific type than allowed should throw IllegalStateException");
     }
 
     @Test

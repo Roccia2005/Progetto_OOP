@@ -9,7 +9,7 @@ import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.HitType;
 
-public class ProBot extends AbstractBotStrategy {
+public final class ProBot extends AbstractBotStrategy {
 
     public enum State {
         HUNTING,
@@ -134,9 +134,10 @@ public class ProBot extends AbstractBotStrategy {
             }
             this.lastTargetPosition = firstHitPosition;
         } else if (this.currentState == State.SEEKING) {
-            if (!this.availableDirections.isEmpty()) {
-                this.availableDirections.removeFirst();
+            if (this.availableDirections.isEmpty()) {
+                return;
             }
+            this.availableDirections.removeFirst();
         }
     }
 

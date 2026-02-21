@@ -21,7 +21,7 @@ import it.unibo.jnavy.model.utilities.ShotResult;
  * to determine its moves and target selection logic during the match.
  * It also listens to turn events to handle time-dependent logic.
  */
-public class Bot implements Player {
+public final class Bot implements Player {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;

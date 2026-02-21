@@ -10,7 +10,7 @@ import it.unibo.jnavy.model.utilities.Position;
  * The Gunner's special ability is an offensive move that executes an {@link AreaShot}.
  * Instead of hitting a single cell, this ability targets a 2x2 area, maximizing the potential damage.
  */
-public class Gunner extends AbstractCaptain {
+public final class Gunner extends AbstractCaptain {
 
     public static final int COOLDOWN = 3;
 

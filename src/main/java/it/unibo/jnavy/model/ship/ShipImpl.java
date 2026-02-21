@@ -6,7 +6,7 @@ import java.util.UUID;
 /**
  * Concrete implementation of the Ship interface.
  */
-public class ShipImpl implements Ship {
+public final class ShipImpl implements Ship {
 
     private static final int MIN_SIZE = 2;
     private static final int MAX_SIZE = 5;

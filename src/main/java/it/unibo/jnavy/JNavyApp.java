@@ -12,7 +12,7 @@ public final class JNavyApp {
 
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(() -> {
-            SelectionController sController = new SelectionController();
+            final SelectionController sController = new SelectionController();
             final View view = new ViewGUI(sController);
             sController.setView(view);
             view.start();

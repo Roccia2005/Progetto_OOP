@@ -44,14 +44,14 @@ public class GamePanel extends JPanel {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
-    private boolean inputBlocked = false;
+    private boolean inputBlocked;
     private final GameHeaderPanel headerPanel;
     private final GameDashboardPanel dashboardPanel;
     private final GridPanel humanGridPanel;
     private final GridPanel botGridPanel;
     private final GameController controller;
     private final SoundManager ambientSound;
-    private boolean gameOverHandled = false;
+    private boolean gameOverHandled;
 
     private final JLayeredPane layeredPane;
     private final JPanel mainContent;
@@ -69,11 +69,11 @@ public class GamePanel extends JPanel {
         this.mainContent = new JPanel(new BorderLayout());
         this.mainContent.setOpaque(false);
 
-        this.setBackground(BACKGROUND_COLOR);
-        this.setLayout(new BorderLayout());
+        setBackground(BACKGROUND_COLOR);
+        setLayout(new BorderLayout());
 
         this.ambientSound = new SoundManager(SOUNDTRACK_PATH);
-        this.add(layeredPane, BorderLayout.CENTER);
+        add(layeredPane, BorderLayout.CENTER);
 
         this.mainContent.setOpaque(false);
 
@@ -115,7 +115,7 @@ public class GamePanel extends JPanel {
         layeredPane.add(this.weatherOverlay, JLayeredPane.MODAL_LAYER);
         layeredPane.add(this.gameOverPanel, JLayeredPane.DRAG_LAYER);
 
-        this.addComponentListener(new ComponentAdapter() {
+        addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(final ComponentEvent e) {
                 final Rectangle bounds = new Rectangle(0, 0, GamePanel.this.getWidth(), GamePanel.this.getHeight());
@@ -155,7 +155,7 @@ public class GamePanel extends JPanel {
 
         final Timer botTimer = new Timer(1000, e -> {
             final Position target = controller.playBotTurn();
-            if (target == null) return;
+            if (target == null) { return; }
 
             final Component targetButton = humanGridPanel.getButtonAt(target);
             final CellCondition state = controller.getHumanCellState(target);
@@ -188,7 +188,7 @@ public class GamePanel extends JPanel {
     }
 
     private void handleHumanGridClick(final Position p) {
-        if (this.inputBlocked || !controller.isHumanTurn()) return;
+        if (this.inputBlocked || !controller.isHumanTurn()) { return; }
         
         if (this.dashboardPanel.isCaptainAbilityActive() && !controller.captainAbilityTargetsEnemyGrid()) {
             controller.processAbility(p);
@@ -203,7 +203,7 @@ public class GamePanel extends JPanel {
         final CellCondition clickedState = controller.getBotCellState(p);
         final boolean isAlreadyRevealed = clickedState == CellCondition.HIT_SHIP || clickedState == CellCondition.SUNK_SHIP || clickedState == CellCondition.HIT_WATER;
 
-        if (isAlreadyRevealed && !this.dashboardPanel.isCaptainAbilityActive()) return;
+        if (isAlreadyRevealed && !this.dashboardPanel.isCaptainAbilityActive()) { return; }
 
         this.inputBlocked = true;
         final boolean isAbility = this.dashboardPanel.isCaptainAbilityActive();
