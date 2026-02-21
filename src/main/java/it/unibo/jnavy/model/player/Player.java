@@ -126,7 +126,7 @@ public interface Player extends TurnObserver {
      *
      * @param enemyGrid The opponent's {@link Grid} used for targeting logic.
      * @return an {@link Optional} containing the {@link Position} if the player is a Bot,
-     * otherwise {@link Optional#empty()}.
+     *    otherwise {@link Optional#empty()}.
      */
     default Optional<Position> generateTarget(final Grid enemyGrid) {
         return Optional.empty();
