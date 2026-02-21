@@ -41,6 +41,7 @@ public final class ProBot extends AbstractBotStrategy {
 
     /**
      * Selects the next target based on the current state of the bot.
+     *
      * @param enemyGrid the grid representing the opponent's territory
      * @return the calculated {@link Position} to target
      */
@@ -56,6 +57,9 @@ public final class ProBot extends AbstractBotStrategy {
 
     /**
      * Handles the hunting state by selecting a random valid position.
+     *
+     * @param enemyGrid the grid representing the opponent's territory
+     * @return the calculated {@link Position} to target
      */
     private Position handleHunting(final Grid enemyGrid) {
         return getRandomValidPosition(enemyGrid);
@@ -63,6 +67,9 @@ public final class ProBot extends AbstractBotStrategy {
 
     /**
      * Handles the seeking state to determine the direction of a hit ship.
+     *
+     * @param enemyGrid the grid representing the opponent's territory
+     * @return the calculated {@link Position} to target
      */
     private Position handleSeeking(final Grid enemyGrid) {
         if (this.availableDirections.isEmpty() && this.firstHitPosition != null) {
@@ -84,6 +91,9 @@ public final class ProBot extends AbstractBotStrategy {
 
     /**
      * Handles the destroying state by continuing to shoot in a specific direction.
+     *
+     * @param enemyGrid the grid representing the opponent's territory
+     * @return the calculated {@link Position} to target
      */
     private Position handleDestroying(final Grid enemyGrid) {
         final Position target = targetCalc(lastTargetPosition);
@@ -105,6 +115,7 @@ public final class ProBot extends AbstractBotStrategy {
 
     /**
      * Updates the bot's internal state based on the result of the last shot.
+     *
      * @param target the position that was shot at
      * @param result the result of the shot (HIT, MISS, SUNK, etc.)
      */
@@ -139,6 +150,8 @@ public final class ProBot extends AbstractBotStrategy {
 
     /**
      * Updates logic when a shot results in a HIT.
+     *
+     * @param target the position that was hit
      */
     private void handleHit(final Position target) {
         switch (this.currentState) {
@@ -180,6 +193,10 @@ public final class ProBot extends AbstractBotStrategy {
 
     /**
      * Calculates the cardinal direction between two positions.
+     *
+     * @param p1 the starting position
+     * @param p2 the ending position
+     * @return the {@link CardinalDirection} connecting the two positions, or null if none
      */
     private CardinalDirection findDirection(final Position p1, final Position p2) {
         for (final CardinalDirection dir : CardinalDirection.values()) {
@@ -201,6 +218,7 @@ public final class ProBot extends AbstractBotStrategy {
 
     /**
      * Calculates a new position based on an initial target and the current direction.
+     *
      * @param target the starting position
      * @return the new {@link Position} shifted by the direction offsets
      */
@@ -213,6 +231,7 @@ public final class ProBot extends AbstractBotStrategy {
 
     /**
      * {@inheritDoc}
+     *
      * @return the string "Pro"
      */
     @Override

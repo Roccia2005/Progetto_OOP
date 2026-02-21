@@ -28,7 +28,7 @@ public interface BotStrategy extends Serializable {
      * @param target The position that was targeted.
      * @param result The outcome of the shot (HIT, MISS, SUNK, etc.).
      */
-    default void lastShotFeedback(final Position target, final HitType result) { };
+    default void lastShotFeedback(final Position target, final HitType result) { }
 
     /**
      * Return the display name of this shooting strategy,

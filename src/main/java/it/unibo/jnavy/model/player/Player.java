@@ -61,10 +61,10 @@ public interface Player extends TurnObserver {
      * if an atmospheric event is active.
      *
      * @param target The target {@link Position}.
-     * @param grid The grid {@link Grid}.
+     * @param targetGrid The grid {@link Grid}.
      * @return The {@link ShotResult} representing the list of generated shot outcomes.
      */
-    List<ShotResult> createShot(Position target, Grid grid);
+    List<ShotResult> createShot(Position target, Grid targetGrid);
 
     /**
      * {@inheritDoc}
@@ -76,16 +76,18 @@ public interface Player extends TurnObserver {
 
     /**
      * Attempts to use a special ability.
+     *
      * @param target The target {@link Position} for the ability.
-     * @param grid The {@link Grid} on which to apply the ability.
+     * @param targetGrid The {@link Grid} on which to apply the ability.
      * @return true if the ability was successfully activated, false otherwise.
      */
-    default boolean useAbility(final Position target, final Grid grid) {
+    default boolean useAbility(final Position target, final Grid targetGrid) {
         return false;
     }
 
     /**
      * Gets the maximum cooldown of the player's ability.
+     *
      * @return the total cooldown turns.
      */
     default int getAbilityCooldown() {
@@ -94,6 +96,7 @@ public interface Player extends TurnObserver {
 
     /**
      * Gets the current remaining turns for the ability cooldown.
+     *
      * @return the current cooldown progress.
      */
     default int getCurrentAbilityCooldown() {
@@ -102,6 +105,7 @@ public interface Player extends TurnObserver {
 
     /**
      * Determines if the ability is designed to be used on the opponent's grid.
+     *
      * @return true if it targets the enemy grid, false otherwise.
      */
     default boolean abilityTargetsEnemyGrid() {
@@ -110,6 +114,7 @@ public interface Player extends TurnObserver {
 
     /**
      * Determines if using the special ability ends the player's current turn.
+     *
      * @return true if the turn is consumed, false otherwise.
      */
     default boolean doesAbilityConsumeTurn() {
@@ -118,6 +123,7 @@ public interface Player extends TurnObserver {
 
     /**
      * Asks the player to autonomously generate a move.
+     *
      * @param enemyGrid The opponent's {@link Grid} used for targeting logic.
      * @return an {@link Optional} containing the {@link Position} if the player is a Bot,
      * otherwise {@link Optional#empty()}.
@@ -128,6 +134,7 @@ public interface Player extends TurnObserver {
 
     /**
      * Sends feedback to the player about the result of the last shot.
+     *
      * @param target the {@link Position} that was attacked.
      * @param result the {@link HitType} outcome of the attack.
      */
@@ -135,6 +142,7 @@ public interface Player extends TurnObserver {
 
     /**
      * Retrieves the identification name of the player's profile.
+     *
      * @return the name of the Captain (Human) or the Difficulty (Bot).
      */
     String getProfileName();

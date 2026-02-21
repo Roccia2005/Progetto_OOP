@@ -46,7 +46,7 @@ public final class Human implements Player {
      * Applies weather effects to the shot before returning the result.
      */
     @Override
-    public List<ShotResult> createShot(final Position target, final Grid grid) {
+    public List<ShotResult> createShot(final Position target, final Grid targetGrid) {
         return List.of(WeatherManagerImpl.getInstance().applyWeatherEffects(target, grid));
     }
 
@@ -63,11 +63,11 @@ public final class Human implements Player {
      * This method acts as a bridge between the User Interface and the Captain's internal logic.
      *
      * @param target The target {@link Position} for the ability.
-     * @param grid The {@link Grid} on which to apply the ability (usually the enemy's).
+     * @param targetGrid The {@link Grid} on which to apply the ability (usually the enemy's).
      * @return true if the ability was successfully used (cooldown reset), false if it was not ready or the target was invalid.
      */
     @Override
-    public boolean useAbility(final Position target, final Grid grid) {
+    public boolean useAbility(final Position target, final Grid targetGrid) {
         return this.captain.useAbility(grid, target);
     }
 

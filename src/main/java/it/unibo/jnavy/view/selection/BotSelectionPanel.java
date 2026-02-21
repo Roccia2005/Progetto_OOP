@@ -52,7 +52,7 @@ import it.unibo.jnavy.view.utilities.ImageLoader;
  * A panel that allows the user to select the bot difficulty level.
  * It displays a list of available bots, their descriptions, and related images.
  */
-public class BotSelectionPanel extends JPanel {
+public final class BotSelectionPanel extends JPanel {
 
     /**
      * Serial version UID for serialization.
@@ -293,7 +293,7 @@ public class BotSelectionPanel extends JPanel {
             final JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
                 index, isSelected, false);
 
-            label.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+            label.setHorizontalAlignment(SwingConstants.CENTER);
 
             if (index == -1) {
                 label.setBackground(MENUBLUE);
