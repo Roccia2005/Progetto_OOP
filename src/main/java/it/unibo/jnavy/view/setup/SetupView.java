@@ -6,7 +6,14 @@ import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.view.game.ToastNotification;
 
+import static it.unibo.jnavy.view.utilities.ViewConstants.BACKGROUND_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BORDER_THICKNESS;
+import static it.unibo.jnavy.view.utilities.ViewConstants.ERROR_COLOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
+import static it.unibo.jnavy.view.utilities.ViewConstants.MENUBLUE;
+import static it.unibo.jnavy.view.utilities.ViewConstants.SETHEIGHT;
+import static it.unibo.jnavy.view.utilities.ViewConstants.SETWIDTH;
+import static it.unibo.jnavy.view.utilities.ViewConstants.TEXT_COLOR;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,16 +37,21 @@ import javax.swing.SwingConstants;
 public final class SetupView extends JPanel {
 
     private static final int GRID_SIZE = 10;
-    private static final Color THEME_BACKGROUND = new Color(20, 20, 30);
-    private static final Color THEME_TEXT = new Color(240, 240, 255);
-    private static final Color COLOR_WATER = new Color(41, 86, 246);
-    private static final Color COLOR_ERROR = new Color(200, 50, 50);
+
     private static final Color COLOR_SHIP = Color.BLACK;
     private static final Color COLOR_BORDER = Color.GRAY;
     private static final Color COLOR_BORDER_WATER = new Color(0, 80, 120);
+
+    private static final int SIDE_PANEL_WIDTH = 250;
+    private static final int PADDING_15 = 15;
+    private static final int PADDING_20 = 20;
+    private static final int TITLE_MARGIN_RIGHT = 100;
+    private static final int TITLE_FONT_SIZE = 30;
+    private static final int INFO_FONT_SIZE = 24;
+    private static final int BACK_BTN_FONT_SIZE = 15;
+
     private static final int FONT_DEFAULT_SIZE = 22;
     private static final int FONT_ICON_SIZE = 120;
-    private static final int BORDER_THICKNESS = 2;
     private static final String NULL_SHIP_ERROR = "Place a ship first!";
     private static final String PLACEMENT_ERROR = "Invalid placement!";
 
@@ -59,6 +71,13 @@ public final class SetupView extends JPanel {
     private JButton clearButton;
     private JButton backButton;
 
+    /**
+     * Constructs the SetupView for the fleet deployment phase.
+     *
+     * @param controller    the controller managing the setup logic
+     * @param gameStartCall the callback to execute when the game starts
+     * @param backCall      the callback to execute to go back to the previous screen
+     */
     public SetupView(final SetupController controller, final Runnable gameStartCall, final Runnable backCall) {
         this.controller = controller;
         this.gameStartCall = gameStartCall;
@@ -67,16 +86,16 @@ public final class SetupView extends JPanel {
     }
 
     private void initUI() {
-        this.setPreferredSize(new Dimension(1000, 700));
+        this.setPreferredSize(new Dimension(SETWIDTH, SETHEIGHT));
         this.setLayout(new BorderLayout());
-        this.setBackground(THEME_BACKGROUND);
+        this.setBackground(BACKGROUND_COLOR);
 
         final JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(THEME_BACKGROUND);
-        topPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 0, 15));
+        topPanel.setBackground(BACKGROUND_COLOR);
+        topPanel.setBorder(BorderFactory.createEmptyBorder(PADDING_15, PADDING_15, 0, PADDING_15));
 
-        backButton = createBigButton("Back", 15);
-        backButton.setForeground(THEME_TEXT);
+        backButton = createBigButton("Back", BACK_BTN_FONT_SIZE);
+        backButton.setForeground(TEXT_COLOR);
         backButton.addActionListener(e -> {
             if (backCall != null) {
                 backCall.run();
@@ -85,22 +104,22 @@ public final class SetupView extends JPanel {
         topPanel.add(backButton, BorderLayout.WEST);
 
         final JLabel titleLabel = new JLabel("DEPLOY YOUR FLEET!", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Impact", Font.PLAIN, 30));
-        titleLabel.setForeground(THEME_TEXT);
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 100));
+        titleLabel.setFont(new Font("Impact", Font.PLAIN, TITLE_FONT_SIZE));
+        titleLabel.setForeground(TEXT_COLOR);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, TITLE_MARGIN_RIGHT));
         topPanel.add(titleLabel, BorderLayout.CENTER);
         this.add(topPanel, BorderLayout.NORTH);
 
         final JPanel gridPanel = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE));
-        gridPanel.setBackground(THEME_BACKGROUND);
-        gridPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        gridPanel.setBackground(BACKGROUND_COLOR);
+        gridPanel.setBorder(BorderFactory.createEmptyBorder(PADDING_20, PADDING_20, PADDING_20, PADDING_20));
 
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
                 final JButton button = new JButton();
                 final Position pos = new Position(i, j);
 
-                button.setBackground(COLOR_WATER);
+                button.setBackground(MENUBLUE);
                 button.setOpaque(true);
                 button.setBorderPainted(true);
 
@@ -113,20 +132,20 @@ public final class SetupView extends JPanel {
         this.add(gridPanel, BorderLayout.CENTER);
 
         final JPanel sidePanel = new JPanel(new BorderLayout());
-        sidePanel.setBackground(THEME_BACKGROUND);
-        sidePanel.setPreferredSize(new Dimension(250, 0));
-        sidePanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
+        sidePanel.setBackground(BACKGROUND_COLOR);
+        sidePanel.setPreferredSize(new Dimension(SIDE_PANEL_WIDTH, 0));
+        sidePanel.setBorder(BorderFactory.createEmptyBorder(PADDING_20, 0, PADDING_20, PADDING_20));
 
         final String sizeText = controller.isSetupFinished() ? "Ready" : String.valueOf(controller.getNextShipSize());
         infoLabel = new JLabel("Size: " + sizeText);
-        infoLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        infoLabel.setForeground(THEME_TEXT);
+        infoLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, INFO_FONT_SIZE));
+        infoLabel.setForeground(TEXT_COLOR);
         infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        infoLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        infoLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, PADDING_20, 0));
         sidePanel.add(infoLabel, BorderLayout.NORTH);
 
-        final JPanel buttonsContainer = new JPanel(new GridLayout(4, 1, 0, 15));
-        buttonsContainer.setBackground(THEME_BACKGROUND);
+        final JPanel buttonsContainer = new JPanel(new GridLayout(4, 1, 0, PADDING_15));
+        buttonsContainer.setBackground(BACKGROUND_COLOR);
 
         rotateButton = createBigButton("→", FONT_ICON_SIZE);
         rotateButton.setToolTipText("Rotate Ship (Horizontal/Vertical)");
@@ -149,9 +168,9 @@ public final class SetupView extends JPanel {
                 try {
                     controller.nextShip();
                     updateView();
-                } catch (IllegalStateException ex) {
+                } catch (final IllegalStateException ex) {
                     Toolkit.getDefaultToolkit().beep();
-                    ToastNotification.show(this, NULL_SHIP_ERROR, COLOR_ERROR);
+                    ToastNotification.show(this, NULL_SHIP_ERROR, ERROR_COLOR);
                 }
             }
         });
@@ -163,7 +182,7 @@ public final class SetupView extends JPanel {
         });
 
         clearButton = createBigButton("Clear Fleet", FONT_DEFAULT_SIZE);
-        clearButton.setForeground(THEME_TEXT);
+        clearButton.setForeground(TEXT_COLOR);
         clearButton.addActionListener(e -> {
             controller.clearFleet();
             updateView();
@@ -195,8 +214,8 @@ public final class SetupView extends JPanel {
     private JButton createBigButton(final String text, final int fontSize) {
         final JButton b = new JButton(text);
         b.setFocusPainted(false);
-        b.setBackground(THEME_BACKGROUND);
-        b.setForeground(THEME_TEXT);
+        b.setBackground(BACKGROUND_COLOR);
+        b.setForeground(TEXT_COLOR);
         b.setFont(new Font(FONT_FAMILY, Font.BOLD, fontSize));
         b.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         return b;
@@ -210,7 +229,7 @@ public final class SetupView extends JPanel {
             updateView();
         } else {
             Toolkit.getDefaultToolkit().beep();
-            ToastNotification.show(this, PLACEMENT_ERROR, COLOR_ERROR);
+            ToastNotification.show(this, PLACEMENT_ERROR, ERROR_COLOR);
         }
     }
 
@@ -229,7 +248,7 @@ public final class SetupView extends JPanel {
                     final int right = state.connectedRight() ? 0 : BORDER_THICKNESS;
                     button.setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, COLOR_BORDER));
                 } else {
-                    button.setBackground(COLOR_WATER);
+                    button.setBackground(MENUBLUE);
                     button.setBorder(BorderFactory.createLineBorder(COLOR_BORDER_WATER, 1));
                 }
             }
@@ -247,7 +266,7 @@ public final class SetupView extends JPanel {
             infoLabel.setText("Size: " + controller.getNextShipSize());
 
             nextShipButton.setText("Confirm");
-            nextShipButton.setForeground(THEME_TEXT);
+            nextShipButton.setForeground(TEXT_COLOR);
 
             rotateButton.setEnabled(true);
             randomButton.setEnabled(true);

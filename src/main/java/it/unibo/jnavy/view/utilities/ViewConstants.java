@@ -19,6 +19,10 @@ public final class ViewConstants {
     /** Default text and foreground color. */
     public static final Color FOREGROUND_COLOR = Color.WHITE;
 
+    /** Default text and foreground color for errors message. */
+    public static final Color TEXT_COLOR = new Color(240, 240, 255);
+    public static final Color ERROR_COLOR = new Color(200, 50, 50);
+
     /** Semi-transparent black color used for overlay panels (e.g., game over screen). */
     public static final Color OVERLAY_COLOR = new Color(0, 0, 0, 230);
 
