@@ -103,6 +103,9 @@ public final class ViewConstants {
     /** Divisor to calculate the height of standard image labels. */
     public static final int IMG_LABEL_HEIGHT_DIVISOR = 5;
 
+    /** Adding to calculate the bounds width. */
+    public static final int BG_WIDTH_OFFSET = 10;
+
     // --- Fonts ---
 
     /** Standard font family used throughout the application. */

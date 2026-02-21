@@ -8,6 +8,7 @@ import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_HEIGHT_DIVISOR
 import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_WIDTH_DIVISOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.DESC_HEIGHT_DIVISOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.DESC_WIDTH_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BG_WIDTH_OFFSET;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FLOW_HGAP;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FLOW_VGAP;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
@@ -60,8 +61,9 @@ public final class BotSelectionPanel extends JPanel {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
-    private final DifficultySelectionListener listener;
-    private final Runnable backAction;
+    private final transient DifficultySelectionListener listener;
+    private final transient Runnable backAction;
+
     private JLabel imageLabel;
     private JComboBox<BotLevel> levelComboBox;
     private JTextPane descriptionArea;
@@ -138,7 +140,7 @@ public final class BotSelectionPanel extends JPanel {
             @Override
             public void paintCurrentValueBackground(final Graphics g, final Rectangle bounds, final boolean hasFocus) {
                 g.setColor(MENUBLUE);
-                g.fillRect(bounds.x, bounds.y, bounds.width + 10, bounds.height);
+                g.fillRect(bounds.x, bounds.y, bounds.width + BG_WIDTH_OFFSET, bounds.height);
             }
 
             @Override
@@ -279,7 +281,7 @@ public final class BotSelectionPanel extends JPanel {
     /**
      * Custom renderer for the ComboBox to match the game's UI theme.
      */
-    private final class CustomRenderer extends DefaultListCellRenderer {
+    private static final class CustomRenderer extends DefaultListCellRenderer {
 
         /**
          * Serial version UID for serialization.
@@ -293,7 +295,7 @@ public final class BotSelectionPanel extends JPanel {
             final JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
                 index, isSelected, false);
 
-            label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setHorizontalAlignment(CENTER);
 
             if (index == -1) {
                 label.setBackground(MENUBLUE);
