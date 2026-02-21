@@ -1,6 +1,7 @@
 package it.unibo.jnavy.view.components.grid;
 
 import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_SIZE_CTRL;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
 
 import java.awt.Font;
@@ -17,24 +18,25 @@ import javax.swing.SwingConstants;
  */
 public final class ColumnLabelsPanel extends JPanel {
 
+    private static final int PADDING_TOP = 5;
+
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a new {@code ColumnLabelsPanel} with the specified number of columns.
      *
-     * @param size the total number of columns in the grid, which 
-     * determines the range of numerical labels generated.
+     * @param size the total number of columns in the grid, which determines the range of numerical labels generated.
      */
     public ColumnLabelsPanel(final int size) {
         super(new GridLayout(1, size, 2, 2));
         this.setOpaque(false);
-        this.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+        this.setBorder(BorderFactory.createEmptyBorder(PADDING_TOP, 0, 0, 0));
 
         for (int i = 1; i <= size; i++) {
             final JLabel label = new JLabel(String.valueOf(i), SwingConstants.CENTER);
             label.setForeground(FOREGROUND_COLOR);
-            label.setFont(new Font(FONT_FAMILY, Font.BOLD, 14));
+            label.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_CTRL));
             this.add(label);
         }
     }
