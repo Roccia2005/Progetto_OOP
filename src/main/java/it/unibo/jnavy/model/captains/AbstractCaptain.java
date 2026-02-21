@@ -19,11 +19,24 @@ public abstract class AbstractCaptain implements Captain {
     private int currentCooldown;
     private boolean usedThisTurn;
 
+    /**
+     * Constructs a new Captain with a specific cooldown.
+     *
+     * @param cooldown the cooldown duration in turns.
+     */
     protected AbstractCaptain(final int cooldown) {
         this.cooldown = cooldown;
         this.currentCooldown = 0;
     }
 
+    /**
+     * Executes the specific effect of the captain's ability.
+     * This method must be implemented by subclasses to define the ability's behavior.
+     *
+     * @param grid the target grid where the effect should be applied.
+     * @param p the target position for the ability.
+     * @return true if the effect was successfully executed, false otherwise.
+     */
     protected abstract boolean executeEffect(Grid grid, Position p);
 
     @Override
