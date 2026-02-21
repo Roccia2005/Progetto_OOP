@@ -10,6 +10,11 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Implementation of the {@link SaveManager} interface.
+ * It manages the persistence of the game state using standard Java Serialization
+ * to save and load data from a binary file.
+ */
 public final class SaveManagerImpl implements SaveManager {
 
     private static final String FILE_NAME = "game_state.dat";
