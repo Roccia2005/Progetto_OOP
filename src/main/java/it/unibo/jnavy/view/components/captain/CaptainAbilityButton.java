@@ -1,12 +1,30 @@
 package it.unibo.jnavy.view.components.captain;
 
-import javax.swing.*;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Window;
+
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
 import it.unibo.jnavy.view.utilities.ImageLoader;
-import static it.unibo.jnavy.view.utilities.ViewConstants.*;
-
-import java.awt.*;
 
 public class CaptainAbilityButton extends JButton {
 
@@ -25,11 +43,14 @@ public class CaptainAbilityButton extends JButton {
     private static final int TEXT_GAP = 5;
     private static final int TIMER_TIME = 1500;
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private final int maxCooldown;
     private double fillPercentage = 0.0;
     private boolean isActive = false;
 
-    public CaptainAbilityButton(int maxCooldown) {
+    public CaptainAbilityButton(final int maxCooldown) {
         super(BUTTON_TEXT);
         this.maxCooldown = maxCooldown;
         
@@ -41,17 +62,17 @@ public class CaptainAbilityButton extends JButton {
                 
         this.setPreferredSize(new Dimension(DIMENSION, DIMENSION));
 
-        Icon captainIcon = ImageLoader.getScaledIcon(CAPTAIN_IMAGE_PATH, IMAGE_DIMENSION, IMAGE_DIMENSION);
+        final Icon captainIcon = ImageLoader.getScaledIcon(CAPTAIN_IMAGE_PATH, IMAGE_DIMENSION, IMAGE_DIMENSION);
         if (captainIcon != null) {
             this.setIcon(captainIcon);
         }
 
-        this.setVerticalTextPosition(SwingConstants.BOTTOM);
-        this.setHorizontalTextPosition(SwingConstants.CENTER);
+        this.setVerticalTextPosition(BOTTOM);
+        this.setHorizontalTextPosition(CENTER);
         this.setIconTextGap(TEXT_GAP);
     }
 
-    public void updateState(int currentCooldown) {
+    public void updateState(final int currentCooldown) {
         if (maxCooldown > 0) {
             this.fillPercentage = (double) currentCooldown / this.maxCooldown;
             this.fillPercentage = Math.min(this.fillPercentage, MAX_PERCENTAGE);
@@ -90,29 +111,29 @@ public class CaptainAbilityButton extends JButton {
     }
 
     private void showFeedbackPopup() {
-        Window parentWindow = SwingUtilities.getWindowAncestor(this);
+        final Window parentWindow = SwingUtilities.getWindowAncestor(this);
         if (parentWindow == null) {
             return;
         }
 
-        JDialog popup = new JDialog(parentWindow, Dialog.ModalityType.MODELESS);
+        final JDialog popup = new JDialog(parentWindow, Dialog.ModalityType.MODELESS);
         popup.setUndecorated(true);
 
-        JPanel contentPanel = new JPanel(new BorderLayout(20, 20));
+        final JPanel contentPanel = new JPanel(new BorderLayout(20, 20));
         contentPanel.setBackground(new Color(40, 40, 40)); 
         contentPanel.setBorder(new LineBorder(new Color(255, 140, 0), 3)); 
 
-        JLabel messageLabel = new JLabel(POPUP_MESSAGE, SwingConstants.CENTER);
+        final JLabel messageLabel = new JLabel(POPUP_MESSAGE, CENTER);
         messageLabel.setForeground(FOREGROUND_COLOR);
         messageLabel.setFont(new Font(FONT_FAMILY, Font.BOLD, 18));
         
-        Icon alertIcon = ImageLoader.getScaledIcon(ALERT_IMAGE_PATH, IMAGE_DIMENSION, IMAGE_DIMENSION);
+        final Icon alertIcon = ImageLoader.getScaledIcon(ALERT_IMAGE_PATH, IMAGE_DIMENSION, IMAGE_DIMENSION);
         if (alertIcon != null) {
             messageLabel.setIcon(alertIcon);
         }
 
-        messageLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
-        messageLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+        messageLabel.setVerticalTextPosition(BOTTOM);
+        messageLabel.setHorizontalTextPosition(CENTER);
         messageLabel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
         contentPanel.add(messageLabel, BorderLayout.CENTER);
@@ -121,7 +142,7 @@ public class CaptainAbilityButton extends JButton {
         popup.pack();
         popup.setLocationRelativeTo(parentWindow);
 
-        Timer timer = new Timer(TIMER_TIME, e -> popup.dispose());
+        final Timer timer = new Timer(TIMER_TIME, e -> popup.dispose());
         timer.setRepeats(false);
         timer.start();
 
@@ -129,12 +150,12 @@ public class CaptainAbilityButton extends JButton {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
+    protected void paintComponent(final Graphics g) {
+        final Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int width = getWidth();
-        int height = getHeight();
+        final int width = getWidth();
+        final int height = getHeight();
 
         g2d.setColor(Color.LIGHT_GRAY);
         g2d.fillRect(0, 0, width, height);
@@ -147,8 +168,8 @@ public class CaptainAbilityButton extends JButton {
             g2d.setColor(BUTTON_RECHARGING);
         }
 
-        int fillHeight = (int) (height * fillPercentage);
-        int yStart = height - fillHeight;
+        final int fillHeight = (int) (height * fillPercentage);
+        final int yStart = height - fillHeight;
         g2d.fillRect(0, yStart, width, fillHeight);
 
         super.paintComponent(g);

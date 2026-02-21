@@ -25,7 +25,7 @@ public enum CardinalDirection {
             case LEFT:
                 return RIGHT;
             default:
-                throw new IllegalStateException("Invalid corresponding enum(opposite) value: "+ this);
+                throw new IllegalStateException("Invalid corresponding enum(opposite) value: " + this);
         }
     }
 

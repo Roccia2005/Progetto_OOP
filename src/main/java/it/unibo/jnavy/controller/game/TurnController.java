@@ -21,7 +21,7 @@ public class TurnController {
     }
 
     public boolean isHumanTurn() {
-        return this.currentPlayer == this.human;
+        return this.currentPlayer.equals(this.human);
     }
 
     public boolean isGameOver() {
@@ -41,6 +41,6 @@ public class TurnController {
         this.currentPlayer.processTurnEnd();
         this.weather.processTurnEnd();
 
-        this.currentPlayer = (this.currentPlayer == this.human) ? this.bot : this.human;
+        this.currentPlayer = (this.currentPlayer.equals(this.human)) ? this.bot : this.human;
     }
 }

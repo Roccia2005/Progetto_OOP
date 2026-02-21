@@ -6,10 +6,11 @@ import it.unibo.jnavy.view.ViewGUI;
 
 public final class JNavyApp {
 
-    private JNavyApp() {}
-    public static void main(String[] args) {
+    private JNavyApp() { }
+
+    public static void main(final String[] args) {
         SwingUtilities.invokeLater(() -> {
-            View view = new ViewGUI();
+            final View view = new ViewGUI();
             view.start();
         });
     }

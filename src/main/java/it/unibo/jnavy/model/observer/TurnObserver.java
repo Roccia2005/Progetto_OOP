@@ -11,6 +11,7 @@ import java.io.Serializable;
  *   - Updating the duration of Weather conditions (e.g., fog lifting after 3 turns)
  *   - Updating the UI timer or turn counter
  */
+@FunctionalInterface
 public interface TurnObserver extends Serializable {
 
     /**

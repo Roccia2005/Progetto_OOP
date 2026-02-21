@@ -145,7 +145,7 @@ public class SetupControllerImpl implements SetupController {
 
         this.unsetShip();
 
-        List<Ship> placedShips = new ArrayList<>(this.human.getGrid().getFleet().getShips());
+        final List<Ship> placedShips = new ArrayList<>(this.human.getGrid().getFleet().getShips());
         for (final Ship s : placedShips) {
             this.human.getGrid().removeShip(s);
         }
@@ -161,8 +161,9 @@ public class SetupControllerImpl implements SetupController {
                 .toList();
     }
 
-    private boolean hasSameShip(final Grid grid, Ship ship, final Position neighbor) {
+    private boolean hasSameShip(final Grid grid, final Ship ship, final Position neighbor) {
         if (!grid.isPositionValid(neighbor)) { return false; }
+
         return grid.getCell(neighbor)
                 .flatMap(Cell::getShip)
                 .map(s -> s.equals(ship))

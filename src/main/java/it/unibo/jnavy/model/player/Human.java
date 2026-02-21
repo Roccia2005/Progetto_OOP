@@ -16,11 +16,11 @@ import it.unibo.jnavy.model.weather.WeatherManagerImpl;
  */
 public class Human implements Player {
 
-    private final Captain captain;
-    private final Grid grid;
-
     @java.io.Serial
     private static final long serialVersionUID = 1L;
+
+    private final Captain captain;
+    private final Grid grid;
 
     /**
      * Constructs a new Human player with the selected captain.
@@ -54,8 +54,7 @@ public class Human implements Player {
      *
      * @param target The target {@link Position} for the ability.
      * @param grid The {@link Grid} on which to apply the ability (usually the enemy's).
-     * @return true if the ability was successfully used (cooldown reset),
-     * false if it was not ready or the target was invalid.
+     * @return true if the ability was successfully used (cooldown reset), false if it was not ready or the target was invalid.
      */
     @Override
     public boolean useAbility(final Position target, final Grid grid) {
@@ -91,8 +90,7 @@ public class Human implements Player {
     /**
      * Checks if using the Captain's ability consumes the player's turn.
      *
-     * @return true if using the ability ends the turn,
-     * false if the player can still shoot after using it.
+     * @return true if using the ability ends the turn, false if the player can still shoot after using it.
      */
     @Override
     public boolean doesAbilityConsumeTurn() {

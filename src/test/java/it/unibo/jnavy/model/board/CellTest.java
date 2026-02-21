@@ -52,7 +52,7 @@ class CellTest {
         assertTrue(cell.isHit(), "Cell should be marked as hit");
 
         // 2. Second shot -> Exception
-        assertThrows(IllegalStateException.class, () -> cell.receiveShot(),
+        assertThrows(IllegalStateException.class, cell::receiveShot,
             "Shooting again on a hit ship segment must throw exception");
     }
 }

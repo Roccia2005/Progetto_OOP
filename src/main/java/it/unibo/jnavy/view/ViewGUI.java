@@ -7,8 +7,14 @@ import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.controller.game.GameControllerImpl;
 import it.unibo.jnavy.controller.setup.SetupController;
 import it.unibo.jnavy.controller.setup.SetupControllerImpl;
-import it.unibo.jnavy.model.bots.*;
-import it.unibo.jnavy.model.captains.*;
+import it.unibo.jnavy.model.bots.BeginnerBot;
+import it.unibo.jnavy.model.bots.BotStrategy;
+import it.unibo.jnavy.model.bots.ProBot;
+import it.unibo.jnavy.model.bots.SniperBot;
+import it.unibo.jnavy.model.captains.Captain;
+import it.unibo.jnavy.model.captains.Engineer;
+import it.unibo.jnavy.model.captains.Gunner;
+import it.unibo.jnavy.model.captains.SonarOfficer;
 import it.unibo.jnavy.model.player.Bot;
 import it.unibo.jnavy.model.player.Human;
 import it.unibo.jnavy.view.game.GamePanel;
@@ -30,6 +36,11 @@ public class ViewGUI extends JFrame implements View {
     private static final String GAME_CARD = "GAME";
     private static final String ERROR_MESSAGE = "No valid save file found!";
     private static final Color ERROR_COLOR = Color.RED;
+    private static final int SIZE_HEIGHT = 700;
+    private static final int SIZE_WIDTH = 1000;
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
 
     private final CardLayout cardLayout;
     private final JPanel mainPanel;
@@ -41,7 +52,7 @@ public class ViewGUI extends JFrame implements View {
     public ViewGUI() {
         this.setTitle("J-Navy");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1000, 700);
+        this.setSize(SIZE_HEIGHT, SIZE_WIDTH);
         this.setLocationRelativeTo(null);
         this.setResizable(true);
 
@@ -64,7 +75,7 @@ public class ViewGUI extends JFrame implements View {
     private void initStartPhase() {
         this.startView = new StartView(
                 () -> {
-                    SaveManager saveManager = new SaveManagerImpl();
+                    final SaveManager saveManager = new SaveManagerImpl();
                     saveManager.deleteSave();
                     this.startView.stopMusic();
                     this.cardLayout.show(this.mainPanel, BOT_CARD);
@@ -76,7 +87,7 @@ public class ViewGUI extends JFrame implements View {
 
     private void initSelectionPhase() {
         final BotSelectionPanel botPanel = new BotSelectionPanel((BotLevel level) -> {
-            switch(level) {
+            switch (level) {
                 case BEGINNER -> this.selectedBotStrategy = new BeginnerBot();
                 case PRO -> this.selectedBotStrategy = new ProBot();
                 case SNIPER -> {
@@ -88,7 +99,7 @@ public class ViewGUI extends JFrame implements View {
         }, () -> this.cardLayout.show(this.mainPanel, START_CARD));
 
         final CapSelectionPanel capPanel = new CapSelectionPanel((CaptainAbility ability) -> {
-            switch(ability) {
+            switch (ability) {
                 case ENGINEER -> this.selectedCaptain = new Engineer();
                 case GUNNER -> this.selectedCaptain = new Gunner();
                 case SONAROFFICER -> this.selectedCaptain = new SonarOfficer();
@@ -132,7 +143,7 @@ public class ViewGUI extends JFrame implements View {
 
         saveManager.load().ifPresentOrElse(
                 loadedState -> {
-                    GameController loadedController = new GameControllerImpl(loadedState);
+                    final GameController loadedController = new GameControllerImpl(loadedState);
                     launchGameWithController(loadedController);
                 },
                 () -> {
@@ -143,7 +154,7 @@ public class ViewGUI extends JFrame implements View {
         );
     }
 
-    private void launchGameWithController(GameController gameController) {
+    private void launchGameWithController(final GameController gameController) {
         final GamePanel gamePanel = new GamePanel(gameController, () -> {
             this.selectedBotStrategy = null;
             this.selectedCaptain = null;

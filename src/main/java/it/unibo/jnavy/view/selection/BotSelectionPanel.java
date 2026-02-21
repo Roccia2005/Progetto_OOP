@@ -1,15 +1,50 @@
 package it.unibo.jnavy.view.selection;
 
-import javax.swing.*;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BACKGROUND_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BORDER_THICKNESS;
+import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_HEIGHT_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.CONTROL_WIDTH_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.DESC_HEIGHT_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.DESC_WIDTH_DIVISOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FLOW_HGAP;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FLOW_VGAP;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_SIZE_CTRL;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_SIZE_DESC;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_SIZE_TITLE;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.IMAGE_SIZE;
+import static it.unibo.jnavy.view.utilities.ViewConstants.INSET_PADDING;
+import static it.unibo.jnavy.view.utilities.ViewConstants.MENUBLUE;
+import static it.unibo.jnavy.view.utilities.ViewConstants.SETHEIGHT;
+import static it.unibo.jnavy.view.utilities.ViewConstants.SETWIDTH;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Rectangle;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import it.unibo.jnavy.view.utilities.ImageLoader;
-
-import java.awt.*;
-
-import static it.unibo.jnavy.view.utilities.ViewConstants.*;
 
 public class BotSelectionPanel extends JPanel {
 
@@ -63,16 +98,16 @@ public class BotSelectionPanel extends JPanel {
     private void initUI() {
         this.setPreferredSize(new Dimension(SETWIDTH, SETHEIGHT));
 
-        JPanel centerPanel = new JPanel(new GridBagLayout());
+        final JPanel centerPanel = new JPanel(new GridBagLayout());
         centerPanel.setBackground(BACKGROUND_COLOR);
 
-        GridBagConstraints gbc = new GridBagConstraints();
+        final GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, INSET_PADDING, INSET_PADDING);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        JLabel title = new JLabel("Choose your opponent");
+        final JLabel title = new JLabel("Choose your opponent");
         title.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_TITLE));
         title.setForeground(FOREGROUND_COLOR);
         gbc.insets = new Insets(INSET_PADDING, INSET_PADDING, 30, INSET_PADDING);
@@ -99,28 +134,28 @@ public class BotSelectionPanel extends JPanel {
         descriptionArea.setBorder(BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS));
         descriptionArea.setBackground(MENUBLUE);
 
-        StyledDocument doc = descriptionArea.getStyledDocument();
-        SimpleAttributeSet center = new SimpleAttributeSet();
+        final StyledDocument doc = descriptionArea.getStyledDocument();
+        final SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), center, false);
         centerPanel.add(descriptionArea, gbc);
 
         gbc.gridy++;
-        JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, FLOW_HGAP, FLOW_VGAP));
+        final JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, FLOW_HGAP, FLOW_VGAP));
         controlsPanel.setBackground(BACKGROUND_COLOR);
 
         levelComboBox = new JComboBox<>(BotLevel.values());
         levelComboBox.setUI(new javax.swing.plaf.basic.BasicComboBoxUI() {
 
             @Override
-            public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus) {
+            public void paintCurrentValueBackground(final Graphics g, final Rectangle bounds, final boolean hasFocus) {
                 g.setColor(MENUBLUE);
                 g.fillRect(bounds.x, bounds.y, bounds.width + 10, bounds.height);
             }
 
             @Override
             protected JButton createArrowButton() {
-                JButton btn = new javax.swing.plaf.basic.BasicArrowButton(
+                final JButton btn = new javax.swing.plaf.basic.BasicArrowButton(
                     javax.swing.plaf.basic.BasicArrowButton.SOUTH,
                     MENUBLUE,       // botton background color
                     MENUBLUE,       // shadow color, the same to uniform that to the background
@@ -143,7 +178,7 @@ public class BotSelectionPanel extends JPanel {
         levelComboBox.addActionListener(e -> updatePreview());
         levelComboBox.setBorder(BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS));
 
-        JButton confirmButton = new JButton("Confirm");
+        final JButton confirmButton = new JButton("Confirm");
         confirmButton.setFocusPainted(false);
         confirmButton.setPreferredSize(new Dimension(SETWIDTH / CONTROL_WIDTH_DIVISOR, SETHEIGHT / CONTROL_HEIGHT_DIVISOR));
         confirmButton.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_CTRL));
@@ -151,7 +186,7 @@ public class BotSelectionPanel extends JPanel {
         confirmButton.setForeground(FOREGROUND_COLOR);
         confirmButton.setBorder(BorderFactory.createLineBorder(FOREGROUND_COLOR, BORDER_THICKNESS));
         confirmButton.addActionListener(e -> {
-            BotLevel selected = (BotLevel) levelComboBox.getSelectedItem();
+            final BotLevel selected = (BotLevel) levelComboBox.getSelectedItem();
             if (selected != null && listener != null) {
                 listener.difficultySelected(selected);
             }
@@ -161,10 +196,10 @@ public class BotSelectionPanel extends JPanel {
         controlsPanel.add(confirmButton);
         centerPanel.add(controlsPanel, gbc);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 30));
+        final JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 30));
         bottomPanel.setBackground(BACKGROUND_COLOR);
 
-        JButton backButton = new JButton("Back");
+        final JButton backButton = new JButton("Back");
         backButton.setFocusPainted(false);
         backButton.setPreferredSize(new Dimension(SETWIDTH / CONTROL_WIDTH_DIVISOR, SETHEIGHT / CONTROL_HEIGHT_DIVISOR));
         backButton.setFont(new Font(FONT_FAMILY, Font.BOLD, FONT_SIZE_CTRL));
@@ -186,9 +221,9 @@ public class BotSelectionPanel extends JPanel {
     }
 
     private void updatePreview() {
-        BotLevel selected = (BotLevel) levelComboBox.getSelectedItem();
+        final BotLevel selected = (BotLevel) levelComboBox.getSelectedItem();
         if (selected != null) {
-            ImageIcon icon = ImageLoader.getScaledIcon(selected.getImagePath(), IMAGE_SIZE, IMAGE_SIZE);
+            final ImageIcon icon = ImageLoader.getScaledIcon(selected.getImagePath(), IMAGE_SIZE, IMAGE_SIZE);
             imageLabel.setIcon(icon);
             if (icon == null) {
                 imageLabel.setText("image not found");
@@ -201,8 +236,8 @@ public class BotSelectionPanel extends JPanel {
 
     private final class CustomRenderer extends DefaultListCellRenderer {
         @Override
-        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, false);
+        public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
+            final JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, false);
 
             label.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
 

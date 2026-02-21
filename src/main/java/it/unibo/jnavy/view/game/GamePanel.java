@@ -1,7 +1,13 @@
 package it.unibo.jnavy.view.game;
 
-import javax.swing.*;
-import java.awt.*;
+import static it.unibo.jnavy.view.utilities.ViewConstants.BACKGROUND_COLOR;
+import static it.unibo.jnavy.view.utilities.ViewConstants.MENUBLUE;
+
+import java.awt.Component;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.List;
@@ -16,7 +22,10 @@ import it.unibo.jnavy.view.utilities.SoundManager;
 import it.unibo.jnavy.view.components.grid.GridPanel;
 import java.util.stream.Collectors;
 
-import static it.unibo.jnavy.view.utilities.ViewConstants.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class GamePanel extends JPanel {
 
@@ -32,11 +41,14 @@ public class GamePanel extends JPanel {
     private static final String GAME_SAVED = "Game saved successfully!";
     private static final String SAVE_ERROR = "Error saving the game.";
 
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private boolean inputBlocked = false;
     private final GameHeaderPanel headerPanel;
     private final GameDashboardPanel dashboardPanel;
     private final GridPanel humanGridPanel;
-    private GridPanel botGridPanel;
+    private final GridPanel botGridPanel;
     private final GameController controller;
     private final SoundManager ambientSound;
     private boolean gameOverHandled = false;
@@ -48,7 +60,7 @@ public class GamePanel extends JPanel {
     private final GameOverPanel gameOverPanel;
     private String lastWeatherCondition;
 
-    public GamePanel(GameController controller, Runnable onMenu) {
+    public GamePanel(final GameController controller, final Runnable onMenu) {
         this.controller = controller;
         this.lastWeatherCondition = controller.getWeatherConditionName();
         this.effectsPanel = new EffectsPanel();
@@ -65,7 +77,7 @@ public class GamePanel extends JPanel {
 
         this.mainContent.setOpaque(false);
 
-        JPanel gridsContainer = new JPanel(new GridLayout(1, 2, 40, 0));
+        final JPanel gridsContainer = new JPanel(new GridLayout(1, 2, 40, 0));
         gridsContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         gridsContainer.setOpaque(false);
 
@@ -105,8 +117,8 @@ public class GamePanel extends JPanel {
 
         this.addComponentListener(new ComponentAdapter() {
             @Override
-            public void componentResized(ComponentEvent e) {
-                Rectangle bounds = new Rectangle(0, 0, GamePanel.this.getWidth(), GamePanel.this.getHeight());
+            public void componentResized(final ComponentEvent e) {
+                final Rectangle bounds = new Rectangle(0, 0, GamePanel.this.getWidth(), GamePanel.this.getHeight());
                 mainContent.setBounds(bounds);
                 effectsPanel.setBounds(bounds);
                 weatherOverlay.setBounds(bounds);
@@ -119,10 +131,10 @@ public class GamePanel extends JPanel {
     }
 
     private void updateDashboard() {
-        String currentCondition = this.controller.getWeatherConditionName();
+        final String currentCondition = this.controller.getWeatherConditionName();
         this.dashboardPanel.updateDashboard(controller.getCurrentCaptainCooldown(), currentCondition);
-        humanGridPanel.refresh(pos -> controller.getHumanCellState(pos));
-        botGridPanel.refresh(pos -> controller.getBotCellState(pos));
+        humanGridPanel.refresh(controller::getHumanCellState);
+        botGridPanel.refresh(controller::getBotCellState);
 
         if (!this.lastWeatherCondition.isEmpty() && !this.lastWeatherCondition.equals(currentCondition)) {
             this.weatherOverlay.showWeatherAlert(currentCondition);
@@ -132,7 +144,7 @@ public class GamePanel extends JPanel {
         if (controller.isGameOver() && !this.gameOverHandled) {
             this.gameOverHandled = true;
 
-            Timer delayTimer = new Timer(900, e -> {
+            final Timer delayTimer = new Timer(900, e -> {
                 this.showEndGameScreen(controller.isBotDefeated());
             });
             delayTimer.setRepeats(false);
@@ -143,15 +155,16 @@ public class GamePanel extends JPanel {
     private void triggerBotTurn() {
         this.headerPanel.setStatus(BOT_TURN_TEXT, BOT_TURN_TEXT_COLOR);
 
-        Timer botTimer = new Timer(1000, e -> {
-            Position target = controller.playBotTurn();
+        final Timer botTimer = new Timer(1000, e -> {
+            final Position target = controller.playBotTurn();
             if (target == null) return;
 
-            JButton targetButton = humanGridPanel.getButtonAt(target);
-            var state = controller.getHumanCellState(target);
-            boolean isHit = state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
+            final Component targetButton = humanGridPanel.getButtonAt(target);
+            final CellCondition state = controller.getHumanCellState(target);
+            final boolean isHit = state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
+
             this.effectsPanel.startShot(List.of(targetButton), isHit,
-                    () -> humanGridPanel.refresh(pos -> controller.getHumanCellState(pos)),
+                    () -> humanGridPanel.refresh(controller::getHumanCellState),
                     () -> {
                 this.updateDashboard();
                 this.inputBlocked = false;
@@ -162,7 +175,7 @@ public class GamePanel extends JPanel {
         botTimer.start();
     }
 
-    public void showEndGameScreen(boolean isVictory) {
+    public void showEndGameScreen(final boolean isVictory) {
         if (this.ambientSound != null) {
             this.ambientSound.stop();
         }
@@ -176,7 +189,7 @@ public class GamePanel extends JPanel {
         this.gameOverPanel.showResult(isVictory);
     }
 
-    private void handleHumanGridClick(Position p) {
+    private void handleHumanGridClick(final Position p) {
         if (this.inputBlocked || !controller.isHumanTurn()) return;
         
         if (this.dashboardPanel.isCaptainAbilityActive() && !controller.captainAbilityTargetsEnemyGrid()) {
@@ -186,18 +199,18 @@ public class GamePanel extends JPanel {
         }
     }
 
-    private void handleBotGridClick(Position p) {
-        if (this.inputBlocked || !controller.isHumanTurn() || controller.isGameOver()) return;
+    private void handleBotGridClick(final Position p) {
+        if (this.inputBlocked || !controller.isHumanTurn() || controller.isGameOver()) { return; }
 
-        CellCondition clickedState = controller.getBotCellState(p);
-        boolean isAlreadyRevealed = (clickedState == CellCondition.HIT_SHIP || clickedState == CellCondition.SUNK_SHIP || clickedState == CellCondition.HIT_WATER);
+        final CellCondition clickedState = controller.getBotCellState(p);
+        final boolean isAlreadyRevealed = clickedState == CellCondition.HIT_SHIP || clickedState == CellCondition.SUNK_SHIP || clickedState == CellCondition.HIT_WATER;
 
         if (isAlreadyRevealed && !this.dashboardPanel.isCaptainAbilityActive()) return;
 
         this.inputBlocked = true;
-        boolean isAbility = this.dashboardPanel.isCaptainAbilityActive();
+        final boolean isAbility = this.dashboardPanel.isCaptainAbilityActive();
 
-        List<Position> previousHits = TargetCalculator.getAllRevealedPositions(controller);
+        final List<Position> previousHits = TargetCalculator.getAllRevealedPositions(controller);
 
         if (isAbility) {
             controller.processAbility(p);
@@ -215,19 +228,19 @@ public class GamePanel extends JPanel {
             controller.processShot(p);
         }
 
-        List<Position> newHits = TargetCalculator.getAllRevealedPositions(controller);
+        final List<Position> newHits = TargetCalculator.getAllRevealedPositions(controller);
         newHits.removeAll(previousHits);
 
-        List<Position> targets = TargetCalculator.determineAnimationTargets(
-            p, newHits, isAbility, controller.getPlayerCaptainName(), controller.getGridSize()
+        final List<Position> targets = TargetCalculator.determineAnimationTargets(
+        p, newHits, isAbility, controller.getPlayerCaptainName(), controller.getGridSize()
         );
         
-        boolean anyHit = targets.stream().anyMatch(pos -> {
-            var state = controller.getBotCellState(pos);
+        final boolean anyHit = targets.stream().anyMatch(pos -> {
+            final var state = controller.getBotCellState(pos);
             return state == CellCondition.HIT_SHIP || state == CellCondition.SUNK_SHIP;
         });
 
-        List<Component> targetButtons = targets.stream().map(botGridPanel::getButtonAt).collect(Collectors.toList());
+        final List<Component> targetButtons = targets.stream().map(botGridPanel::getButtonAt).collect(Collectors.toList());
 
         this.effectsPanel.startShot(targetButtons, anyHit,
                 () -> botGridPanel.refresh(pos -> controller.getBotCellState(pos)),

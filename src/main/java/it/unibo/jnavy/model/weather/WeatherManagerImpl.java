@@ -19,8 +19,11 @@ import java.util.Random;
 public final class WeatherManagerImpl implements WeatherManager {
 
     private static WeatherManagerImpl instance;
-
     private static final int WEATHER_DURATION = 6;
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
     private WeatherCondition condition;
     private int turnCounter;
     private Random random;

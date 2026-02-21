@@ -2,12 +2,17 @@ package it.unibo.jnavy.view.components.bot;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;
+import static it.unibo.jnavy.view.utilities.ViewConstants.FOREGROUND_COLOR;
+
 import java.awt.FlowLayout;
 import java.awt.Font;
 
-import static it.unibo.jnavy.view.utilities.ViewConstants.*;
-
 public class BotDifficultyPanel extends JPanel {
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
 
     public BotDifficultyPanel(final String difficultyName) {
         super(new FlowLayout(FlowLayout.CENTER, 15, 0));

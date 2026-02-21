@@ -60,7 +60,7 @@ public class ProBot extends AbstractBotStrategy {
     }
 
     private Position handleDestroying(final Grid enemyGrid) {
-        Position target = targetCalc(lastTargetPosition);
+        final Position target = targetCalc(lastTargetPosition);
         if (!enemyGrid.isTargetValid(target)) {
             this.currentDirection = this.currentDirection.opposite();
             final Position secondTarget = targetCalc(firstHitPosition);

@@ -3,19 +3,20 @@ package it.unibo.jnavy.model.weather;
 import it.unibo.jnavy.model.grid.Grid;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
 
 import it.unibo.jnavy.model.grid.GridImpl;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.ShotResult;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * Test class for {@link WeatherManagerImpl}.
  */
-public class WeatherManagerTest {
+final class WeatherManagerTest {
 
-    private WeatherManager weatherManager;
     private static final int DURATION = 6;
+    private WeatherManager weatherManager;
 
     /**
      * Sets up the test environment before each test.
@@ -87,10 +88,10 @@ public class WeatherManagerTest {
     void testSunnyPrecision() {
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
 
-        Grid grid = new GridImpl();
-        Position target = new Position(0, 0);
+        final Grid grid = new GridImpl();
+        final Position target = new Position(0, 0);
 
-        ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
+        final ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
 
         assertEquals(target, shotResult.position());
     }
@@ -105,14 +106,14 @@ public class WeatherManagerTest {
     @Test
     void testFogDeviation() {
         this.weatherManager.setCondition(WeatherCondition.FOG);
-        Grid grid = new GridImpl();
-        Position target = new Position(5, 5);
+        final Grid grid = new GridImpl();
+        final Position target = new Position(5, 5);
 
         for (int i = 0; i < 20; i++) {
-            ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
-            Position actualPos = shotResult.position();
-            int diffX = Math.abs(target.x() - actualPos.x());
-            int diffY = Math.abs(target.y() - actualPos.y());
+            final ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
+            final Position actualPos = shotResult.position();
+            final int diffX = Math.abs(target.x() - actualPos.x());
+            final int diffY = Math.abs(target.y() - actualPos.y());
             assertTrue(diffX <= 1 && diffY <= 1);
         }
     }
@@ -126,10 +127,10 @@ public class WeatherManagerTest {
     @Test
     void testFogBoundarySafety() {
         this.weatherManager.setCondition(WeatherCondition.FOG);
-        Grid grid = new GridImpl();
-        Position corner = new Position(0, 0);
-        ShotResult shotResult = this.weatherManager.applyWeatherEffects(corner, grid);
-        Position hitPosition = shotResult.position();
+        final Grid grid = new GridImpl();
+        final Position corner = new Position(0, 0);
+        final ShotResult shotResult = this.weatherManager.applyWeatherEffects(corner, grid);
+        final Position hitPosition = shotResult.position();
         assertNotNull(hitPosition);
 
         // Check that the shot is within the valid neighborhood (0,0), (0,1), (1,0), or (1,1)
@@ -144,23 +145,24 @@ public class WeatherManagerTest {
     @Test
     void testFogAvoidHitCells() {
         this.weatherManager.setCondition(WeatherCondition.FOG);
-        Grid grid = new GridImpl();
-        Position target = new Position(2, 2);
+        final Grid grid = new GridImpl();
+        final Position target = new Position(2, 2);
 
         for (int x = 1; x <= 3; x++) {
             for (int y = 1; y <= 3; y++) {
-                if (x == 1 && y == 1) continue;
+                if (x == 1 && y == 1) { continue; }
+
                 grid.receiveShot(new Position(x, y));
             }
         }
-        ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
+        final ShotResult shotResult = this.weatherManager.applyWeatherEffects(target, grid);
         assertEquals(new Position(1, 1), shotResult.position());
     }
 
     @Test
     void testReset() {
         this.weatherManager.setCondition(WeatherCondition.FOG);
-        ((WeatherManagerImpl)this.weatherManager).reset();
+        ((WeatherManagerImpl) this.weatherManager).reset();
         assertEquals(WeatherCondition.SUNNY, this.weatherManager.getCurrentWeather());
     }
 }

@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public final class ImageLoader {
 
-    private static final Map<String, Image> imageCache = new HashMap<>();
+    private static final Map<String, Image> IMAGE_CACHE = new HashMap<>();
 
     private ImageLoader() {
     }
@@ -21,22 +21,23 @@ public final class ImageLoader {
     /**
      * Loads an image from the specified classpath, utilizing an internal cache
      * to optimize performance and prevent redundant I/O disk operations.
+     * 
      * @param path the absolute path to the image resource (e.g., "/images/ship.png").
      * @return the loaded {@link Image}, or {@code null} if the resource cannot be found or read.
      */
     public static Image getImage(final String path) {
-        if (imageCache.containsKey(path)) {
-            return imageCache.get(path);
+        if (IMAGE_CACHE.containsKey(path)) {
+            return IMAGE_CACHE.get(path);
         }
         try {
-            URL resourceUrl = ImageLoader.class.getResource(path);
+            final URL resourceUrl = ImageLoader.class.getResource(path);
             if (resourceUrl == null) {
                 return null;
             }
-            Image loadedImage = ImageIO.read(resourceUrl);
-            imageCache.put(path, loadedImage);
+            final Image loadedImage = ImageIO.read(resourceUrl);
+            IMAGE_CACHE.put(path, loadedImage);
             return loadedImage;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return null;
         }
     }
@@ -44,6 +45,7 @@ public final class ImageLoader {
     /**
      * Retrieves an image from the cache (or loads it if necessary) and wraps it
      * in an {@link ImageIcon}, ready to be used in Swing components like JLabel or JButton.
+     * 
      * @param path the absolute path to the image resource.
      * @return an {@link ImageIcon} containing the requested image, or {@code null} if it cannot be loaded.
      */
@@ -55,13 +57,14 @@ public final class ImageLoader {
     /**
      * Retrieves an image, scales it to the specified dimensions using a smooth scaling algorithm,
      * and wraps it in an {@link ImageIcon}.
+     * 
      * @param path the absolute path to the image resource.
      * @param width the desired width of the scaled icon.
      * @param height the desired height of the scaled icon.
      * @return a resized {@link ImageIcon}, or {@code null} if the original image cannot be loaded.
      */
     public static ImageIcon getScaledIcon(final String path, final int width, final int height) {
-        Image img = getImage(path);
+        final Image img = getImage(path);
         if (img != null) {
             final Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
             return new ImageIcon(scaledImg);

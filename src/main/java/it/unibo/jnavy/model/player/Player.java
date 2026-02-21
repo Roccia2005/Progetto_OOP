@@ -12,6 +12,7 @@ import it.unibo.jnavy.model.utilities.HitType;
 
 /**
  * Defines the contract for a participant in the game.
+ *
  * <p>
  * This interface abstracts the common behaviors of both human players and computer-controlled
  * opponents (Bots). It ensures that every player has a {@link Grid} containing their ships
@@ -21,6 +22,7 @@ public interface Player extends TurnObserver {
 
     /**
      * Retrieves the game grid associated with this player.
+     *
      * <p>
      * The grid represents the player's board, containing their fleet and tracking
      * the state of each cell (e.g., hit, miss, empty). This is essential for
@@ -32,6 +34,7 @@ public interface Player extends TurnObserver {
 
     /**
      * Retrieves the fleet associated with this player.
+     *
      * <p>
      * This is a default method that delegates the call to the player's Grid,
      * avoiding code duplication in Bot and Human classes.
@@ -44,6 +47,7 @@ public interface Player extends TurnObserver {
 
     /**
      * Creates a shot directed at a specific target position.
+     *
      * <p>
      * The shot type may vary depending on the player (e.g., standard or area for Human, standard for Bot).
      * The returned object is intended to be processed by the weather system and potentially modified
@@ -59,7 +63,7 @@ public interface Player extends TurnObserver {
     default void processTurnEnd() {
     }
 
-    default boolean useAbility(Position target, Grid grid) {
+    default boolean useAbility(final Position target, final Grid grid) {
         return false;
     }
 
@@ -83,7 +87,7 @@ public interface Player extends TurnObserver {
      * Chiede al giocatore di generare autonomamente una mossa.
      * Utilizza Optional: se il giocatore è Umano, ritorna Optional.empty().
      */
-    default Optional<Position> generateTarget(Grid enemyGrid) {
+    default Optional<Position> generateTarget(final Grid enemyGrid) {
         return Optional.empty();
     }
 
@@ -91,7 +95,7 @@ public interface Player extends TurnObserver {
      * Invia un feedback al giocatore sul colpo appena effettuato.
      * Implementazione di default vuota.
      */
-    default void receiveFeedback(Position target, HitType result) {}
+    default void receiveFeedback(final Position target, final HitType result) { }
 
     /**
      * Restituisce il nome identificativo del "profilo" del giocatore.

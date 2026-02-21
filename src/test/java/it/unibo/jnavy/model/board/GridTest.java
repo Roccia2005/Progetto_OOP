@@ -20,10 +20,10 @@ import it.unibo.jnavy.model.utilities.ShotResult;
 /**
  * Test class for {@link GridImpl}.
  */
-public class GridTest {
+final class GridTest {
 
-    private Grid grid;
     private static final int SHIP_SIZE = 3;
+    private Grid grid;
 
     @BeforeEach
     void setup() {
@@ -33,7 +33,7 @@ public class GridTest {
     @Test
     void testValidPlacement() {
         final Ship ship = new ShipImpl(SHIP_SIZE);
-        final Position startPos = new Position(0,0);
+        final Position startPos = new Position(0, 0);
 
         // Test positioning towards RIGHT (0.0 -> 0.1 -> 0.2)
         assertTrue(grid.isPlacementValid(ship, startPos, CardinalDirection.RIGHT),
@@ -95,20 +95,18 @@ public class GridTest {
         grid.placeShip(ship, new Position(5, 5), CardinalDirection.RIGHT);
 
         // 1. I shoot at the water (MISS)
-        ShotResult resultMiss = grid.receiveShot(new Position(0, 0));
+        final ShotResult resultMiss = grid.receiveShot(new Position(0, 0));
         assertEquals(HitType.MISS, resultMiss.hitType());
 
         // 2. I hit the ship (HIT)
-        ShotResult resultHit = grid.receiveShot(new Position(5, 5));
+        final ShotResult resultHit = grid.receiveShot(new Position(5, 5));
         assertEquals(HitType.HIT, resultHit.hitType());
 
         // 3. I hit the same spot (Exception)
-        assertThrows(IllegalStateException.class, () -> {
-            grid.receiveShot(new Position(5, 5));
-        }, "It should throw an exception if I shoot a cell that has already been hit");
+        assertThrows(IllegalStateException.class, () -> grid.receiveShot(new Position(5, 5)), "It should throw an exception if I shoot a cell that has already been hit");
 
         // 4. I'm sinking the ship (SUNK)
-        ShotResult resultSunk = grid.receiveShot(new Position(5, 6));
+        final ShotResult resultSunk = grid.receiveShot(new Position(5, 6));
         assertEquals(HitType.SUNK, resultSunk.hitType());
 
         // Check that the result contains the sunken ship
@@ -124,10 +122,10 @@ public class GridTest {
 
         // I damage the ship
         grid.receiveShot(pos);
-        int healthAfterHit = ship.getHealth();
+        final int healthAfterHit = ship.getHealth();
 
         // Repair
-        boolean repaired = grid.repair(pos);
+        final boolean repaired = grid.repair(pos);
 
         assertTrue(repaired, "Repair should return true on damaged ship cell");
         assertEquals(healthAfterHit + 1, ship.getHealth(), "Ship health should increase by 1");

@@ -15,7 +15,7 @@ public class StandardShot implements HitStrategy {
 
     @Override
     public List<ShotResult> execute(final Position target, final Grid grid) {
-        ShotResult result = WeatherManagerImpl.getInstance().applyWeatherEffects(target, grid);
+        final ShotResult result = WeatherManagerImpl.getInstance().applyWeatherEffects(target, grid);
         return List.of(result);
     }
 }

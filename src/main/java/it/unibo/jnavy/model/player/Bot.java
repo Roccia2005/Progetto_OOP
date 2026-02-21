@@ -15,6 +15,7 @@ import it.unibo.jnavy.model.utilities.ShotResult;
 
 /**
  * Represents a computer-controlled player (Bot) in the game.
+ *
  * <p>
  * The Bot manages its own {@link Fleet} and utilizes a {@link BotStrategy}
  * to determine its moves and target selection logic during the match.
@@ -22,14 +23,15 @@ import it.unibo.jnavy.model.utilities.ShotResult;
  */
 public class Bot implements Player {
 
-    private final Grid grid;
-    private BotStrategy strategy;
-
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
+    private final Grid grid;
+    private BotStrategy strategy;
+
     /**
      * Constructs a new Bot with a specific strategy.
+     *
      * <p>
      * The fleet is automatically initialized using a default implementation.
      * The strategy determines the difficulty level (e.g., Beginner, Pro, Sniper).
@@ -54,6 +56,7 @@ public class Bot implements Player {
 
     /**
      * Updates the Bot's current strategy.
+     *
      * <p>
      * This allows changing the difficulty level or behavior of the Bot dynamically
      * (e.g., from a settings menu).
@@ -66,6 +69,7 @@ public class Bot implements Player {
 
     /**
      * Determines the next target position to attack.
+     *
      * <p>
      * This method delegates the decision-making process to the current {@link BotStrategy},
      * which analyzes the enemy's grid to select the best coordinate.
@@ -81,6 +85,7 @@ public class Bot implements Player {
     /**
      * Passes the result of the shot to the strategy so it can learn/update its state.
      * Crucial for advanced bots like ProBot and SniperBot.
+     *
      * @param target the position targeted
      * @param result the outcome of the shot
      */

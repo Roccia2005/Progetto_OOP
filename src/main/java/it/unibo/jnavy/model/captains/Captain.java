@@ -42,8 +42,7 @@ public interface Captain extends TurnObserver {
     /**
      * Determines the target grid for this captain's special ability.
      *
-     * @return true if the ability is applied to the enemy's grid,
-     * false if it is applied to the player's own grid.
+     * @return true if the ability is applied to the enemy's grid, false if it is applied to the player's own grid.
      */
     boolean targetsEnemyGrid();
 

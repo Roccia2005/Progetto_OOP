@@ -6,7 +6,6 @@ import it.unibo.jnavy.model.utilities.Position;
 
 /**
  * Abstract base implementation of the {@link Captain} interface.
- *
  * This class handles the common logic for all captains, specifically the
  * cooldown management mechanism. It implements {@link TurnObserver} to
  * automatically increment the cooldown counter at the end of each turn.
@@ -15,7 +14,10 @@ public abstract class AbstractCaptain implements Captain {
 
     private final int cooldown;
     private int currentCooldown;
-    private boolean usedThisTurn = false;
+    private boolean usedThisTurn;
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
 
     protected AbstractCaptain(final int cooldown) {
         this.cooldown = cooldown;
@@ -25,7 +27,7 @@ public abstract class AbstractCaptain implements Captain {
     protected abstract boolean executeEffect(Grid grid, Position p);
 
     @Override
-    public final boolean useAbility(Grid grid, Position p) {
+    public final boolean useAbility(final Grid grid, final Position p) {
         if (this.isAbilityRecharged() && grid.isPositionValid(p)) {
             if (this.executeEffect(grid, p)) {
                 this.resetCooldown();
@@ -71,5 +73,4 @@ public abstract class AbstractCaptain implements Captain {
         this.currentCooldown = 0;
         this.usedThisTurn = true;
     }
-
 }

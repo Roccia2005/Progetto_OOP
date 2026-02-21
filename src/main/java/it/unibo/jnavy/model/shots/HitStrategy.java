@@ -12,6 +12,7 @@ import java.util.List;
  * from the "ballistics" (how the shot affects the grid).
  * Different implementations can define unique firing patterns.
  */
+@FunctionalInterface
 public interface HitStrategy {
 
     /**
