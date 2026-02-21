@@ -39,7 +39,7 @@ final class GridTest {
     private Grid grid;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         this.grid = new GridImpl();
     }
 
