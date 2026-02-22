@@ -63,7 +63,7 @@ public final class Bot implements Player {
     @Override
     public List<ShotResult> createShot(final Position target, final Grid targetGrid) {
         final HitStrategy shot = new StandardShot();
-        return shot.execute(target, grid);
+        return shot.execute(target, targetGrid);
     }
 
     /**

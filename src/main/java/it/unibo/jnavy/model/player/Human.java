@@ -47,7 +47,7 @@ public final class Human implements Player {
      */
     @Override
     public List<ShotResult> createShot(final Position target, final Grid targetGrid) {
-        return List.of(WeatherManagerImpl.getInstance().applyWeatherEffects(target, grid));
+        return List.of(WeatherManagerImpl.getInstance().applyWeatherEffects(target, targetGrid));
     }
 
     /**
@@ -68,7 +68,7 @@ public final class Human implements Player {
      */
     @Override
     public boolean useAbility(final Position target, final Grid targetGrid) {
-        return this.captain.useAbility(grid, target);
+        return this.captain.useAbility(targetGrid, target);
     }
 
     /**
