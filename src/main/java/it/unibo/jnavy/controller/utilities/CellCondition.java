@@ -38,5 +38,5 @@ public enum CellCondition {
     /**
      * The cell contains water revealed by a special ability.
      */
-    REVEALED_WATER;
+    REVEALED_WATER
 }
