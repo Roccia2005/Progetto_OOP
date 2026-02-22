@@ -49,7 +49,7 @@ public final class FleetImpl implements Fleet {
     }
 
     @Override
-    public boolean isTopologyValid() {
+    public boolean isCompositionValid() {
         return FLEET_COMPOSITION.entrySet().stream().allMatch(entry -> {
             final long actual = ships.stream().filter(s -> s.getSize() == entry.getKey()).count();
             return actual == entry.getValue();

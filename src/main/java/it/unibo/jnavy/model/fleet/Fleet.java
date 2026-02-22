@@ -56,7 +56,7 @@ public interface Fleet extends Serializable {
      *
      * @return true if the fleet is complete and valid.
      */
-    boolean isTopologyValid();
+    boolean isCompositionValid();
 
     /**
      * Removes the specified ship from the fleet.

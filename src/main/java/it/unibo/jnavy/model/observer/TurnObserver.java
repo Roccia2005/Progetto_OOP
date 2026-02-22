@@ -20,10 +20,4 @@ public interface TurnObserver extends Serializable {
      * decrease duration of weather conditions, update turn counters, ...)
      */
     void processTurnEnd();
-
-    /**
-     * Called automatically by the Game Controller before each turn.
-     * This is a {@code default} method, classes are not forced to implement it.
-     */
-    default void prepareTurn() { }
 }

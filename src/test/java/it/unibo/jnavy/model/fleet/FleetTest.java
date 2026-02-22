@@ -42,7 +42,7 @@ class FleetTest {
             fleet.addShip(new ShipImpl(SHIP_SIZE_2));
         });
 
-        assertTrue(fleet.isTopologyValid(), "The fleet containing proper ships must be valid");
+        assertTrue(fleet.isCompositionValid(), "The fleet containing proper ships must be valid");
     }
 
     @Test
@@ -69,7 +69,7 @@ class FleetTest {
         fleet.addShip(new ShipImpl(SHIP_SIZE_5));
         fleet.addShip(new ShipImpl(SHIP_SIZE_4));
 
-        assertFalse(fleet.isTopologyValid(), "A partial fleet should not be considered valid");
+        assertFalse(fleet.isCompositionValid(), "A partial fleet should not be considered valid");
     }
 
     @Test
