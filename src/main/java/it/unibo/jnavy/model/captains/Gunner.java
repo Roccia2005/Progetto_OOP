@@ -25,7 +25,7 @@ public final class Gunner extends AbstractCaptain {
     }
 
     @Override
-    public boolean executeEffect(final Grid grid, final Position p) {
+    protected boolean executeEffect(final Grid grid, final Position p) {
         final HitStrategy areaShot = new AreaShot(true);
         areaShot.execute(p, grid);
         return true;
