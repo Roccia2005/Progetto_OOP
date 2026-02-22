@@ -1,5 +1,6 @@
 package it.unibo.jnavy.controller.game;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.jnavy.model.player.Player;
 import it.unibo.jnavy.model.weather.WeatherManager;
 
@@ -25,6 +26,10 @@ public class TurnController {
      * @param turnCounter the starting value for the turn counter.
      * @param isHumanTurn true if the game should start with the human player's turn.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The controller needs direct references to Model objects to read their updated state."
+    )
     public TurnController(final Player human, final Player bot, final WeatherManager weather,
                           final int turnCounter, final boolean isHumanTurn) {
         this.human = human;

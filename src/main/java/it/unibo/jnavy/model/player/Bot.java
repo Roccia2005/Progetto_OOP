@@ -49,7 +49,7 @@ public final class Bot implements Player {
      */
     @SuppressFBWarnings(
     value = "EI_EXPOSE_REP",
-    justification = "Il Game Controller necessita dell'accesso diretto alla griglia per gestire la logica dei colpi."
+    justification = "The Game Controller needs direct access to the grid to handle the shot logic."
     )
     @Override
     public Grid getGrid() {

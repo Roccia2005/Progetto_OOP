@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.ObjectStreamException;
 
 /**
@@ -18,6 +21,10 @@ import java.io.ObjectStreamException;
  *    - The alternating cycle between {@link WeatherCondition#SUNNY} and {@link WeatherCondition#FOG}.
  *    - The calculation of coordinate deviation when shooting in bad weather.
  */
+@SuppressFBWarnings(
+    value = "SING_SINGLETON_IMPLEMENTS_SERIALIZABLE",
+    justification = "The class correctly implements readResolve() to maintain Singleton uniqueness during serialization."
+)
 public final class WeatherManagerImpl implements WeatherManager {
 
     private static WeatherManagerImpl instance;
@@ -44,6 +51,10 @@ public final class WeatherManagerImpl implements WeatherManager {
      *
      * @return The singleton instance.
      */
+    @SuppressFBWarnings(
+        value = "MS_EXPOSE_REP",
+        justification = "The Singleton design pattern inherently requires returning the mutable shared instance."
+    )
     public static synchronized WeatherManagerImpl getInstance() {
         if (instance == null) {
             instance = new WeatherManagerImpl();
