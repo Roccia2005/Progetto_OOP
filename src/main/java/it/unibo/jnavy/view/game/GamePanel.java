@@ -30,7 +30,7 @@ import javax.swing.Timer;
 
 /**
  * The core UI container for the active gameplay phase.
- * It integrates the player and bot grids, the dashboard, the header, 
+ * It integrates the player and bot grids, the dashboard, the header,
  * and handles the visual animations and sound effects during the battle.
  */
 public final class GamePanel extends JPanel {
@@ -57,7 +57,7 @@ public final class GamePanel extends JPanel {
     private final GridPanel humanGridPanel;
     private final GridPanel botGridPanel;
     private final transient GameController controller;
-    private final SoundManager ambientSound;
+    private final transient SoundManager ambientSound;
     private boolean gameOverHandled;
 
     private final JLayeredPane layeredPane;
@@ -71,7 +71,7 @@ public final class GamePanel extends JPanel {
      * Constructs a new {@code GamePanel}.
      *
      * @param controller the active {@link GameController} governing the game logic.
-     * @param onMenu a callback function executed when the player navigates back 
+     * @param onMenu a callback function executed when the player navigates back
      *      to the main menu from the game over screen.
      */
     public GamePanel(final GameController controller, final Runnable onMenu) {
@@ -190,7 +190,7 @@ public final class GamePanel extends JPanel {
     }
 
     /**
-     * Halts the game interactions, stops ambient sounds, plays the outcome audio, 
+     * Halts the game interactions, stops ambient sounds, plays the outcome audio,
      * and displays the final result overlay.
      *
      * @param isVictory {@code true} if the player won, {@code false} if the bot won.

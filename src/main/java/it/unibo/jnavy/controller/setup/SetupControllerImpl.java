@@ -126,10 +126,6 @@ public final class SetupControllerImpl implements SetupController {
         return shipsToPlace.isEmpty() && currentShipObject == null;
     }
 
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP",
-        justification = "You need to return the player's real instance so you can pass it to the GameController and start the game."
-    )
     @Override
     public Player getHumanPlayer() {
         return this.human;

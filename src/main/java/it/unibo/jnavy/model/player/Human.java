@@ -2,6 +2,7 @@ package it.unibo.jnavy.model.player;
 
 import java.util.List;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.jnavy.model.captains.Captain;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.grid.GridImpl;
@@ -36,6 +37,10 @@ public final class Human implements Player {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(
+    value = "EI_EXPOSE_REP",
+    justification = "The Game Controller needs direct access to the grid to handle the shot logic."
+    )
     @Override
     public Grid getGrid() {
         return this.grid;
