@@ -3,6 +3,7 @@ package it.unibo.jnavy.model.player;
 import java.util.List;
 import java.util.Optional;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.jnavy.model.bots.BotStrategy;
 import it.unibo.jnavy.model.fleet.Fleet;
 import it.unibo.jnavy.model.grid.Grid;
@@ -46,6 +47,10 @@ public final class Bot implements Player {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(
+    value = "EI_EXPOSE_REP",
+    justification = "Il Game Controller necessita dell'accesso diretto alla griglia per gestire la logica dei colpi."
+    )
     @Override
     public Grid getGrid() {
         return this.grid;

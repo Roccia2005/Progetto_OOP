@@ -142,7 +142,6 @@ public final class ProBot extends AbstractBotStrategy {
             case INVALID:
 
             case NONE:
-            default:
             break;
         }
 
