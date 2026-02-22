@@ -2,6 +2,9 @@ package it.unibo.jnavy.view;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -50,6 +53,10 @@ public final class ViewGUI extends JFrame implements View {
      *
      * @param selectionController the controller responsible for menu and selection transitions
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The View requires a direct reference to the SelectionController to handle UI navigation and state transitions."
+    )
     public ViewGUI(final SelectionController selectionController) {
         this.setTitle("J-Navy");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);

@@ -30,6 +30,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Represents the graphical user interface for the fleet setup phase.
  * It allows the user to manually place, rotate, randomize, or clear their fleet before starting the game.
@@ -79,6 +81,10 @@ public final class SetupView extends JPanel {
      * @param gameStartCall the callback to execute when the game starts
      * @param backCall      the callback to execute to go back to the previous screen
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The View needs a direct reference to the Controller to properly interact with the game state."
+    )
     public SetupView(final SetupController controller, final Runnable gameStartCall, final Runnable backCall) {
         this.controller = controller;
         this.gameStartCall = gameStartCall;
