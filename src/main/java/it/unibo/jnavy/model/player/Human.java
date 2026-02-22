@@ -74,7 +74,7 @@ public final class Human implements Player {
      * @return true if the ability was successfully used (cooldown reset), false if it was not ready or the target was invalid.
      */
     @Override
-    public boolean useAbility(final Position target, final Grid targetGrid) {
+    public boolean useCaptainAbility(final Position target, final Grid targetGrid) {
         return this.captain.useAbility(targetGrid, target);
     }
 

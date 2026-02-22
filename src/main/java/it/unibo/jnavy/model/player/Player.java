@@ -81,7 +81,7 @@ public interface Player extends TurnObserver {
      * @param targetGrid The {@link Grid} on which to apply the ability.
      * @return true if the ability was successfully activated, false otherwise.
      */
-    default boolean useAbility(final Position target, final Grid targetGrid) {
+    default boolean useCaptainAbility(final Position target, final Grid targetGrid) {
         return false;
     }
 
