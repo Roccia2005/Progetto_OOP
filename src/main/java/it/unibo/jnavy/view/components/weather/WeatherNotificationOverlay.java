@@ -30,7 +30,7 @@ public final class WeatherNotificationOverlay extends JComponent {
     private static final int PADDING = 40;
     private static final int CORNER_RADIUS = 30;
     private static final int BOX_HEIGHT = 120;
-    private static final float BORDER_STOKE = 3.0f;
+    private static final float BORDER_STROKE = 3.0f;
 
     private static final int TITLE_FONT_SIZE = 28;
     private static final int SUBTITLE_FONT_SIZE = 22;
@@ -106,7 +106,7 @@ public final class WeatherNotificationOverlay extends JComponent {
 
         // Draw the border
         g2.setColor(ACCENT_YELLOW);
-        g2.setStroke(new BasicStroke(BORDER_STOKE));
+        g2.setStroke(new BasicStroke(BORDER_STROKE));
         g2.drawRoundRect(boxX, boxY, boxWidth, BOX_HEIGHT, CORNER_RADIUS, CORNER_RADIUS);
 
         // Draw the title text

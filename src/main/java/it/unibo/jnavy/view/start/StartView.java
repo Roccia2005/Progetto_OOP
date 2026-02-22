@@ -33,10 +33,10 @@ public final class StartView extends JPanel {
     private static final String TITLE = "Dominate the Ocean. Sink the Enemy.";
     private static final String START_GAME = "NEW GAME";
 
-    private static final int EMPY_BORDER_TOP = 10;
-    private static final int EMPY_BORDER_LEFT = 40;
-    private static final int EMPY_BORDER_RIGHT = 40;
-    private static final int EMPY_BORDER_BOTTOM = 10;
+    private static final int EMPTY_BORDER_TOP = 10;
+    private static final int EMPTY_BORDER_LEFT = 40;
+    private static final int EMPTY_BORDER_RIGHT = 40;
+    private static final int EMPTY_BORDER_BOTTOM = 10;
 
     private static final int INSET_10 = 10;
     private static final int INSET_20 = 20;
@@ -109,7 +109,7 @@ public final class StartView extends JPanel {
         startButton.setFocusPainted(false);
         startButton.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.WHITE, BORDER_THICKNESS),
-                BorderFactory.createEmptyBorder(EMPY_BORDER_TOP, EMPY_BORDER_LEFT, EMPY_BORDER_BOTTOM, EMPY_BORDER_RIGHT)
+                BorderFactory.createEmptyBorder(EMPTY_BORDER_TOP, EMPTY_BORDER_LEFT, EMPTY_BORDER_BOTTOM, EMPTY_BORDER_RIGHT)
         ));
         startButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -130,7 +130,7 @@ public final class StartView extends JPanel {
         loadButton.setFocusPainted(false);
         loadButton.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY, BORDER_THICKNESS),
-                BorderFactory.createEmptyBorder(EMPY_BORDER_TOP, EMPY_BORDER_LEFT, EMPY_BORDER_BOTTOM, EMPY_BORDER_RIGHT)
+                BorderFactory.createEmptyBorder(EMPTY_BORDER_TOP, EMPTY_BORDER_LEFT, EMPTY_BORDER_BOTTOM, EMPTY_BORDER_RIGHT)
         ));
         loadButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 

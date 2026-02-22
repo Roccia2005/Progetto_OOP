@@ -39,13 +39,4 @@ public enum CellCondition {
      * The cell contains water revealed by a special ability.
      */
     REVEALED_WATER;
-
-    /**
-     * Determines if the cell has already been targeted by a standard shot.
-     *
-     * @return true if the cell's condition is either HIT_WATER or HIT_SHIP, false otherwise.
-     */
-    public boolean isAlreadyHit() {
-        return this == HIT_WATER || this == HIT_SHIP;
-    }
 }
