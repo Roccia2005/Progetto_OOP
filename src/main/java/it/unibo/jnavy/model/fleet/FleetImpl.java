@@ -45,7 +45,7 @@ public final class FleetImpl implements Fleet {
 
     @Override
     public List<Ship> getShips() {
-        return new ArrayList<>(this.ships);
+        return List.copyOf(this.ships);
     }
 
     @Override

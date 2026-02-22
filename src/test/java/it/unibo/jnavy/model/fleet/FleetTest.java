@@ -101,9 +101,11 @@ class FleetTest {
         final var ships = fleet.getShips();
         assertEquals(ONE_SHIP, ships.size(), "Fleet should contain exactly 1 ship");
 
-        ships.clear();
+        assertThrows(UnsupportedOperationException.class, ships::clear,
+                "The returned list of ships should be immutable");
 
-        assertEquals(ONE_SHIP, fleet.getShips().size(), "Modifying the returned list should not affect the actual fleet");
+        assertEquals(ONE_SHIP, fleet.getShips().size(),
+                "Modifying the returned list should not affect the actual fleet");
     }
 
     @Test

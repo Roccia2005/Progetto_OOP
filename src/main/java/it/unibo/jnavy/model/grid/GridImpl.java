@@ -1,5 +1,6 @@
 package it.unibo.jnavy.model.grid;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.cell.CellImpl;
 import it.unibo.jnavy.model.fleet.Fleet;
@@ -13,7 +14,6 @@ import it.unibo.jnavy.model.utilities.ShotResult;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Concrete implementation of the Grid interface.
@@ -129,6 +129,10 @@ public final class GridImpl implements Grid {
         return SIZE;
     }
 
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "The game logic requires direct access to the fleet to manage ship statuses."
+    )
     @Override
     public Fleet getFleet() {
         return this.fleet;
@@ -140,7 +144,7 @@ public final class GridImpl implements Grid {
                 .flatMap(Arrays::stream)
                 .filter(c -> !c.isHit())
                 .map(Cell::getPosition)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -178,6 +182,6 @@ public final class GridImpl implements Grid {
                 .flatMap(Arrays::stream)
                 .filter(Cell::isOccupied)
                 .map(Cell::getPosition)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
