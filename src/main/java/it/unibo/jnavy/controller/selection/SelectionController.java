@@ -1,5 +1,6 @@
 package it.unibo.jnavy.controller.selection;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.controller.game.GameControllerImpl;
 import it.unibo.jnavy.controller.setup.SetupController;
@@ -36,6 +37,10 @@ public class SelectionController {
      *
      * @param view the view implementation to be used for UI updates.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The MVC pattern requires the controller to maintain a direct reference to the View in order to update it."
+    )
     public void setView(final View view) {
         this.view = view;
     }
@@ -110,6 +115,10 @@ public class SelectionController {
      *
      * @param completedSetup the setup controller containing the finalized player configuration
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "Injecting the completed setup controller is required for state passing."
+    )
     public void setupComplete(final SetupController completedSetup) {
         final Human humanPlayer = (Human) completedSetup.getHumanPlayer();
         final Bot botPlayer = (Bot) completedSetup.getBotPlayer();

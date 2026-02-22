@@ -1,5 +1,6 @@
 package it.unibo.jnavy.controller.game;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.jnavy.controller.utilities.CellCondition;
 import it.unibo.jnavy.model.cell.Cell;
 import it.unibo.jnavy.model.player.Player;
@@ -24,6 +25,10 @@ public class GameStateController {
      * @param bot the bot player instance.
      * @param weather the manager handling weather conditions.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The controller needs direct references to Model objects to read their updated state."
+    )
     public GameStateController(final Player human, final Player bot, final WeatherManager weather) {
         this.human = human;
         this.bot = bot;

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Implementation of the {@link SetupController} interface.
  * This class manages the ship placement phase for both the human player and the bot,
@@ -124,11 +126,19 @@ public final class SetupControllerImpl implements SetupController {
         return shipsToPlace.isEmpty() && currentShipObject == null;
     }
 
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "You need to return the player's real instance so you can pass it to the GameController and start the game."
+    )
     @Override
     public Player getHumanPlayer() {
         return this.human;
     }
 
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "You need to return the bot's real instance so you can pass it to the GameController and start the game."
+    )
     @Override
     public Player getBotPlayer() {
         return this.bot;

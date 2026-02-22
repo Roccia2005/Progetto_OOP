@@ -2,6 +2,7 @@ package it.unibo.jnavy.controller.game;
 
 import java.util.Optional;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.player.Player;
 import it.unibo.jnavy.model.utilities.Position;
@@ -27,6 +28,10 @@ public class CombatController {
      * @param weather the manager for weather-related effects.
      * @param turnController the controller that manages turn transitions.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The controller needs direct references to Model objects to read their updated state."
+    )
     public CombatController(final Player human, final Player bot,
                             final WeatherManager weather, final TurnController turnController) {
         this.human = human;
