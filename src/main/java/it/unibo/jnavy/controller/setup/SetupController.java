@@ -79,4 +79,11 @@ public interface SetupController {
      * Removes all ships from the human player's grid and resets the placement list.
      */
     void clearFleet();
+
+    /**
+     * Retrieves the size of the game grid.
+     *
+     * @return the grid dimension.
+     */
+    int getGridSize();
 }

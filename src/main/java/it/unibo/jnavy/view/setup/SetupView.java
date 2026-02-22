@@ -38,8 +38,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public final class SetupView extends JPanel {
 
-    private static final int GRID_SIZE = 10;
-
     private static final Color COLOR_SHIP = Color.BLACK;
     private static final Color COLOR_BORDER = Color.GRAY;
     private static final Color COLOR_BORDER_WATER = new Color(0, 80, 120);
@@ -117,12 +115,12 @@ public final class SetupView extends JPanel {
         topPanel.add(titleLabel, BorderLayout.CENTER);
         this.add(topPanel, BorderLayout.NORTH);
 
-        final JPanel gridPanel = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE));
+        final JPanel gridPanel = new JPanel(new GridLayout(controller.getGridSize(), controller.getGridSize()));
         gridPanel.setBackground(BACKGROUND_COLOR);
         gridPanel.setBorder(BorderFactory.createEmptyBorder(PADDING_20, PADDING_20, PADDING_20, PADDING_20));
 
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
+        for (int i = 0; i < controller.getGridSize(); i++) {
+            for (int j = 0; j < controller.getGridSize(); j++) {
                 final JButton button = new JButton();
                 final Position pos = new Position(i, j);
 
@@ -241,8 +239,8 @@ public final class SetupView extends JPanel {
     }
 
     private void updateView() {
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
+        for (int i = 0; i < controller.getGridSize(); i++) {
+            for (int j = 0; j < controller.getGridSize(); j++) {
                 final Position pos = new Position(i, j);
                 final JButton button = gridButtons.get(pos);
                 final CellState state = controller.getCellState(pos);

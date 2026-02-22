@@ -173,6 +173,11 @@ public final class SetupControllerImpl implements SetupController {
         this.shipsToPlace.addAll(buildFleetConfig());
     }
 
+    @Override
+    public int getGridSize() {
+        return this.human.getGrid().getSize();
+    }
+
     private static List<Integer> buildFleetConfig() {
         return Fleet.FLEET_COMPOSITION.entrySet().stream()
                 .sorted(Map.Entry.<Integer, Integer>comparingByKey().reversed()) // largest first
