@@ -59,8 +59,9 @@ public final class SetupView extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private final transient SetupController controller;
-    private final Runnable gameStartCall;
-    private final Runnable backCall;
+    private final transient Runnable gameStartCall;
+    private final transient Runnable backCall;
+
     private final Map<Position, JButton> gridButtons = new HashMap<>();
     private CardinalDirection currentDirection = CardinalDirection.RIGHT;
 

@@ -41,11 +41,11 @@ public abstract class AbstractCaptain implements Captain {
 
     @Override
     public final boolean useAbility(final Grid grid, final Position p) {
-        if (this.isAbilityRecharged() && grid.isPositionValid(p)) {
-            if (this.executeEffect(grid, p)) {
-                this.resetCooldown();
-                return true;
-            }
+        if (this.isAbilityRecharged()
+            && grid.isPositionValid(p)
+            && this.executeEffect(grid, p)) {
+            this.resetCooldown();
+            return true;
         }
         return false;
     }

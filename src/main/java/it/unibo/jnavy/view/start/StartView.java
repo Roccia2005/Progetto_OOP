@@ -51,8 +51,8 @@ public final class StartView extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private final transient Runnable onStartAction;
-    private SoundManager ambientSound;
     private final transient Runnable onLoadAction;
+    private transient SoundManager ambientSound;
 
     /**
      * Constructs the StartView for the game.

@@ -28,8 +28,8 @@ import javax.swing.border.LineBorder;
 
 import it.unibo.jnavy.view.utilities.ImageLoader;
 
-/** 
- * A custom interactive button representing the captain's special ability. 
+/**
+ * A custom interactive button representing the captain's special ability.
  * It visually displays the cooldown progress through a dynamic background fill
  * and handles the activation state, providing visual feedback to the player.
  */
@@ -38,7 +38,6 @@ public final class CaptainAbilityButton extends JButton {
     private static final Color BUTTON_ACTIVE = Color.GREEN;
     private static final Color BUTTON_CHARGED = Color.BLUE;
     private static final Color BUTTON_RECHARGING = Color.CYAN;
-    private static final Color BUTTON_BACKGROUND_DEFAULT = Color.LIGHT_GRAY;
 
     private static final String BUTTON_TEXT = "Ability";
     private static final String CAPTAIN_IMAGE_PATH = "/images/captain.png";
@@ -70,7 +69,7 @@ public final class CaptainAbilityButton extends JButton {
 
     /**
      * Constructs a new {@code CaptainAbilityButton}.
-     * 
+     *
      * @param maxCooldown the maximum number of turns required to fully recharge the ability.
      */
     public CaptainAbilityButton(final int maxCooldown) {
