@@ -191,16 +191,39 @@ public final class ProBot extends AbstractBotStrategy {
     }
 
     /**
-     * Calculates the cardinal direction between two positions.
+     * Determines the cardinal direction between two positions.
+     * If the positions are not adjacent (e.g., deflected by weather fog)
+     * or are diagonal, it calculates the dominant axis to find the closest direction.
      *
      * @param p1 the starting position
      * @param p2 the ending position
-     * @return the {@link CardinalDirection} connecting the two positions, or null if none
+     * @return the {@link CardinalDirection} connecting the two positions, or null if they are identical
      */
     private CardinalDirection findDirection(final Position p1, final Position p2) {
+        if (p1.equals(p2)) {
+            return null;
+        }
+        final int rowDiff = p2.x() - p1.x();
+        final int colDiff = p2.y() - p1.y();
+        int targetRowOffset = 0;
+        int targetColOffset = 0;
+
+        if (Math.abs(rowDiff) > Math.abs(colDiff)) {
+            if (rowDiff > 0) {
+                targetRowOffset = 1;
+            } else {
+                targetRowOffset = -1;
+            }
+        } else {
+            if (colDiff > 0) {
+                targetColOffset = 1;
+            } else {
+                targetColOffset = -1;
+            }
+        }
+
         for (final CardinalDirection dir : CardinalDirection.values()) {
-            if (p1.x() + dir.getRowOffset() == p2.x()
-                    && p1.y() + dir.getColOffset() == p2.y()) {
+            if (dir.getRowOffset() == targetRowOffset && dir.getColOffset() == targetColOffset) {
                 return dir;
             }
         }
