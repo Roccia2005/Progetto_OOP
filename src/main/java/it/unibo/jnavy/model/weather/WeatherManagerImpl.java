@@ -71,7 +71,7 @@ public final class WeatherManagerImpl implements WeatherManager {
      * @throws ObjectStreamException if an error occurs during the resolution process.
      */
     @java.io.Serial
-    protected Object readResolve() throws ObjectStreamException {
+    private Object readResolve() throws ObjectStreamException {
         return getInstance();
     }
 

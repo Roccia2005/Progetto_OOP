@@ -55,7 +55,8 @@ public final class ViewGUI extends JFrame implements View {
      */
     @SuppressFBWarnings(
         value = "EI_EXPOSE_REP2",
-        justification = "The View requires a direct reference to the SelectionController to handle UI navigation and state transitions."
+        justification = "The View requires a direct reference to the SelectionController "
+                + "to handle UI navigation and state transitions."
     )
     public ViewGUI(final SelectionController selectionController) {
         this.setTitle("J-Navy");
