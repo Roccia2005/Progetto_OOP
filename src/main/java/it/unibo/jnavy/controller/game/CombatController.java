@@ -87,10 +87,10 @@ public class CombatController {
      * updates the bot's internal state with the result, and ends the turn.
      *
      * @return the final position targeted by the bot after weather effects,
-     *         or null if the game is over or no target was generated.
+     *         or null if the game is over, no target was generated, or it is the human's turn.
      */
     public Position playBotTurn() {
-        if (this.turnController.isGameOver()) {
+        if (this.turnController.isGameOver() || this.turnController.isHumanTurn()) {
             return null;
         }
 
