@@ -1,6 +1,5 @@
 package it.unibo.jnavy.controller.selection;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.controller.game.GameControllerImpl;
 import it.unibo.jnavy.controller.setup.SetupController;
