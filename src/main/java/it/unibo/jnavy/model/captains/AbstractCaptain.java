@@ -51,12 +51,12 @@ public abstract class AbstractCaptain implements Captain {
     }
 
     @Override
-    public boolean isAbilityRecharged() {
+    public final boolean isAbilityRecharged() {
         return this.currentCooldown >= this.cooldown;
     }
 
     @Override
-    public void processTurnEnd() {
+    public final void processTurnEnd() {
         if (this.usedThisTurn) {
             this.usedThisTurn = false;
         } else {
@@ -65,17 +65,17 @@ public abstract class AbstractCaptain implements Captain {
     }
 
     @Override
-    public int getCooldown() {
+    public final int getCooldown() {
         return this.cooldown;
     }
 
     @Override
-    public int getCurrentCooldown() {
+    public final int getCurrentCooldown() {
         return this.currentCooldown;
     }
 
     @Override
-    public String getName() {
+    public final String getName() {
         return this.getClass().getSimpleName();
     }
 
