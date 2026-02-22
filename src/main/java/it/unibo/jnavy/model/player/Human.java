@@ -4,11 +4,12 @@ import java.util.List;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.jnavy.model.captains.Captain;
+import it.unibo.jnavy.model.shots.HitStrategy;
+import it.unibo.jnavy.model.shots.StandardShot;
 import it.unibo.jnavy.model.grid.Grid;
 import it.unibo.jnavy.model.grid.GridImpl;
 import it.unibo.jnavy.model.utilities.Position;
 import it.unibo.jnavy.model.utilities.ShotResult;
-import it.unibo.jnavy.model.weather.WeatherManagerImpl;
 
 /**
  * Represents a human player in the game.
@@ -52,7 +53,8 @@ public final class Human implements Player {
      */
     @Override
     public List<ShotResult> createShot(final Position target, final Grid targetGrid) {
-        return List.of(WeatherManagerImpl.getInstance().applyWeatherEffects(target, targetGrid));
+        final HitStrategy shot = new StandardShot();
+        return shot.execute(target, targetGrid);
     }
 
     /**
