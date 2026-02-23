@@ -15,8 +15,6 @@ import it.unibo.jnavy.controller.setup.SetupController;
 import it.unibo.jnavy.view.game.GamePanel;
 import it.unibo.jnavy.view.selection.BotSelectionPanel;
 import it.unibo.jnavy.view.selection.CapSelectionPanel;
-import it.unibo.jnavy.view.selection.BotSelectionPanel.BotLevel;
-import it.unibo.jnavy.view.selection.CapSelectionPanel.CaptainAbility;
 import it.unibo.jnavy.view.setup.SetupView;
 import it.unibo.jnavy.view.start.StartView;
 import it.unibo.jnavy.view.utilities.ToastNotification;
@@ -102,12 +100,10 @@ public final class ViewGUI extends JFrame implements View {
      * Initializes the bot and captain selection phases.
      */
     private void initSelectionPhase() {
-        final BotSelectionPanel botPanel = new BotSelectionPanel((BotLevel level) -> {
-            this.selectionController.botSelection(level);
-        }, this.selectionController::showStartScreen);
-        final CapSelectionPanel capPanel = new CapSelectionPanel((CaptainAbility ability) -> {
-            this.selectionController.capSelection(ability);
-        }, this.selectionController::showBotSelection);
+        final BotSelectionPanel botPanel = new BotSelectionPanel(this.selectionController::botSelection,
+                this.selectionController::showStartScreen);
+        final CapSelectionPanel capPanel = new CapSelectionPanel(this.selectionController::capSelection,
+                this.selectionController::showBotSelection);
 
         this.mainPanel.add(botPanel, BOT_CARD);
         this.mainPanel.add(capPanel, CAPTAIN_CARD);

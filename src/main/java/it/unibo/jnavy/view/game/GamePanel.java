@@ -228,6 +228,10 @@ public final class GamePanel extends JPanel {
             return;
         }
 
+        if (this.dashboardPanel.isCaptainAbilityActive() && !controller.captainAbilityTargetsEnemyGrid()) {
+            return;
+        }
+
         final CellCondition clickedState = controller.getBotCellState(p);
         final boolean isAlreadyRevealed = clickedState == CellCondition.HIT_SHIP
                                         || clickedState == CellCondition.SUNK_SHIP

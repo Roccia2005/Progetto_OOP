@@ -149,18 +149,4 @@ public final class GridPanel extends JPanel {
     public JButton getButtonAt(final Position pos) {
         return this.buttons.get(pos);
     }
-
-    /**
-     * Refreshes the appearance of a single cell.
-     *
-     * @param pos The cell's position.
-     * @param state The cell's new condition.
-     */
-    public void refreshCell(final Position pos, final CellCondition state) {
-        final JButton button = this.buttons.get(pos);
-        if (button != null) {
-            updateButtonAppearance(button, state);
-            button.repaint();
-        }
-    }
 }

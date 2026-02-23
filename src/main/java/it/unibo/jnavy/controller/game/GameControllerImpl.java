@@ -119,8 +119,8 @@ public final class GameControllerImpl implements GameController {
     }
 
     @Override
-    public boolean processAbility(final Position p) {
-        return combatController.processAbility(p);
+    public void processAbility(final Position p) {
+        combatController.processAbility(p);
     }
 
     @Override
