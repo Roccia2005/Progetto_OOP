@@ -180,7 +180,7 @@ public final class SetupControllerImpl implements SetupController {
 
     private static List<Integer> buildFleetConfig() {
         return Fleet.FLEET_COMPOSITION.entrySet().stream()
-                .sorted(Map.Entry.<Integer, Integer>comparingByKey().reversed()) // largest first
+                .sorted(Map.Entry.<Integer, Integer>comparingByKey().reversed())
                 .flatMap(e -> Collections.nCopies(e.getValue(), e.getKey()).stream())
                 .toList();
     }
