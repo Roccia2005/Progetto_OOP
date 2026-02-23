@@ -47,6 +47,7 @@ public final class GameControllerImpl implements GameController {
         this.human = state.getHuman();
         this.bot = state.getBot();
         final WeatherManager weather = WeatherManagerImpl.getInstance();
+        ((WeatherManagerImpl) weather).setCondition(state.getWeatherCondition());
 
         this.turnController = new TurnController(this.human, this.bot, weather, state.getTurnCounter(), state.isHumanTurn());
         this.combatController = new CombatController(this.human, this.bot, weather, this.turnController);
