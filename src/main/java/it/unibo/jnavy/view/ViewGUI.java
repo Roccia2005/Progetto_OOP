@@ -13,13 +13,13 @@ import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.controller.selection.SelectionController;
 import it.unibo.jnavy.controller.setup.SetupController;
 import it.unibo.jnavy.view.game.GamePanel;
-import it.unibo.jnavy.view.game.ToastNotification;
 import it.unibo.jnavy.view.selection.BotSelectionPanel;
 import it.unibo.jnavy.view.selection.CapSelectionPanel;
 import it.unibo.jnavy.view.selection.BotSelectionPanel.BotLevel;
 import it.unibo.jnavy.view.selection.CapSelectionPanel.CaptainAbility;
 import it.unibo.jnavy.view.setup.SetupView;
 import it.unibo.jnavy.view.start.StartView;
+import it.unibo.jnavy.view.utilities.ToastNotification;
 
 /**
  * Swing-based implementation of the {@link View} interface.

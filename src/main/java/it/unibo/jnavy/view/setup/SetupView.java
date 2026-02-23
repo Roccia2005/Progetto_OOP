@@ -4,7 +4,7 @@ import it.unibo.jnavy.controller.setup.SetupController;
 import it.unibo.jnavy.controller.utilities.CellState;
 import it.unibo.jnavy.model.utilities.CardinalDirection;
 import it.unibo.jnavy.model.utilities.Position;
-import it.unibo.jnavy.view.game.ToastNotification;
+import it.unibo.jnavy.view.utilities.ToastNotification;
 
 import static it.unibo.jnavy.view.utilities.ViewConstants.BACKGROUND_COLOR;
 import static it.unibo.jnavy.view.utilities.ViewConstants.BORDER_THICKNESS;

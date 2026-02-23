@@ -1,4 +1,4 @@
-package it.unibo.jnavy.view.game;
+package it.unibo.jnavy.view.utilities;
 
 import static it.unibo.jnavy.view.utilities.ViewConstants.BORDER_THICKNESS;
 import static it.unibo.jnavy.view.utilities.ViewConstants.FONT_FAMILY;

@@ -1,4 +1,4 @@
-package it.unibo.jnavy.view.game;
+package it.unibo.jnavy.view.utilities;
 
 import it.unibo.jnavy.controller.game.GameController;
 import it.unibo.jnavy.controller.utilities.CellCondition;

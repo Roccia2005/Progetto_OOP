@@ -19,6 +19,8 @@ import it.unibo.jnavy.view.components.EffectsPanel;
 import it.unibo.jnavy.view.components.GameOverPanel;
 import it.unibo.jnavy.view.components.weather.WeatherNotificationOverlay;
 import it.unibo.jnavy.view.utilities.SoundManager;
+import it.unibo.jnavy.view.utilities.TargetCalculator;
+import it.unibo.jnavy.view.utilities.ToastNotification;
 import it.unibo.jnavy.view.components.grid.GridPanel;
 import java.util.stream.Collectors;
 
