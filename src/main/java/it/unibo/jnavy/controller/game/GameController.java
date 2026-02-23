@@ -34,9 +34,8 @@ public interface GameController {
      * Attempts to activate the captain's special ability at the given position.
      *
      * @param p the target coordinates for the ability.
-     * @return true if the ability was successfully triggered, false otherwise.
      */
-    boolean processAbility(Position p);
+    void processAbility(Position p);
 
     /**
      * Checks whether the game has reached a terminal state.

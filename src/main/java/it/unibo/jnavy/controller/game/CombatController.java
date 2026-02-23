@@ -63,11 +63,10 @@ public class CombatController {
      * the turn is ended.
      *
      * @param p the target coordinates for the ability.
-     * @return true if the ability was successfully used, false otherwise.
      */
-    public boolean processAbility(final Position p) {
+    public void processAbility(final Position p) {
         if (!this.turnController.isHumanTurn()) {
-            return false;
+            return;
         }
 
         final Grid targetGrid = this.human.abilityTargetsEnemyGrid() ? this.bot.getGrid() : this.human.getGrid();
@@ -76,9 +75,7 @@ public class CombatController {
             if (this.human.doesAbilityConsumeTurn()) {
                 this.turnController.endTurn();
             }
-            return true;
         }
-        return false;
     }
 
     /**
