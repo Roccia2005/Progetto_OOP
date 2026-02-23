@@ -71,10 +71,8 @@ public class CombatController {
 
         final Grid targetGrid = this.human.abilityTargetsEnemyGrid() ? this.bot.getGrid() : this.human.getGrid();
 
-        if (this.human.useCaptainAbility(p, targetGrid)) {
-            if (this.human.doesAbilityConsumeTurn()) {
-                this.turnController.endTurn();
-            }
+        if (this.human.useCaptainAbility(p, targetGrid) && this.human.doesAbilityConsumeTurn()) {
+            this.turnController.endTurn();
         }
     }
 
