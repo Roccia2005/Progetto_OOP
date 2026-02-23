@@ -142,9 +142,6 @@ public final class ViewConstants {
     /** Font size for control elements (e.g., buttons, comboboxes). */
     public static final int FONT_SIZE_CTRL = 14;
 
-    /** Bottom margin applied to titles. */
-    public static final int TITLE_BOTTOM_MARGIN = 30;
-
     /**
      * Private constructor to prevent instantiation of this utility class.
      * Throws an exception if called via reflection.

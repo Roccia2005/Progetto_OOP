@@ -48,18 +48,6 @@ public final class ImageLoader {
     }
 
     /**
-     * Retrieves an image from the cache (or loads it if necessary) and wraps it
-     * in an {@link ImageIcon}, ready to be used in Swing components like JLabel or JButton.
-     * 
-     * @param path the absolute path to the image resource.
-     * @return an {@link ImageIcon} containing the requested image, or {@code null} if it cannot be loaded.
-     */
-    public static ImageIcon getIcon(final String path) {
-        final Image img = getImage(path);
-        return img != null ? new ImageIcon(img) : null;
-    }
-
-    /**
      * Retrieves an image, scales it to the specified dimensions using a smooth scaling algorithm,
      * and wraps it in an {@link ImageIcon}.
      * 
